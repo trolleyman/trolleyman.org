@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class FlappycloneConfig(AppConfig):
+class FlappyCloneConfig(AppConfig):
     name = 'FlappyClone'
