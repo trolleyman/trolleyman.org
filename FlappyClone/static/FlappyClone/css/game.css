@@ -36,6 +36,8 @@ html, body {
 	text-align: right;
 	border: 1.5px solid black;
 	background: transparent;
+	text-shadow: 3px 3px 0px black, -3px 3px 0px black, 3px -3px 0px black, -3px -3px 0px black;
+	caret-color: black;
 }
 #username-entry:focus {
 	border: 1.5px solid gold;

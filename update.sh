@@ -1,6 +1,8 @@
-#!/usr/bin/env python3
+set -e
+set -x
 
 # Collect all of the static files
 python manage.py collectstatic --noinput
 
-# TODO: Obfuscate the JS files
+# Update FlappyClone project
+./FlappyClone/update.sh
