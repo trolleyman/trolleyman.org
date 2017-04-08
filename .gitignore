@@ -1,2 +1,5 @@
 # Shhhhh
 SECRET_KEY
+
+# Python
+__pycache__/
