@@ -122,7 +122,7 @@ function Game() {
 	this.imgs.buttonSubmitDisabled = this.loadImage("buttonSubmitDisabled.png");
 	this.imgs.buttonRetry = this.loadImage("buttonRetry.png");
 	
-	// setup buttons
+	// Setup buttons
 	var setState = Object.getOwnPropertyDescriptor(Game.prototype, 'state').set;
 	var spacing = 20;
 	var px = 50, py = 50;
@@ -198,13 +198,13 @@ function Game() {
 		(function() { return this.canvas.width/2 + spacing/2; }).bind(this), dy,
 		this.imgs.buttonRetry, setState.bind(this, STATE_LEADERBOARD));
 
-	// init pipes
+	// Setup pipes
 	this.pipes = [];
 	for (var i = 0; i < 10; i++) {
 		this.pipes[i] = new Pipe(-200);
 	}
 	
-	// setup handling focus events. see https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
+	// Setup handling focus events. see https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
 	var hidden, visibilityChange; 
 	if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
 		hidden = "hidden";
@@ -217,8 +217,8 @@ function Game() {
 		visibilityChange = "webkitvisibilitychange";
 	}
 	
-	// if the page is hidden, pause the game
-	// if the page is hidden, unpause the game, unless it is in the STATE_PAUSED state
+	// If the page is hidden, pause the game
+	// If the page is hidden, unpause the game, unless it is in the STATE_PAUSED state
 	var handleVisibilityChange = (function() {
 		if (document[hidden]) {
 			console.log("Page hidden: paused.");
@@ -232,7 +232,7 @@ function Game() {
 			}
 		}
 	}).bind(this);
-
+	
 	// Warn if the browser doesn't support addEventListener or the Page Visibility API
 	if (typeof document.addEventListener === "undefined" || typeof document[hidden] === "undefined") {
 		console.log("Error: Page Visibility API not supported.");
@@ -241,10 +241,10 @@ function Game() {
 		document.addEventListener(visibilityChange, handleVisibilityChange, false);
 	}
 	
-	// init stats
+	// Setup stats
 	this.stats = document.getElementById("stats");
 	
-	// init vars
+	// Setup vars
 	this.debugAllowed = false; // is debugging allowed?
 	this.debugView = false;
 	this.cameraUpdate = true; // update the camera to be locked onto the bird?
@@ -255,7 +255,7 @@ function Game() {
 	this.beginTextEntryMode();
 	this.endTextEntryMode();
 	
-	// init state
+	// Setup state
 	this.state = STATE_LOADING;
 }
 
