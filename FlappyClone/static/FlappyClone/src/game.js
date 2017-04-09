@@ -20,7 +20,7 @@ window.onload = function(){
 };
 
 function stateToString(state) {
-	     if (state === STATE_LOADING)     return "STATE_LOADING";
+		 if (state === STATE_LOADING)     return "STATE_LOADING";
 	else if (state === STATE_START)       return "STATE_START";
 	else if (state === STATE_PLAYING)     return "STATE_PLAYING";
 	else if (state === STATE_PAUSED)      return "STATE_PAUSED";
@@ -91,14 +91,41 @@ function Game() {
 	this.imgs.flappy = [];
 	this.imgs.deadFlappy = [];
 	this.flappysLoaded = false;
+	this.faviconAnim = false;
+	this.faviconAnimFrame = 0;
 	var loadFlappyFunc = (function() {
 		if (typeof this.flappysLoadedNum === "undefined")
 			this.flappysLoadedNum = 0;
 		this.flappysLoadedNum += 1;
-		if (this.flappysLoadedNum === 4) {
+		if (this.flappysLoadedNum === this.imgs.flappy.length) {
 			this.flappysLoaded = true;
-			// set off font loading
+			
+			// Trigger font loading
 			loadFlappyFont();
+			
+			// Setup favicon data urls
+			function getFaviconDataURLs(size, flappy) {
+				var canvas = document.createElement('canvas');
+				canvas.width = size;
+				canvas.height = size;
+				var ctx = canvas.getContext('2d');
+				
+				var favicon = [];
+				for (var i = 0; i < flappy.length; i++) {
+					var w = flappy[i].width;
+					var h = flappy[i].height;
+					var scale = size / w;
+					ctx.drawImage(flappy[i], 0, 0, Math.floor(w*scale), Math.floor(h*scale));
+					favicon[i] = canvas.toDataURL();
+				}
+				return favicon;
+			}
+			
+			this.favicon16 = getFaviconDataURLs(16, this.imgs.flappy);
+			this.favicon32 = getFaviconDataURLs(32, this.imgs.flappy);
+			
+			// Trigger favicon animation
+			this.faviconAnim = true;
 		}
 	}).bind(this);
 	for (var i = 0; i < 4; i++) {
@@ -599,9 +626,6 @@ Game.prototype.ontouchmove = function(e) {
 }
 
 Game.prototype.update = function() {
-	if (this.paused)
-		return;
-	
 	// calculate timings
 	var now = Date.now().valueOf();
 	if (isNaN(this.prevTime)) {
@@ -609,6 +633,28 @@ Game.prototype.update = function() {
 	}
 	var dt = (now - this.prevTime) / 1000.0;
 	this.prevTime = now;
+	
+	// Update favicon
+	if (this.faviconAnim) {
+		var faviconAnimPrevFrame = Math.floor(this.faviconAnimFrame);
+		this.faviconAnimFrame = (this.faviconAnimFrame + (dt / this.flappyDt)) % this.imgs.flappy.length;
+		
+		if (faviconAnimPrevFrame != Math.floor(this.faviconAnimFrame)) {
+			// Update favicon
+			var icon16 = document.getElementById('icon16');
+			var icon16New = icon16.cloneNode(true);
+			icon16New.setAttribute('href', this.favicon16[Math.floor(this.faviconAnimFrame)]);
+			icon16.parentNode.replaceChild(icon16New, icon16);
+			
+			var icon32 = document.getElementById('icon32');
+			var icon32New = icon32.cloneNode(true);
+			icon32New.setAttribute('href', this.favicon32[Math.floor(this.faviconAnimFrame)]);
+			icon32.parentNode.replaceChild(icon32New, icon32);
+		}
+	}
+	
+	if (this.paused)
+		return;
 	
 	// update flappy frame #
 	if (this.state === STATE_START || this.state === STATE_PLAYING)
