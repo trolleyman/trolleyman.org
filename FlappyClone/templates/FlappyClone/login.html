@@ -1,7 +1,13 @@
 {% extends "FlappyClone/base.html" %}
 {% load static %}
 {% block head %}
-<link rel="stylesheet" href="{% static "FlappyClone/css/login.css" %}">
+<link rel="stylesheet" href="{% static 'FlappyClone/css/login.css' %}">
+
+<style>
+	#content {
+		background: #70C4CE url("{% static 'FlappyClone/img/backgroundLogin.png' %}") left bottom repeat-x;
+	}
+</style>
 {% endblock head %}
 {% block content %}
 <div id="login" class="clearfix">
@@ -21,7 +27,6 @@
 		<input type="hidden" name="action" value="signup" />
 		<div><h1>Sign Up</h1></div>
 		<div>Username: <input type="text" name="username" maxlength="{{ max_name_length|safe }}"/></div>
-		<div>Confirm Username: <input type="text" name="username_confirm" maxlength="{{ max_name_length|safe }}"/></div>
 		<div>Email: <input type="text" name="email"/></div>
 		<div>Confirm Email: <input type="text" name="email_confirm"/></div>
 		<div>Password: <input type="password" name="password" /></div>

@@ -1,28 +1,4 @@
 
-/*
-#content {
-	background-color: rgb(255, 255, 0);
-}
-
-#login {
-	background-color: rgb(170, 0, 0);
-}
-#signup {
-	background-color: rgb(0, 170, 0);
-}
-
-#login > form {
-	background-color: rgb(128, 0, 0);
-}
-#signup > form {
-	background-color: rgb(0, 128, 0);
-}
-
-.seperator {
-	background-color: rgb(0, 0, 255);
-}
-/**/
-
 div, input[type=submit] {
 	font-family: FlappyFont;
 	color: white;
@@ -98,10 +74,6 @@ input[type=text], input[type=password] {
 	#login, #signup {
 		margin-top: auto;
 		margin-bottom: auto;
-	}
-	
-	#login > form, #signup > form {
-		
 	}
 }
 
