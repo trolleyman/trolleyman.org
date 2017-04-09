@@ -1,0 +1,32 @@
+{% extends "FlappyClone/base.html" %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static "FlappyClone/css/login.css" %}">
+{% endblock head %}
+{% block content %}
+<div id="login" class="clearfix">
+	<form method="post">
+		{% csrf_token %}
+		<input type="hidden" name="action" value="login" />
+		<div><h1>Login</h1></div>
+		<div>Username: <input type="text" name="username" maxlength="{{ max_name_length|safe }}"/></div>
+		<div>Password: <input type="password" name="password" /></div>
+		<div><input type="submit" value="Login"/></div>
+	</form>
+</div>
+<div class="seperator"><div></div></div>
+<div id="signup" class="clearfix">
+	<form method="post">
+		{% csrf_token %}
+		<input type="hidden" name="action" value="signup" />
+		<div><h1>Sign Up</h1></div>
+		<div>Username: <input type="text" name="username" maxlength="{{ max_name_length|safe }}"/></div>
+		<div>Confirm Username: <input type="text" name="username_confirm" maxlength="{{ max_name_length|safe }}"/></div>
+		<div>Email: <input type="text" name="email"/></div>
+		<div>Confirm Email: <input type="text" name="email_confirm"/></div>
+		<div>Password: <input type="password" name="password" /></div>
+		<div>Confirm Password: <input type="password" name="password_confirm" /></div>
+		<div><input type="submit" value="Sign Up" /></div>
+	</form>
+</div>
+{% endblock content %}
