@@ -558,8 +558,9 @@ Game.prototype.togglePause = function() {
 
 Game.prototype.press = function(x, y) {
 	var bs = this.buttons;
+	var headerHeight = document.getElementById("header").clientHeight;
 	for (var i = 0; i < bs.length; i++) {
-		bs[i].handleClick(x, y);
+		bs[i].handleClick(x, y - headerHeight);
 	}
 }
 
@@ -714,20 +715,22 @@ Game.prototype.updateFlappy = function(dt) {
 
 Game.prototype.draw = function() {
 	// resize canvas width
-	if (window.innerWidth < MIN_CANVAS_WIDTH)
-		this.canvas.width = MIN_CANVAS_WIDTH
-	else if (window.innerWidth > MAX_CANVAS_WIDTH)
-		this.canvas.width = MAX_CANVAS_WIDTH
+	var targetWidth = window.innerWidth;
+	if (targetWidth < MIN_CANVAS_WIDTH)
+		this.canvas.width = MIN_CANVAS_WIDTH;
+	else if (targetWidth > MAX_CANVAS_WIDTH)
+		this.canvas.width = MAX_CANVAS_WIDTH;
 	else
-		this.canvas.width = window.innerWidth;
+		this.canvas.width = targetWidth;
 	
 	// resize canvas height
-	if (window.innerHeight < MIN_CANVAS_HEIGHT)
-		this.canvas.height = MIN_CANVAS_HEIGHT
-	else if (window.innerHeight > MAX_CANVAS_HEIGHT)
-		this.canvas.height = MAX_CANVAS_HEIGHT
+	var targetHeight = window.innerHeight - document.getElementById("header").clientHeight;
+	if (targetHeight < MIN_CANVAS_HEIGHT)
+		this.canvas.height = MIN_CANVAS_HEIGHT;
+	else if (targetHeight > MAX_CANVAS_HEIGHT)
+		this.canvas.height = MAX_CANVAS_HEIGHT;
 	else
-		this.canvas.height = window.innerHeight;
+		this.canvas.height = targetHeight;
 
 	// get context
 	var c = this.canvas.getContext("2d");
