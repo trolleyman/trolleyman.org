@@ -1,11 +1,12 @@
 @echo on
+
 pushd "%~dp0"
 
 :: Update FlappyClone project
-CALL "FlappyClone/update.bat"
+CALL "FlappyClone/clean.bat"
 
-:: Collect all of the static files
-CALL python manage.py collectstatic --noinput
+:: Remove all of the static files
+rmdir /S /Q static
 
 :: Update SECRET_KEY
 CALL python trolleyman/secret_key_gen.py
