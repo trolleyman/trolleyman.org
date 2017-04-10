@@ -7,6 +7,7 @@ __pycache__/
 # Django
 db.sqlite3
 /static/
+log.txt
 
 # FlappyClone
 /FlappyClone/static/FlappyClone/js

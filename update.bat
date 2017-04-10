@@ -1,9 +1,6 @@
 @echo on
 pushd "%~dp0"
 
-:: Update FlappyClone project
-CALL "FlappyClone/update.bat"
-
 :: Collect all of the static files
 CALL python manage.py collectstatic --noinput
 
