@@ -29,8 +29,8 @@
 	</head>
 	<body>
 		<div id="header">
-			<div id="header-logo">FlappyClone</div>
-			<div id="login"><a href="login">Log in / Sign up</a></div>
+			<div id="header-logo"><a href="{% url 'index' %}">FlappyClone</a></div>
+			<div id="header-login"><a href="{% url 'login' %}">Log in / Sign up</a></div>
 		</div>
 		<div id="content">
 		{% block content %}{% endblock content %}
