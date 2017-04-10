@@ -724,7 +724,7 @@ Game.prototype.draw = function() {
 		this.canvas.width = targetWidth;
 	
 	// resize canvas height
-	var targetHeight = window.innerHeight - document.getElementById("header").clientHeight;
+	var targetHeight = document.getElementById("game-container").clientHeight;
 	if (targetHeight < MIN_CANVAS_HEIGHT)
 		this.canvas.height = MIN_CANVAS_HEIGHT;
 	else if (targetHeight > MAX_CANVAS_HEIGHT)

@@ -30,7 +30,7 @@
 	border: 1.5px solid black;
 	background: transparent;
 	color: gold;
-	text-shadow: 3px 3px 0px black, -3px 3px 0px black, 3px -3px 0px black, -3px -3px 0px black;
+	text-shadow: 2px 2px 0px black, -2px 2px 0px black, 2px -2px 0px black, -2px -2px 0px black;
 	caret-color: black;
 }
 #username-entry:focus {
