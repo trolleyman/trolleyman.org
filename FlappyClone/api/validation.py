@@ -1,10 +1,10 @@
 
-# NB: If these constants are updated, remember to update the JavaScript versions (in js/score.js)!!
+# NB: If these constants are updated, remember to update the JavaScript versions (in js/common/validation.js)!!
 NUM_LEADERBOARD_ENTRIES = 10
 MAX_NAME_LENGTH = 16
 LEGAL_SYMBOLS = '-_'
 
-# NB: If updating these functions, ensure that the JavaScript functions are also updated (in js/score.js)!
+# NB: If updating these functions, ensure that the JavaScript functions are also updated (in js/common/validation.js)!
 def isValidNameChar(c):
     if (c >= 'a' and c <= 'z'):
         return True
@@ -17,7 +17,7 @@ def isValidNameChar(c):
     else:
         return False
 
-# NB: If updating these functions, ensure that the JavaScript functions are also updated (in js/score.js)!
+# NB: If updating these functions, ensure that the JavaScript functions are also updated (in js/common/validation.js)!
 def isValidName(name):
     reason = ''
     if (len(name) == 0):

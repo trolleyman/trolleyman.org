@@ -152,8 +152,8 @@ function Game() {
 	
 	var submitFunction = (function() {
 		var name = this.usernameEntry.value;
-		var ret = isLegalName(name);
-		if (!ret.legal) {
+		var ret = isValidName(name);
+		if (!ret.valid) {
 			console.error("'" + name + "' is invalid: " + ret.reason);
 			alert(ret.reason);
 			return;
@@ -180,7 +180,7 @@ function Game() {
 	var disableFunction = (function() {
 		if (!this.newBestScore
 			|| this.leaderboardLoading
-			|| !isLegalName(this.usernameEntry.value).legal
+			|| !isValidName(this.usernameEntry.value).valid
 			|| this.submitting || this.submitted)
 			return true;
 		return false;
@@ -435,7 +435,7 @@ Object.defineProperty(Game.prototype, 'state', {
 					if (pos !== -1) {
 						this.leaderboardPos = pos;
 						leaderboard.splice(pos, 0, {user: true, name: "", score: this.bestScore});
-						this.beginTextEntryMode(MAX_NAME_LENGTH, isLegalNameChar);
+						this.beginTextEntryMode(MAX_NAME_LENGTH, isValidNameChar);
 					}
 				}
 			}).bind(this);
