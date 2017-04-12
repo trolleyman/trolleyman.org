@@ -29,9 +29,11 @@ if not 'TROLLEYMAN_DEBUG_MODE' in os.environ:
     ALLOWED_HOSTS = ['.trolleyman.org', 'trolleyman.org']
     CONN_MAX_AGE = None
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
+    log_path = os.path.join(os.path.dirname(__file__), 'log.txt') # '/var/log/apache2/django.log'
 else:
     DEBUG = True
     ALLOWED_HOSTS = []
+    log_path = os.path.join(os.path.dirname(__file__), 'log.txt')
 
 INTERNAL_IPS = (
     '127.0.0.1',
@@ -86,13 +88,23 @@ WSGI_APPLICATION = 'trolleyman.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'FlappyClone',
-        'USER': 'root'
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'FlappyClone',
+            'USER': 'root',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'FlappyClone',
+            'USER': 'admin',
+            'PASSWORD': SECRET_KEY,
+        }
+    }
 
 
 # Password validation
@@ -143,7 +155,6 @@ STATICFILES_FINDERS = [
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
 
-'''
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -151,7 +162,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(os.path.dirname(__file__), 'log.txt'),
+            'filename': log_path,
         },
     },
     'loggers': {
@@ -167,4 +178,4 @@ LOGGING = {
         },
     },
 }
-'''
+
