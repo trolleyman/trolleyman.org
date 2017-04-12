@@ -24,11 +24,9 @@ with open(os.path.join(os.path.dirname(__file__), 'SECRET_KEY'), 'r') as f:
     SECRET_KEY = f.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-try:
-    os.getenv('TROLLEYMAN_DEBUG_MODE')
-except KeyError:
+if not 'TROLLEYMAN_DEBUG_MODE' in os.environ:
     DEBUG = False
-    ALLOWED_HOSTS = ['.trolleyman.org']
+    ALLOWED_HOSTS = ['.trolleyman.org', 'trolleyman.org']
     CONN_MAX_AGE = None
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
 else:
