@@ -132,6 +132,9 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
+
 '''
 LOGGING = {
     'version': 1,
