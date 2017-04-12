@@ -24,13 +24,23 @@ with open(os.path.join(os.path.dirname(__file__), 'SECRET_KEY'), 'r') as f:
     SECRET_KEY = f.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+try:
+    os.getenv('TROLLEYMAN_DEBUG_MODE')
+except KeyError:
+    DEBUG = False
+    ALLOWED_HOSTS = ['.trolleyman.org']
+    CONN_MAX_AGE = None
+    ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
+else:
+    DEBUG = True
+    ALLOWED_HOSTS = []
 
 INTERNAL_IPS = (
     '127.0.0.1',
 )
+
+DEFAULT_FROM_EMAIL = 'admin@trolleyman.org'
+SERVER_EMAIL = 'root@trolleyman.org'
 
 # Application definition
 
