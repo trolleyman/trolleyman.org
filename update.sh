@@ -3,10 +3,10 @@ set -ex
 
 pushd "$(dirname $BASH_SOURCE)" > /dev/null
 
-# Collect all of the static files
-python manage.py collectstatic --noinput
-
 # Update SECRET_KEY
-python trolleyman/secret_key_gen.py
+python3 trolleyman/secret_key_gen.py
+
+# Collect all of the static files
+python3 manage.py collectstatic --noinput
 
 popd > /dev/null
