@@ -1,0 +1,13 @@
+ul.icons li {
+	width: 100px;
+	text-align: center;
+}
+
+ul.icons li a {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+hr {
+	margin: 2.5em 0;
+}

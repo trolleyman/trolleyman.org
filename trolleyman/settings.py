@@ -24,7 +24,7 @@ with open(os.path.join(os.path.dirname(__file__), 'SECRET_KEY'), 'r') as f:
     SECRET_KEY = f.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if not 'TROLLEYMAN_DEBUG_MODE' in os.environ:
+if not 'TROLLEYMAN_ORG_DEBUG_MODE' in os.environ:
     DEBUG = False
     ALLOWED_HOSTS = ['.trolleyman.org', 'trolleyman.org']
     CONN_MAX_AGE = None
@@ -46,6 +46,7 @@ SERVER_EMAIL = 'root@trolleyman.org'
 
 INSTALLED_APPS = [
     'FlappyClone.apps.FlappyCloneConfig',
+    'homepage.apps.HomepageConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
