@@ -13,6 +13,11 @@
 		<!--[if lte IE 8]><script src="{% static 'homepage/js/html5shiv.js' %}"></script><![endif]-->
 		<link rel="stylesheet" href="{% static 'homepage/css/main.css' %}" />
 		<link rel="stylesheet" href="{% static 'homepage/css/modifications.css' %}" />
+		<style>
+			body {
+				background-image: url("images/overlay.png"), url('{{ bg_url }}');
+			}
+		</style>
 		<!--[if lte IE 9]><link rel="stylesheet" href="{% static 'homepage/css/ie9.css' %}" /><![endif]-->
 		<!--[if lte IE 8]><link rel="stylesheet" href="{% static 'homepage/css/ie8.css' %}" /><![endif]-->
 		<noscript><link rel="stylesheet" href="{% static 'homepage/css/noscript.css' %}" /></noscript>
@@ -27,14 +32,14 @@
 						<header>
 							<span class="avatar"><img src="{% static 'homepage/images/avatar.jpg' %}" alt="" /></span>
 							<h1>Callum Tolley</h1>
-							<p>Student | Software Developer | Procrastinator</p>
+							<p>&nbsp;&nbsp;Student&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Software Developer&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Procrastinator&nbsp;&nbsp;</p>
 						</header>
 						<hr />
 						<ul class="icons">
-							<li><a href="https://www.facebook.com/callum.tolley.7" title="Facebook" class="fa-facebook"></a>Facebook</li>
-							<li><a href="https://www.instagram.com/callum.tolley/" title="Instagram" class="fa-instagram"></a>Instagram</li>
-							<li><a href="https://github.com/trolleyman/" title="Github" class="fa-github"></a>Github</li>
-							<li><a href="http://steamcommunity.com/id/trolleyman/" title="Steam" class="fa-steam"></a>Steam</li>
+							<li><a href="https://www.facebook.com/callum.tolley.7" class="fa-facebook"></a>Facebook</li>
+							<li><a href="https://github.com/trolleyman/" class="fa-github"></a>Github</li>
+							<li><a href="http://steamcommunity.com/id/trolleyman/" class="fa-steam"></a>Steam</li>
+							<li><a href="mailto:callumgtolley@gmail.com" class="fa-envelope"></a>Email</li>
 						</ul>
 						<hr />
 						<h2>Projects</h2>
@@ -54,7 +59,9 @@
 			<!--[if lte IE 8]><script src="{% static 'homepage/js/respond.min.js' %}"></script><![endif]-->
 			<script>
 				if ('addEventListener' in window) {
-					window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-loading\b/, ''); });
+					window.addEventListener('load', function() {
+						document.body.className = document.body.className.replace(/\bis-loading\b/, '');
+					});
 					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
 				}
 			</script>
