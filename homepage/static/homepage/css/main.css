@@ -2480,8 +2480,8 @@
 		-ms-justify-content: space-between;
 		justify-content: space-between;
 		background-color: #1f1815;
-		background-attachment: scroll,								fixed;
-		background-image: url("images/overlay.png"), url("../../images/bg.jpg");
+		background-attachment: fixed,								fixed;
+		background-image: url("images/overlay.png");
 		background-position: top left,							top left;
 		background-repeat: repeat,								no-repeat;
 		background-size: auto,								auto 100%;
@@ -2572,7 +2572,7 @@
 	#main {
 		margin-left: 35%;
 		max-width: 54em;
-		padding: 8em 4em 4em 4em;
+		padding: 4em 4em 4em 4em;
 		width: calc(100% - 35%);
 	}
 
@@ -2843,11 +2843,6 @@
 		display: none !important;
 	}
 
-	body.is-touch #header {
-		background-attachment: scroll;
-		background-size: auto, cover;
-	}
-
 	body.is-touch .poptrox-popup .nav-next,
 	body.is-touch .poptrox-popup .nav-previous,
 	body.is-touch .poptrox-popup .closer {
@@ -2900,7 +2895,7 @@
 			#main {
 				margin-left: 30%;
 				max-width: none;
-				padding: 6em 3em 3em 3em;
+				padding: 3em 3em 3em 3em;
 				width: calc(100% - 30%);
 			}
 
@@ -2950,7 +2945,7 @@
 			#footer {
 				background-attachment: scroll;
 				background-color: #1f1815;
-				background-image: url("images/overlay.png"), url("../../images/bg.jpg");
+				background-image: url("images/overlay.png");
 				background-position: top left,						bottom center;
 				background-repeat: repeat,							no-repeat;
 				background-size: auto,							cover;
