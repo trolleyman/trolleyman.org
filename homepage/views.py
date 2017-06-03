@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseBadRequest
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 import random
 

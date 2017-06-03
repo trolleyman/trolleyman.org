@@ -37,7 +37,7 @@
 		<!-- Header -->
 		<header id="header">
 			<div class="inner">
-				<a href="#" class="image avatar"><img src="{% static 'homepage/images/avatar.jpg' %}" alt="" /></a>
+				<img class="image avatar" src="{% static 'homepage/images/me.jpg' %}" alt="" />
 				<h1><strong>Callum Tolley</strong><br /></h1>
 				<h1>Second year computer science student at the University of Birmingham</h1>
 			</div>
@@ -45,6 +45,13 @@
 
 		<!-- Main -->
 		<div id="main">
+			<!-- Jobs -->
+			<section>
+				<h2>Jobs</h2>
+				<p>I am always on the look out for work - if you have a job offer please don't hesitate to send me a message! My email address is <a href="mailto:callumgtolley@gmail.com">callumgtolley@gmail.com</a></p>
+				<p>For potential employers, <a href="{% static 'homepage/cv.pdf' %}">here</a> is a link to my CV.</p>
+			</section>
+			
 			<!-- Projects -->
 			<section>
 				<h2>Projects</h2>
@@ -67,7 +74,7 @@
 						<a href="https://github.com/trolleyman/kmeans"><img class="image fit" src="{% static 'homepage/images/projects/kmeans.jpg' %}" alt="" /></a>
 						<h3>k-means</h3>
 						<p>A project exploring the k-means algorithm.</p>
-						<p>Uses the k-means algorithm to create a styleized version of the original image. Written in Rust.</p>
+						<p>Uses the k-means algorithm to create a stylized version of the original image. Written in Rust.</p>
 					</article>
 					<article class="6u 12u$(xsmall) work-item">
 						<a href="https://github.com/trolleyman/Equator"><img class="image fit" src="{% static 'homepage/images/projects/equator.jpg' %}" alt="" /></a>
@@ -78,42 +85,42 @@
 			</section>
 
 			<!-- Contact -->
+			<!--
 			<section>
 				<h2>Contact</h2>
-				<p>Accumsan pellentesque commodo blandit enim arcu non at amet id arcu magna. Accumsan orci faucibus id eu lorem semper nunc nisi lorem vulputate lorem neque lorem ipsum dolor.</p>
 				<div class="row">
 					<div class="8u 12u$(small)">
-						<form method="post" action="#">
+						<form method="post" action="/send_message">
 							<div class="row uniform 50%">
+								{% csrf_token %}
 								<div class="6u 12u$(xsmall)"><input type="text" name="name" id="name" placeholder="Name" /></div>
 								<div class="6u$ 12u$(xsmall)"><input type="email" name="email" id="email" placeholder="Email" /></div>
-								<div class="12u$"><textarea name="message" id="message" placeholder="Message" rows="4"></textarea></div>
+								<div class="12u$"><textarea name="message" id="message" placeholder="Message" rows="6"></textarea></div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
 							</div>
 						</form>
-						<ul class="actions">
-							<li><input type="submit" value="Send Message" /></li>
-						</ul>
 					</div>
 					<div class="4u$ 12u$(small)">
 						<ul class="labeled-icons">
 							<li>
 								<h3 class="icon fa-home"><span class="label">Address</span></h3>
-								1234 Somewhere Rd.<br />
-								Nashville, TN 00000<br />
-								United States
+								###
 							</li>
 							<li>
 								<h3 class="icon fa-mobile"><span class="label">Phone</span></h3>
-								000-000-0000
+								###
 							</li>
 							<li>
 								<h3 class="icon fa-envelope-o"><span class="label">Email</span></h3>
-								<a href="#">hello@untitled.tld</a>
+								<a href="#">#</a>
 							</li>
 						</ul>
 					</div>
 				</div>
 			</section>
+			-->
 		</div>
 
 		<!-- Footer -->
