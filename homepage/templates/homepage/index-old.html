@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!--
+	Strata by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Callum Tolley</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="{% static 'homepage/js/ie/html5shiv.js' %}"></script><![endif]-->
+		<link rel="stylesheet" href="{% static 'homepage/css/main.css' %}" />
+		<style>
+			#header {
+				background-image: url("{% static 'homepage/css/images/overlay.png' %}"), url("{{ bg_url }}");
+			}
+			
+			@media screen and (max-width: 980px) {
+				#footer {
+					background-image: url("{% static 'homepage/css/images/overlay.png' %}"), url("{{ bg_url }}");
+				}
+			}
+			
+			@media screen and (min-width: 979px) {
+				#header {
+					background-attachment: scroll;
+					background-size: auto, cover;
+					background-position: 50% 0px;
+				}
+			}
+		</style>
+		<!--[if lte IE 8]><link rel="stylesheet" href="{% static 'homepage/css/ie8.css' %}" /><![endif]-->
+	</head>
+	<body id="top">
+		<!-- Header -->
+		<header id="header">
+			<div class="inner">
+				<img class="image avatar" src="{% static 'homepage/images/me.jpg' %}" alt="" />
+				<h1><strong>Callum Tolley</strong><br /></h1>
+				<h1>Second year computer science student at the University of Birmingham</h1>
+			</div>
+		</header>
+
+		<!-- Main -->
+		<div id="main">
+			<!-- Jobs -->
+			<section>
+				<h2>Jobs</h2>
+				<p>I am always on the look out for work - if you have a job offer please don't hesitate to send me a message! My email address is <a href="mailto:callumgtolley@gmail.com">callumgtolley@gmail.com</a></p>
+				<p>For potential employers, <a href="{% static 'homepage/cv.pdf' %}">here</a> is a link to my CV.</p>
+			</section>
+			
+			<!-- Projects -->
+			<section>
+				<h2>Projects</h2>
+				<div class="row">
+					<article class="6u 12u$(xsmall) work-item">
+						<a href="/FlappyClone"><img class="image fit" src="{% static 'homepage/images/projects/flappy.jpg' %}" alt="" /></a>
+						<h3>Flappy Clone</h3>
+						<p>Yet another clone of the hit game Flappy Bird.</p>
+						<p>This was my first major project in web development. I used html5's canvas API for the front end, and Django for the back end. Incidentally, Django also runs this site.</p>
+					</article>
+					<article class="6u 12u$(xsmall) work-item">
+						<a href="https://github.com/trolleyman/Portal2"><img class="image fit" src="{% static 'homepage/images/projects/portal.jpg' %}" alt="" /></a>
+						<h3>Portal 2</h3>
+						<p>A small project messing around with OpenGL.</p>
+						<p>The program can load meshes and display a world with them in. Written in Rust.</p>
+					</article>
+				</div>
+				<div class="row">
+					<article class="6u 12u$(xsmall) work-item">
+						<a href="https://github.com/trolleyman/kmeans"><img class="image fit" src="{% static 'homepage/images/projects/kmeans.jpg' %}" alt="" /></a>
+						<h3>k-means</h3>
+						<p>A project exploring the k-means algorithm.</p>
+						<p>Uses the k-means algorithm to create a stylized version of the original image. Written in Rust.</p>
+					</article>
+					<article class="6u 12u$(xsmall) work-item">
+						<a href="https://github.com/trolleyman/Equator"><img class="image fit" src="{% static 'homepage/images/projects/equator.jpg' %}" alt="" /></a>
+						<h3>Equator</h3>
+						<p>An expression editor and evaluator that allows easy visualization and processing of mathematical expressions. Written in Rust using GTK+.</p>
+					</article>
+				</div>
+			</section>
+
+			<!-- Contact -->
+			<!--
+			<section>
+				<h2>Contact</h2>
+				<div class="row">
+					<div class="8u 12u$(small)">
+						<form method="post" action="/send_message">
+							<div class="row uniform 50%">
+								{% csrf_token %}
+								<div class="6u 12u$(xsmall)"><input type="text" name="name" id="name" placeholder="Name" /></div>
+								<div class="6u$ 12u$(xsmall)"><input type="email" name="email" id="email" placeholder="Email" /></div>
+								<div class="12u$"><textarea name="message" id="message" placeholder="Message" rows="6"></textarea></div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
+							</div>
+						</form>
+					</div>
+					<div class="4u$ 12u$(small)">
+						<ul class="labeled-icons">
+							<li>
+								<h3 class="icon fa-home"><span class="label">Address</span></h3>
+								###
+							</li>
+							<li>
+								<h3 class="icon fa-mobile"><span class="label">Phone</span></h3>
+								###
+							</li>
+							<li>
+								<h3 class="icon fa-envelope-o"><span class="label">Email</span></h3>
+								<a href="#">#</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+			-->
+		</div>
+
+		<!-- Footer -->
+		<footer id="footer">
+			<div class="inner">
+				<ul class="icons">
+					<li><a href="https://www.facebook.com/callum.tolley.7" title="Facebook" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+					<li><a href="https://github.com/trolleyman" title="Github" class="icon fa-github"><span class="label">Github</span></a></li>
+					<li><a href="mailto:callumgtolley@gmail.com" title="Email" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+					<li><a href="http://steamcommunity.com/id/trolleyman/" title="Steam" class="icon fa-steam"><span class="label">Steam</span></a></li>
+				</ul>
+				<ul class="copyright">
+					<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+				</ul>
+			</div>
+		</footer>
+
+		<!-- Scripts -->
+		<script src="{% static 'homepage/js/jquery.min.js' %}"></script>
+		<script src="{% static 'homepage/js/jquery.poptrox.min.js' %}"></script>
+		<script src="{% static 'homepage/js/skel.min.js' %}"></script>
+		<script src="{% static 'homepage/js/util.js' %}"></script>
+		<!--[if lte IE 8]><script src="{% static 'homepage/js/ie/respond.min.js' %}"></script><![endif]-->
+		<script src="{% static 'homepage/js/main.js' %}"></script>
+		<script>
+			window.addEventListener("load", function(){
+				// TODO: Remove titles from icons if label is displayed
+				/*
+				var icons = document.querySelector('.footer icons li');
+				for (var i = 0; i < icons.length; i++) {
+					var child = icons[i];
+					
+				}
+				*/
+			});
+		</script>
+	</body>
+</html>
