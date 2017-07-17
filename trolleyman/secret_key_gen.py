@@ -8,7 +8,7 @@ import string
 import random
 import os
 
-KEY_FILE_PATH = os.path.join(os.path.dirname(__file__), 'SECRET_KEY')
+KEY_FILE_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'SECRET_KEY')
 
 # If the SECRET_KEY file does not exist, generate it
 if not os.path.isfile(KEY_FILE_PATH):
