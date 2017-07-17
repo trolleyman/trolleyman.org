@@ -1,0 +1,21 @@
+
+#banner .inner ul {
+	list-style: none;
+	padding: 0;
+}
+
+#banner .inner ul li {
+	display: inline-block;
+	padding: 0;
+}
+
+#banner .inner ul li:not(:first-child) {
+	margin-left: 1em;
+	padding-left: 1em;
+}
+
+.spacer {
+	border-left: solid 2px rgba(255, 255, 255, 0.125);
+	width: 1px;
+	margin: 0 18px;
+}
