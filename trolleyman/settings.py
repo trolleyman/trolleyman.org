@@ -40,7 +40,7 @@ INTERNAL_IPS = (
 )
 
 DEFAULT_FROM_EMAIL = 'admin@trolleyman.org'
-SERVER_EMAIL = 'root@trolleyman.org'
+SERVER_EMAIL = 'admin@trolleyman.org'
 
 # Application definition
 
@@ -89,23 +89,12 @@ WSGI_APPLICATION = 'trolleyman.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'FlappyClone',
-            'USER': 'root',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'FlappyClone',
-            'USER': 'admin',
-            'PASSWORD': SECRET_KEY,
-        }
-    }
+}
 
 
 # Password validation
@@ -130,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-gb'
 
 TIME_ZONE = 'UTC'
 
