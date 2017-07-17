@@ -16,5 +16,8 @@ def index(request):
 def elements(request):
     return render(request, 'homepage/elements.html')
 
-def projects(request):
-    return render(request, 'homepage/projects.html')
+def projects_linc(request):
+    return render(request, 'homepage/projects/linc.html')
+
+def projects_flappy(request):
+    return render(request, 'homepage/projects/flappy.html')

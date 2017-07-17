@@ -3394,7 +3394,7 @@
 		}
 
 		.wrapper .inner {
-			padding: 3em 0 1em 0 ;
+			padding: 0 0 0 0 ;
 			margin: 0 auto;
 			width: 55em;
 		}
@@ -3640,7 +3640,7 @@
 				}
 
 				.wrapper .inner {
-					padding: 3em 3em 1em 3em ;
+					padding: 0 3em 0 3em ;
 					width: 100%;
 				}
 
@@ -3675,7 +3675,7 @@
 				}
 
 				.wrapper .inner {
-					padding: 2em 2em 0.1em 2em ;
+					padding: 0.5em 2em 0.1em 2em ;
 				}
 
 				.wrapper.spotlight .inner {

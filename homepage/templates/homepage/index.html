@@ -16,7 +16,6 @@
     <style>
       #banner {
         background-image: linear-gradient(to top, rgba(46, 49, 65, 0.38), rgba(46, 49, 65, 0.54)), url("{{ bg_url }}");
-        background-size: auto, cover;
       }
       
       @media screen and (min-width: 1281px) {
@@ -34,7 +33,7 @@
           <header id="header" class="alt">
             <h1><a href="/">Callum Tolley</a></h1>
             <nav>
-              <a href="#menu">Menu</a>
+              <a href="#menu"></a>
             </nav>
           </header>
 
@@ -45,7 +44,7 @@
               <ul class="links">
                 <li><a href="/">Home</a></li>
                 <li><a href="{% static 'homepage/cv.pdf' %}" target="_blank">CV</a></li>
-                <li><a href="projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
               </ul>
               <a href="#" class="close">Close</a>
             </div>
@@ -71,11 +70,11 @@
             <!-- One -->
               <section class="wrapper spotlight style1">
                 <div class="inner">
-                  <a href="#" class="image"><img src="{% static 'homepage/images/pic01.jpg' %}" alt=""></a>
+                  <a href="projects/linc" class="image"><img src="{% static 'homepage/images/linc_logo.png' %}" alt=""></a>
                   <div class="content">
-                    <h2 class="major">Magna arcu feugiat</h2>
-                    <p>Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras turpis ante, nullam sit amet turpis non, sollicitudin posuere urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla cursus.</p>
-                    <a href="#" class="special">Learn more</a>
+                    <h2 class="major">LINC Graph</h2>
+                    <p>A versatile social network visualization tool, developed with <a href="https://www.millenniumpoint.org.uk/">Millennium Point.</a></p>
+                    <a href="projects/linc" class="special">Learn more</a>
                   </div>
                 </div>
               </section>
@@ -83,11 +82,11 @@
             <!-- Two -->
               <section class="wrapper alt spotlight style2">
                 <div class="inner">
-                  <a href="#" class="image"><img src="{% static 'homepage/images/pic02.jpg' %}" alt=""></a>
+                  <a href="projects/flappy" class="image"><img src="{% static 'homepage/images/flappy.png' %}" alt=""></a>
                   <div class="content">
-                    <h2 class="major">Tempus adipiscing</h2>
-                    <p>Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras turpis ante, nullam sit amet turpis non, sollicitudin posuere urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla cursus.</p>
-                    <a href="#" class="special">Learn more</a>
+                    <h2 class="major">Flappy Clone</h2>
+                    <p>Yet another <a href="https://en.wikipedia.org/wiki/Flappy_Bird" target="_blank">Flappy Bird</a> clone.</p>
+                    <a href="projects/flappy" class="special">Learn more</a>
                   </div>
                 </div>
               </section>
@@ -107,9 +106,9 @@
 
         <!-- Footer -->
           <section id="footer">
-            <div class="inner">
-              <h2 class="major">Get in touch</h2>
-              <p>If you have any queries relating to jobs, my details are below:</p>
+            <div class="inner" id="contact">
+              <h2 class="major">Contact Details</h2>
+              <p>If you have any queries relating to jobs, my details are below.</p>
               <ul class="contact">
                 <li class="fa-home">
                   109 Poole Crescent<br>

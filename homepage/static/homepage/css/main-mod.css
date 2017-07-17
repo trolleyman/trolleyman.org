@@ -53,3 +53,19 @@
 	content: "";
 	display: table;
 }
+
+.wrapper.spotlight.style1 .image {
+	margin-left: 2.5em;
+}
+.wrapper.spotlight.style1 .image img {
+	width: 80%;
+}
+
+.wrapper.spotlight.style1 .image,
+.wrapper.spotlight.style2 .image {
+	border-radius: 0;
+}
+.wrapper.spotlight.style1 .image img,
+.wrapper.spotlight.style2 .image img {
+	border-radius: 0;
+}
