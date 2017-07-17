@@ -19,3 +19,37 @@
 	width: 1px;
 	margin: 0 18px;
 }
+
+.heading-right {
+	color: rgb(182, 182, 182);
+}
+
+@media screen and (min-width: 426px) {
+	.heading-right {
+		float: right;
+	}
+}
+
+.heading-right a {
+	border-bottom: none;
+	margin-left: 7px;
+}
+
+@media screen and (max-width: 425px) {
+	.heading-right a {
+		font-size: 20px;
+		margin-left: -5px;
+	}
+}
+
+@media screen and (max-width: 530px) {
+	.heading-right a {
+		margin-left: 0px;
+	}
+}
+
+.clearfix::after {
+	clear: both;
+	content: "";
+	display: table;
+}

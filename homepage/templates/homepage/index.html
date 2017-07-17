@@ -1,12 +1,8 @@
-<!DOCTYPE HTML>
-<!--
-  Solid State by HTML5 UP
-  html5up.net | @ajlkn
-  Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
+{% load static %}
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Solid State by HTML5 UP</title>
+    <title>Callum Tolley</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--[if lte IE 8]><script src="{% static 'homepage/js/ie/html5shiv.js' %}"></script><![endif]-->
@@ -15,13 +11,22 @@
     <!--[if lte IE 9]><link rel="stylesheet" href="{% static 'homepage/css/ie9.css' %}"><![endif]-->
     <!--[if lte IE 8]><link rel="stylesheet" href="{% static 'homepage/css/ie8.css' %}"><![endif]-->
     
+    <meta name="static" content="{% static 'homepage/' %}">
+    
     <style>
       #banner {
-        background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("{{ bg_url }}");
+        background-image: linear-gradient(to top, rgba(46, 49, 65, 0.38), rgba(46, 49, 65, 0.54)), url("{{ bg_url }}");
+        background-size: auto, cover;
+      }
+      
+      @media screen and (min-width: 1281px) {
+        #banner {
+          margin-bottom: -6.5em;
+        }
       }
     </style>
   </head>
-  <body>
+  <body class="is-loading">
     <!-- Page Wrapper -->
       <div id="page-wrapper">
 
@@ -38,9 +43,9 @@
             <div class="inner">
               <h2>Menu</h2>
               <ul class="links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="{% static 'homepage/cv.pdf' %}">CV</a></li>
-                <li><a href="projects.html">Projects</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="{% static 'homepage/cv.pdf' %}" target="_blank">CV</a></li>
+                <li><a href="projects">Projects</a></li>
               </ul>
               <a href="#" class="close">Close</a>
             </div>
@@ -50,7 +55,12 @@
           <section id="banner">
             <div class="inner">
               <div class="logo"><span class="icon fa-code"></span></div>
-              <h2>Callum Tolley</h2>
+              <h2 class="clearfix">Callum Tolley<div class="heading-right">
+                <a href="https://github.com/trolleyman"><span class="fa fa-github"></span></a>
+                <a href="https://facebook.com/callum.tolley.7"><span class="fa fa-facebook"></span></a>
+                <a href="https://www.linkedin.com/in/callum-tolley/"><span class="fa fa-linkedin"></span></a>
+                <a href="mailto:callumgtolley@gmail.com"><span class="fa fa-envelope"></span></a>
+              </div></h2>
               <p>Software Developer<span class="spacer"></span>Student<span class="spacer"></span>Hiker</p>
             </div>
           </section>
@@ -109,8 +119,6 @@
                 </li>
                 <li class="fa-phone">+44 7713 515181</li>
                 <li class="fa-envelope"><a href="mailto:callumgtolley@gmail.com">callumgtolley@gmail.com</a></li>
-                <li class="fa-facebook"><a href="https://facebook.com/callum.tolley.7">facebook.com/callum.tolley.7</a></li>
-                <li class="fa-github"><a href="https://github.com/trolleyman">github.com/trolleyman</a></li>
               </ul>
               <ul class="copyright">
                 <li>&copy; Callum Tolley. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
@@ -122,7 +130,13 @@
 
     <!-- Scripts -->
       <script src="{% static 'homepage/js/skel.min.js' %}"></script>
-      <script src="{% static 'homepage/js/jquery.min.js' %}"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script>
+        var loc = document.querySelector('meta[name="static"]').content + 'js/jquery.min.js';
+        loc = loc.replace('"', '&quot;')
+        if (!window.jQuery)
+          document.write('<script src="' + loc + '"><\/script>')
+      </script>
       <script src="{% static 'homepage/js/jquery.scrollex.min.js' %}"></script>
       <script src="{% static 'homepage/js/util.js' %}"></script>
       <!--[if lte IE 8]><script src="{% static 'homepage/js/ie/respond.min.js' %}"></script><![endif]-->

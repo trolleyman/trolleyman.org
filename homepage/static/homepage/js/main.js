@@ -127,7 +127,11 @@
 						event.stopPropagation();
 					})
 					.on('click', 'a', function(event) {
-
+						if ($(this).attr('target') === '_blank') {
+							$menu._hide();
+							return;
+						}
+						
 						var href = $(this).attr('href');
 
 						event.preventDefault();

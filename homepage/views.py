@@ -12,3 +12,9 @@ def index(request):
     bg_url = static('homepage/images/bg/{:02}.jpg'.format(i))
     
     return render(request, 'homepage/index.html', {'bg_url': bg_url})
+
+def elements(request):
+    return render(request, 'homepage/elements.html')
+
+def projects(request):
+    return render(request, 'homepage/projects.html')
