@@ -34,37 +34,26 @@
           <header id="header" class="alt">
             <ul>
               <li><h1><a href="/">Callum Tolley</a></h1></li>
-              <li>TODO 1</li>
-              <li>TODO 2</li>
+              <li><a href="{% static 'homepage/cv.pdf' %}" target="_blank">CV</a></li>
+              <li><a href="#contact">Contact</a></li>
             </ul>
-            <nav>
-              <a href="#menu"></a>
-            </nav>
           </header>
-
-        <!-- Menu -->
-          <nav id="menu">
-            <div class="inner">
-              <h2>Menu</h2>
-              <ul class="links">
-                <li><a href="/">Home</a></li>
-                <li><a href="{% static 'homepage/cv.pdf' %}" target="_blank">CV</a></li>
-                <li><a href="#contact">Contact</a></li>
-              </ul>
-              <a href="#" class="close">Close</a>
-            </div>
-          </nav>
 
         <!-- Banner -->
           <section id="banner">
             <div class="inner">
               <div class="logo"><span class="icon fa-code"></span></div>
-              <h2 class="clearfix">Callum Tolley<div class="heading-right">
-                <a href="https://github.com/trolleyman"><span class="fa fa-github"></span></a>
-                <a href="https://facebook.com/callum.tolley.7"><span class="fa fa-facebook"></span></a>
-                <a href="https://www.linkedin.com/in/callum-tolley/"><span class="fa fa-linkedin"></span></a>
-                <a href="mailto:callumgtolley@gmail.com"><span class="fa fa-envelope"></span></a>
-              </div></h2>
+              <h2 class="clearfix">Callum&nbsp;Tolley
+                <a class="heading-left" target="_blank" href="{% static 'homepage/cv.pdf' %}">
+                  CV
+                </a>
+                <span class="heading-right">
+                  <a href="https://github.com/trolleyman"><span class="fa fa-github"></span></a>
+                  <a href="https://facebook.com/callum.tolley.7"><span class="fa fa-facebook"></span></a>
+                  <a href="https://www.linkedin.com/in/callum-tolley/"><span class="fa fa-linkedin"></span></a>
+                  <a href="mailto:callumgtolley@gmail.com"><span class="fa fa-envelope"></span></a>
+                </span>
+              </h2>
               <p>Software Developer<span class="spacer"></span>Student<span class="spacer"></span>Hiker</p>
             </div>
           </section>
@@ -180,21 +169,23 @@
 
         <!-- Footer -->
           <section id="footer">
-            <div class="inner" id="contact">
-              <h2 class="major">Contact Details</h2>
-              <p>If you have any queries relating to jobs, my details are below.</p>
-              <ul class="contact">
-                <li class="fa-home">
-                  109 Poole Crescent<br>
-                  Harborne<br>
-                  Birmingham<br>
-                  B17 0PE
-                </li>
-                <li class="fa-phone">+44 7713 515181</li>
-                <li class="fa-envelope"><a href="mailto:callumgtolley@gmail.com">callumgtolley@gmail.com</a></li>
-              </ul>
+            <div class="inner">
+              <div id="contact">
+                <h2 class="major">Contact Details</h2>
+                <p>If you have any queries relating to jobs, my details are below.</p>
+                <ul class="contact">
+                  <li class="fa-home">
+                    109 Poole Crescent<br>
+                    Harborne<br>
+                    Birmingham<br>
+                    B17 0PE
+                  </li>
+                  <li class="fa-phone">+44 7713 515181</li>
+                  <li class="fa-envelope"><a href="mailto:callumgtolley@gmail.com">callumgtolley@gmail.com</a></li>
+                </ul>
+              </div>
               <ul class="copyright">
-                <li>&copy; Callum Tolley. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                <li>&copy; Callum Tolley.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
               </ul>
             </div>
           </section>
@@ -208,6 +199,6 @@
       <script src="{% static 'homepage/js/util.js' %}"></script>
       <!--[if lte IE 8]><script src="{% static 'homepage/js/ie/respond.min.js' %}"></script><![endif]-->
       <script src="{% static 'homepage/js/main.js' %}"></script>
-      <script src="{% static 'homepage/js/main-mod.js' %}"></script>
+      <script src="{% static 'homepage/js/index.js' %}"></script>
   </body>
 </html>
