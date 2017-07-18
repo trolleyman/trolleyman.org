@@ -203,16 +203,11 @@
 
     <!-- Scripts -->
       <script src="{% static 'homepage/js/skel.min.js' %}"></script>
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-      <script>
-        var loc = document.querySelector('meta[name="static"]').content + 'js/jquery.min.js';
-        loc = loc.replace('"', '&quot;')
-        if (!window.jQuery)
-          document.write('<script src="' + loc + '"><\/script>')
-      </script>
+      <script src="{% static 'homepage/js/jquery.min.js' %}"></script>
       <script src="{% static 'homepage/js/jquery.scrollex.min.js' %}"></script>
       <script src="{% static 'homepage/js/util.js' %}"></script>
       <!--[if lte IE 8]><script src="{% static 'homepage/js/ie/respond.min.js' %}"></script><![endif]-->
       <script src="{% static 'homepage/js/main.js' %}"></script>
+      <script src="{% static 'homepage/js/main-mod.js' %}"></script>
   </body>
 </html>
