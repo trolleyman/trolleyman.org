@@ -1,25 +1,3 @@
-#header ul {
-	list-style: none;
-	padding: 0;
-}
-
-#header ul li {
-	display: inline-block;
-	padding: 0;
-}
-
-#header ul li:not(:first-child) {
-	margin-left: 1em;
-	padding-left: 1em;
-}
-
-#header a:hover {
-	color: #fff !important;
-}
-
-#header h1 {
-	font-size: 109%;
-}
 
 .spacer {
 	border-left: solid 2px rgba(255, 255, 255, 0.125);
@@ -32,7 +10,6 @@
 	font-size: 80%;
 }
 
-#header ul li:not(:first-child) a,
 .heading-right, .heading-left {
 	border-bottom: none;
 	color: rgb(191, 191, 191);
@@ -69,13 +46,9 @@
 }
 
 .wrapper.spotlight.robot .image,
-.wrapper.spotlight.robot .image img,
 .wrapper.spotlight.portal .image,
-.wrapper.spotlight.portal .image img,
 .wrapper.spotlight.k-means .image,
-.wrapper.spotlight.k-means .image img,
-.wrapper.spotlight.equator .image,
-.wrapper.spotlight.equator .image img {
+.wrapper.spotlight.equator .image {
 	box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.5);
 }
 

@@ -51,6 +51,20 @@
 	#demo01, #demo02, #demo03 {
 		min-width: 4em;
 		width: auto;
-		height: 11.2em;
+		height: 12.4em;
 	}
+}
+
+@media screen and (max-width: 450px) {
+	#demo01, #demo02, #demo03 {
+		min-width: 4em;
+		width: auto;
+		height: 9.2em;
+	}
+}
+
+/* Image shadows */
+.wrapper.spotlight img {
+	box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
 }
