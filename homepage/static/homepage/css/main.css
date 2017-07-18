@@ -2886,7 +2886,8 @@
 			background-color: transparent;
 		}
 
-			#header.alt ul {
+			#header.alt ul > *:not(.always-visible),
+			#header.alt ul > *:not(.always-visible) * {
 				opacity: 0;
 				visibility: hidden;
 			}

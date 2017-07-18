@@ -15,6 +15,10 @@ Callum Tolley
 {% block banner_style %}
 {% endblock %}
 
+{% block header_pre_content %}
+  {% include 'homepage/projects/_back.html' with href='..' %}
+{% endblock %}
+
 {% block header_content %}
 {% endblock %}
 

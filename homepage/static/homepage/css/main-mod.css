@@ -23,7 +23,7 @@
 	font-size: 109%;
 }
 
-#header ul li:not(:first-child) a {
+#header ul li:not(.title) a {
 	border-bottom: none;
 	color: rgb(191, 191, 191);
 }

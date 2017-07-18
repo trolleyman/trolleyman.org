@@ -2,3 +2,48 @@
 .wrapper.spotlight .content > *:last-child {
 	margin-bottom: 0em;
 }
+
+#header {
+	padding-left: 0.5em;
+}
+
+#header .back-container {
+	width: 1.7em;
+	height: 1.7em;
+	margin-bottom: 0.2em;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 1.4em;
+	line-height: 1.45em;
+	
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
+#header .back-container .back {
+	-moz-transition: background-color 0.2s ease-in-out;
+	-webkit-transition: background-color 0.2s ease-in-out;
+	-ms-transition: background-color 0.2s ease-in-out;
+	transition: background-color 0.2s ease-in-out;
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+	border-radius: 100%;
+	border: solid 2px rgba(255, 255, 255, 0.225);
+}
+
+#header .back-container .back a {
+	margin-right: 0.15em;
+}
+
+#header .back-container .back:hover {
+	background-color: rgba(255, 255, 255, 0.075);
+}
+
+#header .back-container .back:active {
+	background-color: rgba(255, 255, 255, 0.125);
+}

@@ -35,7 +35,11 @@
         <!-- Header -->
           <header id="header" class="alt">
             <ul>
-              <li><h1><a href="/">Callum Tolley</a></h1></li>
+              {% block header_pre_content %}
+              {% endblock %}
+              
+              <li class="title"><h1><a href="/">Callum Tolley</a></h1></li>
+              
               {% block header_content %}
                 <li><a href="{% static 'homepage/cv.pdf' %}" target="_blank">CV</a></li>
                 <li><a href="#contact">Contact</a></li>
