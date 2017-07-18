@@ -16,6 +16,7 @@
     <style>
       #banner {
         background-image: linear-gradient(to top, rgba(46, 49, 65, 0.38), rgba(46, 49, 65, 0.54)), url("{{ bg_url }}");
+        background-size: auto, cover;
       }
       
       @media screen and (min-width: 1281px) {
@@ -31,7 +32,11 @@
 
         <!-- Header -->
           <header id="header" class="alt">
-            <h1><a href="/">Callum Tolley</a></h1>
+            <ul>
+              <li><h1><a href="/">Callum Tolley</a></h1></li>
+              <li>Link 1</li>
+              <li>Link 2</li>
+            </ul>
             <nav>
               <a href="#menu"></a>
             </nav>
@@ -67,38 +72,77 @@
         <!-- Wrapper -->
           <section id="wrapper">
 
-            <!-- One -->
-              <section class="wrapper spotlight style1">
+            <!-- LINC -->
+              <section class="wrapper spotlight style1 linc">
                 <div class="inner">
                   <a href="projects/linc" class="image"><img src="{% static 'homepage/images/linc_logo.png' %}" alt=""></a>
                   <div class="content">
                     <h2 class="major">LINC Graph</h2>
                     <p>A versatile social network visualization tool, developed with <a href="https://www.millenniumpoint.org.uk/">Millennium Point.</a></p>
+                    <div class="used">Languages: HTML, JavaScript, CSS, SQL, Python</div>
+                    <div class="used">Frameworks: Three.js, D3.js, Django</div>
                     <a href="projects/linc" class="special">Learn more</a>
                   </div>
                 </div>
               </section>
 
-            <!-- Two -->
-              <section class="wrapper alt spotlight style2">
+            <!-- Flappy Clone -->
+              <section class="wrapper alt spotlight style2 flappy">
                 <div class="inner">
                   <a href="projects/flappy" class="image"><img src="{% static 'homepage/images/flappy.png' %}" alt=""></a>
                   <div class="content">
                     <h2 class="major">Flappy Clone</h2>
-                    <p>Yet another <a href="https://en.wikipedia.org/wiki/Flappy_Bird" target="_blank">Flappy Bird</a> clone.</p>
+                    <p>
+                      Yet another Flappy Bird clone.
+                    </p>
+                    <div class="used">Languages: HTML, JavaScript, CSS, SQL, Python</div>
+                    <div class="used">Frameworks: HTML5 Canvas API, Django</div>
                     <a href="projects/flappy" class="special">Learn more</a>
                   </div>
                 </div>
               </section>
 
-            <!-- Three -->
-              <section class="wrapper spotlight style3">
+            <!-- Portal 2 -->
+              <section class="wrapper spotlight style3 portal">
                 <div class="inner">
-                  <a href="#" class="image"><img src="{% static 'homepage/images/pic03.jpg' %}" alt=""></a>
+                  <a href="#" class="image"><img src="{% static 'homepage/images/portal.jpg' %}" alt=""></a>
                   <div class="content">
-                    <h2 class="major">Nullam dignissim</h2>
-                    <p>Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras turpis ante, nullam sit amet turpis non, sollicitudin posuere urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla cursus.</p>
-                    <a href="#" class="special">Learn more</a>
+                    <h2 class="major">Portal 2</h2>
+                    <p>
+                      A redo of my first Portal project, an shameless attempt to copy my favourite video game at the time, Portal. Guess that makes this a redo of a redo.
+                    </p>
+                    <div class="used">Rust and OpenGL</div>
+                    <a href="projects/portal" class="special">Learn more</a>
+                  </div>
+                </div>
+              </section>
+            
+            <!-- k-means -->
+              <section class="wrapper alt spotlight style4 k-means">
+                <div class="inner">
+                  <a href="#" class="image"><img src="{% static 'homepage/images/k-means.jpg' %}" alt=""></a>
+                  <div class="content">
+                    <h2 class="major">k-means</h2>
+                    <p>
+                      Using the k-means algorithm to create pretty pictures.
+                    </p>
+                    <div class="used">Used Rust</div>
+                    <a href="projects/k-means" class="special">Learn more</a>
+                  </div>
+                </div>
+              </section>
+            
+            <!-- Equator -->
+              <section class="wrapper spotlight style5 equator">
+                <div class="inner">
+                  <a href="#" class="image"><img src="{% static 'homepage/images/equator.jpg' %}" alt=""></a>
+                  <div class="content">
+                    <h2 class="major">Equator</h2>
+                    <p>
+                      An expression editor and evaluator that allows easy visualization and processing of mathematical expressions.
+                    </p>
+                    <div class="used">Rust using GTK+</div>
+                    <a href="projects/equator" class="special">Learn more</a>
                   </div>
                 </div>
               </section>

@@ -21,3 +21,12 @@ def projects_linc(request):
 
 def projects_flappy(request):
     return render(request, 'homepage/projects/flappy.html')
+
+def projects_portal2(request):
+    return render(request, 'homepage/projects/portal2.html')
+
+def projects_kmeans(request):
+    return render(request, 'homepage/projects/k-means.html')
+
+def projects_equator(request):
+    return render(request, 'homepage/projects/equator.html')

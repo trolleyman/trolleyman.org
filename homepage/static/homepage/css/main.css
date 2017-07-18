@@ -2807,20 +2807,24 @@
 	}
 
 		#header h1 {
-			-moz-transition: opacity 0.2s ease-in-out, visibility 0.2s;
-			-webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s;
-			-ms-transition: opacity 0.2s ease-in-out, visibility 0.2s;
-			transition: opacity 0.2s ease-in-out, visibility 0.2s;
 			border-bottom: 0;
 			font-size: 0.8em;
 			margin-bottom: 0;
-			opacity: 1;
-			visibility: visible;
 		}
 
 			#header h1 a {
 				border: 0;
 			}
+		
+		#header *:not(nav) {
+			-moz-transition: opacity 0.2s ease-in-out, visibility 0.2s;
+			-webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s;
+			-ms-transition: opacity 0.2s ease-in-out, visibility 0.2s;
+			transition: opacity 0.2s ease-in-out, visibility 0.2s;
+			
+			opacity: 1;
+			visibility: visible;
+		}
 
 		#header nav {
 			font-family: Raleway, Helvetica, sans-serif;
@@ -2843,7 +2847,7 @@
 
 				#header nav a:before {
 					float: right;
-					margin-left: 0.75em;
+					margin-left: 0;
 				}
 
 				#header nav a[href="#menu"] {
@@ -2882,7 +2886,7 @@
 			background-color: transparent;
 		}
 
-			#header.alt h1 {
+			#header.alt *:not(nav) {
 				opacity: 0;
 				visibility: hidden;
 			}
