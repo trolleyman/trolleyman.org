@@ -52,6 +52,14 @@
 	box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.5);
 }
 
+.wrapper.spotlight.linc .image,
+.wrapper.spotlight.flappy .image,
+.wrapper.spotlight.zucchini .image {
+	-webkit-filter: drop-shadow(8px 8px 20px rgba(0,0,0,0.5));
+	-ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=8, OffY=8, Color='#88000000')";
+	filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=8, OffY=8, Color='#88000000')";
+}
+
 .wrapper.spotlight .inner .used {
 	font-style: italic;
 }
