@@ -67,15 +67,23 @@
 	float: right;
 }*/
 
-.wrapper.spotlight.linc .image,
-.wrapper.spotlight.linc .image img,
-.wrapper.spotlight.flappy .image,
-.wrapper.spotlight.flappy .image img,
-.wrapper.spotlight.equator .image,
-.wrapper.spotlight.equator .image img {
+/* Reset border radius */
+.wrapper.spotlight .image,
+.wrapper.spotlight .image img {
 	border-radius: 0;
 }
 
+.wrapper.spotlight.robot .image,
+.wrapper.spotlight.robot .image img,
+.wrapper.spotlight.portal .image,
+.wrapper.spotlight.portal .image img,
+.wrapper.spotlight.k-means .image,
+.wrapper.spotlight.k-means .image img {
+	border-radius: 5px;
+}
+
+.wrapper.spotlight.robot .image,
+.wrapper.spotlight.robot .image img,
 .wrapper.spotlight.portal .image,
 .wrapper.spotlight.portal .image img,
 .wrapper.spotlight.k-means .image,
@@ -83,13 +91,6 @@
 .wrapper.spotlight.equator .image,
 .wrapper.spotlight.equator .image img {
 	box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.5);
-}
-
-.wrapper.spotlight.portal .image,
-.wrapper.spotlight.portal .image img,
-.wrapper.spotlight.k-means .image,
-.wrapper.spotlight.k-means .image img {
-	border-radius: 5px;
 }
 
 section .content .used {
