@@ -54,12 +54,18 @@
 	display: table;
 }
 
+/*
 .wrapper.spotlight.linc .image {
 	margin-left: 2.5em;
 }
 .wrapper.spotlight.linc .image img {
-	width: 80%;
+	width: 60%;
 }
+
+.wrapper.spotlight.flappy .image img {
+	width: 70%;
+	float: right;
+}*/
 
 .wrapper.spotlight.linc .image,
 .wrapper.spotlight.linc .image img,

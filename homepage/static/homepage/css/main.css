@@ -3650,7 +3650,7 @@
 
 				.wrapper.spotlight .image {
 					margin: 0 2em 2em 0;
-					width: 32em;
+					width: 21em;
 				}
 
 				.wrapper.spotlight:nth-child(2n - 1) .image {
@@ -3709,7 +3709,7 @@
 			.wrapper.spotlight .image {
 				margin: 0 0 1em 0 !important;
 				max-width: 85%;
-				width: 12em;
+				width: 11em;
 			}
 
 		}
