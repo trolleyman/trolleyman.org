@@ -2816,7 +2816,7 @@
 				border: 0;
 			}
 		
-		#header *:not(nav) {
+		#header ul {
 			-moz-transition: opacity 0.2s ease-in-out, visibility 0.2s;
 			-webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s;
 			-ms-transition: opacity 0.2s ease-in-out, visibility 0.2s;
@@ -2886,7 +2886,7 @@
 			background-color: transparent;
 		}
 
-			#header.alt *:not(nav) {
+			#header.alt ul {
 				opacity: 0;
 				visibility: hidden;
 			}
