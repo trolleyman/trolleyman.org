@@ -29,11 +29,11 @@ if not os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
     ALLOWED_HOSTS = ['.trolleyman.org', 'trolleyman.org']
     CONN_MAX_AGE = None
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
-    log_path = os.path.join(os.path.dirname(__file__), 'log.txt') # '/var/log/apache2/django.log'
+    log_path = os.path.join(BASE_DIR, 'log.txt') # '/var/log/apache2/django.log'
 else:
     DEBUG = True
     ALLOWED_HOSTS = []
-    log_path = os.path.join(os.path.dirname(__file__), 'log.txt')
+    log_path = os.path.join(BASE_DIR, 'log.txt')
 
 INTERNAL_IPS = (
     '127.0.0.1',

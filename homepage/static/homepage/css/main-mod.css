@@ -76,6 +76,15 @@
 	}
 }
 
+/* Button margins */
+.wrapper.spotlight .inner .special {
+	margin-top: 0.8em;
+}
+
 .wrapper.spotlight .inner ul li a {
 	margin-bottom: 0;
+}
+
+.wrapper.spotlight .inner .special.github::before {
+	content: "";
 }

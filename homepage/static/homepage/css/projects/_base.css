@@ -1,12 +1,59 @@
 
+/* Banner Logo */
+#banner .logo img {
+	height: 3em;
+}
+
+#banner .logo {
+	margin-bottom: 0.5em !important;
+}
+
+@media screen and (max-width: 736px) {
+	#banner .logo img {
+		height: 2em;
+	}
+}
+
+/* Banner */
+#banner {
+	background-position-y: center;
+	padding-bottom: 5em;
+	padding-top: 3em;
+}
+
+/* Content Padding */
+.wrapper.spotlight .inner {
+	padding-top: 1.5em;
+	padding-bottom: 1.5em;
+}
+
+/* Reset margins for images... */
+.wrapper.spotlight img {
+	margin: 0;
+}
+
+/* ...apart from the right/left */
+.wrapper.spotlight img.right {
+	float: right;
+	margin-left: 1em;
+}
+
+.wrapper.spotlight img.left {
+	float: left;
+	margin-right: 1em;
+}
+
+/* Ensure that no extra margin is on the last child of the inner content */
 .wrapper.spotlight .content > *:last-child {
 	margin-bottom: 0em;
 }
 
+/* Heading change in padding to accomodate back button */
 #header {
 	padding-left: 0.5em;
 }
 
+/* Back styling */
 #header .back-container {
 	width: 1.7em;
 	height: 1.7em;

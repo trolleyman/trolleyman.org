@@ -1,0 +1,50 @@
+{% extends 'homepage/projects/_base.html' %}
+{% load static %}
+
+{% block title %}
+  Callum Tolley - LINC
+{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'homepage/css/projects/linc.css' %}">
+{% endblock %}
+
+{% block banner_style %}
+  {% static 'homepage/images/projects/linc/graph_black.jpg' as banner_img_url %}
+  {% include 'homepage/_banner_img_style.html' %}
+{% endblock %}
+
+{% block banner_content %}
+  <div class="logo"><img src="{% static 'homepage/images/projects/linc/logo.png' %}"></img></div>
+  <h2>LINC</h2>
+{% endblock %}
+
+{% block main_content %}
+  <section class="wrapper spotlight style1">
+    <div class="inner">
+      <div class="content">
+        <p>
+          <img id="launch" class="right" src="{% static 'homepage/images/projects/linc/connect_launch.jpg' %}">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque erat erat, convallis ac scelerisque sit amet, tincidunt vitae augue. Sed ac nunc sit amet tellus tincidunt vehicula. Suspendisse ultrices dignissim tempus. Suspendisse id metus ac odio ultricies feugiat sed ut neque. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc ultrices elementum interdum. Etiam bibendum dui vel lorem tristique, nec pretium nulla sodales. Nam tincidunt fermentum pretium. Phasellus non dapibus orci.
+        </p><p>
+          <img id="graph" class="left" src="{% static 'homepage/images/projects/linc/graph_white.jpg' %}">
+          Etiam id dignissim urna, nec convallis nisl. Phasellus pellentesque id mi ut sagittis. Praesent cursus sem erat, ut volutpat felis varius sed. Aenean nibh erat, fermentum non aliquam vitae, mollis et lacus. Nam efficitur, ipsum vitae venenatis posuere, justo metus suscipit tellus, auctor lacinia risus diam quis dui. Mauris diam purus, mattis at facilisis vitae, venenatis commodo sem. Vestibulum rhoncus malesuada mi.
+        </p><p>
+          Curabitur imperdiet suscipit dolor, vitae commodo dolor placerat vel. Curabitur non justo consequat, consectetur lacus a, porta libero. Phasellus sit amet felis pharetra, maximus elit a, imperdiet nibh. Integer euismod quis eros malesuada congue. Mauris fringilla magna id nulla condimentum, bibendum finibus magna dictum.
+        </p><p>
+          Vestibulum quam orci, mattis id porttitor nec, fringilla ac risus. Fusce interdum euismod velit, nec consectetur urna iaculis eu.
+        </p>
+        <ul class="links">
+          <li><a href="http://lincgraph.co" class="special">Website</a></li>
+          <li><a href="http://lincgraph.co/connect" class="special">Demo</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block footer_content %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
