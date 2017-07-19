@@ -50,6 +50,7 @@
 
         <!-- Banner -->
           <section id="banner">
+            <div id="banner-overlay"></div>
             <div class="inner">
               {% block banner_content %}
                 <div class="logo"><span class="icon fa-code"></span></div>
@@ -237,19 +238,19 @@
       <script src="{% static 'homepage/js/util.js' %}"></script>
       <!--[if lte IE 8]><script src="{% static 'homepage/js/ie/respond.min.js' %}"></script><![endif]-->
       <script src="{% static 'homepage/js/main.js' %}"></script>
+      <script>
+  window.addEventListener('load', function() {
+    var url = document.querySelector('meta[name="banner-bg-url"]').content;
+    
+    var img = new Image();
+    img.onload = function() {
+      document.querySelector('#banner').className = 'loaded';
+    };
+    img.src = url;
+  });
+</script>
       {% block scripts %}
         <script src="{% static 'homepage/js/index.js' %}"></script>
       {% endblock %}
-      <script>
-        $(window).on('load', function() {
-          var url = document.querySelector('meta[name="banner-bg-url"]').content;
-          
-          var img = new Image();
-          img.onload = function() {
-            document.querySelector('#banner').className = 'loaded';
-          }
-          img.src = url;
-        });
-      </script>
   </body>
 </html>
