@@ -24,7 +24,7 @@ with open(os.path.join(BASE_DIR, 'SECRET_KEY'), 'r') as f:
     SECRET_KEY = f.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if not 'TROLLEYMAN_ORG_DEBUG_MODE' in os.environ:
+if not os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
     DEBUG = False
     ALLOWED_HOSTS = ['.trolleyman.org', 'trolleyman.org']
     CONN_MAX_AGE = None

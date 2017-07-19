@@ -10,5 +10,5 @@ db.sqlite3
 log.txt
 /venv/
 
-# FlappyClone
-/FlappyClone/static/FlappyClone/js
+# Debug flag
+/DEBUG
