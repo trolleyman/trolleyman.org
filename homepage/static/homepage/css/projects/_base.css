@@ -48,6 +48,12 @@
 	margin-bottom: 0em;
 }
 
+/* Image shadows */
+.wrapper.spotlight img {
+	box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
+}
+
 /* Heading change in padding to accomodate back button */
 #header {
 	padding-left: 0.5em;

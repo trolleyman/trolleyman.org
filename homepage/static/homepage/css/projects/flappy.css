@@ -1,10 +1,4 @@
 
-/* Images */
-.wrapper.spotlight img {
-	box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.5);
-	border-radius: 5px;
-}
-
 #demo1, #demo2, #demo3 {
 	min-width: 4em;
 	width: auto;

@@ -1,20 +1,20 @@
 
-img#launch, img#graph {
+img#shooting, img#victory {
 	min-width: 4em;
 	width: auto;
 	height: 11em;
 }
 
 @media screen and (max-width: 736px) {
-	img#launch, img#graph {
+	img#shooting, img#victory {
 		min-width: 4em;
 		width: auto;
-		height: 11em;
+		height: 7.9em;
 	}
 }
 
 @media screen and (max-width: 450px) {
-	img#launch, img#graph {
+	img#shooting, img#victory {
 		min-width: initial;
 		width: 100%;
 		height: auto;
