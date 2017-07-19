@@ -21,11 +21,11 @@
       <link rel="stylesheet" href="{% static 'homepage/css/index.css' %}">
     {% endblock %}
     
-    {% block head %}
+    {% block banner_bg %}
+      {% include 'homepage/_banner_bg.html' with banner_img_url=bg_url %}
     {% endblock %}
     
-    {% block banner_style %}
-      {% include 'homepage/_banner_img_style.html' with banner_img_url=bg_url %}
+    {% block head %}
     {% endblock %}
   </head>
   <body class="is-loading">
@@ -240,5 +240,16 @@
       {% block scripts %}
         <script src="{% static 'homepage/js/index.js' %}"></script>
       {% endblock %}
+      <script>
+        $(window).on('load', function() {
+          var url = document.querySelector('meta[name="banner-bg-url"]').content;
+          
+          var img = new Image();
+          img.onload = function() {
+            document.querySelector('#banner').className = 'loaded';
+          }
+          img.src = url;
+        });
+      </script>
   </body>
 </html>

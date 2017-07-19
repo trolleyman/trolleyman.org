@@ -1,0 +1,16 @@
+<meta name="banner-bg-url" content="{{ banner_img_url }}">
+<style>
+  #banner {
+    background-image: linear-gradient(to top, rgba(46, 49, 65, 0.38), rgba(46, 49, 65, 0.54)), rgba(0, 0, 0, 0);
+    
+    -webkit-transition: background 0.4s ease;
+    -moz-transition: background 0.4s ease;
+    -o-transition: background 0.4s ease;
+    -ms-transition: background 0.4s ease;
+    transition: background 0.4s ease;
+  }
+
+  #banner.loaded {
+    background-image: linear-gradient(to top, rgba(46, 49, 65, 0.38), rgba(46, 49, 65, 0.54)), url("{{ banner_img_url }}");
+  }
+</style>
