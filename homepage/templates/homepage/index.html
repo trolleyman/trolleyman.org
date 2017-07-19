@@ -1,4 +1,5 @@
 {% load static %}
+{% load pipeline %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -8,10 +9,9 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <link rel="stylesheet" href="{% static 'homepage/css/normalize.css' %}">
     <!--[if lte IE 8]><script src="{% static 'homepage/js/ie/html5shiv.js' %}"></script><![endif]-->
-    <link rel="stylesheet" href="{% static 'homepage/css/main.css' %}">
-    <link rel="stylesheet" href="{% static 'homepage/css/main-mod.css' %}">
+    
+    {% stylesheet 'homepage-main' %}
     <!--[if lte IE 9]><link rel="stylesheet" href="{% static 'homepage/css/ie9.css' %}"><![endif]-->
     <!--[if lte IE 8]><link rel="stylesheet" href="{% static 'homepage/css/ie8.css' %}"><![endif]-->
     
@@ -75,7 +75,7 @@
               <!-- LINC -->
                 <section class="wrapper spotlight style1 linc">
                   <div class="inner">
-                    <a href="projects/linc" class="image"><img src="{% static 'homepage/images/projects/linc/logo.png' %}" alt=""></a>
+                    <a href="projects/linc" class="image"><img src="{% static 'homepage/images/projects/linc/logo.min.png' %}" alt=""></a>
                     <div class="content">
                       <h2 class="major">LINC</h2>
                       <p>A versatile social network visualization tool, developed with <a href="https://www.millenniumpoint.org.uk/">Millennium Point.</a></p>
@@ -113,7 +113,7 @@
               <!-- Zucchini -->
                 <section class="wrapper spotlight style3 zucchini">
                   <div class="inner">
-                    <a href="#" class="image"><img src="{% static 'homepage/images/projects/zucchini/logo.png' %}" alt=""></a>
+                    <a href="#" class="image"><img src="{% static 'homepage/images/projects/zucchini/logo.min.gif' %}" alt=""></a>
                     <div class="content">
                       <h2 class="major">Zucchini</h2>
                       <p>
@@ -132,7 +132,7 @@
               <!-- Robot Programming -->
                 <section class="wrapper alt spotlight style4 robot">
                   <div class="inner">
-                    <a href="#" class="image"><img src="{% static 'homepage/images/projects/robot/casterbot.jpg' %}" alt=""></a>
+                    <a href="#" class="image"><img src="{% static 'homepage/images/projects/robot/casterbot.min.jpg' %}" alt=""></a>
                     <div class="content">
                       <h2 class="major">Team Project: Probot Programming</h2>
                       <p>
@@ -151,7 +151,7 @@
               <!-- Portal 2 -->
                 <section class="wrapper spotlight style5 portal">
                   <div class="inner">
-                    <a href="#" class="image"><img src="{% static 'homepage/images/projects/portal/screenshot.jpg' %}" alt=""></a>
+                    <a href="#" class="image"><img src="{% static 'homepage/images/projects/portal/screenshot.min.jpg' %}" alt=""></a>
                     <div class="content">
                       <h2 class="major">Portal 2</h2>
                       <p>
@@ -169,7 +169,7 @@
               <!-- k-means -->
                 <section class="wrapper alt spotlight style6 k-means">
                   <div class="inner">
-                    <a href="#" class="image"><img src="{% static 'homepage/images/projects/k-means/alabama-hills-ca.jpg' %}" alt=""></a>
+                    <a href="#" class="image"><img src="{% static 'homepage/images/projects/k-means/alabama-hills-ca.min.jpg' %}" alt=""></a>
                     <div class="content">
                       <h2 class="major">k-means</h2>
                       <p>

@@ -104,10 +104,10 @@ body.is-loading .wrapper.spotlight .inner {
 	-ms-transform: translateX(0.25em);
 	transform: translateX(0.25em);
 	
-	-moz-filter: blur(2px);
-	-webkit-filter: blur(2px);
-	-ms-filter: blur(2px);
-	filter: blur(2px);
+	-moz-filter: blur(8px);
+	-webkit-filter: blur(8px);
+	-ms-filter: blur(8px);
+	filter: blur(8px);
 }
 
 .wrapper.spotlight .inner {
