@@ -100,3 +100,10 @@
 #header .back-container .back:active {
 	background-color: rgba(255, 255, 255, 0.125);
 }
+
+.wrapper.spotlight .inner {
+	-moz-transition-delay: 0.75s;
+	-webkit-transition-delay: 0.75s;
+	-ms-transition-delay: 0.75s;
+	transition-delay: 0.75s;
+}
