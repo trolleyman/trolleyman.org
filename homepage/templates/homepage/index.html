@@ -1,161 +1,256 @@
 {% load static %}
-<!DOCTYPE HTML>
-<!--
-	Strata by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
+{% load pipeline %}
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>Callum Tolley</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="{% static 'homepage/js/ie/html5shiv.js' %}"></script><![endif]-->
-		<link rel="stylesheet" href="{% static 'homepage/css/main.css' %}" />
-		<style>
-			#header {
-				background-image: url("{% static 'homepage/css/images/overlay.png' %}"), url("{{ bg_url }}");
-			}
-			
-			@media screen and (max-width: 980px) {
-				#footer {
-					background-image: url("{% static 'homepage/css/images/overlay.png' %}"), url("{{ bg_url }}");
-				}
-			}
-			
-			@media screen and (min-width: 979px) {
-				#header {
-					background-attachment: scroll;
-					background-size: auto, cover;
-					background-position: 50% 0px;
-				}
-			}
-		</style>
-		<!--[if lte IE 8]><link rel="stylesheet" href="{% static 'homepage/css/ie8.css' %}" /><![endif]-->
-	</head>
-	<body id="top">
-		<!-- Header -->
-		<header id="header">
-			<div class="inner">
-				<img class="image avatar" src="{% static 'homepage/images/me.jpg' %}" alt="" />
-				<h1><strong>Callum Tolley</strong><br /></h1>
-				<h1>Second year computer science student at the University of Birmingham</h1>
-			</div>
-		</header>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>{% block title %}Callum Tolley{% endblock %}</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!--[if lte IE 8]><script src="{% static 'homepage/js/ie/html5shiv.js' %}"></script><![endif]-->
+    
+    {% stylesheet 'homepage-main' %}
+    <!--[if lte IE 9]><link rel="stylesheet" href="{% static 'homepage/css/ie9.css' %}"><![endif]-->
+    <!--[if lte IE 8]><link rel="stylesheet" href="{% static 'homepage/css/ie8.css' %}"><![endif]-->
+    
+    <meta name="static" content="{% static 'homepage/' %}">
+    
+    {% block head_base %}
+      <link rel="stylesheet" href="{% static 'homepage/css/index.css' %}">
+    {% endblock %}
+    
+    {% block banner_bg %}
+      {% include 'homepage/_banner_bg.html' with banner_img_url=bg_url %}
+    {% endblock %}
+    
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body class="is-loading">
+  
+    <!-- Page Wrapper -->
+      <div id="page-wrapper">
 
-		<!-- Main -->
-		<div id="main">
-			<!-- Jobs -->
-			<section>
-				<h2>Jobs</h2>
-				<p>I am always on the look out for work - if you have a job offer please don't hesitate to send me a message! My email address is <a href="mailto:callumgtolley@gmail.com">callumgtolley@gmail.com</a></p>
-				<p>For potential employers, <a href="{% static 'homepage/cv.pdf' %}">here</a> is a link to my CV.</p>
-			</section>
-			
-			<!-- Projects -->
-			<section>
-				<h2>Projects</h2>
-				<div class="row">
-					<article class="6u 12u$(xsmall) work-item">
-						<a href="/FlappyClone"><img class="image fit" src="{% static 'homepage/images/projects/flappy.jpg' %}" alt="" /></a>
-						<h3>Flappy Clone</h3>
-						<p>Yet another clone of the hit game Flappy Bird.</p>
-						<p>This was my first major project in web development. I used html5's canvas API for the front end, and Django for the back end. Incidentally, Django also runs this site.</p>
-					</article>
-					<article class="6u 12u$(xsmall) work-item">
-						<a href="https://github.com/trolleyman/Portal2"><img class="image fit" src="{% static 'homepage/images/projects/portal.jpg' %}" alt="" /></a>
-						<h3>Portal 2</h3>
-						<p>A small project messing around with OpenGL.</p>
-						<p>The program can load meshes and display a world with them in. Written in Rust.</p>
-					</article>
-				</div>
-				<div class="row">
-					<article class="6u 12u$(xsmall) work-item">
-						<a href="https://github.com/trolleyman/kmeans"><img class="image fit" src="{% static 'homepage/images/projects/kmeans.jpg' %}" alt="" /></a>
-						<h3>k-means</h3>
-						<p>A project exploring the k-means algorithm.</p>
-						<p>Uses the k-means algorithm to create a stylized version of the original image. Written in Rust.</p>
-					</article>
-					<article class="6u 12u$(xsmall) work-item">
-						<a href="https://github.com/trolleyman/Equator"><img class="image fit" src="{% static 'homepage/images/projects/equator.jpg' %}" alt="" /></a>
-						<h3>Equator</h3>
-						<p>An expression editor and evaluator that allows easy visualization and processing of mathematical expressions. Written in Rust using GTK+.</p>
-					</article>
-				</div>
-			</section>
+        <!-- Header -->
+          <header id="header" class="alt">
+            <ul>
+              {% block header_pre_content %}
+              {% endblock %}
+              
+              <li class="title"><h1><a href="/">Callum Tolley</a></h1></li>
+              
+              {% block header_content %}
+                <li><a href="{% static 'homepage/cv.pdf' %}" target="_blank">CV</a></li>
+                <li><a href="#contact">Contact</a></li>
+              {% endblock %}
+            </ul>
+          </header>
 
-			<!-- Contact -->
-			<!--
-			<section>
-				<h2>Contact</h2>
-				<div class="row">
-					<div class="8u 12u$(small)">
-						<form method="post" action="/send_message">
-							<div class="row uniform 50%">
-								{% csrf_token %}
-								<div class="6u 12u$(xsmall)"><input type="text" name="name" id="name" placeholder="Name" /></div>
-								<div class="6u$ 12u$(xsmall)"><input type="email" name="email" id="email" placeholder="Email" /></div>
-								<div class="12u$"><textarea name="message" id="message" placeholder="Message" rows="6"></textarea></div>
-								<ul class="actions">
-									<li><input type="submit" value="Send Message" /></li>
-								</ul>
-							</div>
-						</form>
-					</div>
-					<div class="4u$ 12u$(small)">
-						<ul class="labeled-icons">
-							<li>
-								<h3 class="icon fa-home"><span class="label">Address</span></h3>
-								###
-							</li>
-							<li>
-								<h3 class="icon fa-mobile"><span class="label">Phone</span></h3>
-								###
-							</li>
-							<li>
-								<h3 class="icon fa-envelope-o"><span class="label">Email</span></h3>
-								<a href="#">#</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</section>
-			-->
-		</div>
+        <!-- Banner -->
+          <section id="banner">
+            <div id="banner-overlay"></div>
+            <div class="inner">
+              {% block banner_content %}
+                <div class="logo"><span class="icon fa-code"></span></div>
+                <h2 class="clearfix">Callum&nbsp;Tolley
+                  <a class="heading-left" target="_blank" href="{% static 'homepage/cv.pdf' %}">
+                    CV
+                  </a>
+                  <span class="heading-right">
+                    <a href="https://github.com/trolleyman"><span class="fa fa-github"></span></a>
+                    <a href="https://facebook.com/callum.tolley.7"><span class="fa fa-facebook"></span></a>
+                    <a href="https://www.linkedin.com/in/callum-tolley/"><span class="fa fa-linkedin"></span></a>
+                    <a href="mailto:callumgtolley@gmail.com"><span class="fa fa-envelope"></span></a>
+                  </span>
+                </h2>
+                <p>Software Developer<span class="spacer"></span>Student<span class="spacer"></span>Hiker</p>
+              {% endblock %}
+            </div>
+          </section>
 
-		<!-- Footer -->
-		<footer id="footer">
-			<div class="inner">
-				<ul class="icons">
-					<li><a href="https://www.facebook.com/callum.tolley.7" title="Facebook" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-					<li><a href="https://github.com/trolleyman" title="Github" class="icon fa-github"><span class="label">Github</span></a></li>
-					<li><a href="mailto:callumgtolley@gmail.com" title="Email" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
-					<li><a href="http://steamcommunity.com/id/trolleyman/" title="Steam" class="icon fa-steam"><span class="label">Steam</span></a></li>
-				</ul>
-				<ul class="copyright">
-					<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-				</ul>
-			</div>
-		</footer>
+        <!-- Wrapper -->
+          <section id="wrapper">
+            {% block main_content %}
+              <!-- LINC -->
+                <section class="wrapper spotlight style1 linc">
+                  <div class="inner">
+                    <a href="projects/linc" class="image"><img src="{% static 'homepage/images/projects/linc/logo.min.png' %}" alt=""></a>
+                    <div class="content">
+                      <h2 class="major">LINC</h2>
+                      <p>A versatile social network visualization tool, developed with <a href="https://www.millenniumpoint.org.uk/">Millennium Point.</a></p>
+                      <div class="used">Languages: HTML, JavaScript, CSS, SQL, Python</div>
+                      <div class="used">Frameworks: Three.js, D3.js, Django</div>
+                      <ul class="links">
+                        <li><a href="http://lincgraph.co" class="special">Website</a></li>
+                        <li><a href="http://lincgraph.co/connect" class="special">Demo</a></li>
+                        <li><a href="projects/linc" class="special">Learn more</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
 
-		<!-- Scripts -->
-		<script src="{% static 'homepage/js/jquery.min.js' %}"></script>
-		<script src="{% static 'homepage/js/jquery.poptrox.min.js' %}"></script>
-		<script src="{% static 'homepage/js/skel.min.js' %}"></script>
-		<script src="{% static 'homepage/js/util.js' %}"></script>
-		<!--[if lte IE 8]><script src="{% static 'homepage/js/ie/respond.min.js' %}"></script><![endif]-->
-		<script src="{% static 'homepage/js/main.js' %}"></script>
-		<script>
-			window.addEventListener("load", function(){
-				// TODO: Remove titles from icons if label is displayed
-				/*
-				var icons = document.querySelector('.footer icons li');
-				for (var i = 0; i < icons.length; i++) {
-					var child = icons[i];
-					
-				}
-				*/
-			});
-		</script>
-	</body>
+              <!-- Flappy Clone -->
+                <section class="wrapper alt spotlight style2 flappy">
+                  <div class="inner">
+                    <a href="projects/flappy" class="image"><img src="{% static 'homepage/images/projects/flappy/logo.png' %}" alt=""></a>
+                    <div class="content">
+                      <h2 class="major">Flappy Clone</h2>
+                      <p>
+                        Yet another Flappy Bird clone.
+                      </p>
+                      <div class="used">Languages: HTML, JavaScript, CSS, SQL, Python</div>
+                      <div class="used">Frameworks: HTML5 Canvas API, Django</div>
+                      <ul class="links">
+                        <li><a href="https://github.com/trolleyman/FlappyClone" class="special">Github</a></li>
+                        <li><a href="/FlappyClone" class="special">Demo</a></li>
+                        <li><a href="projects/flappy" class="special">Learn more</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+
+              <!-- Zucchini -->
+                <section class="wrapper spotlight style3 zucchini">
+                  <div class="inner">
+                    <a href="projects/zucchini" class="image"><img src="{% static 'homepage/images/projects/zucchini/logo.min.gif' %}" alt=""></a>
+                    <div class="content">
+                      <h2 class="major">Zucchini</h2>
+                      <p>
+                        Atmospheric fast-paced top down shooter. Developed with 5 other students.
+                      </p>
+                      <div class="used">Languages: Java, Java, more Java</div>
+                      <div class="used">Frameworks: LWJGL, OpenGL, OpenAL</div>
+                      <ul class="links">
+                        <li><a href="https://github.com/trolleyman/Zucchini" class="special">Github</a></li>
+                        <li><a href="projects/zucchini" class="special">Learn more</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+              
+              <!-- Robot Programming -->
+                <section class="wrapper alt spotlight style4 robot">
+                  <div class="inner">
+                    <a href="projects/robot" class="image"><img src="{% static 'homepage/images/projects/robot/casterbot.min.jpg' %}" alt=""></a>
+                    <div class="content">
+                      <h2 class="major">Team Project: Probot Programming</h2>
+                      <p>
+                        Robot warehouse management system. Developed with 9 other students.
+                      </p>
+                      <div class="used">Languages: Yet more Java</div>
+                      <div class="used">Frameworks: <a href="http://www.lejos.org/" title="Java for Lego Mindstorms">LeJOS</a>, Swing</div>
+                      <ul class="links">
+                        <li><a href="https://github.com/trolleyman/rp-warehouse" class="special">Github</a></li>
+                        <li><a href="projects/robot" class="special">Learn more</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+              
+              <!-- Portal 2 -->
+                <section class="wrapper spotlight style5 portal">
+                  <div class="inner">
+                    <a href="projects/portal" class="image"><img src="{% static 'homepage/images/projects/portal/screenshot.min.jpg' %}" alt=""></a>
+                    <div class="content">
+                      <h2 class="major">Portal 2</h2>
+                      <p>
+                        A redo of my first Portal project, an shameless attempt to copy my favourite video game at the time, Portal. Guess that makes this a redo of a redo.
+                      </p>
+                      <div class="used">Rust and OpenGL</div>
+                      <ul class="links">
+                        <li><a href="https://github.com/trolleyman/Portal2" class="special">Github</a></li>
+                        <li><a href="projects/portal" class="special">Learn more</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+              
+              <!-- k-means -->
+                <section class="wrapper alt spotlight style6 k-means">
+                  <div class="inner">
+                    <a href="projects/k-means" class="image"><img src="{% static 'homepage/images/projects/k-means/alabama-hills-ca.min.jpg' %}" alt=""></a>
+                    <div class="content">
+                      <h2 class="major">k-means</h2>
+                      <p>
+                        Using the k-means algorithm to create pretty pictures.
+                      </p>
+                      <div class="used">Used Rust</div>
+                      <ul class="links">
+                        <li><a href="https://github.com/trolleyman/kmeans" class="special">Github</a></li>
+                        <li><a href="projects/k-means" class="special">Learn more</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+              
+              <!-- Equator -->
+                <section class="wrapper spotlight style5 equator">
+                  <div class="inner">
+                    <a href="projects/equator" class="image"><img src="{% static 'homepage/images/projects/equator/screenshot.jpg' %}" alt=""></a>
+                    <div class="content">
+                      <h2 class="major">Equator</h2>
+                      <p>
+                        An expression editor and evaluator that allows easy visualization and processing of mathematical expressions.
+                      </p>
+                      <div class="used">Rust using GTK+</div>
+                      <ul class="links">
+                        <li><a href="https://github.com/trolleyman/Equator" class="special">Github</a></li>
+                        <li><a href="projects/equator" class="special">Learn more</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </section>
+            {% endblock %}
+          </section>
+
+        <!-- Footer -->
+          <section id="footer">
+            <div class="inner">
+              {% block footer_content %}
+                <div id="contact">
+                  <h2 class="major">Contact Details</h2>
+                  <p>If you have any queries relating to jobs, my details are below.</p>
+                  <ul class="contact">
+                    <li class="fa-home">
+                      109 Poole Crescent<br>
+                      Harborne<br>
+                      Birmingham<br>
+                      B17 0PE
+                    </li>
+                    <li class="fa-phone">+44 7713 515181</li>
+                    <li class="fa-envelope"><a href="mailto:callumgtolley@gmail.com">callumgtolley@gmail.com</a></li>
+                  </ul>
+                </div>
+              {% endblock %}
+              <ul class="copyright">
+                <li>&copy; Callum Tolley</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+              </ul>
+            </div>
+          </section>
+      </div>
+
+    <!-- Scripts -->
+      <script src="{% static 'homepage/js/skel.min.js' %}"></script>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="{% static 'homepage/js/jquery.scrollex.min.js' %}"></script>
+      <script src="{% static 'homepage/js/util.js' %}"></script>
+      <!--[if lte IE 8]><script src="{% static 'homepage/js/ie/respond.min.js' %}"></script><![endif]-->
+      <script src="{% static 'homepage/js/main.js' %}"></script>
+      <script>
+  window.addEventListener('load', function() {
+    var url = document.querySelector('meta[name="banner-bg-url"]').content;
+    
+    var img = new Image();
+    img.onload = function() {
+      document.querySelector('#banner').className = 'loaded';
+    };
+    img.src = url;
+  });
+</script>
+      {% block scripts %}
+        <script src="{% static 'homepage/js/index.js' %}"></script>
+      {% endblock %}
+  </body>
 </html>

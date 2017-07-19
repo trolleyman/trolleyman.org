@@ -1,0 +1,44 @@
+{% extends 'homepage/projects/_base.html' %}
+{% load static %}
+
+{% block title %}
+  Callum Tolley - LINC
+{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'homepage/css/projects/linc.css' %}">
+{% endblock %}
+
+{% block banner_bg %}
+  {% static 'homepage/images/projects/linc/graph_black.jpg' as banner_img_url %}
+  {% include 'homepage/_banner_bg.html' %}
+{% endblock %}
+
+{% block banner_content %}
+  <div class="logo"><img src="{% static 'homepage/images/projects/linc/logo.png' %}"></img></div>
+  <h2>LINC</h2>
+{% endblock %}
+
+{% block main_content %}
+  <section class="wrapper spotlight style1">
+    <div class="inner">
+      <div class="content">
+        <p>
+          <img id="launch" class="right" src="{% static 'homepage/images/projects/linc/connect_launch.jpg' %}">
+          I developed LINC alongside <a href="http://peran.co">Peran Truscott</a> and <a href="http://tomg.io">Tom Goodman</a> over the 2017 summer holidays. The project was funded by the wonderful <a href="https://www.millenniumpoint.org.uk/">Millennium Point</a>, in order to advertise their new CONNECT space opening. We had two and a half short weeks, but we managed to generate a digital artpiece that captured the attention of the many people there.
+        </p><p>
+          Everyone entered their name and up to 3 interests into LINC, and they were displayed on a graph that connected people to their interests. The graph could then be explored manually to view who was similar to them, or it could be put onto auto mode to produce a cool screensaver.
+        </p><p>
+          <img id="graph" class="left" src="{% static 'homepage/images/projects/linc/graph_white.jpg' %}">
+          For the visualisation front end we used <a href="https://threejs.org/">THREE.js</a> to render the graph, and <a href="https://www.npmjs.com/package/d3-force-3d">d3-force-3d</a> to simulate the forces between the nodes in the graph. The back end was developed using Python, with <a href="https://www.djangoproject.com/">Django</a> to manage the database and project. We also built a small landing page, with templates from <a href="http://html5up.net">HTML5 UP</a>.
+        </p><p>
+          I learnt a lot on this project about web development, and I hope to further develop these skills. Have a look at the demo below to see how I did!
+        </p>
+        <ul class="links">
+          <li><a href="http://lincgraph.co" class="special">Website</a></li>
+          <li><a href="http://lincgraph.co/connect" class="special">Demo</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'homepage/projects/_base.html' %}
+{% load static %}
+
+{% block title %}
+  Callum Tolley - Zucchini
+{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'homepage/css/projects/zucchini.css' %}">
+{% endblock %}
+
+{% block banner_bg %}
+  {% static 'homepage/images/projects/zucchini/bg.png' as banner_img_url %}
+  {% include 'homepage/_banner_bg.html' %}
+{% endblock %}
+
+{% block banner_content %}
+  <div class="logo"><img src="{% static 'homepage/images/projects/zucchini/logo.png' %}"></img></div>
+  <h2>Zucchini</h2>
+{% endblock %}
+
+{% block main_content %}
+  <section class="wrapper spotlight style1">
+    <div class="inner">
+      <div class="content">
+        <p>
+          <img id="shooting" class="right" src="{% static 'homepage/images/projects/zucchini/shooting.png' %}">
+          I developed Zucchini with 5 other students as part of a team project module for my course at the Universit of Birmingham. We had 11 weeks to produce a working multiplayer game. We each had differing roles, and as the integration manager I had to ensure that everyone was on the same page about the project, so that we could effectively work as a team.
+        </p><p>
+          I learnt a lot during this project about team management and game development that I hope to apply in the future.
+        </p><p>
+          <img id="victory" class="left" src="{% static 'homepage/images/projects/zucchini/victory.png' %}">
+          The game consists of a set of 4-person deathmatches. The game can be played singleplayer, in which case AI will take over to fill the lobby, or with others via LAN or over the internet. The lighting system means that it sometimes becomes a tense game of cat and mouse where one person turns off their flashlight in order to be less detectable by the other person, but leaves themselves open to attack by zombies scattered throughout the map.
+        </p><p>
+          <img id="laser" class="right" src="{% static 'homepage/images/projects/zucchini/laser.png' %}">
+          We used Java with the LWJGL framework to develop the game. This involved OpenGL which was difficult to begin with, however it left open the possibility of cool effects, like a realistic lighting system and occlusion of the unseen portions of the map.
+        </p>
+        <ul class="links">
+          <li><a href="https://github.com/trolleyman/Zucchini" class="special">Github</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endblock %}

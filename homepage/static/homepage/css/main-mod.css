@@ -1,0 +1,135 @@
+
+/* Header */
+#header ul {
+	list-style: none;
+	padding: 0;
+}
+
+#header ul li {
+	display: inline-block;
+	padding: 0;
+}
+
+#header ul li:not(:first-child) {
+	margin-left: 2em;
+}
+
+@media screen and (max-width: 350px) {
+	#header ul li:not(:first-child) {
+		margin-left: 1.2em;
+	}
+}
+
+#header a:hover {
+	color: #fff !important;
+}
+
+#header h1 {
+	font-size: 109%;
+}
+
+#header ul li:not(.title) a {
+	border-bottom: none;
+	color: rgb(191, 191, 191);
+}
+
+/* Banner */
+#banner {
+	background-size: cover;
+}
+
+@media screen and (min-width: 1281px) {
+	#banner {
+		margin-bottom: -6.5em;
+	}
+}
+
+/* Clearfix */
+.clearfix::after {
+	clear: both;
+	content: "";
+	display: table;
+}
+
+/* Reset border radius */
+.wrapper.spotlight .image,
+.wrapper.spotlight .image img {
+	border-radius: 0;
+}
+
+.wrapper.spotlight .inner {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+/* Links css */
+.wrapper.spotlight .inner ul {
+	list-style: none;
+	padding-left: 0;
+	margin-top: 0.4em;
+}
+
+.wrapper.spotlight .inner ul li {
+	padding-left: 0;
+}
+
+@media screen and (min-width: 736px) {
+	.wrapper.spotlight .inner ul li {
+		display: inline-block;
+	}
+	.wrapper.spotlight .inner ul li:not(:first-child) {
+		margin-left: 1.3em;
+	}
+}
+
+/* Button margins */
+.wrapper.spotlight .inner .special {
+	margin-top: 0.8em;
+}
+
+.wrapper.spotlight .inner ul li a {
+	margin-bottom: 0;
+}
+
+.wrapper.spotlight .inner .special.github::before {
+	content: "";
+}
+
+/* Inner fade in animations */
+body.is-loading .wrapper.spotlight .inner {
+	opacity: 0;
+	
+	-moz-transform: translateX(0.25em);
+	-webkit-transform: translateX(0.25em);
+	-ms-transform: translateX(0.25em);
+	transform: translateX(0.25em);
+	
+	-moz-filter: blur(8px);
+	-webkit-filter: blur(8px);
+	-ms-filter: blur(8px);
+	filter: blur(8px);
+}
+
+.wrapper.spotlight .inner {
+	-moz-transition: opacity 0.5s ease, -moz-transform 0.5s ease, -moz-filter 0.25s ease;
+	-webkit-transition: opacity 0.5s ease, -webkit-transform 0.5s ease, -webkit-filter 0.25s ease;
+	-ms-transition: opacity 0.5s ease, -ms-transform 0.5s ease, -ms-filter 0.25s ease;
+	transition: opacity 0.5s ease, transform 0.5s ease, filter 0.25s ease;
+	
+	-moz-transform: translateX(0);
+	-webkit-transform: translateX(0);
+	-ms-transform: translateX(0);
+	transform: translateX(0);
+	
+	-moz-transition-delay: 0.9s;
+	-webkit-transition-delay: 0.9s;
+	-ms-transition-delay: 0.9s;
+	transition-delay: 0.9s;
+	
+	-moz-filter: blur(0);
+	-webkit-filter: blur(0);
+	-ms-filter: blur(0);
+	filter: blur(0);
+	
+	opacity: 1;
+}

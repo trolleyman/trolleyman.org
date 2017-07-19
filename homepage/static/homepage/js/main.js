@@ -1,114 +1,61 @@
 /*
-	Strata by HTML5 UP
+	Solid State by HTML5 UP
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
 (function($) {
 
-	var settings = {
-
-		// Parallax background effect?
-			parallax: false,
-
-		// Parallax factor (lower = more intense, higher = less intense).
-			parallaxFactor: 20
-
-	};
+	"use strict";
 
 	skel.breakpoints({
-		xlarge: '(max-width: 1800px)',
-		large: '(max-width: 1280px)',
-		medium: '(max-width: 980px)',
-		small: '(max-width: 736px)',
-		xsmall: '(max-width: 480px)'
+		xlarge:	'(max-width: 1680px)',
+		large:	'(max-width: 1280px)',
+		medium:	'(max-width: 980px)',
+		small:	'(max-width: 736px)',
+		xsmall:	'(max-width: 480px)'
+	});
+	
+	var	$window = $(window),
+		$body = $('body'),
+		$header = $('#header'),
+		$banner = $('#banner');
+
+	// Disable animations/transitions until the page has loaded.
+	$body.addClass('is-loading');
+
+	window.addEventListener('load', function() {
+		window.setTimeout(function() {
+			$body.removeClass('is-loading');
+		}, 100);
 	});
 
-	$(function() {
+	// Fix: Placeholder polyfill.
+	$('form').placeholder();
 
-		var $window = $(window),
-			$body = $('body'),
-			$header = $('#header'),
-			$footer = $('#footer'),
-			$main = $('#main');
-
-		// Disable animations/transitions until the page has loaded.
-			$body.addClass('is-loading');
-
-			$window.on('load', function() {
-				$body.removeClass('is-loading');
-			});
-
-		// Touch?
-			if (skel.vars.mobile) {
-
-				// Turn on touch mode.
-					$body.addClass('is-touch');
-
-				// Height fix (mostly for iOS).
-					window.setTimeout(function() {
-						$window.scrollTop($window.scrollTop() + 1);
-					}, 0);
-
-			}
-
-		// Fix: Placeholder polyfill.
-			$('form').placeholder();
-
-		// Prioritize "important" elements on medium.
-			skel.on('+medium -medium', function() {
-				$.prioritize(
-					'.important\\28 medium\\29',
-					skel.breakpoint('medium').active
-				);
-			});
-
-		// Footer.
-			skel.on('+medium', function() {
-				$footer.insertAfter($main);
-			});
-
-			skel.on('-medium !medium', function() {
-				$footer.appendTo($header);
-			});
-
-		// Header.
-
-			// Parallax background.
-
-				// Disable parallax on IE (smooth scrolling is jerky), and on mobile platforms (= better performance).
-					if (skel.vars.browser == 'ie'
-					||	skel.vars.mobile)
-						settings.parallax = false;
-
-				if (settings.parallax) {
-
-					skel.on('change', function() {
-
-						if (skel.breakpoint('medium').active) {
-
-							$window.off('scroll.strata_parallax');
-							$header.css('background-position', 'top left, center center');
-
-						}
-						else {
-
-							$header.css('background-position', 'left 0px');
-
-							$window.on('scroll.strata_parallax', function() {
-								$header.css('background-position', 'left ' + (-1 * (parseInt($window.scrollTop()) / settings.parallaxFactor)) + 'px');
-							});
-
-						}
-
-					});
-
-					$window.on('load', function() {
-						$window.triggerHandler('scroll');
-					});
-
-				}
-
+	// Prioritize "important" elements on medium.
+	skel.on('+medium -medium', function() {
+		$.prioritize(
+			'.important\\28 medium\\29',
+			skel.breakpoint('medium').active
+		);
 	});
 
+	// Header.
+	if (skel.vars.IEVersion < 9)
+		$header.removeClass('alt');
+
+	if ($banner.length > 0
+	&&	$header.hasClass('alt')) {
+
+		$window.on('resize', function() { $window.trigger('scroll'); });
+
+		$banner.scrollex({
+			bottom:		$header.outerHeight(),
+			terminate:	function() { $header.removeClass('alt'); },
+			enter:		function() { $header.addClass('alt'); },
+			leave:		function() { $header.removeClass('alt'); }
+		});
+
+	}
 })(jQuery);

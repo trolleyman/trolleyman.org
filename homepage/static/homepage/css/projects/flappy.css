@@ -1,0 +1,22 @@
+
+#demo1, #demo2, #demo3 {
+	min-width: 4em;
+	width: auto;
+	height: 15.1em;
+}
+
+@media screen and (max-width: 736px) {
+	#demo1, #demo2, #demo3 {
+		min-width: 4em;
+		width: auto;
+		height: 12.4em;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	#demo1, #demo2, #demo3 {
+		min-width: 4em;
+		width: auto;
+		height: 9.2em;
+	}
+}

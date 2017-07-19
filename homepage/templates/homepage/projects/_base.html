@@ -1,0 +1,35 @@
+{% extends 'homepage/index.html' %}
+{% load static %}
+
+{% block title %}
+Callum Tolley
+{% endblock %}
+
+{% block head_base %}
+  <link rel="stylesheet" href="{% static 'homepage/css/projects/_base.css' %}">
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block banner_style %}
+{% endblock %}
+
+{% block header_pre_content %}
+  {% include 'homepage/projects/_back.html' with href='..' %}
+{% endblock %}
+
+{% block header_content %}
+{% endblock %}
+
+{% block banner_content %}
+{% endblock %}
+
+{% block main_content %}
+{% endblock %}
+
+{% block footer_content %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

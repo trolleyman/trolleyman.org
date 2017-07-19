@@ -1,0 +1,109 @@
+
+/* Banner Logo */
+#banner .logo img {
+	height: 3em;
+}
+
+#banner .logo {
+	margin-bottom: 0.5em !important;
+}
+
+@media screen and (max-width: 736px) {
+	#banner .logo img {
+		height: 2em;
+	}
+}
+
+/* Banner */
+#banner {
+	background-position-y: center;
+	padding-bottom: 5em;
+	padding-top: 3em;
+}
+
+/* Content Padding */
+.wrapper.spotlight .inner {
+	padding-top: 1.5em;
+	padding-bottom: 1.5em;
+}
+
+/* Reset margins for images... */
+.wrapper.spotlight img {
+	margin: 0;
+}
+
+/* ...apart from the right/left */
+.wrapper.spotlight img.right {
+	float: right;
+	margin-left: 1em;
+}
+
+.wrapper.spotlight img.left {
+	float: left;
+	margin-right: 1em;
+}
+
+/* Ensure that no extra margin is on the last child of the inner content */
+.wrapper.spotlight .content > *:last-child {
+	margin-bottom: 0em;
+}
+
+/* Image shadows */
+.wrapper.spotlight img {
+	box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
+}
+
+/* Heading change in padding to accomodate back button */
+#header {
+	padding-left: 0.5em;
+}
+
+/* Back styling */
+#header .back-container {
+	width: 1.7em;
+	height: 1.7em;
+	margin-bottom: 0.2em;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 1.4em;
+	line-height: 1.45em;
+	
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+
+#header .back-container .back {
+	-moz-transition: background-color 0.2s ease-in-out;
+	-webkit-transition: background-color 0.2s ease-in-out;
+	-ms-transition: background-color 0.2s ease-in-out;
+	transition: background-color 0.2s ease-in-out;
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+	border-radius: 100%;
+	border: solid 2px rgba(255, 255, 255, 0.225);
+}
+
+#header .back-container .back a {
+	margin-right: 0.15em;
+}
+
+#header .back-container .back:hover {
+	background-color: rgba(255, 255, 255, 0.075);
+}
+
+#header .back-container .back:active {
+	background-color: rgba(255, 255, 255, 0.125);
+}
+
+.wrapper.spotlight .inner {
+	-moz-transition-delay: 0.75s;
+	-webkit-transition-delay: 0.75s;
+	-ms-transition-delay: 0.75s;
+	transition-delay: 0.75s;
+}

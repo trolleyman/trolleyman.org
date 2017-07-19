@@ -1,0 +1,69 @@
+
+.spacer {
+	border-left: solid 2px rgba(255, 255, 255, 0.125);
+	width: 1px;
+	margin: 0 18px;
+}
+
+.heading-left {
+	margin-left: 7px;
+	font-size: 80%;
+}
+
+.heading-right, .heading-left {
+	border-bottom: none;
+	color: rgb(191, 191, 191);
+}
+
+.heading-right {
+	display: inline-block;
+}
+
+@media screen and (min-width: 475px) {
+	.heading-right {
+		float: right;
+	}
+}
+
+.heading-right a {
+	border-bottom: none;
+	margin-left: 7px;
+}
+
+@media screen and (max-width: 530px) {
+	.heading-right a {
+		margin-left: 0px;
+	}
+}
+
+.wrapper.spotlight.robot .image,
+.wrapper.spotlight.robot .image img,
+.wrapper.spotlight.portal .image,
+.wrapper.spotlight.portal .image img,
+.wrapper.spotlight.k-means .image,
+.wrapper.spotlight.k-means .image img {
+	border-radius: 5px;
+}
+
+.wrapper.spotlight.robot .image,
+.wrapper.spotlight.portal .image,
+.wrapper.spotlight.k-means .image,
+.wrapper.spotlight.equator .image {
+	box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.5);
+}
+
+.wrapper.spotlight.linc .image,
+.wrapper.spotlight.flappy .image,
+.wrapper.spotlight.zucchini .image {
+	-webkit-filter: drop-shadow(8px 8px 20px rgba(0,0,0,0.5));
+	-ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=8, OffY=8, Color='#88000000')";
+	filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=8, OffY=8, Color='#88000000')";
+}
+
+.wrapper.spotlight .inner .used {
+	font-style: italic;
+}
+
+.wrapper.spotlight .inner p {
+	margin-bottom: 0.5em;
+}

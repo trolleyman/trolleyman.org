@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,27 +21,33 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(os.path.dirname(__file__), 'SECRET_KEY'), 'r') as f:
+with open(os.path.join(BASE_DIR, 'SECRET_KEY'), 'r') as f:
     SECRET_KEY = f.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if not 'TROLLEYMAN_ORG_DEBUG_MODE' in os.environ:
+if not os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
     DEBUG = False
-    ALLOWED_HOSTS = ['.trolleyman.org', 'trolleyman.org']
+    ALLOWED_HOSTS = ['.trolleyman.org', 'trolleyman.org', 'localhost']
     CONN_MAX_AGE = None
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
-    log_path = os.path.join(os.path.dirname(__file__), 'log.txt') # '/var/log/apache2/django.log'
 else:
     DEBUG = True
     ALLOWED_HOSTS = []
-    log_path = os.path.join(os.path.dirname(__file__), 'log.txt')
+
+if sys.platform.startswith('linux'):
+    LOG_PATH = '/var/log/apache2/django/django.log'
+else:
+    LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+    if not os.path.exists(LOGS_DIR):
+        os.mkdir(LOGS_DIR)
+    LOG_PATH = os.path.join(LOGS_DIR, 'django.log')
 
 INTERNAL_IPS = (
     '127.0.0.1',
 )
 
 DEFAULT_FROM_EMAIL = 'admin@trolleyman.org'
-SERVER_EMAIL = 'root@trolleyman.org'
+SERVER_EMAIL = 'admin@trolleyman.org'
 
 # Application definition
 
@@ -53,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pipeline', # django-pipeline
 ]
 
 MIDDLEWARE = [
@@ -89,23 +97,12 @@ WSGI_APPLICATION = 'trolleyman.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'FlappyClone',
-            'USER': 'root',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'FlappyClone',
-            'USER': 'admin',
-            'PASSWORD': SECRET_KEY,
-        }
-    }
+}
 
 
 # Password validation
@@ -130,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-gb'
 
 TIME_ZONE = 'UTC'
 
@@ -148,35 +145,97 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
+STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage' # django-pipeline
+
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder', # django-pipeline
 ]
+
+PIPELINE = {
+    'STYLESHEETS': {
+        'homepage-main': {
+            'source_filenames': (
+                'homepage/css/normalize.css',
+                'homepage/css/main.css',
+                'homepage/css/main-mod.css',
+            ),
+            'output_filename': 'homepage/css/main.min.css',
+            'extra_context': {
+                'media': 'screen,projection',
+            },
+        },
+    },
+    'JAVASCRIPT': {
+    },
+    'CSS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
+    'JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
+    'DISABLE_WRAPPER': True,
+    'YUGLIFY_BINARY': 'C:/Users/Callum/AppData/Roaming/npm/yuglify.cmd',
+}
 
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': log_path,
+if DEBUG:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'default': {
+                'level': 'DEBUG',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': LOG_PATH,
+                'maxBytes': 1024*1024*5, # 5 MB
+                'backupCount': 5,
+                'formatter': 'standard',
+            },  
+            'console': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard',
+            },
         },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
+        'formatters': {
+            'standard': {
+                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+            },
         },
-        'FlappyClone': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
+        'loggers': {
+            'django': {
+                'handlers': ['default', 'console'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
         },
-    },
-}
-
+    }
+else:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'default': {
+                'level': 'DEBUG',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': LOG_PATH,
+                'maxBytes': 1024*1024*5, # 5 MB
+                'backupCount': 5,
+                'formatter': 'standard',
+            },  
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'formatters': {
+            'standard': {
+                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+            },
+        },
+        'loggers': {
+            '': {
+                'handlers': ['default'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
+        },
+    }
