@@ -21,3 +21,26 @@ img#shooting, img#victory {
 		margin: 1em 0;
 	}
 }
+
+img#laser {
+	min-width: 4em;
+	width: auto;
+	height: 11em;
+}
+
+@media screen and (max-width: 736px) {
+	img#laser {
+		min-width: 4em;
+		width: auto;
+		height: 7.9em;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	img#laser {
+		min-width: initial;
+		width: 100%;
+		height: auto;
+		margin: 1em 0;
+	}
+}
