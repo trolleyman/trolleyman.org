@@ -11,8 +11,13 @@
 }
 
 #header ul li:not(:first-child) {
-	margin-left: 1em;
-	padding-left: 1em;
+	margin-left: 2em;
+}
+
+@media screen and (max-width: 350px) {
+	#header ul li:not(:first-child) {
+		margin-left: 1.2em;
+	}
 }
 
 #header a:hover {
@@ -53,14 +58,15 @@
 }
 
 .wrapper.spotlight .inner {
-	padding-top: 1em;
-	padding-bottom: 1em;
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 /* Links css */
 .wrapper.spotlight .inner ul {
 	list-style: none;
 	padding-left: 0;
+	margin-top: 0.4em;
 }
 
 .wrapper.spotlight .inner ul li {
