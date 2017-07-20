@@ -71,14 +71,15 @@
 
 .wrapper.spotlight .inner ul li {
 	padding-left: 0;
+	display: inline-block;
+}
+.wrapper.spotlight .inner ul li:not(:first-child) {
+	margin-left: 1.3em;
 }
 
-@media screen and (min-width: 736px) {
+@media screen and (max-width: 640px) {
 	.wrapper.spotlight .inner ul li {
-		display: inline-block;
-	}
-	.wrapper.spotlight .inner ul li:not(:first-child) {
-		margin-left: 1.3em;
+		/* display: block; */
 	}
 }
 
