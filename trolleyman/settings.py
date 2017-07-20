@@ -158,11 +158,11 @@ STATICFILES_FINDERS = [
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
 
-COMPRESS_ENABLED = True
-
 COMPRESS_CSS_FILTERS = [
     'compressor.filters.cssmin.rCSSMinFilter',
 ]
+
+COMPRESS_OFFLINE = True
 
 if DEBUG:
     LOGGING = {

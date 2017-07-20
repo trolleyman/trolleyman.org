@@ -20,6 +20,9 @@ python3 manage.py migrate
 # Collect all of the static files
 python3 manage.py collectstatic --noinput
 
+# Compress everything
+python3 manage.py compress
+
 # Restart server
 sudo apachectl start
 
