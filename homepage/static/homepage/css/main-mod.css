@@ -11,7 +11,7 @@
 }
 
 #header ul li:not(:first-child) {
-	margin-left: 2em;
+	margin-left: 1.2em;
 }
 
 @media screen and (max-width: 350px) {
