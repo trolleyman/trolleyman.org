@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pipeline', # django-pipeline
+    'compressor', # django-compressor
 ]
 
 MIDDLEWARE = [
@@ -149,43 +149,20 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage' # django-pipeline
-
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'pipeline.finders.PipelineFinder', # django-pipeline
+    'compressor.finders.CompressorFinder', # django-compressor
 ]
-
-PIPELINE = {
-    'STYLESHEETS': {
-        'homepage-main': {
-            'source_filenames': (
-                'homepage/css/normalize.css',
-                'homepage/css/main.css',
-                'homepage/css/main-mod.css',
-            ),
-            'output_filename': 'homepage/css/main.min.css',
-        },
-    },
-    'JAVASCRIPT': {
-        'homepage-main': {
-            'source_filenames': (
-                'homepage/js/jquery.scrollex.min.js',
-                'homepage/js/util.js',
-                'homepage/js/main.js',
-            ),
-            'output_filename': 'homepage/js/main.min.js',
-        },
-    },
-    'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor', #'pipeline.compressors.yuglify.YuglifyCompressor',
-    'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor', #'pipeline.compressors.yuglify.YuglifyCompressor',
-    'DISABLE_WRAPPER': True,
-    'YUGLIFY_BINARY': YUGLIFY_BINARY,
-}
 
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
+
+COMPRESS_ENABLED = True
+
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.cssmin.rCSSMinFilter',
+]
 
 if DEBUG:
     LOGGING = {

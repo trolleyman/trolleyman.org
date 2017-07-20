@@ -1,5 +1,5 @@
 {% load static %}
-{% load pipeline %}
+{% load compress %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -11,16 +11,23 @@
     
     <!--[if lte IE 8]><script charset="utf-8" type="text/javascript" src="{% static 'homepage/js/ie/html5shiv.js' %}"></script><![endif]-->
     
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
-    {% stylesheet 'homepage-main' %}
+    {% compress css %}
+      <link rel="stylesheet" href="{% static 'homepage/css/normalize.css' %}">
+      <link rel="stylesheet" href="{% static 'homepage/css/main.css' %}">
+      <link rel="stylesheet" href="{% static 'homepage/css/main-mod.css' %}">
+    {% endcompress %}
+    
     <!--[if lte IE 9]><link rel="stylesheet" href="{% static 'homepage/css/ie9.css' %}"><![endif]-->
     <!--[if lte IE 8]><link rel="stylesheet" href="{% static 'homepage/css/ie8.css' %}"><![endif]-->
     
     <meta name="static" content="{% static 'homepage/' %}">
     
     {% block head_base %}
-      <link rel="stylesheet" href="{% static 'homepage/css/index.css' %}">
+      {% compress css %}
+        <link rel="stylesheet" href="{% static 'homepage/css/index.css' %}">
+      {% endcompress %}
     {% endblock %}
     
     {% block banner_bg %}
@@ -234,11 +241,18 @@
       </div>
 
     <!-- Scripts -->
-      <script charset="utf-8" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      {% javascript 'homepage-main' %}
-      <!--[if lte IE 8]><script charset="utf-8" type="text/javascript" src="{% static 'homepage/js/ie/respond.min.js' %}"></script><![endif]-->
-      {% block scripts %}
+    <script charset="utf-8" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    {% compress js %}
+      <script charset="utf-8" type="text/javascript" src="{% static 'homepage/js/jquery.scrollex.min.js'%}"></script>
+      <script charset="utf-8" type="text/javascript" src="{% static 'homepage/js/util.js'%}"></script>
+      <script charset="utf-8" type="text/javascript" src="{% static 'homepage/js/main.js'%}"></script>
+    {% endcompress %}
+    
+    <!--[if lte IE 8]><script charset="utf-8" type="text/javascript" src="{% static 'homepage/js/ie/respond.min.js' %}"></script><![endif]-->
+    {% block scripts %}
+      {% compress js %}
         <script charset="utf-8" type="text/javascript" src="{% static 'homepage/js/index.js' %}"></script>
-      {% endblock %}
+      {% endcompress %}
+    {% endblock %}
   </body>
 </html>
