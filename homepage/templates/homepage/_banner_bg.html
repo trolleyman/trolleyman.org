@@ -36,3 +36,14 @@
     bottom: 0;
   }
 </style>
+<script charset="utf-8" type="text/javascript">
+  window.addEventListener('load', function() {
+    var url = document.querySelector('meta[name="banner-bg-url"]').content;
+    
+    var img = new Image();
+    img.onload = function() {
+      document.querySelector('#banner').className = 'loaded';
+    };
+    img.src = url;
+  });
+</script>

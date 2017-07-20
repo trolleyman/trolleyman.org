@@ -169,6 +169,14 @@ PIPELINE = {
         },
     },
     'JAVASCRIPT': {
+        'homepage-main': {
+            'source_filenames': (
+                'homepage/js/jquery.scrollex.min.js',
+                'homepage/js/util.js',
+                'homepage/js/main.js',
+            ),
+            'output_filename': 'homepage/js/main.min.js',
+        },
     },
     'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor', #'pipeline.compressors.yuglify.YuglifyCompressor',
     'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor', #'pipeline.compressors.yuglify.YuglifyCompressor',
