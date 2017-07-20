@@ -35,12 +35,16 @@ else:
     ALLOWED_HOSTS = []
 
 if sys.platform.startswith('linux'):
-    LOG_PATH = '/var/log/apache2/django/django.log'
+    LOG_PATH = '/var/log/apache2/django.log'
+    
+    YUGLIFY_BINARY = '/usr/bin/env yuglify'
 else:
     LOGS_DIR = os.path.join(BASE_DIR, 'logs')
     if not os.path.exists(LOGS_DIR):
         os.mkdir(LOGS_DIR)
     LOG_PATH = os.path.join(LOGS_DIR, 'django.log')
+    
+    YUGLIFY_BINARY = 'C:/Users/Callum/AppData/Roaming/npm/yuglify.cmd'
 
 INTERNAL_IPS = (
     '127.0.0.1',
@@ -162,17 +166,14 @@ PIPELINE = {
                 'homepage/css/main-mod.css',
             ),
             'output_filename': 'homepage/css/main.min.css',
-            'extra_context': {
-                'media': 'screen,projection',
-            },
         },
     },
     'JAVASCRIPT': {
     },
-    'CSS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
-    'JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
+    'CSS_COMPRESSOR': 'pipeline.compressors.NoopCompressor', #'pipeline.compressors.yuglify.YuglifyCompressor',
+    'JS_COMPRESSOR': 'pipeline.compressors.NoopCompressor', #'pipeline.compressors.yuglify.YuglifyCompressor',
     'DISABLE_WRAPPER': True,
-    'YUGLIFY_BINARY': 'C:/Users/Callum/AppData/Roaming/npm/yuglify.cmd',
+    'YUGLIFY_BINARY': YUGLIFY_BINARY,
 }
 
 LOGIN_URL = 'login'
