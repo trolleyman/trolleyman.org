@@ -34,10 +34,6 @@
 }
 
 /* Banner */
-#banner {
-	background-size: cover;
-}
-
 @media screen and (min-width: 1281px) {
 	#banner {
 		margin-bottom: -6.5em;

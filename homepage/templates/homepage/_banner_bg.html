@@ -2,28 +2,36 @@
 <style>
   #banner {
     position: relative;
-    
-    background-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==");
-    
-    -webkit-transition:
-      background-image 0.8s ease,
-      background-position 0s linear;
-    -moz-transition:
-      background-image 0.8s ease,
-      background-position 0s linear;
-    -o-transition:
-      background-image 0.8s ease,
-      background-position 0s linear;
-    -ms-transition:
-      background-image 0.8s ease,
-      background-position 0s linear;
-    transition:
-      background-image 0.8s ease,
-      background-position 0s linear;
   }
   
-  #banner.loaded {
+  #banner-bg {
+    background-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+    background-size: cover;
+    
+    opacity: 0;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  #banner-bg.loaded {
     background-image: url("{{ banner_img_url }}");
+    
+    opacity: 1;
+    
+    -webkit-transition:
+      opacity 0.8s ease;
+    -moz-transition:
+      opacity 0.8s ease;
+    -o-transition:
+      opacity 0.8s ease;
+    -ms-transition:
+      opacity 0.8s ease;
+    transition:
+      opacity 0.8s ease;
   }
   
   #banner-overlay {
@@ -42,7 +50,9 @@
     
     var img = new Image();
     img.onload = function() {
-      document.querySelector('#banner').className = 'loaded';
+      setTimeout(function() {
+        document.querySelector('#banner-bg').classList.add('loaded');
+      }, 50);
     };
     img.src = url;
   });
