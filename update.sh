@@ -3,6 +3,8 @@ set -ex
 
 pushd "$(dirname $BASH_SOURCE)" > /dev/null
 
+sudo chown -R www-data:www-data .
+
 # Activate venv
 source venv/bin/activate
 
