@@ -32,6 +32,14 @@
 	transition-delay: 0.75s;
 }
 
+/* Opposite align to usual - left align first */
+.wrapper.spotlight:nth-child(2n - 1) .inner {
+	text-align: left;
+}
+.wrapper.spotlight:nth-child(2n) .inner {
+	text-align: right;
+}
+
 /* Reset margins for images... */
 .wrapper.spotlight img {
 	margin: 0;
@@ -112,42 +120,3 @@
 #header .back-container a:active .back {
 	background-color: rgba(255, 255, 255, 0.3);
 }
-
-/*
-#header .back-container a::after {
-	-webkit-transition:
-		color 0.2s ease-in-out,
-		opacity 0.4s ease-in-out;
-	-moz-transition:
-		color 0.2s ease-in-out,
-		opacity 0.4s ease-in-out;
-	-ms-transition:
-		color 0.2s ease-in-out,
-		opacity 0.4s ease-in-out;
-	transition:
-		color 0.2s ease-in-out,
-		opacity 0.4s ease-in-out;
-	
-	opacity: 0;
-	
-	content: "BACK";
-	display: inline-block;
-	
-	position: absolute;
-	left: 2em;
-	top: 0.1em;
-	
-	font-family: Raleway, Helvetica, sans-serif;
-	font-weight: bold;
-	font-size: 1.05em;
-	color: rgba(255, 255, 255, 0.85);
-}
-#header.alt .back-container a::after {
-	opacity: 1;
-}
-
-#header .back-container a:hover::after,
-#header .back-container a:active::after {
-	color: rgba(255, 255, 255, 1.0);
-}
-*/

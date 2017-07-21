@@ -13,15 +13,6 @@ img#shooting, img#victory {
 	}
 }
 
-@media screen and (max-width: 450px) {
-	img#shooting, img#victory {
-		min-width: initial;
-		width: 100%;
-		height: auto;
-		margin: 1em 0;
-	}
-}
-
 img#laser {
 	min-width: 4em;
 	width: auto;
@@ -37,10 +28,11 @@ img#laser {
 }
 
 @media screen and (max-width: 450px) {
-	img#laser {
+	img#shooting, img#victory, img#laser {
 		min-width: initial;
+		display: block;
 		width: 100%;
 		height: auto;
-		margin: 1em 0;
+		margin: 0 0 1em 0;
 	}
 }
