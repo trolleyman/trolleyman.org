@@ -3,7 +3,7 @@
 	background-position-y: center;
 }
 
-img#drawing {
+img#casterbot {
 	width: auto;
 	height: 10.6em;
 }
@@ -14,8 +14,8 @@ img#selfie {
 }
 
 @media screen and (max-width: 736px) {
-	img#drawing {
-		height: 7.7em;
+	img#casterbot {
+		height: 9.7em;
 	}
 	
 	img#selfie {

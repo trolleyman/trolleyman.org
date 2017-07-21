@@ -24,17 +24,14 @@
     
     <meta name="static" content="{% static 'homepage/' %}">
     
-    {% block head_base %}
-      {% compress css %}
-        <link rel="stylesheet" href="{% static 'homepage/css/index.css' %}">
-      {% endcompress %}
-    {% endblock %}
-    
     {% block banner_bg %}
       {% include 'homepage/_banner_bg.html' with banner_img_url=bg_url %}
     {% endblock %}
     
-    {% block head %}
+    {% block stylesheets %}
+      {% compress css %}
+        <link rel="stylesheet" href="{% static 'homepage/css/index.css' %}">
+      {% endcompress %}
     {% endblock %}
   </head>
   <body class="is-loading">

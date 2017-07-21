@@ -5,7 +5,8 @@
   Callum Tolley - Flappy Clone
 {% endblock %}
 
-{% block head %}
+{% block stylesheets %}
+  {{ block.super }}
   <link rel="stylesheet" href="{% static 'homepage/css/projects/flappy.css' %}">
 {% endblock %}
 
@@ -23,11 +24,12 @@
   <section class="wrapper spotlight style1">
     <div class="inner">
       <div class="content">
+        <img id="demo1" class="right" src="{% static 'homepage/images/projects/flappy/demo1.jpg' %}">
         <p>
-          <img id="demo1" class="right" src="{% static 'homepage/images/projects/flappy/demo1.jpg' %}">
           I developed Flappy Clone in my spare time over the 2016 Christmas holidays. There was a job advertised near where I live that wanted a web developer. Since I had no experience developing websites, and no imagination, I got the idea to produce a clone of the Flappy Bird game that was popular a while ago.
-        </p><p>
-          <img id="demo2" class="left" src="{% static 'homepage/images/projects/flappy/demo2.jpg' %}">
+        </p>
+        <img id="demo2" class="left" src="{% static 'homepage/images/projects/flappy/demo2.jpg' %}">
+        <p>
           Although I didn't end up getting the job, I believe that I learnt a lot about web development, and this helped me in my future project,
           <a href="linc">LINC</a>.
         </p><p>

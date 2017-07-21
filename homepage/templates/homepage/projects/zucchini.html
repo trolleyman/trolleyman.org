@@ -5,7 +5,8 @@
   Callum Tolley - Zucchini
 {% endblock %}
 
-{% block head %}
+{% block stylesheets %}
+  {{ block.super }}
   <link rel="stylesheet" href="{% static 'homepage/css/projects/zucchini.css' %}">
 {% endblock %}
 
@@ -24,7 +25,7 @@
     <div class="inner">
       <div class="content">
         <p>
-          <img id="shooting" class="right full" src="{% static 'homepage/images/projects/zucchini/shooting.png' %}">
+          <img id="shooting" class="right full full-move" src="{% static 'homepage/images/projects/zucchini/shooting.png' %}">
           I developed Zucchini with 5 other students as part of a team project module for my course at the University of Birmingham. We had 11 weeks to produce a working multiplayer game. We each had differing roles, and as the integration manager I had to ensure that everyone was on the same page about the project, so that we could effectively work as a team.
         </p><p>
           I learnt a lot during this project about team management and game development that I hope to apply in the future.
