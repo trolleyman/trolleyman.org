@@ -7,18 +7,6 @@ img#launch, img#graph {
 
 @media screen and (max-width: 736px) {
 	img#launch, img#graph {
-		min-width: 4em;
-		width: auto;
 		height: 11em;
-	}
-}
-
-@media screen and (max-width: 450px) {
-	img#launch, img#graph {
-		min-width: initial;
-		display: block;
-		width: 100%;
-		height: auto;
-		margin: 1em 0;
 	}
 }

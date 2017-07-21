@@ -1,0 +1,24 @@
+
+#banner-bg {
+	background-position-y: center;
+}
+
+img#drawing {
+	width: auto;
+	height: 10.6em;
+}
+
+img#selfie {
+	width: auto;
+	height: 11em;
+}
+
+@media screen and (max-width: 736px) {
+	img#drawing {
+		height: 7.7em;
+	}
+	
+	img#selfie {
+		height: 11em;
+	}
+}

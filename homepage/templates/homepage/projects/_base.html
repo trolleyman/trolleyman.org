@@ -1,12 +1,15 @@
 {% extends 'homepage/index.html' %}
 {% load static %}
+{% load compress %}
 
 {% block title %}
 Callum Tolley
 {% endblock %}
 
 {% block head_base %}
-  <link rel="stylesheet" href="{% static 'homepage/css/projects/_base.css' %}">
+  {% compress css %}
+    <link rel="stylesheet" href="{% static 'homepage/css/projects/_base.css' %}">
+  {% endcompress %}
 {% endblock %}
 
 {% block head %}

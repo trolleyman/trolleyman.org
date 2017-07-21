@@ -1,38 +1,11 @@
 
-img#shooting, img#victory {
-	min-width: 4em;
+img#shooting, img#victory, img#laser {
 	width: auto;
 	height: 11em;
 }
 
 @media screen and (max-width: 736px) {
-	img#shooting, img#victory {
-		min-width: 4em;
-		width: auto;
-		height: 7.9em;
-	}
-}
-
-img#laser {
-	min-width: 4em;
-	width: auto;
-	height: 11em;
-}
-
-@media screen and (max-width: 736px) {
-	img#laser {
-		min-width: 4em;
-		width: auto;
-		height: 7.9em;
-	}
-}
-
-@media screen and (max-width: 450px) {
 	img#shooting, img#victory, img#laser {
-		min-width: initial;
-		display: block;
-		width: 100%;
-		height: auto;
-		margin: 0 0 1em 0;
+		height: 7.9em;
 	}
 }
