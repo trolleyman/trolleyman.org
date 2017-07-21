@@ -33,11 +33,16 @@
 }
 
 /* Opposite align to usual - left align first */
-.wrapper.spotlight:nth-child(2n - 1) .inner {
+.wrapper.spotlight:nth-child(2n - 1) .inner p {
 	text-align: left;
 }
-.wrapper.spotlight:nth-child(2n) .inner {
+.wrapper.spotlight:nth-child(2n) .inner p {
 	text-align: right;
+}
+
+/* Adjust margin for links */
+.wrapper.spotlight .inner p:last-of-type {
+	margin-bottom: 0;
 }
 
 /* Reset margins for images... */
