@@ -36,15 +36,11 @@ else:
 
 if sys.platform.startswith('linux'):
     LOG_PATH = '/var/log/apache2/django.log'
-    
-    YUGLIFY_BINARY = '/usr/bin/env yuglify'
 else:
     LOGS_DIR = os.path.join(BASE_DIR, 'logs')
     if not os.path.exists(LOGS_DIR):
         os.mkdir(LOGS_DIR)
     LOG_PATH = os.path.join(LOGS_DIR, 'django.log')
-    
-    YUGLIFY_BINARY = 'C:/Users/Callum/AppData/Roaming/npm/yuglify.cmd'
 
 INTERNAL_IPS = (
     '127.0.0.1',

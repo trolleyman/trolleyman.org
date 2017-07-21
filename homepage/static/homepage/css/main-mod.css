@@ -69,8 +69,11 @@
 	padding-left: 0;
 	display: inline-block;
 }
-.wrapper.spotlight .inner ul li:not(:first-child) {
+.wrapper.spotlight:not(.alt) .inner ul li:not(:first-child) {
 	margin-left: 1.3em;
+}
+.wrapper.spotlight.alt .inner ul li:not(:last-child) {
+	margin-right: 1.3em;
 }
 
 @media screen and (max-width: 640px) {
