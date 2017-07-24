@@ -1,0 +1,43 @@
+{% extends 'homepage/projects/_base.html' %}
+{% load static %}
+
+{% block title %}
+  Callum Tolley - Portal
+{% endblock %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'homepage/css/projects/portal.css' %}">
+{% endblock %}
+
+{% block banner_bg %}
+  {% static 'homepage/images/projects/portal/.jpg' as banner_img_url %}
+  {% include 'homepage/_banner_bg.html' %}
+{% endblock %}
+
+{% block banner_content %}
+  <h2>Portal</h2>
+{% endblock %}
+
+{% block main_content %}
+  <section class="wrapper spotlight style1">
+    <div class="inner">
+      <div class="content">
+        <img id="XXX" class="right full full-move" src="{% static 'homepage/images/projects/portal/.png' %}">
+        <p>
+          TODO Our task sounded simple for this project - get a set of robots to pick up and drop off items in a warehouse. It turned into the most frustrating yet rewarding project I've worked on. I was working with a large group of 9 other students as this was a module for my first year computer science degree at uni. Each person was assigned a role, and then we were told to just go out and do it.
+        </p>
+        <p>
+          TODO I was assigned GUI, but my role transformed into general bugfixer and integrator. I remember the final week was spent frantically trying to get the robots to route around eachother rather than bumping into eachother. Eventually I stayed up one night determined to get it working, and in the early hours of the morning, when the sun was rising, I finally made it. I stayed there for another 20 minutes, amazed that it worked finally. Then I packed up, and got a few hours sleep before the project final at 9am.
+        </p>
+        <img id="XXX" class="left full" src="{% static 'homepage/images/projects/portal/.jpg' %}">
+        <p>
+          TODO This project was also a challenge because it was the first time that I had worked in a large group before, and I believe that I really improved my communication skills on this project, and hope to further improve these skills.
+        </p>
+        <ul class="links">
+          <li><a href="https://github.org/trolleyman/Portal2" class="special">Github</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endblock %}

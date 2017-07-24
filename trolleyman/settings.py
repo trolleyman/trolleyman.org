@@ -32,7 +32,11 @@ if not os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
 else:
     DEBUG = True
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = [
+        'localhost',
+        '127.0.0.1',
+        '192.168.0.17', # temp
+    ]
 
 if sys.platform.startswith('linux'):
     LOG_PATH = '/var/log/apache2/django.log'
