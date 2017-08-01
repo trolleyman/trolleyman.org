@@ -13,9 +13,6 @@ def index(request):
     
     return render(request, 'homepage/index.html', {'bg_url': bg_url})
 
-def elements(request):
-    return render(request, 'homepage/elements.html')
-
 def projects_linc(request):
     return render(request, 'homepage/projects/linc.html')
 
@@ -28,11 +25,11 @@ def projects_zucchini(request):
 def projects_robot(request):
     return render(request, 'homepage/projects/robot.html')
 
-def projects_portal(request):
-    return render(request, 'homepage/projects/portal.html')
+# def projects_portal(request):
+#     return render(request, 'homepage/projects/portal.html')
 
-def projects_kmeans(request):
-    return render(request, 'homepage/projects/k-means.html')
+# def projects_kmeans(request):
+#     return render(request, 'homepage/projects/k-means.html')
 
-def projects_equator(request):
-    return render(request, 'homepage/projects/equator.html')
+# def projects_equator(request):
+#     return render(request, 'homepage/projects/equator.html')
