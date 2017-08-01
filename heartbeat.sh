@@ -1,5 +1,14 @@
 #!/bin/bash
 
+
+lockdir=/trolleyman.org/.update-lock
+mkdir $lockdir  || {
+    echo "Lock directory exists"
+    exit 1
+}
+# take pains to remove lock directory when script terminates
+trap "rmdir $lockdir" EXIT INT KILL TERM
+
 PATH=/bin:/usr/bin
 THEDIR=/tmp/apache-watchdog
 EMAIL=cgtrolley@gmail.com

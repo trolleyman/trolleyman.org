@@ -3,6 +3,16 @@ set -ex
 
 pushd "$(dirname $BASH_SOURCE)" > /dev/null
 
+# Lock
+lockdir=./.lock
+mkdir $lockdir  || {
+    echo "Lock directory exists"
+    popd
+    exit 1
+}
+# take pains to remove lock directory when script terminates
+trap "rmdir $lockdir" EXIT INT KILL TERM
+
 sudo chown -R www-data:www-data . /var/log/apache2/
 sudo chmod -R g=u . /var/log/apache2/
 
