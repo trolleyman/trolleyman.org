@@ -27,7 +27,7 @@ with open(os.path.join(BASE_DIR, 'SECRET_KEY'), 'r') as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 if not os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
     DEBUG = False
-    ALLOWED_HOSTS = ['.trolleyman.org', 'trolleyman.org', 'localhost']
+    ALLOWED_HOSTS = ['.trolleyman.org', 'trolleyman.org', '34.209.83.179', 'localhost']
     CONN_MAX_AGE = None
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
 else:
