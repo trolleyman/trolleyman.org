@@ -1,6 +1,9 @@
 # Shhhhh
 SECRET_KEY
 
+# Lock
+/.update-lock
+
 # Python
 __pycache__/
 
