@@ -38,7 +38,7 @@ else:
         '192.168.0.17', # temp
     ]
 
-if sys.platform.startswith('linux'):
+if not DEBUG:
     LOG_PATH = '/var/log/apache2/django.log'
 else:
     LOGS_DIR = os.path.join(BASE_DIR, 'logs')
