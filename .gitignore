@@ -3,6 +3,7 @@ SECRET_KEY
 
 # Lock
 /.update-lock
+/.heartbeat-lock
 
 # Python
 __pycache__/

@@ -171,10 +171,8 @@ if DEBUG:
         'handlers': {
             'default': {
                 'level': 'DEBUG',
-                'class': 'logging.handlers.RotatingFileHandler',
+                'class': 'logging.FileHandler',
                 'filename': LOG_PATH,
-                'maxBytes': 1024*1024*5, # 5 MB
-                'backupCount': 5,
                 'formatter': 'standard',
             },  
             'console': {

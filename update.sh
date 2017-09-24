@@ -4,7 +4,7 @@ set -ex
 pushd "$(dirname $BASH_SOURCE)" > /dev/null
 
 # Lock
-lockdir=./.lock
+lockdir=./.update-lock
 mkdir $lockdir  || {
     echo "Lock directory exists"
     popd
