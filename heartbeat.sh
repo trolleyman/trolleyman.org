@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-lockdir=/trolleyman.org/.update-lock
+lockdir=/trolleyman.org/.heartbeat-lock
 mkdir $lockdir  || {
     echo "Lock directory exists"
     exit 1
