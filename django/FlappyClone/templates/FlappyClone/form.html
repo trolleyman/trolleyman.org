@@ -1,0 +1,17 @@
+<div id="{{ action }}" class="clearfix">
+	<h1>{{ action_name }}</h1>
+	<form method="post">
+		<input type="hidden" name="action" value="{{ action }}" />
+		{% if next %}
+			<input type="hidden" name="next" value="{{ next }}" />
+		{% endif %}
+		{% csrf_token %}
+		{% for field in form %}
+			<div>
+				{{ field.label_tag }} {{ field }}
+			</div>
+			{{ field.errors }}
+		{% endfor %}
+		<div><input type="submit" value="{{ action_name }}" /></div>
+	</form>
+</div>

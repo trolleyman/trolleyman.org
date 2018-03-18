@@ -1,0 +1,5 @@
+# Paint.NET
+*.pdnBak
+
+# Python
+__pycache__/

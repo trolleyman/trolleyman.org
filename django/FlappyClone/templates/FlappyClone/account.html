@@ -1,0 +1,39 @@
+{% extends "FlappyClone/base.html" %}
+{% load static %}
+{% block head %}
+	{% include "FlappyClone/flappyBackgroundHead.html" %}
+	<link rel="stylesheet" href="{% static 'FlappyClone/css/account.css' %}">
+	
+	<script src="{% static 'FlappyClone/js/account.js' %}"></script>
+{% endblock head %}
+{% block content %}
+	<div id="title">
+		<span id="title-span">{{ user.get_username }}</span>
+	</div>
+	<div class="detail">
+		<span class="detail-name">High Score:</span>
+		<span class="detail-content">{{ user.userprofile.score|safe }}</span>
+	</div>
+	{% if not user.userprofile.score == 0 %}
+	<div class="detail" id="date">
+		<span class="detail-content">{{ user.userprofile.date|date:'d M Y'|safe }}</span>
+	</div>
+	<div class="detail" id="time">
+		<span class="detail-content">{{ user.userprofile.date|date:'H:i:s'|safe }}</span>
+	</div>
+	{% endif %}
+	{% if user.userprofile.medal == 0 %}
+	<img id="medal" src="{% static 'FlappyClone/img/account/medal0.png' %}" />
+	{% elif user.userprofile.medal == 1 %}
+	<img id="medal" src="{% static 'FlappyClone/img/account/medal1.png' %}" />
+	{% elif user.userprofile.medal == 2 %}
+	<img id="medal" src="{% static 'FlappyClone/img/account/medal2.png' %}" />
+	{% elif user.userprofile.medal == 3 %}
+	<img id="medal" src="{% static 'FlappyClone/img/account/medal3.png' %}" />
+	{% endif %}
+	<div>
+		<form action="{% url 'logout' %}">
+			<input type="image" src="{% static 'FlappyClone/img/account/logout.png' %}" />
+		</form>
+	</div>
+{% endblock content %}

@@ -1,15 +1,11 @@
 # Shhhhh
 SECRET_KEY
 
-# Lock
-/.update-lock
-/.heartbeat-lock
-
 # Python
 __pycache__/
 
 # Django
-db.sqlite3
+/database
 /static/
 log.txt
 /logs

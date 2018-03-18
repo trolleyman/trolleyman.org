@@ -1,0 +1,24 @@
+{% extends "FlappyClone/base.html" %}
+{% load static %}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'FlappyClone/css/game.css' %}">
+	
+	<script>"use strict";</script>
+	<script src="{% static 'FlappyClone/js/game/sizing.js' %}"></script>
+	<script src="{% static 'FlappyClone/js/game/fontfaceonload.js' %}"></script>
+	<script src="{% static 'FlappyClone/js/game/intersection.js' %}"></script>
+	<script src="{% static 'FlappyClone/js/game/cookie.js' %}"></script>
+	<script src="{% static 'FlappyClone/js/game/score.js' %}"></script>
+	<script src="{% static 'FlappyClone/js/game/button.js' %}"></script>
+	<script src="{% static 'FlappyClone/js/game/rect.js' %}"></script>
+	<script src="{% static 'FlappyClone/js/game/draw.js' %}"></script>
+	<script src="{% static 'FlappyClone/js/game/pipe.js' %}"></script>
+	<script src="{% static 'FlappyClone/js/game/bird.js' %}"></script>
+	<script src="{% static 'FlappyClone/js/game/game.js' %}"></script>
+{% endblock head %}
+{% block content %}
+	<div id="game-container">
+		<div id="stats-container" style="visibility: hidden;"><div id="stats"></div></div>
+		<canvas id="canvas" width="500" height="800"></canvas>
+	</div>
+{% endblock content %}

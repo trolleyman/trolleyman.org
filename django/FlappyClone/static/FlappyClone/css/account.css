@@ -1,0 +1,36 @@
+
+#content {
+	font-family: FlappyFont;
+	text-align: center;
+}
+
+#title {
+	height: 100px;
+	width: 80%;
+	margin: 10% 10% 10px 10%;
+	color: gold;
+	text-shadow: 3px 3px 0px black, -3px 3px 0px black, 3px -3px 0px black, -3px -3px 0px black;
+}
+
+.detail {
+	width: 90%;
+	margin: 6px 5%;
+	text-shadow: 2px 2px 0px black, -2px 2px 0px black, 2px -2px 0px black, -2px -2px 0px black;
+}
+
+.detail-name {
+	color: rgb(190, 255, 0);
+}
+
+.detail-content {
+	vertical-align: middle;
+	color: white;
+}
+
+#medal {
+	margin: 10px;
+}
+
+#logout {
+	margin: 10px;
+}

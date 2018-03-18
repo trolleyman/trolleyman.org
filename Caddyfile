@@ -1,0 +1,14 @@
+
+http://trolleyman.org {
+	redir https://trolleyman.org{uri}
+}
+
+http://callumgtolley.uk {
+	redir https://callumgtolley.uk{uri}
+}
+
+localhost:8000, https://trolleyman.org, https://callumgtolley.uk {
+	proxy / django:8000 {
+		transparent
+	}
+}
