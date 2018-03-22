@@ -42,11 +42,11 @@ VOLUME logs/
 # Run secret key gen
 RUN python trolleyman/secret_key_gen.py
 
-# Compress stuff
-RUN python manage.py compress
-
 # Collect static files
 RUN python manage.py collectstatic
+
+# Compress stuff
+RUN python manage.py compress
 
 # 3. Setup startup cmd
 WORKDIR /
