@@ -52,8 +52,8 @@ INTERNAL_IPS = (
     '127.0.0.1',
 )
 
-DEFAULT_FROM_EMAIL = 'admin@trolleyman.org'
-SERVER_EMAIL = 'admin@trolleyman.org'
+DEFAULT_FROM_EMAIL = 'admin@callumgtolley.uk'
+SERVER_EMAIL = 'admin@callumgtolley.uk'
 
 # Application definition
 
@@ -164,7 +164,10 @@ COMPRESS_CSS_FILTERS = [
     'compressor.filters.cssmin.rCSSMinFilter',
 ]
 
-COMPRESS_OFFLINE = True
+if DEBUG:
+    COMPRESS_OFFLINE = False
+else:
+    COMPRESS_OFFLINE = True
 
 if DEBUG:
     LOGGING = {
