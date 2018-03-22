@@ -46,7 +46,7 @@ RUN python trolleyman/secret_key_gen.py
 RUN python manage.py compress
 
 # Collect static files
-RUN python manage.py collectstatic
+RUN python manage.py collectstatic --noinput
 
 # 3. Setup startup cmd
 WORKDIR /
