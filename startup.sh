@@ -10,3 +10,7 @@ nohup gunicorn -b localhost:5000 trolleyman.wsgi > logs/gunicorn.log &
 cd /caddy
 # TODO logs & cmd line parameters etc
 nohup caddy --conf Caddyfile --log logs/caddy.log &
+
+# Wait for child processes to exit
+wait
+
