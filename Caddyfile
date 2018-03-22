@@ -1,6 +1,10 @@
 
-http://trolleyman.org, http://callumgtolley.uk {
-	proxy / django:8000 {
+http://localhost, http://138.68.156.104, http://callumgtolley.uk {
+	redir http://trolleyman.org{uri}
+}
+
+http://trolleyman.org {
+	proxy / django:5000 {
 		transparent
 	}
 }
