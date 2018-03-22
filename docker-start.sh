@@ -11,4 +11,5 @@ docker run \
   -v $DIR/logs:/caddy/logs \
   -v $DIR/.caddy:/caddy/.caddy \
   -p 80:80 -p 443:443 \
+  --name server \
   server

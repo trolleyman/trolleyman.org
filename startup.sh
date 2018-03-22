@@ -13,4 +13,3 @@ nohup caddy --conf Caddyfile --log logs/caddy.log &
 
 # Wait for child processes to exit
 wait
-
