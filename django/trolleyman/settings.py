@@ -43,13 +43,10 @@ else:
         '127.0.0.1',
     ]
 
-if not DEBUG:
-    LOG_PATH = '/var/log/apache2/django.log'
-else:
-    LOGS_DIR = os.path.join(BASE_DIR, 'logs')
-    if not os.path.exists(LOGS_DIR):
-        os.mkdir(LOGS_DIR)
-    LOG_PATH = os.path.join(LOGS_DIR, 'django.log')
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOGS_DIR):
+    os.mkdir(LOGS_DIR)
+LOG_PATH = os.path.join(LOGS_DIR, 'django.log')
 
 INTERNAL_IPS = (
     '127.0.0.1',
