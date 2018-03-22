@@ -43,7 +43,7 @@ VOLUME logs/
 RUN python trolleyman/secret_key_gen.py
 
 # Collect static files
-RUN python manage.py collectstatic
+RUN python manage.py collectstatic --noinput
 
 # Compress stuff
 RUN python manage.py compress
