@@ -1,9 +1,5 @@
 # Git
 .git/
 
-# Lock
-/.update-lock
-/.heartbeat-lock
-
-# Python
-__pycache__/
+logs/
+*.log

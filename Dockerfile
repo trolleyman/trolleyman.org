@@ -1,42 +1,49 @@
 FROM python:3
 
 # 1. Install stuff
-# Install caddy # TODO: test
-RUN apt-get install caddy -y
+RUN curl -s https://getcaddy.com | bash -s personal
+RUN which caddy
 
-# Install forever # TODO: test
-RUN apt-get install forever -y
+# Install npm
+RUN apt-get update
+RUN apt-get install nodejs -y
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN apt-get install npm -y
+RUN nodejs -v
+
+# Install forever
+RUN npm install -g forever
 
 # Install django
-RUN mkdir /django
-WORKDIR /django
-
-COPY django/requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install django
+RUN pip install gunicorn
+RUN pip install django_compressor
 
 # 2. Copy files
-# Copy django files
-COPY django/ *
+# Setup caddy
+EXPOSE 80 443
+RUN mkdir /caddy
+WORKDIR /caddy
+VOLUME logs/
+COPY Caddyfile ./Caddyfile
+VOLUME .caddy/
+ENV CADDYPATH /caddy/.caddy
 
-# Collect static files
-RUN python manage.py staticfiles
-VOLUME static/
+# Copy django files
+COPY django /django
+WORKDIR /django
 
 # Setup database
-RUN mkdir -p database
 VOLUME database/
 
 # Setup django logs volume
 VOLUME logs/
 
-# Setup caddy
-WORKDIR /caddy
-EXPOSE 80 443
-# TODO
-COPY Caddyfile /etc/Caddyfile
+# Collect static files
+RUN python manage.py collectstatic
 
-# 3. Run everything
+# 3. Setup startup cmd
 WORKDIR /
 COPY startup.sh /
 
-CMD /update.sh
+CMD /startup.sh

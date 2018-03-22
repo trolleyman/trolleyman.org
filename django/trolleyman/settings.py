@@ -32,9 +32,7 @@ if not os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
         'trolleyman.org',
         '.callumgtolley.uk',
         'callumgtolley.uk',
-        '34.209.83.179',
         'localhost',
-        'ec2-34-209-83-179.us-west-2.compute.amazonaws.com'
     ]
     CONN_MAX_AGE = None
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
@@ -43,7 +41,6 @@ else:
     ALLOWED_HOSTS = [
         'localhost',
         '127.0.0.1',
-        '192.168.0.17', # temp
     ]
 
 if not DEBUG:

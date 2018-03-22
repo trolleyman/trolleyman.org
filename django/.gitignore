@@ -3,6 +3,7 @@ SECRET_KEY
 
 # Python
 __pycache__/
+*.pyc
 
 # Django
 /database
