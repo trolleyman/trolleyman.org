@@ -9,4 +9,5 @@ docker run^
  -v "%dir%\django\database:/django/database"^
  -v "%dir%\logs:/caddy/logs"^
  -v "%dir%\.caddy:/caddy/.caddy"^
+ -p 80:80 -p 443:443^
  server
