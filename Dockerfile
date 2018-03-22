@@ -39,6 +39,9 @@ VOLUME database/
 # Setup django logs volume
 VOLUME logs/
 
+# Compress stuff
+RUN python manage.py compress
+
 # Collect static files
 RUN python manage.py collectstatic
 
