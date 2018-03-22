@@ -39,11 +39,11 @@ VOLUME database/
 # Setup django logs volume
 VOLUME logs/
 
-# Compress stuff
-RUN python manage.py compress
-
 # Run secret key gen
 RUN python trolleyman/secret_key_gen.py
+
+# Compress stuff
+RUN python manage.py compress
 
 # Collect static files
 RUN python manage.py collectstatic
