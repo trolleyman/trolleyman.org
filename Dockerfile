@@ -48,6 +48,9 @@ RUN python manage.py collectstatic --noinput
 # Compress stuff
 RUN python manage.py compress
 
+# Migrate database
+RUN python manage.py migrate
+
 # 3. Setup startup cmd
 WORKDIR /
 COPY startup.sh /
