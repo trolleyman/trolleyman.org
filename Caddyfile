@@ -3,7 +3,7 @@ http://localhost, http://138.68.156.104, http://trolleyman.org {
 }
 
 http://callumgtolley.uk {
-	root /django
+	root /django/static
 	proxy / localhost:5000 {
 		except /static
 		transparent
