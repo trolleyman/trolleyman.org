@@ -4,7 +4,7 @@ set -ex
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-docker build . -t server
+docker build "$DIR" -t server
 docker kill server || true
 docker rm server || true
 docker run -d\

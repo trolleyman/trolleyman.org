@@ -3,7 +3,7 @@
 set dir=%~dp0
 set dir=%dir:~0,-1%
 
-docker build . -t server || exit 1
+docker build "%dir%" -t server || exit 1
 docker kill server
 docker rm server
 docker run -d^
