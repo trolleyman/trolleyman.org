@@ -69,6 +69,15 @@ INSTALLED_APPS = [
     'compressor', # django-compressor
 ]
 
+if not DEBUG:
+    RECAPTCHA_PUBLIC_KEY = '6LfdxE8UAAAAAN1sVEiQVDVomnIyvz-Pa4FstoHT'
+    with open(os.path.join(BASE_DIR, 'RECAPTCHA_PRIVATE_KEY'), 'r') as f:
+        RECAPTCHA_PRIVATE_KEY = f.read()
+else:
+    # !!!TEST KEYS DO NOT USE IN PROD!!!
+    RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+    RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

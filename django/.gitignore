@@ -1,5 +1,6 @@
 # Shhhhh
 SECRET_KEY
+RECAPTCHA_PRIVATE_KEY
 
 # Python
 __pycache__/

@@ -18,6 +18,7 @@ RUN npm install -g forever
 RUN pip install django
 RUN pip install gunicorn
 RUN pip install django_compressor
+RUN pip install requests
 
 # 2. Copy files
 # Setup caddy

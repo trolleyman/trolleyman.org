@@ -23,6 +23,7 @@
     <!--[if lte IE 8]><link rel="stylesheet" href="{% static 'homepage/css/ie8.css' %}"><![endif]-->
     
     <meta name="static" content="{% static 'homepage/' %}">
+    <meta name="sitekey" content="{{ sitekey }}">
     
     {% block banner_bg %}
       {% include 'homepage/_banner_bg.html' with banner_img_url=bg_url %}
@@ -215,20 +216,56 @@
           <section id="footer">
             <div class="inner">
               {% block footer_content %}
+                <script type="text/javascript">
+                  var recaptchaCallback = function () {
+                    // Recaptcha is ready
+                    grecaptcha.render('captcha', {
+                      'sitekey': document.querySelector('meta[name="sitekey"]').content,
+                      'theme': 'dark',
+                      'callback': function(token) {
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function () {
+                          if (this.readyState == 4) {
+                            if (this.status >= 200 && this.status < 300) {
+                              // Ok. Remove captcha
+                              document.getElementById('captcha').classList.add('hide');
+                              document.getElementById('contact-details').classList.remove('hide');
+                              document.getElementById('contact-details').innerHTML = this.responseText;
+                              requestAnimationFrame(function() {
+                                document.getElementById('contact-inner').style.height = document.getElementById('contact-details').scrollHeight + 'px';
+                                
+                                setTimeout(function() {
+                                  document.getElementById('contact-inner').style.transition = 'none';
+                                  document.getElementById('contact-inner').style.height = '';
+                                }, 500);
+                              });
+
+                            } else {
+                              // Error - TODO: test & fix
+                              console.error('Error: status code: ' + this.statusText);
+                              console.error(this.responseText);
+                              grecaptcha.reset();
+                            }
+                          }
+                        };
+                        xhttp.open('GET', 'contact_details', true);
+                        xhttp.setRequestHeader('g-recaptcha-response', token);
+                        xhttp.send();
+                      },
+                    });
+                    requestAnimationFrame(function() {
+                      document.getElementById('contact-inner').style.height = document.getElementById('captcha').scrollHeight + 'px';
+                    });
+                  };
+                </script>
+                <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallback&render=explicit" async defer></script>
                 <div id="contact">
                   <h2 class="major">Contact Details</h2>
                   <p>If you have any queries relating to jobs, my details are below.</p>
-                  <ul class="contact">
-                    <li class="fa-home">
-                      109 Poole Crescent<br>
-                      Harborne<br>
-                      Birmingham<br>
-                      B17 0PE
-                    </li>
-                    <li class="fa-phone">+44 7713 515181</li>
-                    <li class="fa-envelope"><a href="mailto:callumgtolley@gmail.com">callumgtolley@gmail.com</a></li>
-                  </ul>
-                </div>
+                  <div id="contact-inner">
+                    <div id="captcha"></div>
+                    <div id="contact-details" class="hide"></div>
+                  </div>
               {% endblock %}
               <ul class="copyright">
                 <li>&copy; Callum Tolley</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
