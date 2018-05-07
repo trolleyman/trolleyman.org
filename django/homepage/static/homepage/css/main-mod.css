@@ -182,3 +182,13 @@ body.is-loading .wrapper.spotlight .inner {
 .wrapper.spotlight.alt .inner .content .date {
 	right: 0;
 }
+
+/* Banner summary */
+#banner p {
+	line-height: 1.5 !important;
+	margin-bottom: 1em;
+}
+#banner p.summary {
+	text-align: justify;
+	text-transform: none;
+}
