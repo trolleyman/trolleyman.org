@@ -1,0 +1,14 @@
+.git/
+
+# Python
+__pycache__/
+
+# Django
+/database
+/static/
+/log.txt
+/logs
+/venv/
+
+# Debug flag
+/DEBUG

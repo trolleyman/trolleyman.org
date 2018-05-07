@@ -32,9 +32,7 @@ if not os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
         'trolleyman.org',
         '.callumgtolley.uk',
         'callumgtolley.uk',
-        '34.209.83.179',
         'localhost',
-        'ec2-34-209-83-179.us-west-2.compute.amazonaws.com'
     ]
     CONN_MAX_AGE = None
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
@@ -43,23 +41,19 @@ else:
     ALLOWED_HOSTS = [
         'localhost',
         '127.0.0.1',
-        '192.168.0.17', # temp
     ]
 
-if not DEBUG:
-    LOG_PATH = '/var/log/apache2/django.log'
-else:
-    LOGS_DIR = os.path.join(BASE_DIR, 'logs')
-    if not os.path.exists(LOGS_DIR):
-        os.mkdir(LOGS_DIR)
-    LOG_PATH = os.path.join(LOGS_DIR, 'django.log')
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOGS_DIR):
+    os.mkdir(LOGS_DIR)
+LOG_PATH = os.path.join(LOGS_DIR, 'django.log')
 
 INTERNAL_IPS = (
     '127.0.0.1',
 )
 
-DEFAULT_FROM_EMAIL = 'admin@trolleyman.org'
-SERVER_EMAIL = 'admin@trolleyman.org'
+DEFAULT_FROM_EMAIL = 'admin@callumgtolley.uk'
+SERVER_EMAIL = 'admin@callumgtolley.uk'
 
 # Application definition
 
@@ -74,6 +68,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'compressor', # django-compressor
 ]
+
+if not DEBUG:
+    RECAPTCHA_PUBLIC_KEY = '6LfdxE8UAAAAAN1sVEiQVDVomnIyvz-Pa4FstoHT'
+    with open(os.path.join(BASE_DIR, 'RECAPTCHA_PRIVATE_KEY'), 'r') as f:
+        RECAPTCHA_PRIVATE_KEY = f.read()
+else:
+    # !!!TEST KEYS DO NOT USE IN PROD!!!
+    RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+    RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -112,7 +115,7 @@ WSGI_APPLICATION = 'trolleyman.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'database/db.sqlite3'),
     }
 }
 
@@ -155,7 +158,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "static/static")
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -170,7 +173,10 @@ COMPRESS_CSS_FILTERS = [
     'compressor.filters.cssmin.rCSSMinFilter',
 ]
 
-COMPRESS_OFFLINE = True
+if DEBUG:
+    COMPRESS_OFFLINE = False
+else:
+    COMPRESS_OFFLINE = True
 
 if DEBUG:
     LOGGING = {

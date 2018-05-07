@@ -1,0 +1,17 @@
+# Shhhhh
+SECRET_KEY
+RECAPTCHA_PRIVATE_KEY
+
+# Python
+__pycache__/
+*.pyc
+
+# Django
+/database
+/static/
+log.txt
+/logs
+/venv/
+
+# Debug flag
+/DEBUG

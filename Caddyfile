@@ -1,0 +1,12 @@
+
+http://localhost, http://138.68.156.104, http://callumgtolley.uk, http://trolleyman.org, https://trolleyman.org {
+	redir https://callumgtolley.uk{uri}
+}
+
+https://callumgtolley.uk {
+	root /django/static
+	proxy / localhost:5000 {
+		except /static
+		transparent
+	}
+}

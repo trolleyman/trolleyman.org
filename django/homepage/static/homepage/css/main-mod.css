@@ -133,3 +133,32 @@ body.is-loading .wrapper.spotlight .inner {
 	
 	opacity: 1;
 }
+
+/* Contact details */
+
+#contact-inner {
+	position: relative;
+	padding: 0;
+	transition: height 0.5s;
+}
+
+#captcha, #contact-details {
+	opacity: 1;
+	transition: opacity 0.5s;
+}
+
+#captcha.hide, #contact-details.hide {
+	position: absolute;
+	opacity: 0;
+	display: relative;
+}
+
+#footer .inner .contact {
+	margin-bottom: 0em;
+	padding-bottom: 1.5em;
+}
+
+#footer .inner .copyright {
+	margin-top: 1.5em !important;
+	padding-top: 1.5em !important;
+}

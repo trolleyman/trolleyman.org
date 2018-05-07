@@ -1,3 +1,3 @@
-[submodule "FlappyClone"]
-	path = FlappyClone
+[submodule "django/FlappyClone"]
+	path = django/FlappyClone
 	url = https://github.com/trolleyman/FlappyClone
