@@ -7,8 +7,8 @@ __pycache__/
 *.pyc
 
 # Django
+/database/*
 !/database/dummy.txt
-/database
 /static/
 log.txt
 /logs
