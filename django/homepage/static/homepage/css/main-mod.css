@@ -162,3 +162,23 @@ body.is-loading .wrapper.spotlight .inner {
 	margin-top: 1.5em !important;
 	padding-top: 1.5em !important;
 }
+
+/* Date formatting */
+.wrapper.spotlight .inner .content div.major {
+	margin: 0 0 1em 0;
+	position: relative;
+}
+
+.wrapper.spotlight .inner .content div.major h2 {
+	margin-bottom: 0;
+}
+
+.wrapper.spotlight .inner .content .date {
+	position: absolute;
+	bottom: 0;
+	color: rgb(201, 201, 201);
+}
+
+.wrapper.spotlight.alt .inner .content .date {
+	right: 0;
+}
