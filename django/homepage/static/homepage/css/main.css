@@ -3350,6 +3350,9 @@
 		margin: 6.5em 0;
 		position: relative;
 	}
+	.scroll-marker {
+		bottom: 6.5em;
+	}
 
 		.wrapper:before, .wrapper:after {
 			background-image: url("data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='100'%20height='100'%20viewBox='0%200%20100%20100'%20preserveAspectRatio='none'%3E%3Cpolygon%20points='0,100%20100,0%20100,100'%20style='fill:%232e3141%3B'%20/%3E%3C/svg%3E");

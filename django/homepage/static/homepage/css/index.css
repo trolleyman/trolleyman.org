@@ -67,3 +67,9 @@
 .wrapper.spotlight .inner p {
 	margin-bottom: 0.5em;
 }
+
+.scroll-marker {
+	height: 0;
+	width: 100%;
+	transform: translateY(-100px);
+}

@@ -43,23 +43,16 @@ def contact_details(request):
     else:
         return HttpResponse(r.text, status=401)
 
-def projects_linc(request):
-    return render(request, 'homepage/projects/linc.html', DEFAULT_OPTS)
+projects = [
+    'linc',
+    'flappy',
+    'zucchini',
+    'robot',
+    # 'portal',
+    # 'k-means',
+    # 'equator',
+]
 
-def projects_flappy(request):
-    return render(request, 'homepage/projects/flappy.html', DEFAULT_OPTS)
-
-def projects_zucchini(request):
-    return render(request, 'homepage/projects/zucchini.html', DEFAULT_OPTS)
-
-def projects_robot(request):
-    return render(request, 'homepage/projects/robot.html', DEFAULT_OPTS)
-
-# def projects_portal(request):
-#     return render(request, 'homepage/projects/portal.html', DEFAULT_OPTS)
-
-# def projects_kmeans(request):
-#     return render(request, 'homepage/projects/k-means.html', DEFAULT_OPTS)
-
-# def projects_equator(request):
-#     return render(request, 'homepage/projects/equator.html', DEFAULT_OPTS)
+def project_view(name):
+    template = 'homepage/projects/' + name + '.html'
+    return lambda request: render(request, template, {'name': name, **DEFAULT_OPTS})

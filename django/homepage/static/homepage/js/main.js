@@ -24,10 +24,12 @@
 
 	// Disable animations/transitions until the page has loaded.
 	$body.addClass('is-loading');
-
-	window.addEventListener('load', function() {
+	
+	var doneLoading = function () {
 		$body.removeClass('is-loading');
-	});
+	};
+	window.addEventListener('load', doneLoading);
+	//window.addEventListener('DOMContentLoaded', doneLoading);
 
 	// Fix: Placeholder polyfill.
 	$('form').placeholder();
