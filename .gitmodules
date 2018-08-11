@@ -2,5 +2,5 @@
 	path = django/FlappyClone
 	url = https://github.com/trolleyman/FlappyClone
 [submodule "django/vis"]
-	path = django/vis
+	path = django/linc
 	url = https://github.com/trolleyman/linc
