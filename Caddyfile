@@ -1,18 +1,12 @@
 
 # Redirects -> https://callumgtolley.uk
-https://138.68.156.104 {
-	redir https://callumgtolley.uk{uri}
-}
-https://[2a03:b0c0:1:d0::a00:b001] {
-	redir https://callumgtolley.uk{uri}
-}
-https://www.trolleyman.org {
-	redir https://callumgtolley.uk{uri}
-}
-https://trolleyman.org {
-	redir https://callumgtolley.uk{uri}
-}
-https://www.callumgtolley.uk {
+https://138.68.156.104,
+https://[2a03:b0c0:1:d0::a00:b001],
+https://www.trolleyman.org,
+https://www.trolleyman.org,
+https://trolleyman.org,
+https://www.callumgtolley.uk,
+{
 	redir https://callumgtolley.uk{uri}
 }
 
