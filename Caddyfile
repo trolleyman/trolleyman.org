@@ -37,9 +37,6 @@ https://trolleyman.org {
 https://www.callumgtolley.uk {
 	redir https://callumgtolley.uk{uri}
 }
-https://callumgtolley.uk {
-	redir https://callumgtolley.uk{uri}
-}
 
 https://callumgtolley.uk {
 	root /django/static
