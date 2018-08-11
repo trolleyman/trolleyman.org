@@ -1,6 +1,6 @@
 # Shhhhh
-SECRET_KEY
-RECAPTCHA_PRIVATE_KEY
+/keys/*
+!/keys/dummy.txt
 
 # Python
 __pycache__/

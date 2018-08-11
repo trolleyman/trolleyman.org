@@ -40,8 +40,8 @@ VOLUME database/
 # Setup django logs volume
 VOLUME logs/
 
-# Run secret key gen
-RUN python trolleyman/secret_key_gen.py
+# Setup keys volume
+VOLUME keys/
 
 # Collect static files
 RUN python manage.py collectstatic --noinput

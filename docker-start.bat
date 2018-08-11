@@ -9,6 +9,7 @@ docker rm server
 docker run -d^
  -v "%dir%\logs:/django/logs"^
  -v "%dir%\django\database:/django/database"^
+ -v "%dir%\django\keys:/django/keys"^
  -v "%dir%\logs:/caddy/logs"^
  -v "%dir%\.caddy:/caddy/.caddy"^
  -p 80:80 -p 443:443^

@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(BASE_DIR, 'SECRET_KEY'), 'r') as f:
+with open(os.path.join(BASE_DIR, 'keys/SECRET_KEY'), 'r') as f:
     SECRET_KEY = f.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -78,7 +78,7 @@ INSTALLED_APPS = [
 
 if not DEBUG:
     RECAPTCHA_PUBLIC_KEY = '6LfdxE8UAAAAAN1sVEiQVDVomnIyvz-Pa4FstoHT'
-    with open(os.path.join(BASE_DIR, 'RECAPTCHA_PRIVATE_KEY'), 'r') as f:
+    with open(os.path.join(BASE_DIR, 'keys/RECAPTCHA_PRIVATE_KEY'), 'r') as f:
         RECAPTCHA_PRIVATE_KEY = f.read()
 else:
     # !!!TEST KEYS DO NOT USE IN PROD!!!
