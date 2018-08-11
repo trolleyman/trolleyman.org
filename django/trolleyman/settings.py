@@ -39,6 +39,8 @@ if not DEBUG:
         '.callumgtolley.uk',
         'callumgtolley.uk',
         'localhost',
+        '138.68.156.104',
+        '2a03:b0c0:1:d0::a00:b001',
     ]
     CONN_MAX_AGE = None
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
