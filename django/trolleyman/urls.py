@@ -21,7 +21,7 @@ from . import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^FlappyClone/', include('FlappyClone.urls')),
-    url(r'^linc/', include('vis.urls')),
+    url(r'^linc/', include('linc.urls')),
     url(r'heartbeat', views.heartbeat),
     url(r'^', include('homepage.urls')),
 ]
