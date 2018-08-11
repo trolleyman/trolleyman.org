@@ -59,6 +59,7 @@ SERVER_EMAIL = 'admin@callumgtolley.uk'
 
 INSTALLED_APPS = [
     'FlappyClone.apps.FlappyCloneConfig',
+    'vis.apps.VisConfig',
     'homepage.apps.HomepageConfig',
     'django.contrib.admin',
     'django.contrib.auth',
