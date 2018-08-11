@@ -25,8 +25,14 @@ with open(os.path.join(BASE_DIR, 'SECRET_KEY'), 'r') as f:
     SECRET_KEY = f.read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if not os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
+if os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
+    DEBUG = True
+else:
     DEBUG = False
+
+
+if not DEBUG:
+    # Production
     ALLOWED_HOSTS = [
         '.trolleyman.org',
         'trolleyman.org',
@@ -37,7 +43,7 @@ if not os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
     CONN_MAX_AGE = None
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
 else:
-    DEBUG = True
+    # Debug
     ALLOWED_HOSTS = [
         'localhost',
         '127.0.0.1',
