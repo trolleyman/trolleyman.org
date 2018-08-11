@@ -14,11 +14,14 @@ RUN nodejs -v
 # Install forever
 RUN npm install -g forever
 
+# Update pip
+RUN pip install --upgrade pip
+
 # Install django
-RUN pip install django
-RUN pip install gunicorn
-RUN pip install django_compressor
-RUN pip install requests
+COPY django/requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+COPY django/linc/requirements.txt requirements_linc.txt
+RUN pip install -r requirements_linc.txt
 
 # 2. Copy files
 # Setup caddy
@@ -48,9 +51,6 @@ RUN python manage.py collectstatic --noinput
 
 # Compress stuff
 RUN python manage.py compress
-
-# Migrate database
-RUN python manage.py migrate
 
 # 3. Setup startup cmd
 WORKDIR /
