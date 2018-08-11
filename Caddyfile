@@ -2,32 +2,32 @@
 
 
 # HTTP -> HTTPS !!FIXME: THIS!!
-# http://138.68.156.104 {
-# 	redir https://138.68.156.104{uri}
-# }
+http://138.68.156.104 {
+	redir https://138.68.156.104{uri}
+}
 # http://[2a03:b0c0:1:d0::a00:b001] {
 # 	redir https://[2a03:b0c0:1:d0::a00:b001]{uri}
 # }
-# http://www.trolleyman.org {
-# 	redir https://www.trolleyman.org{uri}
-# }
-# http://trolleyman.org {
-# 	redir https://trolleyman.org{uri}
-# }
-# http://www.callumgtolley.uk {
-# 	redir https://www.callumgtolley.uk{uri}
-# }
-# http://callumgtolley.uk {
-# 	redir https://callumgtolley.uk{uri}
-# }
+http://www.trolleyman.org {
+	redir https://www.trolleyman.org{uri}
+}
+http://trolleyman.org {
+	redir https://trolleyman.org{uri}
+}
+http://www.callumgtolley.uk {
+	redir https://www.callumgtolley.uk{uri}
+}
+http://callumgtolley.uk {
+	redir https://callumgtolley.uk{uri}
+}
 
 # All other HTTPS -> https://callumgtolley.uk
 https://138.68.156.104 {
 	redir https://callumgtolley.uk{uri}
 }
-https://[2a03:b0c0:1:d0::a00:b001] {
-	redir https://callumgtolley.uk{uri}
-}
+# https://[2a03:b0c0:1:d0::a00:b001] {
+# 	redir https://callumgtolley.uk{uri}
+# }
 https://www.trolleyman.org {
 	redir https://callumgtolley.uk{uri}
 }
