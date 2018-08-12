@@ -1,68 +1,59 @@
 import os
 
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.views.decorators.csrf import csrf_exempt
+from hashlib import sha1
 
 import json
 import hmac
 
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils.encoding import force_bytes
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-with open(os.path.join(BASE_DIR, 'keys/GIT_REFRESH_SECRET'), 'r') as f:
-	hex = f.read().strip()
-	SECRET = bytearray.fromhex(hex)
+COM_PORT=9401
 
-PORT=9401
-
+@require_POST
 @csrf_exempt
 def push(request):
-	# A push has been triggered
-	# Get signature
-	try:
-		sig = request.META['HTTP_X_HUB_SIGNATURE']
-	except KeyError:
-		return HttpResponseBadRequest('Required header X-Hub-Signature not found')
+    # A push has been triggered
+    # Get signature
+    header_signature = request.META.get('HTTP_X_HUB_SIGNATURE')
+    if header_signature is None:
+        return HttpResponseBadRequest('Required header X-Hub-Signature not found')
 
-	# Validate signature
-	if not is_signature_valid(sig, request.body):
-		ret = HttpResponse('Invalid signature')
-		ret.status_code = 401
-		return ret
+    # Validate signature
+    sha_name, signature = header_signature.split('=')
+    if sha_name != 'sha1':
+        return HttpResponseBadRequest('Operation not supported')
 
-	# Decode JSON
-	body = request.body.decode(encoding='utf-8', errors='replace')
-	try:
-		js = json.loads(body)
-	except json.JSONDecodeError:
-		return HttpResponseBadRequest('Invalid JSON')
+    mac = hmac.new(force_bytes(settings.GITHUB_WEBHOOK_KEY), msg=force_bytes(request.body), digestmod=sha1)
+    if not hmac.compare_digest(force_bytes(mac.hexdigest()), force_bytes(signature)):
+        return HttpResponseForbidden('Invalid signature', status=401)
 
-	# Get event name
-	print(request.META)
-	try:
-		evt_name = request.META['HTTP_X_GITHUB_EVENT']
-	except KeyError:
-		return HttpResponseBadRequest('Required header X-Github-Event not found')
+    # Decode JSON
+    body = request.body.decode(encoding='utf-8', errors='replace')
+    try:
+        js = json.loads(body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest('Invalid JSON')
 
-	# Get keys from json
-	try:
-		ref = js['ref']
+    # Get event name
+    evt_name = request.META.get('HTTP_X_GITHUB_EVENT')
+    if evt_name is None:
+        return HttpResponseBadRequest('Required header X-Github-Event not found')
 
-	except KeyError:
-		return HttpResponseBadRequest('Invalid JSON')
-
-	# Signal that there has been a push request
-	# TODO
-
-	# Return a default OK response
-	return HttpResponse('ok')
-
-def is_signature_valid(sig, body):
-	digest = hmac.new(SECRET, msg=body, digestmod='sha1').hexdigest()
-	calc_sig = 'sha1=%s' % digest
-	import logging
-	log = logging.getLogger(__name__)
-	log.warning('calc_sig: %r' % calc_sig)
-	log.warning('sig     : %r' % sig)
-	return hmac.compare_digest(sig, calc_sig)
-
+    elif evt_name == 'ping':
+        # Handle ping event
+        return HttpResponse('pong')
+    
+    elif evt_name == 'push':
+        # Handle push
+        ref = js.get('ref')
+        
+        # Signal that there has been a push request
+        # TODO
+    
+    else:
+        return HttpResponseBadRequest('Unknown event: %s' % evt_name)
