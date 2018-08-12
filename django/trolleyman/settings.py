@@ -66,6 +66,7 @@ SERVER_EMAIL = 'admin@callumgtolley.uk'
 # Application definition
 
 INSTALLED_APPS = [
+    'git_refresh.apps.GitRefreshConfig',
     'FlappyClone.apps.FlappyCloneConfig',
     'linc.apps.LincConfig',
     'homepage.apps.HomepageConfig',

@@ -23,7 +23,7 @@ RUN pip install -r requirements.txt
 COPY django/linc/requirements.txt requirements_linc.txt
 RUN pip install -r requirements_linc.txt
 
-# 2. Copy files
+# 2. Setup config
 # Setup caddy
 EXPOSE 80 443
 RUN mkdir /caddy
@@ -36,6 +36,9 @@ ENV CADDYPATH /caddy/.caddy
 # Copy django files
 COPY django /django
 WORKDIR /django
+
+# Specify django port
+ENV DJANGO_PORT=4999
 
 # Setup database
 VOLUME database/
@@ -53,7 +56,7 @@ RUN python manage.py collectstatic --noinput
 RUN python manage.py compress
 
 # 3. Setup startup cmd
-WORKDIR /
-COPY startup.sh /
+WORKDIR ~
+COPY entrypoint.sh ./
 
-CMD /startup.sh
+ENTRYPOINT ./entrypoint.sh

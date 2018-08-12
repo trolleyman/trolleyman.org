@@ -13,6 +13,6 @@ docker run -d\
   -v $DIR/django/keys:/django/keys \
   -v $DIR/logs:/caddy/logs \
   -v $DIR/.caddy:/caddy/.caddy \
-  -p 80:80 -p 443:443 \
+  -p 80:80 -p 443:443 -p 9401:9401 \
   --name server \
   server

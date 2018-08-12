@@ -6,7 +6,7 @@ https://trolleyman.org, https://www.trolleyman.org, https://www.callumgtolley.uk
 
 https://callumgtolley.uk {
 	root /django/static
-	proxy / localhost:5000 {
+	proxy / localhost:{$DJANGO_PORT} {
 		except /static
 		transparent
 	}

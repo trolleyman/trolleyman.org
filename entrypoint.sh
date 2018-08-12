@@ -12,7 +12,7 @@ python trolleyman/secret_key_gen.py
 python manage.py migrate
 
 # Run django via gunicorn
-nohup gunicorn -b localhost:5000 trolleyman.wsgi > logs/gunicorn.log 2>&1 &
+nohup gunicorn -b localhost:${DJANGO_PORT} trolleyman.wsgi > logs/gunicorn.log 2>&1 &
 
 ### Caddy ###
 cd /caddy
