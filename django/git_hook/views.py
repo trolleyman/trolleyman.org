@@ -16,7 +16,7 @@ with open(os.path.join(BASE_DIR, 'keys/GIT_REFRESH_SECRET'), 'r') as f:
 PORT=9401
 
 @csrf_exempt
-def push_hook(request):
+def push(request):
 	# A push has been triggered
 	# Get signature
 	try:
