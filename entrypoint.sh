@@ -12,13 +12,13 @@ python trolleyman/secret_key_gen.py
 python manage.py migrate
 
 # Run django via gunicorn
-nohup gunicorn -b localhost:${DJANGO_PORT} trolleyman.wsgi > logs/gunicorn.log 2>&1 &
+gunicorn -b localhost:${DJANGO_PORT} trolleyman.wsgi > logs/gunicorn.log 2>&1 &
 
 ### Caddy ###
 cd /caddy
 
 # Run caddy
-nohup caddy --conf Caddyfile --log logs/caddy.log &
+caddy --conf Caddyfile --log logs/caddy.log &
 
 # Wait for child processes to exit
 wait
