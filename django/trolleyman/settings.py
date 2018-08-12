@@ -44,8 +44,7 @@ if not DEBUG:
 else:
     # Debug
     ALLOWED_HOSTS = [
-        'localhost',
-        '127.0.0.1',
+        '*'
     ]
 
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
