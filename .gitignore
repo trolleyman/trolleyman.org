@@ -1,4 +1,3 @@
 /logs/
-/keys/
 *.log
 /.caddy/

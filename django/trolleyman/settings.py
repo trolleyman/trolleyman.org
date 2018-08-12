@@ -13,15 +13,16 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 import sys
 
+import decouple  # django-decouple
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(BASE_DIR, 'keys/SECRET_KEY'), 'r') as f:
-    SECRET_KEY = f.read()
+SECRET_KEY = decouple.config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = decouple.config('DEBUG', default=False, cast=bool)
 if os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
     DEBUG = True
 else:
@@ -77,12 +78,14 @@ INSTALLED_APPS = [
 
 if not DEBUG:
     RECAPTCHA_PUBLIC_KEY = '6LfdxE8UAAAAAN1sVEiQVDVomnIyvz-Pa4FstoHT'
-    with open(os.path.join(BASE_DIR, 'keys/RECAPTCHA_PRIVATE_KEY'), 'r') as f:
-        RECAPTCHA_PRIVATE_KEY = f.read()
+    RECAPTCHA_PRIVATE_KEY = decouple.config('RECAPTCHA_PRIVATE_KEY')
 else:
     # !!!TEST KEYS DO NOT USE IN PROD!!!
     RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
     RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+
+# Get Github webhooks secret
+GITHUB_WEBHOOKS_SECRET = decouple.config('GITHUB_WEBHOOKS_SECRET').encode('utf-8')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

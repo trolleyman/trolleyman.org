@@ -46,9 +46,6 @@ VOLUME database/
 # Setup django logs volume
 VOLUME logs/
 
-# Setup keys volume
-VOLUME keys/
-
 # Collect static files
 RUN python manage.py collectstatic --noinput
 

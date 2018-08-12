@@ -2,3 +2,4 @@ django==2.1
 gunicorn==19.9
 django_compressor==2.2
 requests==2.19
+python-decouple==3.1

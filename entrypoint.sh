@@ -5,9 +5,6 @@ set -x
 ### Django ###
 cd /django
 
-# Run secret key gen (if there's a key already, this won't overwrite it)
-python trolleyman/secret_key_gen.py
-
 # Migrate the database
 python manage.py migrate
 
