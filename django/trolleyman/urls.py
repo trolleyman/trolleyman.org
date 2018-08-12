@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^FlappyClone/', include('FlappyClone.urls')),
     url(r'^linc/', include('linc.urls')),
     url(r'^heartbeat', views.heartbeat),
-    url(r'^git_refresh/', include('git_refresh.urls'))
+    url(r'^git_refresh/', include('git_refresh.urls')),
     url(r'^', include('homepage.urls')),
 ]
