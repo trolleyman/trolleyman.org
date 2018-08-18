@@ -5,7 +5,7 @@ import os
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'django'))
-from git_hook.com_consts import COM_MSG_GIT_RESTART
+from git_hook.com_consts import COM_MSG_GIT_RESTART  # noqa
 
 COM_PORT = os.environ['COM_PORT']
 
@@ -21,10 +21,10 @@ def connection_handler(conn, address):
         if len(buf_recv) == 0:
             print("{}: Disconnected".format(saddr))
             break
-        
+
         # Handle data received
         buf += buf_recv
-        
+
         # Find all msgs in received buffer
         while True:
             index = buf.find(b'\n')
@@ -36,7 +36,7 @@ def connection_handler(conn, address):
                 msg = buf[:index]
                 # Strip message data from buf.
                 buf = buf[index+1:]
-                
+
                 if msg == COM_MSG_GIT_RESTART:
                     # Restart
                     git_restart_event.set()
@@ -55,7 +55,7 @@ def run_server():
 
     while True:
         connection, address = serversocket.accept()
-        
+
         t = threading.Thread(target=connection_handler, args=(connection, address), daemon=True)
         t.start()
 
@@ -63,10 +63,10 @@ def run_server():
 def main():
     t = threading.Thread(target=run_server, daemon=True)
     t.start()
-    
+
     # Wait for restart request
     git_restart_event.wait()
-    
+
     # Restart request received: shutdown computer
     os.system("shutdown now -r")
 
