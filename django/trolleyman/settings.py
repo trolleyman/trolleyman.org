@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-import sys
 
 import decouple  # django-decouple
 
@@ -69,7 +68,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'compressor', # django-compressor
+    'compressor',  # django-compressor
 ]
 
 if not DEBUG:
@@ -168,7 +167,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/static")
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder', # django-compressor
+    'compressor.finders.CompressorFinder',  # django-compressor
 ]
 
 LOGIN_URL = 'login'
@@ -193,7 +192,7 @@ if DEBUG:
                 'class': 'logging.FileHandler',
                 'filename': LOG_PATH,
                 'formatter': 'standard',
-            },  
+            },
             'console': {
                 'class': 'logging.StreamHandler',
                 'formatter': 'standard',
@@ -221,10 +220,10 @@ else:
                 'level': 'DEBUG',
                 'class': 'logging.handlers.RotatingFileHandler',
                 'filename': LOG_PATH,
-                'maxBytes': 1024*1024*5, # 5 MB
+                'maxBytes': 1024*1024*5,  # 5 MB
                 'backupCount': 5,
                 'formatter': 'standard',
-            },  
+            },
             'console': {
                 'class': 'logging.StreamHandler',
             },

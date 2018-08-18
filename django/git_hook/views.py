@@ -55,7 +55,7 @@ def push(request):
     elif evt_name == 'ping':
         # Handle ping event
         return HttpResponse('pong')
-    
+
     elif evt_name == 'push':
         # Handle push
         ref = js.get('ref')
@@ -66,7 +66,7 @@ def push(request):
             sock.sendall(COM_MSG_GIT_RESTART + b'\n')
             sock.flush()
             sock.close()
-        
+
         # Send thanks to Git webhooks
         return HttpResponse('Cheers, git.')
 
