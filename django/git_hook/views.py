@@ -14,7 +14,7 @@ from django.utils.encoding import force_bytes
 
 from .com_consts import COM_MSG_GIT_RESTART
 
-COM_PORT = os.environ['COM_PORT']
+COM_PORT = int(os.environ['COM_PORT'])
 
 
 @require_POST
