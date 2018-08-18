@@ -17,7 +17,7 @@ from .com_consts import COM_MSG_GIT_RESTART
 COM_PORT = os.environ['COM_PORT']
 
 
-#@require_POST
+@require_POST
 @csrf_exempt
 def push(request):
     # A push has been triggered
