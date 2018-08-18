@@ -17,10 +17,10 @@ docker build . -t server
 docker kill server || true
 docker rm server || true
 docker run -d\
-  -v ./logs:/django/logs \
-  -v ./django/database:/django/database \
-  -v ./logs:/caddy/logs \
-  -v ./.caddy:/caddy/.caddy \
+  -v logs:/django/logs \
+  -v django/database:/django/database \
+  -v logs:/caddy/logs \
+  -v .caddy:/caddy/.caddy \
   -p 80:80 -p 443:443 -p $COM_PORT:$COM_PORT \
   -e COM_PORT=$COM_PORT \
   --name server \
