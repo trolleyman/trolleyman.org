@@ -62,6 +62,7 @@ def push(request):
         if ref == 'refs/heads/prod':
             # prod branch has been updated: signal that there has been an update & request a restart
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             sock.connect(('localhost', COM_PORT))
             sock.sendall(COM_MSG_GIT_RESTART + b'\n')
             sock.flush()
