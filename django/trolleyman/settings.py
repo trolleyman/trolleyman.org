@@ -23,10 +23,6 @@ SECRET_KEY = decouple.config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = decouple.config('DEBUG', default=False, cast=bool)
-if os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
-    DEBUG = True
-else:
-    DEBUG = False
 
 
 if not DEBUG:
@@ -85,7 +81,7 @@ else:
     RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 
 # Get Github webhooks secret
-GITHUB_WEBHOOKS_SECRET = decouple.config('GITHUB_WEBHOOKS_SECRET').encode('utf-8')
+GITHUB_WEBHOOK_SECRET = decouple.config('GITHUB_WEBHOOK_SECRET').encode('utf-8')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

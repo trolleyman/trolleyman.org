@@ -4,6 +4,7 @@ from hashlib import sha1
 
 import json
 import hmac
+import socket
 
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -11,10 +12,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.encoding import force_bytes
 
+from .com_consts import COM_MSG_GIT_RESTART
 
-COM_PORT=9401
+COM_PORT = os.environ['COM_PORT']
 
-@require_POST
+
+#@require_POST
 @csrf_exempt
 def push(request):
     # A push has been triggered
@@ -28,9 +31,14 @@ def push(request):
     if sha_name != 'sha1':
         return HttpResponseBadRequest('Operation not supported')
 
-    mac = hmac.new(force_bytes(settings.GITHUB_WEBHOOK_KEY), msg=force_bytes(request.body), digestmod=sha1)
-    if not hmac.compare_digest(force_bytes(mac.hexdigest()), force_bytes(signature)):
-        return HttpResponseForbidden('Invalid signature', status=401)
+    secret = force_bytes(settings.GITHUB_WEBHOOK_SECRET)
+    msg = force_bytes(request.body)
+
+    mac = hmac.new(secret, msg=msg, digestmod=sha1)
+
+    digest = force_bytes(mac.hexdigest())
+    if not hmac.compare_digest(digest, force_bytes(signature)):
+        return HttpResponse('Invalid signature', status=401)
 
     # Decode JSON
     body = request.body.decode(encoding='utf-8', errors='replace')
@@ -51,9 +59,16 @@ def push(request):
     elif evt_name == 'push':
         # Handle push
         ref = js.get('ref')
+        if ref == 'refs/heads/prod':
+            # prod branch has been updated: signal that there has been an update & request a restart
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect(('localhost', COM_PORT))
+            sock.sendall(COM_MSG_GIT_RESTART + b'\n')
+            sock.flush()
+            sock.close()
         
-        # Signal that there has been a push request
-        # TODO
-    
+        # Send thanks to Git webhooks
+        return HttpResponse('Cheers, git.')
+
     else:
         return HttpResponseBadRequest('Unknown event: %s' % evt_name)
