@@ -1,41 +1,47 @@
-FROM python:3
+FROM ubuntu:18.10
 
-# 1. Install stuff
+# === Install stuff ===
+# Update apt
+RUN apt-get update
+
+# Install python3
+RUN apt-get install python3 -y
+RUN python3 -V
+
+# Install pip
+RUN apt-get install python3-pip -y
+RUN pip3 -V
+
+# Update pip
+RUN pip3 install --upgrade pip
+
+# Install caddy
+RUN apt-get install curl -y
 RUN curl -s https://getcaddy.com | bash -s personal
 RUN which caddy
 
-# Install npm
-RUN apt-get update
-RUN apt-get install nodejs -y
-RUN ln -s /usr/bin/nodejs /usr/bin/node
-RUN apt-get install npm -y
-RUN nodejs -v
-
-# Install forever
-RUN npm install -g forever
-
-# Update pip
-RUN pip install --upgrade pip
-
 # Install django
 COPY django/requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 COPY django/linc/requirements.txt requirements_linc.txt
-RUN pip install -r requirements_linc.txt
+RUN pip3 install -r requirements_linc.txt
 
-# 2. Copy files
+# === Setup config ===
 # Setup caddy
 EXPOSE 80 443
-RUN mkdir /caddy
-WORKDIR /caddy
+RUN mkdir /opt/caddy
+WORKDIR /opt/caddy
 VOLUME logs/
 COPY Caddyfile ./Caddyfile
 VOLUME .caddy/
-ENV CADDYPATH /caddy/.caddy
+ENV CADDYPATH /opt/caddy/.caddy
 
 # Copy django files
-COPY django /django
-WORKDIR /django
+COPY django /opt/django
+WORKDIR /opt/django
+
+# Specify django port
+ENV DJANGO_PORT=4999
 
 # Setup database
 VOLUME database/
@@ -43,17 +49,14 @@ VOLUME database/
 # Setup django logs volume
 VOLUME logs/
 
-# Setup keys volume
-VOLUME keys/
-
 # Collect static files
-RUN python manage.py collectstatic --noinput
+RUN python3 manage.py collectstatic --noinput
 
 # Compress stuff
-RUN python manage.py compress
+RUN python3 manage.py compress --force
 
-# 3. Setup startup cmd
-WORKDIR /
-COPY startup.sh /
+# === Setup startup cmd ===
+WORKDIR ~
+COPY docker_entrypoint.sh ~/docker_entrypoint.sh
 
-CMD /startup.sh
+ENTRYPOINT ["~/docker_entrypoint.sh"]

@@ -11,24 +11,17 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-import sys
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import decouple  # django-decouple
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(BASE_DIR, 'keys/SECRET_KEY'), 'r') as f:
-    SECRET_KEY = f.read()
+SECRET_KEY = decouple.config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.path.exists(os.path.join(BASE_DIR, 'DEBUG')):
-    DEBUG = True
-else:
-    DEBUG = False
+DEBUG = decouple.config('DEBUG', default=False, cast=bool)
 
 
 if not DEBUG:
@@ -47,8 +40,7 @@ if not DEBUG:
 else:
     # Debug
     ALLOWED_HOSTS = [
-        'localhost',
-        '127.0.0.1',
+        '*'
     ]
 
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
@@ -66,6 +58,7 @@ SERVER_EMAIL = 'admin@callumgtolley.uk'
 # Application definition
 
 INSTALLED_APPS = [
+    'git_hook.apps.GitHookConfig',
     'FlappyClone.apps.FlappyCloneConfig',
     'linc.apps.LincConfig',
     'homepage.apps.HomepageConfig',
@@ -75,17 +68,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'compressor', # django-compressor
+    'compressor',  # django-compressor
 ]
 
 if not DEBUG:
     RECAPTCHA_PUBLIC_KEY = '6LfdxE8UAAAAAN1sVEiQVDVomnIyvz-Pa4FstoHT'
-    with open(os.path.join(BASE_DIR, 'keys/RECAPTCHA_PRIVATE_KEY'), 'r') as f:
-        RECAPTCHA_PRIVATE_KEY = f.read()
+    RECAPTCHA_PRIVATE_KEY = decouple.config('RECAPTCHA_PRIVATE_KEY')
 else:
-    # !!!TEST KEYS DO NOT USE IN PROD!!!
+    # !!!TEST KEYS - Do not use in prod!!!
     RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
     RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+
+# Get Github webhooks secret
+GITHUB_WEBHOOK_SECRET = decouple.config('GITHUB_WEBHOOK_SECRET').encode('utf-8')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -172,7 +167,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/static")
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder', # django-compressor
+    'compressor.finders.CompressorFinder',  # django-compressor
 ]
 
 LOGIN_URL = 'login'
@@ -187,62 +182,50 @@ if DEBUG:
 else:
     COMPRESS_OFFLINE = True
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': LOG_PATH,
+            'formatter': 'verbose',
+        },
+        'rotating_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_PATH,
+            'maxBytes': 1024*1024*5,  # 5 MB
+            'backupCount': 10,
+            'formatter': 'verbose',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
+    },
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+        'verbose': {
+            'format': '%(asctime)s [%(levelname)s] (PID %(process)d, TID %(thread)d) %(module)s - %(name)s: %(message)s'
+        },
+    },
+    'loggers': {},
+}
 if DEBUG:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'default': {
-                'level': 'DEBUG',
-                'class': 'logging.FileHandler',
-                'filename': LOG_PATH,
-                'formatter': 'standard',
-            },  
-            'console': {
-                'class': 'logging.StreamHandler',
-                'formatter': 'standard',
-            },
-        },
-        'formatters': {
-            'standard': {
-                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-            },
-        },
-        'loggers': {
-            'django': {
-                'handlers': ['default', 'console'],
-                'level': 'DEBUG',
-                'propagate': True,
-            },
+    LOGGING['loggers'] = {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
         },
     }
 else:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'default': {
-                'level': 'DEBUG',
-                'class': 'logging.handlers.RotatingFileHandler',
-                'filename': LOG_PATH,
-                'maxBytes': 1024*1024*5, # 5 MB
-                'backupCount': 5,
-                'formatter': 'standard',
-            },  
-            'console': {
-                'class': 'logging.StreamHandler',
-            },
-        },
-        'formatters': {
-            'standard': {
-                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-            },
-        },
-        'loggers': {
-            '': {
-                'handlers': ['default'],
-                'level': 'DEBUG',
-                'propagate': True,
-            },
+    LOGGING['loggers'] = {
+        'django': {
+            'handlers': ['rotating_file'],
+            'level': 'DEBUG',
         },
     }

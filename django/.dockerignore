@@ -9,6 +9,3 @@ __pycache__/
 /log.txt
 /logs
 /venv/
-
-# Debug flag
-/DEBUG
