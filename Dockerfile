@@ -56,7 +56,7 @@ RUN python3 manage.py collectstatic --noinput
 RUN python3 manage.py compress --force
 
 # === Setup startup cmd ===
-WORKDIR ~
-COPY docker_entrypoint.sh ~/docker_entrypoint.sh
+WORKDIR /root/
+COPY docker_entrypoint.sh /root/docker_entrypoint.sh
 
-ENTRYPOINT ["~/docker_entrypoint.sh"]
+ENTRYPOINT ["/root/docker_entrypoint.sh"]
