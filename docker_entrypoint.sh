@@ -6,7 +6,7 @@ set -x
 cd /opt/caddy
 
 # Run caddy
-caddy --conf Caddyfile --log logs/caddy.log &
+caddy --conf Caddyfile --log logs/caddy.log 2>&1 > /dev/null &
 
 ### Django ###
 cd /opt/django
