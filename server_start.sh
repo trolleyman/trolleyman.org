@@ -6,7 +6,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SELF="$( realpath "${BASH_SOURCE[0]}" )"
 
 # Set echo & exit on error
-echo "dir: $DIR"
 set -ex
 
 # Redirect all output to a logfile
@@ -18,7 +17,7 @@ cd $DIR
 (git pull && git submodule init && git submodule sync && git submodule update) || true
 
 # Run docker
-"$DIR/root_run_docker.sh"
+"$DIR/server_run_docker.sh"
 
 # Exec ourselves
 exec "$SELF"
