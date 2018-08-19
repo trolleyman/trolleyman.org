@@ -1,4 +1,3 @@
-import os
 
 from hashlib import sha1
 
@@ -12,9 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.encoding import force_bytes
 
-from .com_consts import COM_MSG_GIT_RESTART
-
-COM_PORT = int(os.environ['COM_PORT'])
+from .com_consts import COM_MSG_GIT_RESTART, COM_PORT
 
 
 @require_POST

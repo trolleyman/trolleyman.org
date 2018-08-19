@@ -5,9 +5,7 @@ import os
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'django'))
-from git_hook.com_consts import COM_MSG_GIT_RESTART  # noqa
-
-COM_PORT = int(os.environ['COM_PORT'])
+from git_hook.com_consts import COM_MSG_GIT_RESTART, COM_PORT  # noqa
 
 git_restart_event = threading.Event()
 
