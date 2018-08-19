@@ -75,7 +75,7 @@ if not DEBUG:
     RECAPTCHA_PUBLIC_KEY = '6LfdxE8UAAAAAN1sVEiQVDVomnIyvz-Pa4FstoHT'
     RECAPTCHA_PRIVATE_KEY = decouple.config('RECAPTCHA_PRIVATE_KEY')
 else:
-    # !!!TEST KEYS DO NOT USE IN PROD!!!
+    # !!!TEST KEYS - Do not use in prod!!!
     RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
     RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 
@@ -182,7 +182,7 @@ if DEBUG:
 else:
     COMPRESS_OFFLINE = True
 
-LOGGING_CONFIG = {
+LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
@@ -216,18 +216,16 @@ LOGGING_CONFIG = {
     'loggers': {},
 }
 if DEBUG:
-    LOGGING_CONFIG['loggers'] = {
+    LOGGING['loggers'] = {
         'django': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
-            'propagate': True,
         },
     }
 else:
-    LOGGING_CONFIG['loggers'] = {
+    LOGGING['loggers'] = {
         'django': {
             'handlers': ['rotating_file'],
             'level': 'DEBUG',
-            'propagate': True,
         },
     }
