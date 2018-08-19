@@ -3,15 +3,16 @@ from hashlib import sha1
 
 import json
 import hmac
-import socket
+import os
+import signal
+
+import psutil
 
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.encoding import force_bytes
-
-from .com_consts import COM_MSG_GIT_RESTART, COM_PORT
 
 
 @require_POST
@@ -57,13 +58,16 @@ def push(request):
         # Handle push
         ref = js.get('ref')
         if ref == 'refs/heads/prod':
-            # prod branch has been updated: signal that there has been an update & request a restart
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            sock.connect(('localhost', COM_PORT))
-            sock.sendall(COM_MSG_GIT_RESTART + b'\n')
-            sock.flush()
-            sock.close()
+            # prod branch has been updated
+
+            # Find all gunicorn processes
+            gunicorn_pids = [
+                p.info for p in psutil.process_iter(attrs=['pid', 'name']) if 'gunicorn' in p.info['name']
+            ]
+
+            # Send SIGTERM to them
+            for pid in gunicorn_pids:
+                os.kill(os.getpid(), signal.SIGTERM)
 
         # Send thanks to Git webhooks
         return HttpResponse('Cheers, git.')

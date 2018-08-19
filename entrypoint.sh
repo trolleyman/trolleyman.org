@@ -2,20 +2,17 @@
 
 set -x
 
-### Django ###
-cd /django
-
-# Migrate the database
-python manage.py migrate
-
-# Run django via gunicorn
-gunicorn -b localhost:${DJANGO_PORT} trolleyman.wsgi > logs/gunicorn.log 2>&1 &
-
 ### Caddy ###
-cd /caddy
+cd /opt/caddy
 
 # Run caddy
 caddy --conf Caddyfile --log logs/caddy.log &
 
-# Wait for child processes to exit
-wait
+### Django ###
+cd /opt/django
+
+# Migrate the database
+python manage.py migrate
+
+# Run django via gunicorn & wait for django to exit
+gunicorn -b localhost:${DJANGO_PORT} trolleyman.wsgi > logs/gunicorn.log 2>&1
