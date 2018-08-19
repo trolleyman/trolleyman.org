@@ -9,7 +9,8 @@ export COM_PORT_OUTSIDE=9402
 
 cd $DIR/django
 
-git pull || true # We don't want spurious network errors holding up the server
+# We have `|| true' here because we don't want spurious network errors holding up the server
+(git pull && git submodule init && git submodule sync && git submodule update) || true
 
 cd $DIR
 
