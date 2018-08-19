@@ -182,62 +182,52 @@ if DEBUG:
 else:
     COMPRESS_OFFLINE = True
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': LOG_PATH,
+            'formatter': 'verbose',
+        },
+        'rotating_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': LOG_PATH,
+            'maxBytes': 1024*1024*5,  # 5 MB
+            'backupCount': 10,
+            'formatter': 'verbose',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
+    },
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+        'verbose': {
+            'format': '%(asctime)s [%(levelname)s] (PID %(process)d, TID %(thread)d) %(module)s - %(name)s: %(message)s'
+        },
+    },
+    'loggers': {},
+}
 if DEBUG:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'default': {
-                'level': 'DEBUG',
-                'class': 'logging.FileHandler',
-                'filename': LOG_PATH,
-                'formatter': 'standard',
-            },
-            'console': {
-                'class': 'logging.StreamHandler',
-                'formatter': 'standard',
-            },
-        },
-        'formatters': {
-            'standard': {
-                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-            },
-        },
-        'loggers': {
-            'django': {
-                'handlers': ['default', 'console'],
-                'level': 'DEBUG',
-                'propagate': True,
-            },
+    LOGGING['loggers'] = {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
         },
     }
 else:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'default': {
-                'level': 'DEBUG',
-                'class': 'logging.handlers.RotatingFileHandler',
-                'filename': LOG_PATH,
-                'maxBytes': 1024*1024*5,  # 5 MB
-                'backupCount': 5,
-                'formatter': 'standard',
-            },
-            'console': {
-                'class': 'logging.StreamHandler',
-            },
-        },
-        'formatters': {
-            'standard': {
-                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-            },
-        },
-        'loggers': {
-            '': {
-                'handlers': ['default'],
-                'level': 'DEBUG',
-                'propagate': True,
-            },
+    LOGGING['loggers'] = {
+        'django': {
+            'handlers': ['rotating_file'],
+            'level': 'DEBUG',
+            'propagate': True,
         },
     }
