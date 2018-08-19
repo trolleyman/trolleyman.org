@@ -70,13 +70,14 @@ def push(request):
             # prod branch has been updated
 
             # Find all gunicorn processes
-            gunicorn_pids = [
+            gunicorn_processes = [
                 p.info for p in psutil.process_iter(attrs=['pid', 'name']) if 'gunicorn' in p.info['name']
             ]
 
             # Send SIGTERM to them
-            for pid in gunicorn_pids:
-                os.kill(pid, signal.SIGTERM)
+            logger.debug("gunicorn pid(s): %r" % gunicorn_processes)
+            for process in gunicorn_processes:
+                os.kill(process['pid'], signal.SIGTERM)
 
             logger.info("SIGTERM sent")
 
