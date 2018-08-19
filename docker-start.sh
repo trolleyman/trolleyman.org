@@ -21,7 +21,7 @@ docker run -d\
   -v $DIR/django/database:/django/database \
   -v $DIR/logs:/caddy/logs \
   -v $DIR/.caddy:/caddy/.caddy \
-  -p 80:80 -p 443:443 -p $COM_PORT_OUTSIDE:$COM_PORT_INSIDE/tcp \
+  -p 80:80 -p 443:443 -p $COM_PORT_INSIDE:$COM_PORT_OUTSIDE/tcp \
   -e COM_PORT=$COM_PORT_INSIDE \
   --name server \
   server
