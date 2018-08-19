@@ -3,6 +3,7 @@
 # It reloads the repository from GitHub, and runs docker.
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SELF="$( realpath "${BASH_SOURCE[0]}" )"
 
 # Set echo & exit on error
 set -ex
@@ -19,4 +20,4 @@ cd $DIR
 "$DIR/root_run_docker.sh"
 
 # Exec ourselves
-exec "${BASH_SOURCE[0]}"
+exec "$SELF"
