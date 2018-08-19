@@ -14,7 +14,14 @@ exec > "$DIR/logs/script.log" 2>&1
 cd $DIR
 
 # We have `|| true' here because we don't want spurious network errors holding up the server
-(git pull && git submodule init && git submodule sync && git submodule update) || true
+(
+	git fetch &&\
+	git checkout prod &&\
+	git reset --hard origin/prod &&\
+	git submodule init &&\
+	git submodule sync &&\
+	git submodule update
+) || true
 
 # Run docker
 "$DIR/server_run_docker.sh"
