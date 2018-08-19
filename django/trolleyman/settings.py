@@ -228,4 +228,8 @@ else:
             'handlers': ['rotating_file'],
             'level': 'DEBUG',
         },
+        'django.request': {
+            'handlers': ['rotating_file'],
+            'level': 'DEBUG',
+        },
     }
