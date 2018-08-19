@@ -21,8 +21,5 @@ docker run -d\
   --name server \
   server
 
-# Wait for docker to exit
-docker wait server
-
-# Shutdown
+# Shutdown once entrypoint.sh has run
 shutdown now -r

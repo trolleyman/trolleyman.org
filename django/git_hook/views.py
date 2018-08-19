@@ -3,9 +3,9 @@ from hashlib import sha1
 
 import json
 import hmac
+import logging
 import os
 import signal
-import time
 
 import psutil
 
@@ -14,6 +14,9 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.encoding import force_bytes
+
+
+logger = logging.getLogger(__name__)
 
 
 @require_POST
@@ -53,12 +56,17 @@ def push(request):
 
     elif evt_name == 'ping':
         # Handle ping event
+        logger.info("ping event received")
         return HttpResponse('pong')
 
     elif evt_name == 'push':
         # Handle push
         ref = js.get('ref')
-        if ref == 'refs/heads/prod':
+        if ref != 'refs/heads/prod':
+            logger.info("ref %r updated, ignoring" % ref)
+
+        else:
+            logger.info("ref %r updated, shutting down gunicorn" % ref)
             # prod branch has been updated
 
             # Find all gunicorn processes
@@ -70,9 +78,7 @@ def push(request):
             for pid in gunicorn_pids:
                 os.kill(os.getpid(), signal.SIGTERM)
 
-            # Wait for a bit, then shutdown
-            time.sleep(2)
-            os.system("shutdown now")
+            logger.info("SIGTERM sent")
 
         # Send thanks to Git webhooks
         return HttpResponse('Cheers, git.')
