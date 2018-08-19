@@ -5,6 +5,11 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SELF="$( realpath "${BASH_SOURCE[0]}" )"
 
+function on-exit() {
+	exec "$SELF" "$@"
+}
+trap on-exit EXIT
+
 # Set echo & exit on error
 set -ex
 
