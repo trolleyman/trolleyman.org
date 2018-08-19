@@ -4,12 +4,10 @@ set -ex
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-cd $DIR/django
+cd $DIR
 
 # We have `|| true' here because we don't want spurious network errors holding up the server
 (git pull && git submodule init && git submodule sync && git submodule update) || true
-
-cd $DIR
 
 docker build . -t server
 docker kill server || true
