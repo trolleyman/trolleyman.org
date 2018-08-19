@@ -9,7 +9,7 @@ set -ex
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 docker build "$DIR" -t server
-docker kill server || true
+docker stop server || true
 docker rm server || true
 docker run\
   -v "$DIR/logs:/opt/django/logs" \
