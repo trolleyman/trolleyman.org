@@ -57,6 +57,6 @@ RUN python3 manage.py compress --force
 
 # === Setup startup cmd ===
 WORKDIR ~
-COPY entrypoint.sh ./
+COPY entrypoint.sh ~/entrypoint.sh
 
-ENTRYPOINT ./entrypoint.sh
+ENTRYPOINT ["~/entrypoint.sh"]

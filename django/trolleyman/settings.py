@@ -182,7 +182,7 @@ if DEBUG:
 else:
     COMPRESS_OFFLINE = True
 
-LOGGING = {
+LOGGING_CONFIG = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
@@ -216,7 +216,7 @@ LOGGING = {
     'loggers': {},
 }
 if DEBUG:
-    LOGGING['loggers'] = {
+    LOGGING_CONFIG['loggers'] = {
         'django': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
@@ -224,7 +224,7 @@ if DEBUG:
         },
     }
 else:
-    LOGGING['loggers'] = {
+    LOGGING_CONFIG['loggers'] = {
         'django': {
             'handlers': ['rotating_file'],
             'level': 'DEBUG',
