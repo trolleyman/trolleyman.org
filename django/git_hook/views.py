@@ -76,7 +76,7 @@ def push(request):
 
             # Send SIGTERM to them
             for pid in gunicorn_pids:
-                os.kill(os.getpid(), signal.SIGTERM)
+                os.kill(pid, signal.SIGTERM)
 
             logger.info("SIGTERM sent")
 
