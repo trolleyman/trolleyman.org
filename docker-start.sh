@@ -12,7 +12,7 @@ cd $DIR
 docker build . -t server
 docker kill server || true
 docker rm server || true
-docker run -d\
+docker run\
   -v $DIR/logs:/opt/django/logs \
   -v $DIR/django/database:/opt/django/database \
   -v $DIR/logs:/opt/caddy/logs \
