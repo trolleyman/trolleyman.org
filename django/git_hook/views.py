@@ -5,6 +5,7 @@ import json
 import hmac
 import os
 import signal
+import time
 
 import psutil
 
@@ -68,6 +69,10 @@ def push(request):
             # Send SIGTERM to them
             for pid in gunicorn_pids:
                 os.kill(os.getpid(), signal.SIGTERM)
+
+            # Wait for a bit, then shutdown
+            time.sleep(2)
+            os.system("shutdown now")
 
         # Send thanks to Git webhooks
         return HttpResponse('Cheers, git.')

@@ -15,4 +15,4 @@ cd /opt/django
 python manage.py migrate
 
 # Run django via gunicorn & wait for django to exit
-gunicorn -b localhost:${DJANGO_PORT} trolleyman.wsgi > logs/gunicorn.log 2>&1
+gunicorn -b localhost:${DJANGO_PORT} trolleyman.wsgi > logs/gunicorn.log 2>&1 &
