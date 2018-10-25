@@ -1,4 +1,4 @@
-django==2.1
+django>=2.1.2
 gunicorn==19.9
 django_compressor==2.2
 requests==2.19
