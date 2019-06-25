@@ -175,7 +175,7 @@ LOGOUT_REDIRECT_URL = 'login'
 
 COMPRESS_FILTERS = {
     'css': [
-        'compressor.filters.css_default.CssAbsoluteFilter'
+        'compressor.filters.css_default.CssAbsoluteFilter',
         'compressor.filters.yuglify.YUglifyCSSFilter'
     ],
     'js': [
