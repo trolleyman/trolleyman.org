@@ -176,6 +176,15 @@ LOGOUT_REDIRECT_URL = 'login'
 COMPRESS_CSS_FILTERS = [
     'compressor.filters.cssmin.rCSSMinFilter',
 ]
+COMPRESS_FILTERS = {
+    'css': [
+        'compressor.filters.css_default.CssAbsoluteFilter'
+        'compressor.filters.yuglify.YUglifyCSSFilter'
+    ],
+    'js': [
+        'compressor.filters.jsmin.JSMinFilter'
+    ]
+}
 
 if DEBUG:
     COMPRESS_OFFLINE = False

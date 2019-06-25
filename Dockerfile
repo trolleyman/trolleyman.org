@@ -5,18 +5,25 @@ FROM ubuntu:18.10
 RUN apt-get update
 
 # Install python3
-RUN apt-get install python3 -y
+RUN apt-get install -y python3
 RUN python3 -V
 
 # Install pip
-RUN apt-get install python3-pip -y
+RUN apt-get install -y python3-pip
 RUN pip3 -V
 
 # Update pip
 RUN pip3 install --upgrade pip
 
+# Install node
+RUN apt-get install -y nodejs
+RUN apt-get install -y npm
+
+# Install needed node packages
+RUN npm install -g yuglify
+
 # Install caddy
-RUN apt-get install curl -y
+RUN apt-get install -y curl
 RUN curl -s https://getcaddy.com | bash -s personal
 RUN which caddy
 
