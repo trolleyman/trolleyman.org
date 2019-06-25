@@ -1,13 +1,14 @@
 {% extends 'homepage/projects/_base.html' %}
 {% load static %}
+{% load compress %}
 
-{% block title %}
-  Callum Tolley - Zucchini
-{% endblock %}
+{% block title %}Zucchini - Callum Tolley{% endblock %}
 
 {% block stylesheets %}
   {{ block.super }}
+  {% compress css %}
   <link rel="stylesheet" href="{% static 'homepage/css/projects/zucchini.css' %}">
+  {% endcompress %}
 {% endblock %}
 
 {% block banner_bg %}

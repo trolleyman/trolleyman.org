@@ -1,13 +1,14 @@
 {% extends 'homepage/projects/_base.html' %}
 {% load static %}
+{% load compress %}
 
-{% block title %}
-  Callum Tolley - Flappy Clone
-{% endblock %}
+{% block title %}Flappy Clone - Callum Tolley{% endblock %}
 
 {% block stylesheets %}
   {{ block.super }}
+  {% compress css %}
   <link rel="stylesheet" href="{% static 'homepage/css/projects/flappy.css' %}">
+  {% endcompress %}
 {% endblock %}
 
 {% block banner_bg %}
@@ -16,7 +17,7 @@
 {% endblock %}
 
 {% block banner_content %}
-  <div class="logo"><img src="{% static 'homepage/images/projects/flappy/logo.png' %}"></img></div>
+  <div class="logo"><img class="pixelated" src="{% static 'homepage/images/projects/flappy/logo.png' %}"></img></div>
   <h2>Flappy Clone</h2>
 {% endblock %}
 

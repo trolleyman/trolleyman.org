@@ -26,14 +26,14 @@
     
     <!--[if lte IE 9]><link rel="stylesheet" href="{% static 'homepage/css/ie9.css' %}"><![endif]-->
     <!--[if lte IE 8]><link rel="stylesheet" href="{% static 'homepage/css/ie8.css' %}"><![endif]-->
-    
+
     <meta name="static" content="{% static 'homepage/' %}">
     <meta name="sitekey" content="{{ sitekey }}">
-    
+
     {% block banner_bg %}
       {% include 'homepage/_banner_bg.html' with banner_img_url=bg_url %}
     {% endblock %}
-    
+
     {% block stylesheets %}
       {% compress css %}
         <link rel="stylesheet" href="{% static 'homepage/css/index.css' %}">
@@ -41,274 +41,280 @@
     {% endblock %}
   </head>
   <body class="is-loading">
-  
     <!-- Page Wrapper -->
-      <div id="page-wrapper">
+    <div id="page-wrapper">
 
-        <!-- Header -->
-          <header id="header" class="alt">
-            <ul>
-              {% block header_pre_content %}
-              {% endblock %}
-              
-              <li class="title"><h1><a href="/">Callum Tolley</a></h1></li>
-              
-              {% block header_content %}
-                <li><a href="{% static 'cv.pdf' %}" target="_blank">CV</a></li>
-                <li><a href="#contact">Contact</a></li>
-              {% endblock %}
-            </ul>
-          </header>
+      <!-- Header -->
+      <header id="header" class="alt">
+        <ul>
+          {% block header_pre_content %}
+          {% endblock %}
+          
+          <li class="title"><h1><a href="/">Callum Tolley</a></h1></li>
+          
+          {% block header_content %}
+            <li><a href="{% static 'CV.pdf' %}" target="_blank">CV</a></li>
+            <li><a href="#contact">Contact</a></li>
+          {% endblock %}
+        </ul>
+      </header>
 
-        <!-- Banner -->
-          <section id="banner">
-            <div id="banner-bg"></div>
-            <div id="banner-overlay"></div>
+      <!-- Banner -->
+      <section id="banner">
+        <div id="banner-bg"></div>
+        <div id="banner-overlay"></div>
+        <div class="inner">
+          {% block banner_content %}
+            <div class="logo"><span class="icon fa-code"></span></div>
+            <h2 class="clearfix">Callum&nbsp;Tolley
+              <a class="heading-left" target="_blank" href="{% static 'CV.pdf' %}">
+                CV
+              </a>
+              <span class="heading-right">
+                <a href="https://github.com/trolleyman"><span class="fa fa-github"></span></a>
+                <a href="https://www.linkedin.com/in/callum-tolley/"><span class="fa fa-linkedin"></span></a>
+                <a href="#contact"><span class="fa fa-envelope"></span></a>
+              </span>
+            </h2>
+            <!-- <p>Software Developer<span class="spacer"></span>Student</p> -->
+            <p class="summary">
+              Hi, I'm Callum. I've just graduated from the University of Birmingham with a 1st class MSc in Computer Science, and I'm open to job offers. My contact details can be found <a href="#contact">here</a>. Below is a list of projects that I have been involved in which might interest you.
+            </p>
+          {% endblock %}
+        </div>
+      </section>
+
+      <!-- Wrapper -->
+      <section id="wrapper">
+        {% block main_content %}
+          <section class="wrapper spotlight style1">
+            <div id="linc" class="scroll-marker"></div>
             <div class="inner">
-              {% block banner_content %}
-                <div class="logo"><span class="icon fa-code"></span></div>
-                <h2 class="clearfix">Callum&nbsp;Tolley
-                  <a class="heading-left" target="_blank" href="{% static 'cv.pdf' %}">
-                    CV
-                  </a>
-                  <span class="heading-right">
-                    <a href="https://github.com/trolleyman"><span class="fa fa-github"></span></a>
-                    <a href="https://www.linkedin.com/in/callum-tolley/"><span class="fa fa-linkedin"></span></a>
-                    <a href="#contact"><span class="fa fa-envelope"></span></a>
-                  </span>
-                </h2>
-                <!-- <p>Software Developer<span class="spacer"></span>Student</p> -->
-                <p class="summary">
-                  Hi, I'm Callum Tolley. Currently I'm just about finished my third (penultimate) year studying computer science at the University of Birmingham. I'm open to job offers, my contact details can be found <a href="#contact">here</a>. Below is a list of my projects that might interest you.
+              <a href="projects/dissertation" class="image box-shadow pixelated"><img src="{% static 'homepage/images/projects/dissertation/breakout.png' %}" alt=""></a>
+              <div class="content">
+                <div class="major">
+                  <h2>Dissertation</h2>
+                  <div class="date">2018-19</div>
+                </div>
+                <p>Final year project exploring Google DeepMind's research into developing general AI for Atari 2600 games using deep learning.</p>
+                <p>Achieved a 1st class mark for this project.</p>
+                <div class="used">Languages: Python</div>
+                <div class="used">Frameworks: TensorFlow, PyTorch</div>
+                <ul class="links">
+                    <li><a href="{% static 'Dissertation.pdf' %}" class="special" target="_blank">Paper PDF</a></li>
+                  <li><a href="projects/dissertation" class="special">More details</a></li>
+                </ul>
+              </div>
+            </div>
+          </section>
+          <section class="wrapper alt spotlight style2">
+            <div id="linc" class="scroll-marker"></div>
+            <div class="inner">
+              <a href="projects/linc" class="image drop-shadow"><img src="{% static 'homepage/images/projects/linc/logo.min.png' %}" alt=""></a>
+              <div class="content">
+                <div class="major">
+                  <h2>LINC</h2>
+                  <div class="date">Jun. 2017</div>
+                </div>
+                <p>A versatile social network visualization tool, developed with <a href="https://www.millenniumpoint.org.uk/">Millennium Point.</a></p>
+                <div class="used">Languages: HTML, JavaScript, CSS, SQL, Python</div>
+                <div class="used">Frameworks: Three.js, D3.js, Django</div>
+                <ul class="links">
+                  <li><a href="linc" class="special">Website</a></li>
+                  <li><a href="linc/demo" class="special">Demo</a></li>
+                  <li><a href="projects/linc" class="special">More details</a></li>
+                </ul>
+              </div>
+            </div>
+          </section>
+          <section class="wrapper spotlight style3">
+            <div id="flappy" class="scroll-marker"></div>
+            <div class="inner">
+              <a href="projects/flappy" class="image drop-shadow pixelated"><img src="{% static 'homepage/images/projects/flappy/logo.png' %}" alt=""></a>
+              <div class="content">
+                <div class="major">
+                  <h2>Flappy Clone</h2>
+                  <div class="date">Dec. 2016 - Jul. 2017</div>
+                </div>
+                <p>
+                  Yet another Flappy Bird clone.
                 </p>
-              {% endblock %}
+                <div class="used">Languages: HTML, JavaScript, CSS, SQL, Python</div>
+                <div class="used">Frameworks: HTML5 Canvas API, Django</div>
+                <ul class="links">
+                  <li><a href="https://github.com/trolleyman/FlappyClone" class="special">Github</a></li>
+                  <li><a href="/FlappyClone" class="special">Demo</a></li>
+                  <li><a href="projects/flappy" class="special">More details</a></li>
+                </ul>
+              </div>
             </div>
           </section>
-
-        <!-- Wrapper -->
-          <section id="wrapper">
-            {% block main_content %}
-              <!-- LINC -->
-                <section class="wrapper spotlight style1 linc">
-                  <div id="linc" class="scroll-marker"></div>
-                  <div class="inner">
-                    <a href="projects/linc" class="image"><img src="{% static 'homepage/images/projects/linc/logo.min.png' %}" alt=""></a>
-                    <div class="content">
-                      <div class="major">
-                        <h2>LINC</h2>
-                        <div class="date">Jun 2017</div>
-                      </div>
-                      <p>A versatile social network visualization tool, developed with <a href="https://www.millenniumpoint.org.uk/">Millennium Point.</a></p>
-                      <div class="used">Languages: HTML, JavaScript, CSS, SQL, Python</div>
-                      <div class="used">Frameworks: Three.js, D3.js, Django</div>
-                      <ul class="links">
-                        <li><a href="linc" class="special">Website</a></li>
-                        <li><a href="linc/demo" class="special">Demo</a></li>
-                        <li><a href="projects/linc" class="special">Learn more</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-
-              <!-- Flappy Clone -->
-                <section class="wrapper alt spotlight style2 flappy">
-                  <div id="flappy" class="scroll-marker"></div>
-                  <div class="inner">
-                    <a href="projects/flappy" class="image"><img src="{% static 'homepage/images/projects/flappy/logo.png' %}" alt=""></a>
-                    <div class="content">
-                      <div class="major">
-                        <h2>Flappy Clone</h2>
-                        <div class="date">Dec 2016 - Jul 2017</div>
-                      </div>
-                      <p>
-                        Yet another Flappy Bird clone.
-                      </p>
-                      <div class="used">Languages: HTML, JavaScript, CSS, SQL, Python</div>
-                      <div class="used">Frameworks: HTML5 Canvas API, Django</div>
-                      <ul class="links">
-                        <li><a href="https://github.com/trolleyman/FlappyClone" class="special">Github</a></li>
-                        <li><a href="/FlappyClone" class="special">Demo</a></li>
-                        <li><a href="projects/flappy" class="special">Learn more</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-
-              <!-- Zucchini -->
-                <section class="wrapper spotlight style3 zucchini">
-                  <div id="zucchini" class="scroll-marker"></div>
-                  <div class="inner">
-                    <a href="projects/zucchini" class="image"><img src="{% static 'homepage/images/projects/zucchini/logo.min.gif' %}" alt=""></a>
-                    <div class="content">
-                      <div class="major">
-                        <h2>Zucchini</h2>
-                        <div class="date">Jul 2017</div>
-                      </div>
-                      <p>
-                        Atmospheric fast-paced top down shooter. Developed with 5 other students.
-                      </p>
-                      <div class="used">Languages: Java, Java, more Java</div>
-                      <div class="used">Frameworks: LWJGL, OpenGL, OpenAL</div>
-                      <ul class="links">
-                        <li><a href="https://github.com/trolleyman/Zucchini" class="special">Github</a></li>
-                        <li><a href="projects/zucchini" class="special">Learn more</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-              
-              <!-- Robot Programming -->
-                <section id="robot" class="wrapper alt spotlight style4 robot">
-                  <div id="robot" class="scroll-marker"></div>
-                  <div class="inner">
-                    <a href="projects/robot" class="image"><img src="{% static 'homepage/images/projects/robot/casterbot.min.jpg' %}" alt=""></a>
-                    <div class="content">
-                      <div class="major">
-                        <h2>Robot Warehouse</h2>
-                        <div class="date">Apr 2016</div>
-                      </div>
-                      <p>
-                        Robot warehouse management system. Developed with 9 other students.
-                      </p>
-                      <div class="used">Languages: Yet more Java</div>
-                      <div class="used">Frameworks: <a href="http://www.lejos.org/" title="Java for Lego Mindstorms">LeJOS</a>, Swing</div>
-                      <ul class="links">
-                        <li><a href="https://github.com/trolleyman/rp-warehouse" class="special">Github</a></li>
-                        <li><a href="projects/robot" class="special">Learn more</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-              
-              <!-- Portal 2 -->
-                <section id="portal" class="wrapper spotlight style5 portal">
-                  <div id="portal" class="scroll-marker"></div>
-                  <div class="inner">
-                    <a href="projects/portal" class="image"><img src="{% static 'homepage/images/projects/portal/screenshot.min.jpg' %}" alt=""></a>
-                    <div class="content">
-                      <div class="major">
-                        <h2>Portal 2</h2>
-                        <div class="date">Nov 2016</div>
-                      </div>
-                      <p>
-                        A redo of my first Portal project, an shameless attempt to copy my favourite video game at the time, Portal. Guess that makes this a redo of a redo.
-                      </p>
-                      <div class="used">Rust and OpenGL</div>
-                      <ul class="links">
-                        <li><a href="https://github.com/trolleyman/Portal2" class="special">Github</a></li>
-                        <!--<li><a href="projects/portal" class="special">Learn more</a></li>-->
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-              
-              <!-- k-means -->
-                <section id="k-means" class="wrapper alt spotlight style6 k-means">
-                  <div id="k-means" class="scroll-marker"></div>
-                  <div class="inner">
-                    <a href="projects/k-means" class="image"><img src="{% static 'homepage/images/projects/k-means/alabama-hills-ca.min.jpg' %}" alt=""></a>
-                    <div class="content">
-                      <div class="major">
-                        <h2>k-means</h2>
-                        <div class="date">Sep 2016</div>
-                      </div>
-                      <p>
-                        Using the k-means algorithm to create pretty pictures.
-                      </p>
-                      <div class="used">Used Rust</div>
-                      <ul class="links">
-                        <li><a href="https://github.com/trolleyman/kmeans" class="special">Github</a></li>
-                        <!--<li><a href="projects/k-means" class="special">Learn more</a></li>-->
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-              
-              <!-- Equator -->
-                <section id="equator" class="wrapper spotlight style5 equator">
-                  <div id="equator" class="scroll-marker"></div>
-                  <div class="inner">
-                    <a href="projects/equator" class="image"><img src="{% static 'homepage/images/projects/equator/screenshot.jpg' %}" alt=""></a>
-                    <div class="content">
-                      <div class="major">
-                        <h2>Equator</h2>
-                        <div class="date">Dec 2016</div>
-                      </div>
-                      <p>
-                        An expression editor and evaluator that allows easy visualization and processing of mathematical expressions.
-                      </p>
-                      <div class="used">Rust using GTK+</div>
-                      <ul class="links">
-                        <li><a href="https://github.com/trolleyman/Equator" class="special">Github</a></li>
-                        <!--<li><a href="projects/equator" class="special">Learn more</a></li>-->
-                      </ul>
-                    </div>
-                  </div>
-                </section>
-            {% endblock %}
-          </section>
-
-        <!-- Footer -->
-          <section id="footer">
+          <section class="wrapper alt spotlight style4">
+            <div id="zucchini" class="scroll-marker"></div>
             <div class="inner">
-              {% block footer_content %}
-                <script type="text/javascript">
-                  var recaptchaCallback = function () {
-                    // Recaptcha is ready
-                    grecaptcha.render('captcha', {
-                      'sitekey': document.querySelector('meta[name="sitekey"]').content,
-                      'theme': 'dark',
-                      'callback': function(token) {
-                        var xhttp = new XMLHttpRequest();
-                        xhttp.onreadystatechange = function () {
-                          if (this.readyState == 4) {
-                            if (this.status >= 200 && this.status < 300) {
-                              // Ok. Remove captcha
-                              document.getElementById('captcha').classList.add('hide');
-                              document.getElementById('contact-details').classList.remove('hide');
-                              document.getElementById('contact-details').innerHTML = this.responseText;
-                              requestAnimationFrame(function() {
-                                document.getElementById('contact-inner').style.height = document.getElementById('contact-details').scrollHeight + 'px';
-                                
-                                setTimeout(function() {
-                                  document.getElementById('contact-inner').style.transition = 'none';
-                                  document.getElementById('contact-inner').style.height = '';
-                                }, 500);
-                              });
-
-                            } else {
-                              // Error - TODO: test & fix
-                              console.error('Error: status code: ' + this.statusText);
-                              console.error(this.responseText);
-                              grecaptcha.reset();
-                            }
-                          }
-                        };
-                        xhttp.open('GET', 'contact_details', true);
-                        xhttp.setRequestHeader('g-recaptcha-response', token);
-                        xhttp.send();
-                      },
-                    });
-                    requestAnimationFrame(function() {
-                      document.getElementById('contact-inner').style.height = document.getElementById('captcha').scrollHeight + 'px';
-                    });
-                  };
-                </script>
-                <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallback&render=explicit" async defer></script>
-                <div id="contact">
-                  <h2 class="major">Contact Details</h2>
-                  <p>If you have any queries relating to jobs, my details are below.</p>
-                  <div id="contact-inner">
-                    <div id="captcha"></div>
-                    <div id="contact-details" class="hide"></div>
-                  </div>
-              {% endblock %}
-              <ul class="copyright">
-                <li>&copy; Callum Tolley</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-              </ul>
+              <a href="projects/zucchini" class="image drop-shadow"><img src="{% static 'homepage/images/projects/zucchini/logo.min.gif' %}" alt=""></a>
+              <div class="content">
+                <div class="major">
+                  <h2>Zucchini</h2>
+                  <div class="date">Jul. 2017</div>
+                </div>
+                <p>
+                  Atmospheric fast-paced top down shooter. Developed with 5 other students.
+                </p>
+                <div class="used">Languages: Java, Java, more Java</div>
+                <div class="used">Frameworks: LWJGL, OpenGL, OpenAL</div>
+                <ul class="links">
+                  <li><a href="https://github.com/trolleyman/Zucchini" class="special">Github</a></li>
+                  <li><a href="projects/zucchini" class="special">More details</a></li>
+                </ul>
+              </div>
             </div>
           </section>
-      </div>
+          <section id="robot" class="wrapper spotlight style5">
+            <div id="robot" class="scroll-marker"></div>
+            <div class="inner">
+              <a href="projects/robot" class="image box-shadow"><img src="{% static 'homepage/images/projects/robot/casterbot.min.jpg' %}" alt=""></a>
+              <div class="content">
+                <div class="major">
+                  <h2>Robot Warehouse</h2>
+                  <div class="date">Apr. 2016</div>
+                </div>
+                <p>
+                  Robot warehouse management system. Developed with 9 other students.
+                </p>
+                <div class="used">Languages: Yet more Java</div>
+                <div class="used">Frameworks: <a href="http://www.lejos.org/" title="Java for Lego Mindstorms">LeJOS</a>, Swing</div>
+                <ul class="links">
+                  <li><a href="https://github.com/trolleyman/rp-warehouse" class="special">Github</a></li>
+                  <li><a href="projects/robot" class="special">More details</a></li>
+                </ul>
+              </div>
+            </div>
+          </section>
+          <section id="portal" class="wrapper alt spotlight style6">
+            <div id="portal" class="scroll-marker"></div>
+            <div class="inner">
+              <a href="projects/portal" class="image box-shadow"><img src="{% static 'homepage/images/projects/portal/screenshot.min.jpg' %}" alt=""></a>
+              <div class="content">
+                <div class="major">
+                  <h2>Portal 2</h2>
+                  <div class="date">Nov. 2016</div>
+                </div>
+                <p>
+                  A redo of my first Portal project, an shameless attempt to copy my favourite video game at the time, Portal. Guess that makes this a redo of a redo.
+                </p>
+                <div class="used">Rust and OpenGL</div>
+                <ul class="links">
+                  <li><a href="https://github.com/trolleyman/Portal2" class="special">Github</a></li>
+                  <!--<li><a href="projects/portal" class="special">More details</a></li>-->
+                </ul>
+              </div>
+            </div>
+          </section>
+          <section id="k-means" class="wrapper spotlight style5">
+            <div id="k-means" class="scroll-marker"></div>
+            <div class="inner">
+              <a href="projects/k-means" class="image box-shadow"><img src="{% static 'homepage/images/projects/k-means/alabama-hills-ca.min.jpg' %}" alt=""></a>
+              <div class="content">
+                <div class="major">
+                  <h2>k-means</h2>
+                  <div class="date">Sep. 2016</div>
+                </div>
+                <p>
+                  Using the k-means algorithm to create pretty pictures.
+                </p>
+                <div class="used">Rust</div>
+                <ul class="links">
+                  <li><a href="https://github.com/trolleyman/kmeans" class="special">Github</a></li>
+                  <!--<li><a href="projects/k-means" class="special">More details</a></li>-->
+                </ul>
+              </div>
+            </div>
+          </section>
+          <section id="equator" class="wrapper alt spotlight style4">
+            <div id="equator" class="scroll-marker"></div>
+            <div class="inner">
+              <a href="projects/equator" class="image box-shadow"><img src="{% static 'homepage/images/projects/equator/screenshot.jpg' %}" alt=""></a>
+              <div class="content">
+                <div class="major">
+                  <h2>Equator</h2>
+                  <div class="date">Dec. 2016</div>
+                </div>
+                <p>
+                  An expression editor and evaluator that allows easy visualization and processing of mathematical expressions.
+                </p>
+                <div class="used">Rust using GTK+</div>
+                <ul class="links">
+                  <li><a href="https://github.com/trolleyman/Equator" class="special">Github</a></li>
+                  <!--<li><a href="projects/equator" class="special">More details</a></li>-->
+                </ul>
+              </div>
+            </div>
+          </section>
+        {% endblock %}
+      </section>
+
+      <!-- Footer -->
+      <section id="footer">
+        <div class="inner">
+          {% block footer_content %}
+            <script type="text/javascript">
+              var recaptchaCallback = function () {
+                // Recaptcha is ready
+                grecaptcha.render('captcha', {
+                  'sitekey': document.querySelector('meta[name="sitekey"]').content,
+                  'theme': 'dark',
+                  'callback': function(token) {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                      if (this.readyState == 4) {
+                        if (this.status >= 200 && this.status < 300) {
+                          // Ok. Remove captcha
+                          document.getElementById('captcha').classList.add('hide');
+                          document.getElementById('contact-details').classList.remove('hide');
+                          document.getElementById('contact-details').innerHTML = this.responseText;
+                          requestAnimationFrame(function() {
+                            document.getElementById('contact-inner').style.height = document.getElementById('contact-details').scrollHeight + 'px';
+                            
+                            setTimeout(function() {
+                              document.getElementById('contact-inner').style.transition = 'none';
+                              document.getElementById('contact-inner').style.height = '';
+                            }, 500);
+                          });
+
+                        } else {
+                          // Error - TODO: test & fix
+                          console.error('Error: status code: ' + this.statusText);
+                          console.error(this.responseText);
+                          grecaptcha.reset();
+                        }
+                      }
+                    };
+                    xhttp.open('GET', 'contact_details', true);
+                    xhttp.setRequestHeader('g-recaptcha-response', token);
+                    xhttp.send();
+                  },
+                });
+                requestAnimationFrame(function() {
+                  document.getElementById('contact-inner').style.height = document.getElementById('captcha').scrollHeight + 'px';
+                });
+              };
+            </script>
+            <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallback&render=explicit" async defer></script>
+            <div id="contact">
+              <h2 class="major">Contact Details</h2>
+              <p>If you have any queries relating to jobs, my details are below.</p>
+              <div id="contact-inner">
+                <div id="captcha"></div>
+                <div id="contact-details" class="hide"></div>
+              </div>
+          {% endblock %}
+          <ul class="copyright">
+            <li>&copy; Callum Tolley</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+          </ul>
+        </div>
+      </section>
+    </div>
 
     <!-- Scripts -->
     <script charset="utf-8" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

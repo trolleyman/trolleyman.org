@@ -44,7 +44,7 @@
 .clearfix::after {
 	clear: both;
 	content: "";
-	display: table;
+	display: block;
 }
 
 /* Reset border radius */
@@ -69,10 +69,10 @@
 	padding-left: 0;
 	display: inline-block;
 }
-.wrapper.spotlight:not(.alt) .inner ul li:not(:first-child) {
+.wrapper.spotlight:nth-child(2n) .inner ul li:not(:first-child) {
 	margin-left: 1.3em;
 }
-.wrapper.spotlight.alt .inner ul li:not(:last-child) {
+.wrapper.spotlight:nth-child(2n - 1) .inner ul li:not(:last-child) {
 	margin-right: 1.3em;
 }
 
@@ -166,21 +166,21 @@ body.is-loading .wrapper.spotlight .inner {
 /* Date formatting */
 .wrapper.spotlight .inner .content div.major {
 	margin: 0 0 1em 0;
-	position: relative;
+	display: flex;
 }
 
 .wrapper.spotlight .inner .content div.major h2 {
 	margin-bottom: 0;
+	flex-grow: 1;
 }
 
-.wrapper.spotlight .inner .content .date {
-	position: absolute;
-	bottom: 0;
+.wrapper.spotlight .inner .content div.major .date {
 	color: rgb(201, 201, 201);
+	align-self: flex-end;
 }
 
-.wrapper.spotlight.alt .inner .content .date {
-	right: 0;
+.wrapper.spotlight:nth-child(2n+1) .inner .content div.major {
+	flex-direction: row-reverse;
 }
 
 /* Banner summary */
@@ -191,4 +191,62 @@ body.is-loading .wrapper.spotlight .inner {
 #banner p.summary {
 	text-align: justify;
 	text-transform: none;
+}
+
+/* Font size */
+body, input, select, textarea {
+	font-size: 14pt;
+}
+
+@media screen and (max-width: 1680px) {
+	body, input, select, textarea {
+		font-size: 13pt;
+	}
+}
+
+@media screen and (max-width: 1280px) {
+	body, input, select, textarea {
+		font-size: 12pt;
+	}
+}
+
+@media screen and (max-width: 980px) {
+	body, input, select, textarea {
+		font-size: 12pt;
+	}
+}
+
+@media screen and (max-width: 736px) {
+	body, input, select, textarea {
+		font-size: 12pt;
+	}
+}
+
+@media screen and (max-width: 640px) {
+	body, input, select, textarea {
+		font-size: 12pt;
+	}
+}
+
+/* Image shadows */
+.image.box-shadow,
+.image.box-shadow img {
+	border-radius: 5px;
+}
+
+.image.box-shadow {
+	box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.5);
+}
+
+.image.drop-shadow {
+	-webkit-filter: drop-shadow(8px 8px 20px rgba(0,0,0,0.5));
+	-ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=8, OffY=8, Color='#88000000')";
+	filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=8, OffY=8, Color='#88000000')";
+}
+
+.image.pixelated img,
+img.pixelated {
+	image-rendering: -moz-crisp-edges;
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
 }

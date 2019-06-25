@@ -48,6 +48,7 @@ def contact_details(request):
 
 
 projects = [
+    'dissertation',
     'linc',
     'flappy',
     'zucchini',
@@ -60,7 +61,7 @@ projects = [
 
 def project_view(name):
     template = 'homepage/projects/' + name + '.html'
-    return lambda request: render(request, template, {'name': name, **DEFAULT_OPTS})
+    return lambda request: render(request, template, {'name': name})
 
 
 # Callable error functions
@@ -73,27 +74,36 @@ def error404_not_found(request, msg=None):
 
 
 # Error handlers
-def handler400(request, exception):
+def handler400(request, *args, **kwargs):
+    msg = ''
+    if len(args) >= 1:
+        msg = str(args[0])
     return render(request, 'homepage/error.html', status=400, context={
         'status': 400,
         'title': 'Bad Request',
-        'msg': str(exception),
+        'msg': msg,
     })
 
 
-def handler403(request, exception):
+def handler403(request, *args, **kwargs):
+    msg = ''
+    if len(args) >= 1:
+        msg = str(args[0])
     return render(request, 'homepage/error.html', status=403, context={
         'status': 403,
         'title': 'Forbidden',
-        'msg': str(exception),
+        'msg': msg,
     })
 
 
-def handler404(request, exception):
+def handler404(request, *args, **kwargs):
+    msg = ''
+    if len(args) >= 1:
+        msg = str(args[0])
     return render(request, 'homepage/error.html', status=404, context={
         'status': 404,
         'title': 'Not Found',
-        'msg': str(exception),
+        'msg': msg,
     })
 
 

@@ -3390,14 +3390,14 @@
 			left: 0;
 		}
 
-		.wrapper.alt:before {
+		.wrapper:nth-child(2n):before {
 			-moz-transform: scaleX(-1);
 			-webkit-transform: scaleX(-1);
 			-ms-transform: scaleX(-1);
 			transform: scaleX(-1);
 		}
 
-		.wrapper.alt:after {
+		.wrapper:nth-child(2n):after {
 			-moz-transform: scaleY(-1) scaleX(-1);
 			-webkit-transform: scaleY(-1) scaleX(-1);
 			-ms-transform: scaleY(-1) scaleX(-1);

@@ -1,0 +1,37 @@
+
+#graph {
+	float: right;
+	width: min-content;
+	margin: 0 0 0.5em 1em;
+	border: 1px white solid;
+	border-radius: 7px;
+	overflow: hidden;
+	box-shadow: 3px 3px 20px 0px rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
+}
+
+#graph img {
+	height: 10.8em;
+	border-radius: 0;
+	box-shadow: none;
+	margin: 0 !important;
+}
+
+@media screen and (max-width: 600px) {
+	#graph, #graph img {
+		width: 100% !important;
+		height: auto !important;
+		display: block !important;
+		margin: 0 0 1em 0 !important;
+	}
+	
+	#graph img {
+		width: 100% !important;
+		height: auto !important;
+	}
+}
+
+#graph figcaption {
+	text-align: center;
+	margin: 0 0.4em 0.4em 0.4em;
+}

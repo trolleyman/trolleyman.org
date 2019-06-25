@@ -32,6 +32,12 @@
       opacity 0.8s ease;
     transition:
       opacity 0.8s ease;
+
+    {% if pixelated %}
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    {% endif %}
   }
   
   #banner-overlay {
