@@ -6,7 +6,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SELF="$( realpath "${BASH_SOURCE[0]}" )"
 
 # Set echo & exit on error
-set -ex
+set -x
 
 # Redirect all output to a logfile
 mkdir -p "$DIR/logs"
