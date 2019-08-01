@@ -12,7 +12,7 @@ caddy --conf Caddyfile --log logs/caddy.log 2>&1 > /dev/null &
 cd /opt/django
 
 # Copy static files
-python3 manage.py collectstatic
+python3 manage.py collectstatic -y
 
 # Migrate the database
 python3 manage.py migrate
