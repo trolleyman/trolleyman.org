@@ -1,5 +1,6 @@
 
 # Redirects -> https://callumgtolley.uk
+http://trolleyman.org, http://www.trolleyman.org, http://callumgtolley.uk, http://www.callumgtolley.uk,
 https://trolleyman.org, https://www.trolleyman.org, https://www.callumgtolley.uk {
 	redir / https://callumgtolley.uk{uri}
 }
