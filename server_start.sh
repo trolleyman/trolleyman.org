@@ -5,7 +5,7 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SELF="$( realpath "${BASH_SOURCE[0]}" )"
 
-# Set echo & exit on error
+# Set echo
 set -x
 
 # Redirect all output to a logfile
