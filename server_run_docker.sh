@@ -21,3 +21,4 @@ docker run\
   server
 
 echo "Docker finished"
+

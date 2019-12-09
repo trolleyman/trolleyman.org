@@ -29,3 +29,4 @@ cd $DIR
 
 # Exec ourselves
 exec "$SELF"
+
