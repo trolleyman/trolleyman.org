@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -ex
 
 ### Caddy ###
 cd /opt/caddy
@@ -12,7 +12,7 @@ caddy --conf Caddyfile --log logs/caddy.log 2>&1 > /dev/null &
 cd /opt/django
 
 # Copy static files
-python3 manage.py collectstatic -y
+python3 manage.py collectstatic --noinput
 
 # Migrate the database
 python3 manage.py migrate
