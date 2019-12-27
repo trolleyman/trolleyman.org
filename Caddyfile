@@ -1,6 +1,6 @@
 
 # Redirects
-http://callumgtolley.uk{uri},
+http://callumgtolley.uk,
 http://138.68.156.104, http://trolleyman.org, http://www.trolleyman.org, http://www.callumgtolley.uk {
 #	redir / http://callumgtolley.uk{uri}
 	redir / https://callumgtolley.uk{uri}
