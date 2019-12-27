@@ -57,6 +57,7 @@ VOLUME database/
 VOLUME logs/
 
 # Collect static files
+RUN mkdir -p /var/www/callumgtolley.uk/static
 RUN python3 manage.py collectstatic --noinput
 
 # Compress stuff
