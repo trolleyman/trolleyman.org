@@ -16,7 +16,7 @@ python manage.py runserver
 ```
 
 ## Example production `django/.env` file
-```env
+```
 DEBUG=False
 SECRET_KEY=<random key used by Django (can just be a random string of characters)>
 RECAPTCHA_PRIVATE_KEY=<Google reCAPTCHA private key (see https://developers.google.com/recaptcha/intro)>
