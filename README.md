@@ -2,7 +2,7 @@
 # trolleyman.org
 [trolleyman.org](https://trolleyman.org) is my personal website, and this repo contains all the code to make it work.
 
-To get it up and running a [`.env`](#example-production-django-.env-file) file must be placed in the `django` directory, and [`server_start.sh`](server_start.sh) needs to be run every reboot.
+To get it up and running a [`.env`](#example-production-djangoenv-file) file must be placed in the `django` directory, and [`server_start.sh`](server_start.sh) needs to be run every reboot.
 
 The [git_hook/push endpoint](django/git_hook) can be used to automatically update the server every time a branch is updated on GitHub.
 For example, the [trolleyman.org](https://trolleyman.org) is hooked up to restart when the `prod` branch is updated.
