@@ -1,13 +1,14 @@
 
-# Redirects -> https://callumgtolley.uk
+# HTTPS redirects
 https://trolleyman.org, https://www.trolleyman.org, https://www.callumgtolley.uk {
 	redir / https://callumgtolley.uk{uri}
 }
 
 https://callumgtolley.uk {
-	root /opt/django/static
+	root /var/www/callumgtolley.uk/
 	proxy / localhost:{$DJANGO_PORT} {
 		except /static
 		transparent
 	}
 }
+

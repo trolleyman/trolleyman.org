@@ -5,8 +5,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SELF="$( realpath "${BASH_SOURCE[0]}" )"
 
-# Set echo & exit on error
-set -ex
+# Set echo
+set -x
 
 # Redirect all output to a logfile
 mkdir -p "$DIR/logs"
@@ -29,3 +29,4 @@ cd $DIR
 
 # Exec ourselves
 exec "$SELF"
+
