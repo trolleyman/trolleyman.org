@@ -4,3 +4,6 @@
 [submodule "django/linc"]
 	path = django/linc
 	url = git@github.com:trolleyman/linc.git
+[submodule "django/autodiary"]
+	path = django/autodiary
+	url = https://github.com/trolleyman/autodiary
