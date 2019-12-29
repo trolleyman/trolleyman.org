@@ -227,6 +227,7 @@ LOGGING = {
             'formatter': 'verbose',
         },
         'console': {
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'standard',
         },
