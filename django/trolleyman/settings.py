@@ -43,10 +43,11 @@ if not DEBUG:
         'trolleyman.org',
         '.callumgtolley.uk',
         'callumgtolley.uk',
-        'localhost',
-        '127.0.0.1',
         '138.68.156.104',
         '2a03:b0c0:1:d0::a00:b001',
+        'localhost',
+        '127.0.0.1',
+        '::1'
     ]
     CONN_MAX_AGE = None
     ADMINS = [('Callum Tolley', 'cgtrolley@gmail.com')]
@@ -54,7 +55,8 @@ else:
     # Debug
     ALLOWED_HOSTS = [
         'localhost',
-        '127.0.0.1'
+        '127.0.0.1',
+        '::1'
     ]
 
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
@@ -62,9 +64,10 @@ if not os.path.exists(LOGS_DIR):
     os.mkdir(LOGS_DIR)
 LOG_PATH = os.path.join(LOGS_DIR, 'django.log')
 
-INTERNAL_IPS = (
+INTERNAL_IPS = [
     '127.0.0.1',
-)
+    '::1'
+]
 
 DEFAULT_FROM_EMAIL = 'admin@callumgtolley.uk'
 SERVER_EMAIL = 'admin@callumgtolley.uk'
