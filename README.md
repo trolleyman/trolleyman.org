@@ -13,9 +13,16 @@ Ensure that you are using Python 3. [Virtualenv](https://virtualenv.pypa.io/en/l
 
 ```bash
 cd django
+
+# Install python requirements
 pip install -r requirements.txt
 pip install -r linc/requirements.txt
+pip install -r FlappyClone/requirements.txt
+
+# Migrate database (update database structure)
 python manage.py migrate
+
+# Run dev server
 python manage.py runserver
 ```
 

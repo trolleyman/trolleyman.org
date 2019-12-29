@@ -32,6 +32,8 @@ COPY django/requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 COPY django/linc/requirements.txt requirements_linc.txt
 RUN pip3 install -r requirements_linc.txt
+COPY django/FlappyClone/requirements.txt requirements_FlappyClone.txt
+RUN pip3 install -r requirements_FlappyClone.txt
 
 # === Setup config ===
 # Setup caddy

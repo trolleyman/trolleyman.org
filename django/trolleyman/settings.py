@@ -193,6 +193,11 @@ STATICFILES_FINDERS = [
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
 
+if DEBUG:
+    COMPRESS_ENABLED = False
+else:
+    COMPRESS_ENABLED = True
+
 COMPRESS_FILTERS = {
     'css': [
         'compressor.filters.css_default.CssAbsoluteFilter',
