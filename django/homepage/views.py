@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.templatetags.static import static
 from django.http import Http404, HttpResponse
 from django.conf import settings
 
