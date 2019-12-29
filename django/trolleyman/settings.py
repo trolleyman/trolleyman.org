@@ -20,7 +20,7 @@ import decouple  # django-decouple
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = decouple.config('DEBUG', default=False, cast=bool)
+DEBUG = decouple.config('DEBUG', default=True, cast=bool)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 try:
@@ -29,9 +29,10 @@ except decouple.UndefinedValueError as e:
     # Generate random secret key
     SECRET_KEY = ''.join(random.choice('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') for _ in range(24))
     with open(os.path.join(BASE_DIR, '.env'), 'ba+') as f:
-        f.seek(-1, io.SEEK_END)
-        if f.read(1) != b'\n':
-            f.write(b'\n')
+        if f.tell() > 0:
+            f.seek(-1, io.SEEK_END)
+            if f.read(1) != b'\n':
+                f.write(b'\n')
         f.write('SECRET_KEY={}\n'.format(SECRET_KEY).encode())
 
 
@@ -43,6 +44,7 @@ if not DEBUG:
         '.callumgtolley.uk',
         'callumgtolley.uk',
         'localhost',
+        '127.0.0.1',
         '138.68.156.104',
         '2a03:b0c0:1:d0::a00:b001',
     ]
@@ -51,7 +53,8 @@ if not DEBUG:
 else:
     # Debug
     ALLOWED_HOSTS = [
-        '*'
+        'localhost',
+        '127.0.0.1'
     ]
 
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
@@ -90,7 +93,7 @@ else:
     RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
     RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 
-# Get Github webhooks secret
+# Get Github webhook secret
 if DEBUG:
     GITHUB_WEBHOOK_SECRET = ''
 else:
