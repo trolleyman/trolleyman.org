@@ -1,6 +1,12 @@
 [submodule "django/FlappyClone"]
 	path = django/FlappyClone
 	url = git@github.com:trolleyman/FlappyClone.git
+	branch = master
 [submodule "django/linc"]
 	path = django/linc
 	url = git@github.com:trolleyman/linc.git
+	branch = master
+[submodule "django/tanks"]
+	path = django/tanks
+	url = git@github.com:trolleyman/tanks.git
+	branch = master
