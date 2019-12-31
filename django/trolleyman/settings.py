@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     'git_hook.apps.GitHookConfig',
     'FlappyClone.apps.FlappyCloneConfig',
     'linc.apps.LincConfig',
+    'tanks.apps.TanksConfig',
     'homepage.apps.HomepageConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -196,25 +197,29 @@ STATICFILES_FINDERS = [
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
 
-if DEBUG:
-    COMPRESS_ENABLED = False
-else:
-    COMPRESS_ENABLED = True
-
-COMPRESS_FILTERS = {
-    'css': [
-        'compressor.filters.css_default.CssAbsoluteFilter',
-        'compressor.filters.yuglify.YUglifyCSSFilter'
-    ],
-    'js': [
-        'compressor.filters.jsmin.JSMinFilter'
-    ]
-}
+COMPRESS_ENABLED = True
 
 if DEBUG:
     COMPRESS_OFFLINE = False
 else:
     COMPRESS_OFFLINE = True
+
+if DEBUG:
+    pass
+else:
+    COMPRESS_FILTERS = {
+        'css': [
+            'compressor.filters.css_default.CssAbsoluteFilter',
+            'compressor.filters.yuglify.YUglifyCSSFilter'
+        ],
+        'js': [
+            'compressor.filters.jsmin.JSMinFilter'
+        ]
+    }
+
+COMPRESS_PRECOMPILERS = [
+    ('text/typescript', 'trolleyman.filters.TypescriptFilter'),
+]
 
 LOGGING = {
     'version': 1,
