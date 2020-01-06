@@ -25,7 +25,7 @@ pip install -r requirements.txt
 pip install -r linc/requirements.txt
 pip install -r FlappyClone/requirements.txt
 
-# Migrate database (update database structure)
+# Migrate database (updates database structure)
 python manage.py migrate
 
 # Run dev server
