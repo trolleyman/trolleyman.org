@@ -22,6 +22,9 @@ RUN apt-get install -y npm
 # Install needed node packages
 RUN npm install -g yuglify
 
+# Install TypeScript
+RUN npm install -g typescript
+
 # Install caddy
 RUN apt-get install -y curl
 RUN curl -s https://getcaddy.com | bash -s personal
