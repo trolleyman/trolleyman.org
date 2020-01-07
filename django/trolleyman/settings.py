@@ -205,7 +205,10 @@ else:
     COMPRESS_OFFLINE = True
 
 if DEBUG:
-    pass
+    COMPRESS_FILTERS = {
+        'css': [],
+        'js': []
+    }
 else:
     COMPRESS_FILTERS = {
         'css': [
