@@ -2,3 +2,5 @@
 *.log
 /.caddy/
 /.vscode
+/target
+**/*.rs.bk

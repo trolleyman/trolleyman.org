@@ -9,8 +9,8 @@ SELF="$( realpath "${BASH_SOURCE[0]}" )"
 set -x
 
 # Redirect all output to a logfile
-mkdir -p "$DIR/logs"
-exec > "$DIR/logs/script.log" 2>&1
+mkdir -p "$DIR/../logs"
+exec > "$DIR/../logs/script.log" 2>&1
 
 cd $DIR
 

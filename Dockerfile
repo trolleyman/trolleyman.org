@@ -1,42 +1,36 @@
 FROM ubuntu:18.10
 
 # === Install stuff ===
-# Update apt
-RUN apt-get update
+# Update apt, install dependencies
+RUN apt-get update &&\
+	apt-get install -y python3 python3-pip &&\
+	pip3 install --upgrade pip &&\
+	apt-get install -y nodejs npm &&\
+	apt-get install -y yuglify &&\
+	apt-get install -y curl &&\
+	curl https://getcaddy.com -sSf | bash -s personal &&\
+	curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable --profile minimal &&\
+	apt-get clean
 
-# Install python3
-RUN apt-get install -y python3
 RUN python3 -V
-
-# Install pip
-RUN apt-get install -y python3-pip
 RUN pip3 -V
-
-# Update pip
-RUN pip3 install --upgrade pip
-
-# Install node
-RUN apt-get install -y nodejs
-RUN apt-get install -y npm
-
-# Install needed node packages
-RUN npm install -g yuglify
-
-# Install TypeScript
-RUN npm install -g typescript
-
-# Install caddy
-RUN apt-get install -y curl
-RUN curl -s https://getcaddy.com | bash -s personal
-RUN which caddy
+RUN npm -v
+RUN nodejs -v
+RUN caddy -version
+RUN rustup -V
+RUN rustc -V
+RUN cargo -V
 
 # Install django
 COPY django/requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip3 --no-cache-dir install -r requirements.txt
 COPY django/linc/requirements.txt requirements_linc.txt
-RUN pip3 install -r requirements_linc.txt
+RUN pip3 --no-cache-dir install -r requirements_linc.txt
 COPY django/FlappyClone/requirements.txt requirements_FlappyClone.txt
-RUN pip3 install -r requirements_FlappyClone.txt
+RUN pip3 --no-cache-dir install -r requirements_FlappyClone.txt
+
+# Compile dependencies of the Rocket server
+#TODO - see https://github.com/rust-lang/cargo/issues/2644#issuecomment-335272535
 
 # === Setup config ===
 # Setup caddy
@@ -68,8 +62,11 @@ RUN python3 manage.py collectstatic --noinput
 # Compress stuff
 RUN python3 manage.py compress --force
 
+# Compile Rocket server & copy over binary
+# TODO
+
 # === Setup startup cmd ===
 WORKDIR /root/
-COPY docker_entrypoint.sh /root/docker_entrypoint.sh
+COPY scripts/docker_entrypoint.sh /root/docker_entrypoint.sh
 
 ENTRYPOINT ["/root/docker_entrypoint.sh"]

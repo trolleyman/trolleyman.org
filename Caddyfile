@@ -8,6 +8,10 @@ https://callumgtolley.uk {
 	root /var/www/callumgtolley.uk/
 	proxy / localhost:{$DJANGO_PORT} {
 		except /static
+		except /tanks
+		transparent
+	}
+	proxy /tanks localhost:{$RUST_PORT} {
 		transparent
 	}
 }
