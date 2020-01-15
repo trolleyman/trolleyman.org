@@ -78,7 +78,6 @@ INSTALLED_APPS = [
     'git_hook.apps.GitHookConfig',
     'FlappyClone.apps.FlappyCloneConfig',
     'linc.apps.LincConfig',
-    'tanks.apps.TanksConfig',
     'homepage.apps.HomepageConfig',
     'django.contrib.admin',
     'django.contrib.auth',
