@@ -46,8 +46,9 @@ ENV CADDYPATH /opt/caddy/.caddy
 COPY django /opt/django
 WORKDIR /opt/django
 
-# Specify django port
+# Specify ports
 ENV DJANGO_PORT=4999
+ENV ROCKET_PORT=4998
 
 # Setup database
 VOLUME database/

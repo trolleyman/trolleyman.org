@@ -11,8 +11,7 @@ https://callumgtolley.uk {
 		except /tanks
 		transparent
 	}
-	proxy /tanks localhost:{$RUST_PORT} {
+	proxy /tanks localhost:{$ROCKET_PORT} {
 		transparent
 	}
 }
-
