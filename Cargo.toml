@@ -5,3 +5,9 @@ authors = ["Callum Tolley <cgtrolley@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+rocket = "0.4.2"
+
+[dependencies.rocket_contrib]
+version = "0.5.0"
+default-features = false
+features = ["tera_templates"]
