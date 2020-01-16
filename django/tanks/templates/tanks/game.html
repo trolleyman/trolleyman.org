@@ -41,4 +41,10 @@
   <body>
     <canvas id="canvas"></canvas>
   </body>
+  {% compress js %}
+  <script>
+    var game = new Game();
+    game.loop();
+  </script>
+  {% endcompress %}
 </html>

@@ -197,28 +197,22 @@ STATICFILES_FINDERS = [
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
 
-COMPRESS_ENABLED = True
-
 if DEBUG:
+    COMPRESS_ENABLED = False
     COMPRESS_OFFLINE = False
 else:
+    COMPRESS_ENABLED = True
     COMPRESS_OFFLINE = True
 
-if DEBUG:
-    COMPRESS_FILTERS = {
-        'css': [],
-        'js': []
-    }
-else:
-    COMPRESS_FILTERS = {
-        'css': [
-            'compressor.filters.css_default.CssAbsoluteFilter',
-            'compressor.filters.yuglify.YUglifyCSSFilter'
-        ],
-        'js': [
-            'compressor.filters.jsmin.JSMinFilter'
-        ]
-    }
+COMPRESS_FILTERS = {
+    'css': [
+        'compressor.filters.css_default.CssAbsoluteFilter',
+        'compressor.filters.yuglify.YUglifyCSSFilter'
+    ],
+    'js': [
+        'compressor.filters.jsmin.JSMinFilter'
+    ]
+}
 
 COMPRESS_PRECOMPILERS = [
     ('text/typescript', 'trolleyman.filters.TypescriptFilter'),
