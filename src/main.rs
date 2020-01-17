@@ -33,6 +33,8 @@ impl Config {
 	}
 }
 
+struct RequestMessage(Option<String>);
+
 
 #[get("/")]
 fn index(config: State<Config>) -> Template {
@@ -73,12 +75,23 @@ fn contact_details(config: State<Config>) -> Template {
 
     // else:
 	// 	return error400_bad_request(request, 'RECAPTCHA error: ' + r.text)
-		
+	
 	if false {
 		Template::render("contact_details", ())
 	} else {
 		panic!("error");
 	}
+}
+
+
+#[catch(400)]
+fn error_400_bad_request(req: &rocket::Request) -> Template {
+	let msg = if let Some(msg) = &req.local_cache(|| RequestMessage(None)).0 { format!(": {}", msg) } else { String::new() };
+	Template::render("error", hashmap!{
+		"status" => "400".to_string(),
+		"title" => "Bad Request".to_string(),
+		"msg" => format!("Client sent a bad request{}.", msg),
+	})
 }
 
 
@@ -98,7 +111,7 @@ fn main() {
 			//engines.tera.new();
 		}))
 		.manage(Config::load(env))
-		.register(catchers![error_404_not_found])
+		.register(catchers![error_400_bad_request, error_404_not_found])
 		.mount("/", routes![index])
 		.mount("/static", StaticFiles::from("./static"))
 		.launch();
