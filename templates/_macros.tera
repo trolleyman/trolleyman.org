@@ -1,0 +1,78 @@
+{% macro banner(img_url) %}
+<meta name="banner-bg-url" content="{{ img_url }}">
+<style>
+  #banner {
+    position: relative;
+  }
+
+  #banner-bg {
+    background-size: cover;
+    background-position-y: center;
+    
+    opacity: 0;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  #banner-bg.loaded {
+    background-image: url("{{ img_url }}");
+    
+    opacity: 1;
+    
+    -webkit-transition:
+    opacity 0.8s ease;
+    -moz-transition:
+    opacity 0.8s ease;
+    -o-transition:
+    opacity 0.8s ease;
+    -ms-transition:
+    opacity 0.8s ease;
+    transition:
+    opacity 0.8s ease;
+
+    {% if pixelated %}
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    {% endif %}
+  }
+
+  #banner-overlay {
+    background-image: linear-gradient(to top, rgba(46, 49, 65, 0.38), rgba(46, 49, 65, 0.54));
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+</style>
+<script charset="utf-8" type="text/javascript">
+  window.addEventListener('load', function() {
+    var url = document.querySelector('meta[name="banner-bg-url"]').content;
+    
+    var loadedTimePassed = false;
+    var imgLoaded = false;
+    
+    setTimeout(function() {
+    loadedTimePassed = true;
+    if (imgLoaded)
+      document.querySelector('#banner-bg').classList.add('loaded');
+    }, 500);
+    
+    var img = new Image();
+    img.onload = function() {
+      if (loadedTimePassed) {
+        document.querySelector('#banner-bg').classList.add('loaded');
+      } else {
+        imgLoaded = true;
+      }
+    };
+    img.src = url;
+  });
+</script>
+{% endmacro input %}
