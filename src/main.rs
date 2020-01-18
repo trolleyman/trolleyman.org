@@ -7,6 +7,8 @@ extern crate rocket_contrib;
 #[macro_use] extern crate maplit;
 
 
+use std::collections::HashMap;
+
 use rocket::config::Environment;
 use rocket::State;
 
@@ -38,8 +40,8 @@ fn index(config: State<AppConfig>) -> Template {
 }
 
 #[get("/contact_details")]
-fn contact_details(config: State<AppConfig>, _recaptcha: ReCaptchaGuard) -> Template {
-	Template::render("contact_details", ())
+fn contact_details(_recaptcha: ReCaptchaGuard) -> Template {
+	Template::render("contact_details", HashMap::<String, String>::new())
 }
 
 
@@ -69,7 +71,7 @@ fn main() {
 		.attach(Template::custom(|_engines| {
 			//engines.tera.new();
 		}))
-		.manage(Config::load(env))
+		.manage(AppConfig::load(env))
 		.register(catchers![error_400_bad_request, error_404_not_found])
 		.mount("/", routes![index, contact_details])
 		.mount("/static", StaticFiles::from("./static"))

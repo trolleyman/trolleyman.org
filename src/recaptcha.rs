@@ -2,7 +2,7 @@
 use rocket::State;
 use rocket::Request;
 use rocket::http::Status;
-use rocket::request::{self, FromRequest};
+use rocket::request::{FromRequest, Outcome};
 use rocket::outcome::IntoOutcome;
 
 use super::config::AppConfig;
@@ -14,42 +14,41 @@ const RECAPTCHA_VERIFY_URL: &'static str = "https://www.google.com/recaptcha/api
 #[derive(Debug)]
 pub enum ReCaptchaError {
 	NonexistentHeader,
+	ConfigLoad,
+	VerifyError(reqwest::Error),
 }
 
-pub struct ReCaptchaGuard(String);
+pub struct ReCaptchaGuard {
+	// Here to ensure that this type is never constructible from outside this module
+	_phantom_data: std::marker::PhantomData<()>
+}
 impl<'a, 'r> FromRequest<'a, 'r> for ReCaptchaGuard {
 	type Error = ReCaptchaError;
-	fn from_request(req: &'a Request<'r>) -> request::Outcome<Self, Self::Error> {
+	fn from_request(req: &'a Request<'r>) -> Outcome<Self, Self::Error> {
 		// Check if g-recaptcha-response is valid.
-		let token = req.headers().get_one("G_RECAPTCHA_RESPONSE")
+		let token = req.headers().get_one("g-recaptcha-response")
 			.ok_or(ReCaptchaError::NonexistentHeader)
 			.into_outcome(Status::BadRequest)?;
 
-		let private_key = req.guard::<State<AppConfig>>().recaptcha_private_key;
-		let data = json!({
+		let private_key = &req.guard::<State<AppConfig>>().map_failure(|(status, _)| (status, ReCaptchaError::ConfigLoad))?.recaptcha_private_key;
+		let mut data = json!({
 			"secret": private_key,
 			"token": token,
 		});
-		data.as_object_mut().unwrap().insert("remoteip".to_string(), serde_json::Value::String(remote_ip));
-		
-		// data = {
-		//     'secret': settings.RECAPTCHA_PRIVATE_KEY,
-		//     'response': token,
-		// }
-		// try:
-		//     data['remoteip'] = request.META['HTTP_REMOTE_ADDR']
-		// except KeyError:
-		//     pass  # Ignore
-	
-		// r = requests.post(url, data=data)
-		// if r.status_code >= 200 and r.status_code < 300:
-		//     return render(request, 'homepage/contact_details.html', {
-		//         'sitekey': settings.RECAPTCHA_PUBLIC_KEY
-		//     })
-	
-		// else:
-		// 	return error400_bad_request(request, 'RECAPTCHA error: ' + r.text)
-		
-		Ok(ReCaptchaGuard(format!("")))
+		if let Some(client_ip) = req.client_ip() {
+			data.as_object_mut().unwrap().insert("remoteip".to_string(), serde_json::Value::String(client_ip.to_string()));
+		}
+
+		let client = reqwest::blocking::Client::new();
+		let result = client.post(RECAPTCHA_VERIFY_URL)
+			.header(reqwest::header::CONTENT_TYPE, "application/json")
+			.header(reqwest::header::ACCEPT, "application/json")
+			.body(data.to_string())
+			.send();
+
+		match result {
+			Ok(_) => Outcome::Success(ReCaptchaGuard{_phantom_data: std::marker::PhantomData}),
+			Err(e) => Outcome::Failure((Status::InternalServerError, ReCaptchaError::VerifyError(e))),
+		}
 	}
 }
