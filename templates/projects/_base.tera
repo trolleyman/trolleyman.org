@@ -1,0 +1,29 @@
+{% extends "index" %}
+{% import "_macros" as macros %}
+
+{% block css %}
+  <link rel="stylesheet" href="/static/homepage/css/projects/_base.css">
+{% endblock %}
+
+{% block banner_bg %}
+{% endblock %}
+
+{% block header_pre_content %}
+  {{ macros::back_button(project_name=project_name) }}
+{% endblock %}
+
+{% block header_content %}
+{% endblock %}
+
+{% block banner_content %}
+{% endblock %}
+
+{% block main_content %}
+{% endblock %}
+
+{% block footer_content %}
+{% endblock %}
+
+{% block js %}
+  <script charset="utf-8" type="text/javascript" src="/static/homepage/js/projects/_base.js"></script>
+{% endblock %}

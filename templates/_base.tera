@@ -2,13 +2,13 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>{%block title%}Callum Tolley{% endblock title %}</title>
+		<title>{%block title%}Callum Tolley{% endblock %}</title>
 		
 		{% block head %}
-		{% endblock head %}
+		{% endblock %}
 	</head>
 	<body>
 		{% block body %}
-		{% endblock body %}
+		{% endblock %}
 	</body>
 </html>

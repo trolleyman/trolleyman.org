@@ -1,7 +1,0 @@
-<li class="back-container always-visible">
-  <a href="..#proj_{{ name }}">
-    <div class="back">
-      <span class="fa fa-angle-left"></span>
-    </div>
-  </a>
-</li>

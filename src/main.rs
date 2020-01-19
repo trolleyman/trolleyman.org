@@ -13,7 +13,7 @@ use rocket::config::Environment;
 use rocket::State;
 
 use rocket_contrib::serve::StaticFiles;
-use rocket_contrib::templates::Template;
+use rocket_contrib::templates::{self, Template};
 
 use rand::Rng;
 
@@ -42,6 +42,18 @@ fn index(config: State<AppConfig>) -> Template {
 #[get("/contact_details")]
 fn contact_details(_recaptcha: ReCaptchaGuard) -> Template {
 	Template::render("contact_details", HashMap::<String, String>::new())
+}
+
+#[get("/projects/<project_name>")]
+fn project(project_name: String, metadata: templates::Metadata) -> Option<Template> {
+	let template_name = format!("projects/{}", project_name);
+	if !metadata.contains_template(&template_name) {
+		None
+	} else {
+		Some(Template::render(template_name, hashmap!{
+			"project_name" => project_name,
+		}))
+	}
 }
 
 
@@ -73,7 +85,7 @@ fn main() {
 		}))
 		.manage(AppConfig::load(env))
 		.register(catchers![error_400_bad_request, error_404_not_found])
-		.mount("/", routes![index, contact_details])
+		.mount("/", routes![index, contact_details, project])
 		.mount("/static", StaticFiles::from("./static"))
 		.launch();
 }

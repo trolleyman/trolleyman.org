@@ -22,12 +22,18 @@
   <!--[if lte IE 8]><link rel="stylesheet" href="/static/homepage/css/ie8.css"><![endif]-->
 
   <meta name="static" content="/static/homepage/">
+  {% if sitekey %}
   <meta name="sitekey" content="{{ sitekey }}">
+  {% endif %}
 
-  {{ macros::banner(img_url=bg_url) }}
+  {% block banner_bg %}
+    {{ macros::banner(img_url=bg_url) }}
+  {% endblock %}
 
-  <link rel="stylesheet" href="/static/homepage/css/index.css">
-{% endblock head %}
+  {% block css %}
+    <link rel="stylesheet" href="/static/homepage/css/index.css">
+  {% endblock %}
+{% endblock %}
 {% block body %}
   <!-- Page Wrapper -->
   <div id="page-wrapper">
@@ -36,9 +42,9 @@
       <ul>
         {% block header_pre_content %}
         {% endblock %}
-        
+
         <li class="title"><h1><a href="/">Callum Tolley</a></h1></li>
-        
+
         {% block header_content %}
           <li><a href="/static/files/CV.pdf" target="_blank">CV</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -310,5 +316,8 @@
   <script charset="utf-8" type="text/javascript" src="/static/homepage/js/main.js"></script>
 
   <!--[if lte IE 8]><script charset="utf-8" type="text/javascript" src="/static/homepage/js/ie/respond.min.js"></script><![endif]-->
-  <script charset="utf-8" type="text/javascript" src="/static/homepage/js/index.js"></script>
-{% endblock body %}
+
+  {% block js %}
+    <script charset="utf-8" type="text/javascript" src="/static/homepage/js/index.js"></script>
+  {% endblock %}
+{% endblock %}

@@ -1,23 +1,19 @@
-{% extends 'homepage/projects/_base.html' %}
-{% load static %}
-{% load compress %}
+{% extends "projects/_base" %}
+{% import "_macros" as macros %}
 
 {% block title %}Flappy Clone - Callum Tolley{% endblock %}
 
-{% block stylesheets %}
-  {{ block.super }}
-  {% compress css %}
-  <link rel="stylesheet" href="{% static 'homepage/css/projects/flappy.css' %}">
-  {% endcompress %}
+{% block css %}
+  {{ super() }}
+  <link rel="stylesheet" href="/static/homepage/css/projects/flappy.css">
 {% endblock %}
 
 {% block banner_bg %}
-  {% static 'homepage/images/projects/flappy/bg.png' as banner_img_url %}
-  {% include 'homepage/_banner_bg.html' %}
+  {{ macros::banner(img_url="/static/homepage/images/projects/flappy/bg.png", pixelated=true) }}
 {% endblock %}
 
 {% block banner_content %}
-  <div class="logo"><img class="pixelated" src="{% static 'homepage/images/projects/flappy/logo.png' %}"></img></div>
+  <div class="logo"><img class="pixelated" src="/static/homepage/images/projects/flappy/logo.png"></div>
   <h2>Flappy Clone</h2>
 {% endblock %}
 
@@ -25,11 +21,11 @@
   <section class="wrapper spotlight style1">
     <div class="inner">
       <div class="content">
-        <img id="demo1" class="right" src="{% static 'homepage/images/projects/flappy/demo1.jpg' %}">
+        <img id="demo1" class="right" src="/static/homepage/images/projects/flappy/demo1.jpg">
         <p>
           I developed Flappy Clone in my spare time over the 2016 Christmas holidays. There was a job advertised near where I live that wanted a web developer. Since I had no experience developing websites, and no imagination, I got the idea to produce a clone of the Flappy Bird game that was popular a while ago.
         </p>
-        <img id="demo2" class="left" src="{% static 'homepage/images/projects/flappy/demo2.jpg' %}">
+        <img id="demo2" class="left" src="/static/homepage/images/projects/flappy/demo2.jpg">
         <p>
           Although I didn't end up getting the job, I believe that I learnt a lot about web development, and this helped me in my future project,
           <a href="linc">LINC</a>.

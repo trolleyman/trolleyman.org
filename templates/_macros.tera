@@ -1,4 +1,4 @@
-{% macro banner(img_url) %}
+{% macro banner(img_url, pixelated=false) %}
 <meta name="banner-bg-url" content="{{ img_url }}">
 <style>
   #banner {
@@ -76,3 +76,12 @@
   });
 </script>
 {% endmacro input %}
+{% macro back_button(project_name) %}
+<li class="back-container always-visible">
+  <a href="..#proj_{{ project_name }}">
+    <div class="back">
+      <span class="fa fa-angle-left"></span>
+    </div>
+  </a>
+</li>
+{% endmacro %}
