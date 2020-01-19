@@ -34,7 +34,7 @@ fn index(config: State<AppConfig>) -> Template {
 	let i = rand::thread_rng().gen_range(0, num_bg) + 1;
 
 	Template::render("index", hashmap!{
-		"bg_url" => format!("homepage/images/bg/{:02}.jpg", i),
+		"bg_url" => format!("/static/homepage/images/bg/{:02}.jpg", i),
 		"sitekey" => config.recaptcha_public_key.clone(),
 	})
 }
@@ -55,7 +55,6 @@ fn error_400_bad_request(req: &rocket::Request) -> Template {
 	})
 }
 
-
 #[catch(404)]
 fn error_404_not_found(req: &rocket::Request) -> Template {
 	Template::render("error", hashmap!{
@@ -64,6 +63,7 @@ fn error_404_not_found(req: &rocket::Request) -> Template {
 		"msg" => format!("'{}' could not be found.", req.uri().path()),
 	})
 }
+
 
 fn main() {
 	let env = Environment::active().expect("Invalid environment");
