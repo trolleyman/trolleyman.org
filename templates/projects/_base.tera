@@ -2,7 +2,7 @@
 {% import "_macros" as macros %}
 
 {% block css %}
-  <link rel="stylesheet" href="/static/homepage/css/projects/_base.css">
+  <link rel="stylesheet" href="/static/css/projects/_base.css">
 {% endblock %}
 
 {% block banner_bg %}
@@ -25,5 +25,5 @@
 {% endblock %}
 
 {% block js %}
-  <script charset="utf-8" type="text/javascript" src="/static/homepage/js/projects/_base.js"></script>
+  <script charset="utf-8" type="text/javascript" src="/static/js/projects/_base.js"></script>
 {% endblock %}

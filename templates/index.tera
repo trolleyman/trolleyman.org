@@ -10,18 +10,18 @@
   <!-- Windows Phone -->
   <meta name="msapplication-navbutton-color" content="#2e3141">
 
-  <!--[if lte IE 8]><script charset="utf-8" type="text/javascript" src="/static/homepage/js/ie/html5shiv.js"></script><![endif]-->
+  <!--[if lte IE 8]><script charset="utf-8" type="text/javascript" src="/static/js/ie/html5shiv.js"></script><![endif]-->
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  <link rel="stylesheet" href="/static/homepage/css/normalize.css">
-  <link rel="stylesheet" href="/static/homepage/css/main.css">
-  <link rel="stylesheet" href="/static/homepage/css/main-mod.css">
+  <link rel="stylesheet" href="/static/css/normalize.css">
+  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="/static/css/main-mod.css">
 
-  <!--[if lte IE 9]><link rel="stylesheet" href="/static/homepage/css/ie9.css"><![endif]-->
-  <!--[if lte IE 8]><link rel="stylesheet" href="/static/homepage/css/ie8.css"><![endif]-->
+  <!--[if lte IE 9]><link rel="stylesheet" href="/static/css/ie9.css"><![endif]-->
+  <!--[if lte IE 8]><link rel="stylesheet" href="/static/css/ie8.css"><![endif]-->
 
-  <meta name="static" content="/static/homepage/">
+  <meta name="static" content="/static/">
   {% if sitekey %}
   <meta name="sitekey" content="{{ sitekey }}">
   {% endif %}
@@ -31,7 +31,7 @@
   {% endblock %}
 
   {% block css %}
-    <link rel="stylesheet" href="/static/homepage/css/index.css">
+    <link rel="stylesheet" href="/static/css/index.css">
   {% endblock %}
 {% endblock %}
 {% block body %}
@@ -83,7 +83,7 @@
         <section class="wrapper spotlight style1">
           <div id="proj_dissertation" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/dissertation" class="image box-shadow pixelated"><img src="/static/homepage/images/projects/dissertation/breakout.png" alt=""></a>
+            <a href="projects/dissertation" class="image box-shadow pixelated"><img src="/static/images/projects/dissertation/breakout.png" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Dissertation</h2>
@@ -103,7 +103,7 @@
         <section class="wrapper alt spotlight style2">
           <div id="proj_linc" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/linc" class="image drop-shadow"><img src="/static/homepage/images/projects/linc/logo.min.png" alt=""></a>
+            <a href="projects/linc" class="image drop-shadow"><img src="/static/images/projects/linc/logo.min.png" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>LINC</h2>
@@ -123,7 +123,7 @@
         <section class="wrapper spotlight style3">
           <div id="proj_flappy" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/flappy" class="image drop-shadow pixelated"><img src="/static/homepage/images/projects/flappy/logo.png" alt=""></a>
+            <a href="projects/flappy" class="image drop-shadow pixelated"><img src="/static/images/projects/flappy/logo.png" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Flappy Clone</h2>
@@ -145,7 +145,7 @@
         <section class="wrapper alt spotlight style4">
           <div id="proj_zucchini" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/zucchini" class="image drop-shadow"><img src="/static/homepage/images/projects/zucchini/logo.min.gif" alt=""></a>
+            <a href="projects/zucchini" class="image drop-shadow"><img src="/static/images/projects/zucchini/logo.min.gif" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Zucchini</h2>
@@ -166,7 +166,7 @@
         <section class="wrapper spotlight style5">
           <div id="robot" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/robot" class="image box-shadow"><img src="/static/homepage/images/projects/robot/casterbot.min.jpg" alt=""></a>
+            <a href="projects/robot" class="image box-shadow"><img src="/static/images/projects/robot/casterbot.min.jpg" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Robot Warehouse</h2>
@@ -187,7 +187,7 @@
         <section class="wrapper alt spotlight style6">
           <div id="portal" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/portal" class="image box-shadow"><img src="/static/homepage/images/projects/portal/screenshot.min.jpg" alt=""></a>
+            <a href="projects/portal" class="image box-shadow"><img src="/static/images/projects/portal/screenshot.min.jpg" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Portal 2</h2>
@@ -207,7 +207,7 @@
         <section class="wrapper spotlight style5">
           <div id="k-means" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/k-means" class="image box-shadow"><img src="/static/homepage/images/projects/k-means/alabama-hills-ca.min.jpg" alt=""></a>
+            <a href="projects/k-means" class="image box-shadow"><img src="/static/images/projects/k-means/alabama-hills-ca.min.jpg" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>k-means</h2>
@@ -227,7 +227,7 @@
         <section class="wrapper alt spotlight style4">
           <div id="equator" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/equator" class="image box-shadow"><img src="/static/homepage/images/projects/equator/screenshot.jpg" alt=""></a>
+            <a href="projects/equator" class="image box-shadow"><img src="/static/images/projects/equator/screenshot.jpg" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Equator</h2>
@@ -311,13 +311,13 @@
 
   <!-- Scripts -->
   <script charset="utf-8" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script charset="utf-8" type="text/javascript" src="/static/homepage/js/jquery.scrollex.min.js"></script>
-  <script charset="utf-8" type="text/javascript" src="/static/homepage/js/util.js"></script>
-  <script charset="utf-8" type="text/javascript" src="/static/homepage/js/main.js"></script>
+  <script charset="utf-8" type="text/javascript" src="/static/js/jquery.scrollex.min.js"></script>
+  <script charset="utf-8" type="text/javascript" src="/static/js/util.js"></script>
+  <script charset="utf-8" type="text/javascript" src="/static/js/main.js"></script>
 
-  <!--[if lte IE 8]><script charset="utf-8" type="text/javascript" src="/static/homepage/js/ie/respond.min.js"></script><![endif]-->
+  <!--[if lte IE 8]><script charset="utf-8" type="text/javascript" src="/static/js/ie/respond.min.js"></script><![endif]-->
 
   {% block js %}
-    <script charset="utf-8" type="text/javascript" src="/static/homepage/js/index.js"></script>
+    <script charset="utf-8" type="text/javascript" src="/static/js/index.js"></script>
   {% endblock %}
 {% endblock %}

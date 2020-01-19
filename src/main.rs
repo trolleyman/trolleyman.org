@@ -34,7 +34,7 @@ fn index(config: State<AppConfig>) -> Template {
 	let i = rand::thread_rng().gen_range(0, num_bg) + 1;
 
 	Template::render("index", hashmap!{
-		"bg_url" => format!("/static/homepage/images/bg/{:02}.jpg", i),
+		"bg_url" => format!("/static/images/bg/{:02}.jpg", i),
 		"sitekey" => config.recaptcha_public_key.clone(),
 	})
 }

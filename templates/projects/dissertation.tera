@@ -5,15 +5,15 @@
 
 {% block css %}
   {{ super() }}
-  <link rel="stylesheet" href="/static/homepage/css/projects/dissertation.css">
+  <link rel="stylesheet" href="/static/css/projects/dissertation.css">
 {% endblock %}
 
 {% block banner_bg %}
-  {{ macros::banner(img_url="/static/homepage/images/projects/dissertation/bg.png", pixelated=true) }}
+  {{ macros::banner(img_url="/static/images/projects/dissertation/bg.png", pixelated=true) }}
 {% endblock %}
 
 {% block banner_content %}
-  <div class="logo"><img src="/static/homepage/images/projects/dissertation/atari.png"></div>
+  <div class="logo"><img src="/static/images/projects/dissertation/atari.png"></div>
   <h2>Artificial Intelligence in Atari 2600 Games using Deep Q-Learning</h2>
 {% endblock %}
 
@@ -22,7 +22,7 @@
     <div class="inner">
       <div class="content">
         <figure id="graph">
-          <img src="/static/homepage/images/projects/dissertation/breakout_graph.png">
+          <img src="/static/images/projects/dissertation/breakout_graph.png">
           <figcaption>Annotated graph of Q-values over time for an episode of Breakout.</figcaption>
         </figure>
         <p>For my dissertation project I chose to explore the topic of game AI. <a href="https://deepmind.com/">Google DeepMind</a> had recently released a <a href="https://deepmind.com/research/dqn/">paper</a> about a novel technique of creating general game AIs using machine learning. They then demonstrated the efficacy of their method on a variety of Atari 2600 games (Breakout, Space Invaders, Pacman, etc.).</p>
