@@ -10,18 +10,11 @@
   <!-- Windows Phone -->
   <meta name="msapplication-navbutton-color" content="#2e3141">
 
-  <!--[if lte IE 8]><script charset="utf-8" type="text/javascript" src="/static/js/ie/html5shiv.js"></script><![endif]-->
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  <link rel="stylesheet" href="/static/css/normalize.css">
   <link rel="stylesheet" href="/static/css/main.css">
   <link rel="stylesheet" href="/static/css/main-mod.css">
 
-  <!--[if lte IE 9]><link rel="stylesheet" href="/static/css/ie9.css"><![endif]-->
-  <!--[if lte IE 8]><link rel="stylesheet" href="/static/css/ie8.css"><![endif]-->
-
-  <meta name="static" content="/static/">
   {% if sitekey %}
   <meta name="sitekey" content="{{ sitekey }}">
   {% endif %}
@@ -83,7 +76,7 @@
         <section class="wrapper spotlight style1">
           <div id="proj_dissertation" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/dissertation" class="image box-shadow pixelated"><img src="/static/images/projects/dissertation/breakout.png" alt=""></a>
+            <a href="projects/dissertation" class="image box-shadow pixelated"><img src="/static/img/projects/dissertation/breakout.png" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Dissertation</h2>
@@ -103,7 +96,7 @@
         <section class="wrapper alt spotlight style2">
           <div id="proj_linc" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/linc" class="image drop-shadow"><img src="/static/images/projects/linc/logo.min.png" alt=""></a>
+            <a href="projects/linc" class="image drop-shadow"><img src="/static/img/projects/linc/logo.min.png" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>LINC</h2>
@@ -123,7 +116,7 @@
         <section class="wrapper spotlight style3">
           <div id="proj_flappy" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/flappy" class="image drop-shadow pixelated"><img src="/static/images/projects/flappy/logo.png" alt=""></a>
+            <a href="projects/flappy" class="image drop-shadow pixelated"><img src="/static/img/projects/flappy/logo.png" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Flappy Clone</h2>
@@ -135,8 +128,7 @@
               <div class="used">Languages: HTML, JavaScript, CSS, SQL, Python</div>
               <div class="used">Frameworks: HTML5 Canvas API, Django</div>
               <ul class="links">
-                <li><a href="https://github.com/trolleyman/FlappyClone" class="special">Github</a></li>
-                <li><a href="/FlappyClone" class="special">Demo</a></li>
+                <li><a href="/flappy" class="special">Demo</a></li>
                 <li><a href="projects/flappy" class="special">More details</a></li>
               </ul>
             </div>
@@ -145,7 +137,7 @@
         <section class="wrapper alt spotlight style4">
           <div id="proj_zucchini" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/zucchini" class="image drop-shadow"><img src="/static/images/projects/zucchini/logo.min.gif" alt=""></a>
+            <a href="projects/zucchini" class="image drop-shadow"><img src="/static/img/projects/zucchini/logo.min.gif" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Zucchini</h2>
@@ -166,7 +158,7 @@
         <section class="wrapper spotlight style5">
           <div id="robot" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/robot" class="image box-shadow"><img src="/static/images/projects/robot/casterbot.min.jpg" alt=""></a>
+            <a href="projects/robot" class="image box-shadow"><img src="/static/img/projects/robot/casterbot.min.jpg" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Robot Warehouse</h2>
@@ -187,7 +179,7 @@
         <section class="wrapper alt spotlight style6">
           <div id="portal" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/portal" class="image box-shadow"><img src="/static/images/projects/portal/screenshot.min.jpg" alt=""></a>
+            <a href="projects/portal" class="image box-shadow"><img src="/static/img/projects/portal/screenshot.min.jpg" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Portal 2</h2>
@@ -207,7 +199,7 @@
         <section class="wrapper spotlight style5">
           <div id="k-means" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/k-means" class="image box-shadow"><img src="/static/images/projects/k-means/alabama-hills-ca.min.jpg" alt=""></a>
+            <a href="projects/k-means" class="image box-shadow"><img src="/static/img/projects/k-means/alabama-hills-ca.min.jpg" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>k-means</h2>
@@ -227,7 +219,7 @@
         <section class="wrapper alt spotlight style4">
           <div id="equator" class="scroll-marker"></div>
           <div class="inner">
-            <a href="projects/equator" class="image box-shadow"><img src="/static/images/projects/equator/screenshot.jpg" alt=""></a>
+            <a href="projects/equator" class="image box-shadow"><img src="/static/img/projects/equator/screenshot.jpg" alt=""></a>
             <div class="content">
               <div class="major">
                 <h2>Equator</h2>
@@ -311,11 +303,9 @@
 
   <!-- Scripts -->
   <script charset="utf-8" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script charset="utf-8" type="text/javascript" src="/static/js/jquery.scrollex.min.js"></script>
+  <script charset="utf-8" type="text/javascript" src="/static/js/lib/jquery.scrollex.min.js"></script>
   <script charset="utf-8" type="text/javascript" src="/static/js/util.js"></script>
   <script charset="utf-8" type="text/javascript" src="/static/js/main.js"></script>
-
-  <!--[if lte IE 8]><script charset="utf-8" type="text/javascript" src="/static/js/ie/respond.min.js"></script><![endif]-->
 
   {% block js %}
     <script charset="utf-8" type="text/javascript" src="/static/js/index.js"></script>

@@ -3021,7 +3021,7 @@
 		}
 
 		#menu .close {
-			background-image: url("images/close.svg");
+			background-image: url("/static/img/close.svg");
 			background-position: 75% 25%;
 			background-repeat: no-repeat;
 			background-size: 2em 2em;

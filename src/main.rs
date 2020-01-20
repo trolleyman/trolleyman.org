@@ -7,8 +7,6 @@ extern crate rocket_contrib;
 #[macro_use] extern crate maplit;
 
 
-use std::collections::HashMap;
-
 use rocket::config::Environment;
 use rocket::State;
 
@@ -20,6 +18,7 @@ use rand::Rng;
 
 mod config;
 mod recaptcha;
+mod flappy;
 
 use config::AppConfig;
 use recaptcha::ReCaptchaGuard;
@@ -33,15 +32,15 @@ fn index(config: State<AppConfig>) -> Template {
 	let num_bg = 16;
 	let i = rand::thread_rng().gen_range(0, num_bg) + 1;
 
-	Template::render("index", hashmap!{
-		"bg_url" => format!("/static/images/bg/{:02}.jpg", i),
-		"sitekey" => config.recaptcha_public_key.clone(),
-	})
+	Template::render("index", json!({
+		"bg_url": format!("/static/img/bg/{:02}.jpg", i),
+		"sitekey": config.recaptcha_public_key.clone(),
+	}))
 }
 
 #[get("/contact_details")]
 fn contact_details(_recaptcha: ReCaptchaGuard) -> Template {
-	Template::render("contact_details", HashMap::<String, String>::new())
+	Template::render("contact_details", json!({}))
 }
 
 #[get("/projects/<project_name>")]
@@ -50,9 +49,9 @@ fn project(project_name: String, metadata: templates::Metadata) -> Option<Templa
 	if !metadata.contains_template(&template_name) {
 		None
 	} else {
-		Some(Template::render(template_name, hashmap!{
-			"project_name" => project_name,
-		}))
+		Some(Template::render(template_name, json!({
+			"project_name": project_name,
+		})))
 	}
 }
 
@@ -60,11 +59,11 @@ fn project(project_name: String, metadata: templates::Metadata) -> Option<Templa
 #[catch(400)]
 fn error_400_bad_request(req: &rocket::Request) -> Template {
 	let msg = if let Some(msg) = &req.local_cache(|| ErrorMessage(None)).0 { format!(": {}", msg) } else { String::new() };
-	Template::render("error", hashmap!{
-		"status" => "400".to_string(),
-		"title" => "Bad Request".to_string(),
-		"msg" => format!("Client sent a bad request{}.", msg),
-	})
+	Template::render("error", json!({
+		"status": "400".to_string(),
+		"title": "Bad Request".to_string(),
+		"msg": format!("Client sent a bad request{}.", msg),
+	}))
 }
 
 #[catch(404)]
@@ -87,5 +86,6 @@ fn main() {
 		.register(catchers![error_400_bad_request, error_404_not_found])
 		.mount("/", routes![index, contact_details, project])
 		.mount("/static", StaticFiles::from("./static"))
+		.mount("/flappy", flappy::routes())
 		.launch();
 }

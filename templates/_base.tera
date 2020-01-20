@@ -5,6 +5,8 @@
 		<title>{%block title%}Callum Tolley{% endblock %}</title>
 		
 		{% block head %}
+		<link rel="stylesheet" href="/static/css/normalize.css">
+		<link rel="stylesheet" href="/static/css/base.css">
 		{% endblock %}
 	</head>
 	<body>
