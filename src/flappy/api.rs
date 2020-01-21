@@ -53,6 +53,7 @@ fn leaderboard(conn: DbConn) -> Json<Vec<LeaderboardEntry>> {
 		.unwrap_or_else(|_| vec![]))
 }
 
+// TODO: CSRF attacks
 #[post("/api/submit", data = "<leaderboard_entry>")]
 fn submit(leaderboard_entry: LenientForm<NewLeaderboardEntry>, conn: DbConn) -> Result<String, String> {
 	leaderboard_entry.0.insert_into(leaderboard::table)

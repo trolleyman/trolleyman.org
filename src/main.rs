@@ -4,6 +4,7 @@
 #[macro_use] extern crate rocket_contrib;
 
 #[macro_use] extern crate diesel;
+#[macro_use] extern crate diesel_migrations;
 
 #[macro_use] extern crate serde_json;
 #[macro_use] extern crate maplit;
@@ -13,14 +14,18 @@ use rocket::config::Environment;
 use rocket::State;
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::{self, Template};
+use diesel::prelude::*;
 
 use rand::Rng;
 
-pub mod schema;
+
+mod schema;
 
 mod config;
 mod recaptcha;
 mod flappy;
+
+embed_migrations!();
 
 use config::AppConfig;
 use recaptcha::ReCaptchaGuard;
@@ -84,7 +89,21 @@ fn error_404_not_found(req: &rocket::Request) -> Template {
 fn main() {
 	let active_env = Environment::active().expect("Invalid environment");
 	let configs = rocket::config::RocketConfig::read().unwrap();
-	rocket::custom(configs.get(active_env).clone())
+	let rocket_config = configs.get(active_env).clone();
+
+	// Migrate database
+	let db_url = rocket_config.extras
+		.get("databases").expect("databases key missing")
+		.as_table().expect("databases key not table")
+		.get("db").expect("databases.db key missing")
+		.as_table().expect("databases.db key not table")
+		.get("url").expect("databases.db.url key missing")
+		.as_str().expect("databases.db.url key not string");
+	let db_conn = diesel::sqlite::SqliteConnection::establish(&db_url).expect("Failed to open database connection");
+	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout()).expect("Failed to migrate database");
+
+	// Launch Rocket
+	rocket::custom(rocket_config)
 		.attach(Template::fairing())
 		.attach(DbConn::fairing())
 		.manage(AppConfig::load(active_env))
