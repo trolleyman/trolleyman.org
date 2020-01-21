@@ -1,1 +1,4 @@
 templates/
+database/
+logs/
+*.log
