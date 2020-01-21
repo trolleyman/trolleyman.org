@@ -1,7 +1,9 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
 #[macro_use] extern crate rocket;
-extern crate rocket_contrib;
+#[macro_use] extern crate rocket_contrib;
+
+#[macro_use] extern crate diesel;
 
 #[macro_use] extern crate serde_json;
 #[macro_use] extern crate maplit;
@@ -9,12 +11,12 @@ extern crate rocket_contrib;
 
 use rocket::config::Environment;
 use rocket::State;
-
 use rocket_contrib::serve::StaticFiles;
 use rocket_contrib::templates::{self, Template};
 
 use rand::Rng;
 
+pub mod schema;
 
 mod config;
 mod recaptcha;
@@ -23,6 +25,9 @@ mod flappy;
 use config::AppConfig;
 use recaptcha::ReCaptchaGuard;
 
+
+#[database("db")]
+pub struct DbConn(diesel::SqliteConnection);
 
 pub struct ErrorMessage(Option<String>);
 
@@ -77,12 +82,12 @@ fn error_404_not_found(req: &rocket::Request) -> Template {
 
 
 fn main() {
-	let env = Environment::active().expect("Invalid environment");
-	rocket::custom(rocket::config::ConfigBuilder::new(env).expect("Invalid config"))
-		.attach(Template::custom(|_engines| {
-			//engines.tera.new();
-		}))
-		.manage(AppConfig::load(env))
+	let active_env = Environment::active().expect("Invalid environment");
+	let configs = rocket::config::RocketConfig::read().unwrap();
+	rocket::custom(configs.get(active_env).clone())
+		.attach(Template::fairing())
+		.attach(DbConn::fairing())
+		.manage(AppConfig::load(active_env))
 		.register(catchers![error_400_bad_request, error_404_not_found])
 		.mount("/", routes![index, contact_details, project])
 		.mount("/static", StaticFiles::from("./static"))

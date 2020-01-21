@@ -1,8 +1,8 @@
 const NUM_LEADERBOARD_ENTRIES = 10;
 const BEST_SCORE_COOKIE_NAME = "BEST_SCORE";
 
-const LEADERBOARD_API_PATH = "api/leaderboard";
-const SUBMIT_API_PATH = "api/submit";
+const LEADERBOARD_API_PATH = "/flappy/api/leaderboard";
+const SUBMIT_API_PATH = "/flappy/api/submit";
 
 function setBestScore(score) {
 	setCookie(BEST_SCORE_COOKIE_NAME, score, 365);

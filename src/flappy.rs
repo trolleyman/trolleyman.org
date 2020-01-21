@@ -1,8 +1,13 @@
 
 use rocket_contrib::templates::Template;
 
+mod api;
+
+
 pub fn routes() -> Vec<rocket::Route> {
-	routes![game]
+	let mut routes = routes![game];
+	routes.append(&mut api::routes());
+	routes
 }
 
 #[get("/")]
