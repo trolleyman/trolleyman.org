@@ -50,9 +50,7 @@ SECRET_KEY=<random key used by Django (this will be auto-generated if not specif
 ```
 
 ## FlappyClone
-A Flappy Bird clone with a global leaderboard.
-
-Coded using JavaScript.
+A fully responsive HTML5 canvas-based Flappy Bird clone with a global leaderboard.
 
 <img src="screenshots/start.png" width="210px" /> <img src="screenshots/playing.png" width="210px" /> <img src="screenshots/death.png" width="210px" /> <img src="screenshots/leaderboard.gif" width="210px" />
 
