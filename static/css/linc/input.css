@@ -1,0 +1,136 @@
+/*
+ * Copyright Callum Tolley and Michael Peran Truscott
+ */
+body {
+    background-color: hsla(0, 0%, 95%, 1);
+    color: black;
+    min-width: 400px;
+}
+#topbar {
+    background-color: #cc5d29;
+    max-height: 20%;
+}
+
+#dismiss {
+    position: absolute;
+    right: 10px;
+    /* top: 10px; */
+    /* display: block; */
+    /* margin-left: auto; */
+}
+
+.logo {
+    width: 20%;
+}
+
+.required {
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'SciFly-Sans'; /*a name to be used later*/
+    src: url('SciFly-Sans.ttf'); /*URL to font*/
+}
+form {
+    font-family: 'SciFly-Sans';
+    font-size: 18pt;
+    margin-top: 10%;
+}
+input[type="submit"]:hover {
+    color: #0081c9;
+}
+
+#messagebar {
+    overflow: hidden;
+    font-family: 'SciFly-Sans';
+    font-size: 16pt;
+    padding: 15px;
+    background-color: rgb(53, 149, 52);
+    /* max-height: 20%; */
+}
+
+.container {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.container * {
+    box-sizing: border-box;
+}
+
+.flex-outer,
+.flex-inner {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flex-outer {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.flex-outer li,
+.flex-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.flex-inner {
+    padding: 0 8px;
+    justify-content: space-between;  
+}
+
+.flex-outer > li:not(:last-child):not(.error-after) {
+    margin-bottom: 20px;
+}
+
+.error-after {
+    margin-bottom: 10px;
+}
+
+.flex-outer li label,
+.flex-outer li p {
+    padding: 8px;
+    /* font-weight: 300; */
+    /* letter-spacing: .09em; */
+    /* text-transform: uppercase; */
+}
+
+.flex-outer > li > label,
+.flex-outer li p {
+    flex: 1 0 120px;
+    max-width: 220px;
+}
+
+.flex-outer > li > label + *,
+.flex-inner {
+    flex: 1 0 220px;
+}
+
+.flex-outer li p {
+    margin: 0;
+}
+
+.flex-outer li input,
+.flex-outer li select {
+    padding: 5px;
+}
+
+.flex-outer li input[type='submit'] {
+    margin-left: auto;
+    border: none;
+    padding: 7px;
+}
+
+.flex-inner li {
+    width: 100px;
+}
+
+.error {
+    text-align: right;
+    display: block !important; /* To get text to align properly */
+    font-size: 16pt;
+    color: rgb(226, 26, 26);
+}

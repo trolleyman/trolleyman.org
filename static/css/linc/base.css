@@ -1,0 +1,10 @@
+/* Copyright Callum Tolley and Michael Peran Truscott */
+
+@font-face {
+    font-family: 'SciFly-Sans';
+    src: url('../fonts/SciFly-Sans.ttf');
+}
+
+* {
+	box-sizing: border-box;
+}
