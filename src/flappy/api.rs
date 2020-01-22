@@ -1,12 +1,12 @@
 
 use serde::Serialize;
-use chrono::prelude::*;
 use rocket::request::LenientForm;
 use rocket_contrib::json::Json;
 use diesel::prelude::*;
 
 use crate::schema::flappy_leaderboard as leaderboard;
 use crate::DbConn;
+use crate::db::serde_naive_datetime;
 
 
 #[derive(Queryable, Identifiable, Serialize)]
@@ -24,20 +24,6 @@ struct LeaderboardEntry {
 struct NewLeaderboardEntry {
 	pub name: String,
 	pub score: i32,
-}
-
-mod serde_naive_datetime {
-	use super::*;
-	use serde::{Serialize, Serializer, Deserialize, Deserializer, de::Error};
-
-	pub fn serialize<S: Serializer>(time: &NaiveDateTime, serializer: S) -> Result<S::Ok, S::Error> {
-		DateTime::<Utc>::from_utc(*time, Utc).to_rfc3339().serialize(serializer)
-	}
-
-	pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<NaiveDateTime, D::Error> {
-		let time: &str = Deserialize::deserialize(deserializer)?;
-		Ok(DateTime::parse_from_rfc3339(&time).map_err(D::Error::custom)?.naive_utc())
-	}
 }
 
 

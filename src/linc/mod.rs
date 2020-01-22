@@ -1,11 +1,14 @@
 
 use serde::Serialize;
+use chrono::prelude::*;
 use rocket_contrib::templates::Template;
 use diesel::prelude::*;
 
 use crate::DbConn;
+use crate::db::serde_naive_datetime;
 use crate::schema::linc_person as person;
 use crate::schema::linc_interest as interest;
+use crate::schema::linc_lastedited as lastedited;
 
 
 #[derive(Queryable, Identifiable, Serialize)]
@@ -24,8 +27,22 @@ struct Person {
 	interest1_id: Option<i32>,
 	interest2_id: Option<i32>,
 	interest3_id: Option<i32>,
-	twitter_pic_url: String,
-	twitter: String,
+	twitter_pic_url: Option<String>,
+	twitter: Option<String>,
+}
+
+#[derive(Queryable, Identifiable, Serialize)]
+#[table_name = "lastedited"]
+struct LastEdited {
+	id: i32,
+	#[serde(with = "serde_naive_datetime")]
+	timestamp: NaiveDateTime,
+}
+
+#[derive(Insertable)]
+#[table_name = "lastedited"]
+struct NewLastEdited {
+	timestamp: NaiveDateTime,
 }
 
 
@@ -45,7 +62,18 @@ fn demo() -> Template {
 
 #[get("/api/graph")]
 fn graph(conn: DbConn) -> Result<String, String> {
+	let lastedited = match lastedited::table.first::<LastEdited>(&*conn).optional() {
+		Ok(Some(e)) => e.timestamp,
+		Ok(None) => {
+			let timestamp = Utc::now().naive_utc();
+			NewLastEdited { timestamp }.insert_into(lastedited::table)
+				.execute(&*conn).map_err(|_| format!("Database error inserting last edited"))?;
+			timestamp
+		},
+		Err(_) => return Err(format!("Database error getting last edited")),
+	};
 	Ok(json!({
+		"last_edited": DateTime::<Utc>::from_utc(lastedited, Utc).to_rfc3339(),
 		"people": person::table.load::<Person>(&*conn).map_err(|_| format!("Database error"))?,
 		"interests": interest::table.load::<Interest>(&*conn).map_err(|_| format!("Database error"))?,
 	}).to_string())

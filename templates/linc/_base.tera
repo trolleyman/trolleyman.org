@@ -1,0 +1,9 @@
+{% extends "_base" %}
+{% block copyright %}<!-- Copyright Callum Tolley and Michael Peran Truscott -->{% endblock %}
+{% block title %}LINC{% endblock title %}
+{% block head %}
+  {{ super() }}
+  <link rel="shortcut icon" type="image/png" href="/static/favicon/linc/favicon.ico"/>
+
+  <link rel="stylesheet" href="/static/css/linc/base.css">
+{% endblock %}

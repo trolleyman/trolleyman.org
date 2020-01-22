@@ -7,7 +7,6 @@
 #[macro_use] extern crate diesel_migrations;
 
 #[macro_use] extern crate serde_json;
-#[macro_use] extern crate maplit;
 
 
 use rocket::config::Environment;
@@ -22,21 +21,19 @@ use rand::Rng;
 mod schema;
 
 mod config;
+mod db;
 mod recaptcha;
 
 mod flappy;
 mod linc;
 
+pub use db::DbConn;
+
 embed_migrations!();
+
 
 use config::AppConfig;
 use recaptcha::ReCaptchaGuard;
-
-
-#[database("db")]
-pub struct DbConn(diesel::SqliteConnection);
-
-pub struct ErrorMessage(Option<String>);
 
 
 #[get("/")]
@@ -69,22 +66,21 @@ fn project(project_name: String, metadata: templates::Metadata) -> Option<Templa
 
 
 #[catch(400)]
-fn error_400_bad_request(req: &rocket::Request) -> Template {
-	let msg = if let Some(msg) = &req.local_cache(|| ErrorMessage(None)).0 { format!(": {}", msg) } else { String::new() };
+fn error_400_bad_request(_req: &rocket::Request) -> Template {
 	Template::render("error", json!({
-		"status": "400".to_string(),
-		"title": "Bad Request".to_string(),
-		"msg": format!("Client sent a bad request{}.", msg),
+		"status": "400",
+		"title": "Bad Request",
+		"msg": "Client sent a bad request.",
 	}))
 }
 
 #[catch(404)]
 fn error_404_not_found(req: &rocket::Request) -> Template {
-	Template::render("error", hashmap!{
-		"status" => "404".to_string(),
-		"title" => "Not Found".to_string(),
-		"msg" => format!("'{}' could not be found.", req.uri().path()),
-	})
+	Template::render("error", json!({
+		"status": "404",
+		"title": "Not Found",
+		"msg": format!("'{}' could not be found.", req.uri().path()),
+	}))
 }
 
 

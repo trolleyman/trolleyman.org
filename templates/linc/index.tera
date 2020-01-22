@@ -1,31 +1,19 @@
-{% load static %}
-<!--Copyright Callum Tolley and Michael Peran Truscott-->
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+{% extends "linc/_base" %}
+{% block head %}
+  {{ super() }}
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>LINC</title>
-
-  <link rel="shortcut icon" type="image/png" href="{% static 'linc/images/favicon.ico' %}" />
-
-  <link rel="stylesheet" href="{% static 'linc/css/normalize.css' %}">
+  <link rel="shortcut icon" type="image/png" href="/static/favicon/linc/favicon.ico" />
   
-  <!--[if lte IE 8]><script src="{% static 'linc/mainpage/js/ie/html5shiv.js' %}"></script><![endif]-->
-  <link rel="stylesheet" href="{% static 'linc/css/font-awesome.min.css' %}">
-  <link rel="stylesheet" href="{% static 'linc/mainpage/css/main.css' %}">
-  <link rel="stylesheet" href="{% static 'linc/mainpage/css/main-mod.css' %}">
-  <!--[if lte IE 8]><link rel="stylesheet" href="{% static 'linc/mainpage/css/ie8.css' %}"><![endif]-->
-</head>
-
-<body>
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/css/linc/mainpage/main.css">
+  <link rel="stylesheet" href="/static/css/linc/mainpage/main-mod.css">
+{% endblock %}
+{% block body %}
   <!-- Header -->
   <div id="header">
     <span class="logo icon">
-      <img src="{% static 'linc/mainpage/images/linc_logo.png' %}">
+      <img src="/static/img/linc/mainpage/linc_logo.png">
     </span>
     <h1>LINC</h1>
     <p>
@@ -41,7 +29,7 @@
   
     <div class="box alt container">
       <section class="feature left">
-        <img src="{% static 'linc/mainpage/images/CONNECT_LAUNCH_031.jpg' %}" alt="">
+        <img src="/static/img/linc/mainpage/CONNECT_LAUNCH_031.jpg" alt="">
         <div class="content">
           <h3>This is LINC: Events</h3>
           <p>Use LINC as a digital logbook: a creative way to look back at who was your event, or as a way to tailor future events
@@ -49,7 +37,7 @@
         </div>
       </section>
       <section class="feature right">
-        <img src="{% static 'linc/mainpage/images/CONNECT_WHITE.jpg' %}" alt="">
+        <img src="/static/img/linc/mainpage/CONNECT_WHITE.jpg" alt="">
         <div class="content">
           <h3>This is LINC: Network</h3>
           <p>LINC visualises connections between people; connections between interests; or even connections between events.</p>
@@ -58,7 +46,7 @@
         </div>
       </section>
       <section class="feature left">
-        <img src="{% static 'linc/mainpage/images/CONNECT_BLACK.jpg' %}" alt="">
+        <img src="/static/img/linc/mainpage/CONNECT_BLACK.jpg" alt="">
         <div class="content">
           <h3>This is LINC: Business</h3>
           <p>Work out team dynamics, plot relations between projects, or visualise group synergy.</p>
@@ -115,10 +103,8 @@
   </div>
   
   <!-- Scripts -->
-  <script src="{% static 'linc/mainpage/js/jquery.min.js' %}"></script>
-  <script src="{% static 'linc/mainpage/js/skel.min.js' %}"></script>
-  <script src="{% static 'linc/mainpage/js/util.js' %}"></script>
-  <!--[if lte IE 8]><script src="{% static 'linc/mainpage/js/ie/respond.min.js' %}"></script><![endif]-->
-  <script src="{% static 'linc/mainpage/js/main.js' %}"></script>
-</body>
-</html>
+  <script type="text/javascript" src="/static/js/lib/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/js/linc/mainpage/skel.min.js"></script>
+  <script type="text/javascript" src="/static/js/linc/mainpage/util.js"></script>
+  <script type="text/javascript" src="/static/js/linc/mainpage/main.js"></script>
+{% endblock %}

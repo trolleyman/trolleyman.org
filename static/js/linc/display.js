@@ -3,7 +3,7 @@
  */
 const GRAPH_API_URL = 'api/graph';
 const TWITTER_PIC_API_URL = 'api/twitter_pic';
-const WIRE_SPHERE_URL = 'js/models/Sphere.json';
+const WIRE_SPHERE_URL = '/static/js/linc/models/Sphere.json';
 const GRAPH_API_TIMEOUT = 5000;
 
 const TRANSPARENT_SRC = 'data:image/gif;base64,R0lGODlhAQABAPcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAP8ALAAAAAABAAEAAAgEAP8FBAA7';
@@ -32,7 +32,6 @@ window.addEventListener('load', function() {
     exports.maximizeHelp = maximizeHelp;
     exports.searchSelect = searchSelect;
     
-    const STATIC_BASE_URL = document.querySelector('meta[name="static"]').getAttribute('content');
     // Setup scene + renderer
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -50,7 +49,7 @@ window.addEventListener('load', function() {
 
     // Add wire frame to scene
     new THREE.JSONLoader().load(
-        STATIC_BASE_URL + WIRE_SPHERE_URL,
+        WIRE_SPHERE_URL,
         function (geometry) {
             var material = new THREE.MeshBasicMaterial({
                 color: 0xd3d3d3,
@@ -254,7 +253,7 @@ window.addEventListener('load', function() {
     var logo_data = null;
 
     new THREE.TextureLoader().load(
-        STATIC_BASE_URL + 'images/logo.png',
+        '/static/img/linc/logo.png',
         function (texture) {
             logo_texture = texture;
             logo_image = logo_texture.image;
@@ -274,7 +273,7 @@ window.addEventListener('load', function() {
     var logo_background = null;
 
     new THREE.TextureLoader().load(
-        STATIC_BASE_URL + 'images/logo_orange.png',
+        '/static/img/linc/logo_orange.png',
         function (texture) {
             background_image = texture;
             var geometry = new THREE.PlaneGeometry(background_image.image.width * LOGO_SCALE, background_image.image.height * LOGO_SCALE);
@@ -302,7 +301,7 @@ window.addEventListener('load', function() {
     var logo_fade = null;
 
     new THREE.TextureLoader().load(
-        STATIC_BASE_URL + 'images/logo_fade.png',
+        '/static/img/linc/logo_fade.png',
         function(texture) {
             fade_image = texture;
             console.log("fade: "+fade_image.image.width);

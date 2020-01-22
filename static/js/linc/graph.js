@@ -194,10 +194,10 @@ function Person(x, y, z, o, interestsMap) {
     this.name = o.name;
     this.twitter = o.twitter;
     this.interests = [];
-    if (o.i1) this.interests.push(interestsMap[o.i1]);
-    if (o.i2) this.interests.push(interestsMap[o.i2]);
-    if (o.i3) this.interests.push(interestsMap[o.i3]);
-    
+    if (o.interest1_id) this.interests.push(interestsMap[o.interest1_id]);
+    if (o.interest2_id) this.interests.push(interestsMap[o.interest2_id]);
+    if (o.interest3_id) this.interests.push(interestsMap[o.interest3_id]);
+
     for (var i = 0; i < this.interests.length; i++) {
         var interest = this.interests[i];
         interest.numInterested++;

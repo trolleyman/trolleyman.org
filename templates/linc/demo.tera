@@ -1,55 +1,47 @@
-{% extends "linc/base.html" %}
-{% block copyright %}<!--Copyright Callum Tolley and Michael Peran Truscott-->{% endblock %}
-{% load static %}
-
+{% extends "linc/_base" %}
 {% block head %}
+  {{ super() }}
   <!-- Mobile -->
-  <title>{% block title %}LINC{% endblock title %}</title>
-
   <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"/>
   <meta name="HandheldFriendly" content="true"/>
-  
+
   {% if debug %}
     <meta name="debug" content="1">
   {% endif %}
 
   <!-- CSS files -->
-  <link rel="stylesheet" href="{% static 'linc/css/display.css' %}">
-  {% if debug %} <link rel="stylesheet" href="{% static 'linc/css/font-awesome.css' %}">
-  {% else %}     <link rel="stylesheet" href="{% static 'linc/css/font-awesome.min.css' %}"> {% endif %}
+  <link rel="stylesheet" href="/static/css/linc/display.css">
+  <link rel="stylesheet" href="/static/css/linc/font-awesome.min.css">
   
   <!-- 3D Graph -->
-  {% if debug %} <script src="{% static 'linc/js/d3force/d3-force-3d.bundle.js' %}"></script>
-  {% else %}     <script src="{% static 'linc/js/d3force/d3-force-3d.bundle.min.js' %}"></script> {% endif %}
+  <script type="text/javascript" src="/static/js/linc/d3force/d3-force-3d.bundle.min.js"></script>
   
   <!-- THREE.js -->
-  {% if debug %} <script src="{% static 'linc/js/three/three.js' %}"></script>
-  {% else %}     <script src="{% static 'linc/js/three/three.min.js' %}"></script> {% endif %}
+  <script type="text/javascript" src="/static/js/linc/three/three.min.js"></script>
   
   <!-- THREE.js extensions -->
-  <script src="{% static 'linc/js/three/examples/Detector.js' %}"></script>
-  <script src="{% static 'linc/js/three/examples/controls/OrbitControls.js' %}"></script>
+  <script type="text/javascript" src="/static/js/linc/three/examples/Detector.js"></script>
+  <script type="text/javascript" src="/static/js/linc/three/examples/controls/OrbitControls.js"></script>
   
   <!-- THREE.js extensions for glitch effect -->
-  <script src="{% static 'linc/js/three/examples/shaders/CopyShader.js' %}"></script>
-  <script src="{% static 'linc/js/three/examples/shaders/DigitalGlitch.js' %}"></script>
+  <script type="text/javascript" src="/static/js/linc/three/examples/shaders/CopyShader.js"></script>
+  <script type="text/javascript" src="/static/js/linc/three/examples/shaders/DigitalGlitch.js"></script>
   
-  <script src="{% static 'linc/js/three/examples/postprocessing/EffectComposer.js' %}"></script>
-  <script src="{% static 'linc/js/three/examples/postprocessing/RenderPass.js' %}"></script>
-  <script src="{% static 'linc/js/three/examples/postprocessing/MaskPass.js' %}"></script>
-  <script src="{% static 'linc/js/three/examples/postprocessing/ShaderPass.js' %}"></script>
-  <script src="{% static 'linc/js/three/examples/postprocessing/GlitchPass.js' %}"></script>
+  <script type="text/javascript" src="/static/js/linc/three/examples/postprocessing/EffectComposer.js"></script>
+  <script type="text/javascript" src="/static/js/linc/three/examples/postprocessing/RenderPass.js"></script>
+  <script type="text/javascript" src="/static/js/linc/three/examples/postprocessing/MaskPass.js"></script>
+  <script type="text/javascript" src="/static/js/linc/three/examples/postprocessing/ShaderPass.js"></script>
+  <script type="text/javascript" src="/static/js/linc/three/examples/postprocessing/GlitchPass.js"></script>
   
   <!-- Our .js files -->
-  <script src="{% static 'linc/js/graph.js' %}"></script>
-  <script src="{% static 'linc/js/wordlist.js' %}"></script>
-  <script src="{% static 'linc/js/display.js' %}"></script>
+  <script type="text/javascript" src="/static/js/linc/graph.js"></script>
+  <script type="text/javascript" src="/static/js/linc/wordlist.js"></script>
+  <script type="text/javascript" src="/static/js/linc/display.js"></script>
 {% endblock %}
-
-{% block content %}
+{% block body %}
   <div id="container">
     <a href="/">
-      <img id="logo" src="{% static 'linc/images/linc_logo_transparent.png' %}">
+      <img id="logo" src="/static/img/linc/linc_logo_transparent.png">
     </a>
     <div id="debuginfo"></div>
     <div id="help" class="help-minimized">

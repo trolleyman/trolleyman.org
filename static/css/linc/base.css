@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: 'SciFly-Sans';
-    src: url('../fonts/SciFly-Sans.ttf');
+    src: url('/static/font/linc/SciFly-Sans.ttf');
 }
 
 * {
