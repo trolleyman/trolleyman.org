@@ -9,7 +9,8 @@ use crate::schema::flappy_leaderboard as leaderboard;
 use crate::DbConn;
 
 
-#[derive(Queryable, Serialize)]
+#[derive(Queryable, Identifiable, Serialize)]
+#[table_name = "leaderboard"]
 struct LeaderboardEntry {
 	id: i32,
 	name: String,
@@ -19,7 +20,7 @@ struct LeaderboardEntry {
 }
 
 #[derive(Insertable, FromForm)]
-#[table_name="leaderboard"]
+#[table_name = "leaderboard"]
 struct NewLeaderboardEntry {
 	pub name: String,
 	pub score: i32,
