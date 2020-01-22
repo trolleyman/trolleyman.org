@@ -23,7 +23,9 @@ mod schema;
 
 mod config;
 mod recaptcha;
+
 mod flappy;
+mod linc;
 
 embed_migrations!();
 
@@ -111,5 +113,6 @@ fn main() {
 		.mount("/", routes![index, contact_details, project])
 		.mount("/static", StaticFiles::from("./static"))
 		.mount("/flappy", flappy::routes())
+		.mount("/linc", linc::routes())
 		.launch();
 }

@@ -1,0 +1,124 @@
+{% load static %}
+<!--Copyright Callum Tolley and Michael Peran Truscott-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>LINC</title>
+
+  <link rel="shortcut icon" type="image/png" href="{% static 'linc/images/favicon.ico' %}" />
+
+  <link rel="stylesheet" href="{% static 'linc/css/normalize.css' %}">
+  
+  <!--[if lte IE 8]><script src="{% static 'linc/mainpage/js/ie/html5shiv.js' %}"></script><![endif]-->
+  <link rel="stylesheet" href="{% static 'linc/css/font-awesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'linc/mainpage/css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'linc/mainpage/css/main-mod.css' %}">
+  <!--[if lte IE 8]><link rel="stylesheet" href="{% static 'linc/mainpage/css/ie8.css' %}"><![endif]-->
+</head>
+
+<body>
+  <!-- Header -->
+  <div id="header">
+    <span class="logo icon">
+      <img src="{% static 'linc/mainpage/images/linc_logo.png' %}">
+    </span>
+    <h1>LINC</h1>
+    <p>
+      <i>The People Network</i>
+    </p>
+  </div>
+  
+  <!-- Main -->
+  <div id="main">
+    <header class="major container 75%">
+      <p>LINC is a digital networking visualisation, connecting people based on their interests, hobbies and skills.</p>
+    </header>
+  
+    <div class="box alt container">
+      <section class="feature left">
+        <img src="{% static 'linc/mainpage/images/CONNECT_LAUNCH_031.jpg' %}" alt="">
+        <div class="content">
+          <h3>This is LINC: Events</h3>
+          <p>Use LINC as a digital logbook: a creative way to look back at who was your event, or as a way to tailor future events
+            by learning about your attendees.</p>
+        </div>
+      </section>
+      <section class="feature right">
+        <img src="{% static 'linc/mainpage/images/CONNECT_WHITE.jpg' %}" alt="">
+        <div class="content">
+          <h3>This is LINC: Network</h3>
+          <p>LINC visualises connections between people; connections between interests; or even connections between events.</p>
+          <p
+            style="text-align: right;"> You decide.</p>
+        </div>
+      </section>
+      <section class="feature left">
+        <img src="{% static 'linc/mainpage/images/CONNECT_BLACK.jpg' %}" alt="">
+        <div class="content">
+          <h3>This is LINC: Business</h3>
+          <p>Work out team dynamics, plot relations between projects, or visualise group synergy.</p>
+        </div>
+      </section>
+    </div>
+  
+    <footer id="features" class="major container 75%">
+      <h3>Features</h3>
+      <ul>
+        <li>Fully configurable - use your branding</li>
+        <li>Twitter integration - populate LINC with images from the social network</li>
+        <li>Logo View - your logo, on view</li>
+        <li>Insights - look at the data behind the connections</li>
+      </ul>
+    </footer>
+  
+    <a href="demo" id="demo" class="button" target="_blank">
+      See it in action
+      <span class="indicator-container">
+        <i class="indicator fa fa-angle-right"></i>
+      </span>
+    </a>
+  
+    <footer class="major container 75%">
+      <h3>Contact Us</h3>
+      <p>If you have any queries regarding LINC or would like to use it, drop us a line below!</p>
+      <ul class="contact">
+        <li class="fa-phone">+44 781 040 1175</li>
+        <li class="fa-envelope">
+          <a href="mailto:t.a.goodman.25@gmail.com">t.a.goodman.25@gmail.com</a>
+        </li>
+      </ul>
+    </footer>
+  </div>
+  
+  <!-- Footer -->
+  <div id="footer">
+    <div class="container 75%">
+      <ul class="copyright">
+        <li>&copy;
+          <a href="http://trolleyman.org">Callum Tolley</a>,
+          <a href="http://peran.co">Peran Truscott</a> and
+          <a href="http://tomg.io">Tom Goodman</a>
+        </li>
+        <li>Design:
+          <a href="http://html5up.net">HTML5 UP</a>
+        </li>
+      </ul>
+      <ul class="copyright">
+        <li>Developed with, and images courtesy of Millennium Point</li>
+      </ul>
+    </div>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="{% static 'linc/mainpage/js/jquery.min.js' %}"></script>
+  <script src="{% static 'linc/mainpage/js/skel.min.js' %}"></script>
+  <script src="{% static 'linc/mainpage/js/util.js' %}"></script>
+  <!--[if lte IE 8]><script src="{% static 'linc/mainpage/js/ie/respond.min.js' %}"></script><![endif]-->
+  <script src="{% static 'linc/mainpage/js/main.js' %}"></script>
+</body>
+</html>

@@ -56,3 +56,6 @@ A fully responsive HTML5 canvas-based Flappy Bird clone with a global leaderboar
 
 ### Controls
 Space or click/tap on the screen to flap.
+
+## LINC
+A small project completed for Millenium Point.
