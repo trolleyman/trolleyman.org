@@ -1,4 +1,0 @@
-[submodule "django/linc"]
-	path = django/linc
-	url = git@github.com:trolleyman/linc.git
-	branch = master
