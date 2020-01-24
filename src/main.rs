@@ -12,7 +12,7 @@
 use rocket::config::Environment;
 use rocket::State;
 use rocket_contrib::serve::StaticFiles;
-use rocket_contrib::templates::{self, Template};
+use rocket_contrib::templates::{self, Template, tera};
 use diesel::prelude::*;
 
 use rand::Rng;
@@ -102,7 +102,19 @@ fn main() {
 
 	// Launch Rocket
 	rocket::custom(rocket_config)
-		.attach(Template::fairing())
+		.attach(Template::custom(move |f| {
+			f.tera.register_function("dot_min", Box::new(move |args| {
+				if !args.is_empty() {
+					Err(tera::Error::from_kind(tera::ErrorKind::Msg("dot_min called with arguments (expected none)".into())))
+				} else {
+					if active_env.is_prod() {
+						Ok(json!(".min"))
+					} else {
+						Ok(json!(""))
+					}
+				}
+			}));
+		}))
 		.attach(DbConn::fairing())
 		.manage(AppConfig::load(active_env))
 		.register(catchers![error_400_bad_request, error_404_not_found])

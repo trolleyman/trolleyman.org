@@ -4,12 +4,8 @@
 	<meta charset="utf-8">
 	<title>{%block title%}Flappy Clone{% endblock %}</title>
 
-	<!-- Libraries -->
-	<script src="/static/js/lib/jquery-3.2.0.min.js"></script>
-
 	<!-- Common CSS files -->
-	<link rel="stylesheet" href="/static/css/flappy/normalize.css">
-	<link rel="stylesheet" href="/static/css/flappy/base.css">
+	<link rel="stylesheet" href="/static/css/normalize.css">
 	<link rel="stylesheet" href="/static/css/flappy/game.css">
 
 	<!-- Icon stuff. Generated using http://realfavicongenerator.net -->
@@ -42,11 +38,8 @@
 			<canvas id="canvas" width="500" height="800"></canvas>
 		</div>
 	</div>
-	{% if debug %}
-	<script charset="utf-8" type="text/javascript" src="/static/js/lib/jquery.js"></script>
-	{% else %}
-	<script charset="utf-8" type="text/javascript" src="/static/js/lib/jquery.min.js"></script>
-	{% endif %}
+	<script charset="utf-8" type="text/javascript" src="/static/js/lib/jquery{{ dot_min() }}.js"></script>
+
 	<script charset="utf-8" type="text/javascript" src="/static/js/flappy/game/validation.js"></script>
 	<script charset="utf-8" type="text/javascript" src="/static/js/flappy/game/sizing.js"></script>
 	<script charset="utf-8" type="text/javascript" src="/static/js/flappy/game/fontfaceonload.js"></script>

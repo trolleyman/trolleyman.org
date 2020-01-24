@@ -302,8 +302,8 @@
   </div>
 
   <!-- Scripts -->
-  <script charset="utf-8" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script charset="utf-8" type="text/javascript" src="/static/js/lib/jquery.scrollex.min.js"></script>
+  <script charset="utf-8" type="text/javascript" src="/static/js/lib/jquery{{ dot_min() }}.js"></script>
+  <script charset="utf-8" type="text/javascript" src="/static/js/lib/jquery.scrollex{{ dot_min() }}.js"></script>
   <script charset="utf-8" type="text/javascript" src="/static/js/util.js"></script>
   <script charset="utf-8" type="text/javascript" src="/static/js/main.js"></script>
 
