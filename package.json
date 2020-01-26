@@ -1,0 +1,25 @@
+{
+  "name": "trolleyman.org",
+  "version": "0.1.0",
+  "description": "https://trolleyman.org",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cargo build",
+    "start": "cargo run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trolleyman/trolleyman.org.git"
+  },
+  "keywords": [
+    "website",
+    "rust",
+    "wasm"
+  ],
+  "author": "Callum Tolley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/trolleyman/trolleyman.org/issues"
+  },
+  "homepage": "https://github.com/trolleyman/trolleyman.org#readme"
+}
