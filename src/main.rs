@@ -57,7 +57,7 @@ fn contact_details(_recaptcha: ReCaptchaGuard) -> Template {
 #[get("/projects/<project_name>")]
 fn project(project_name: String, metadata: templates::Metadata) -> Option<Template> {
 	let template_name = format!("projects/{}", project_name);
-	if !metadata.contains_template(&template_name) {
+	if project_name.starts_with('_') || !metadata.contains_template(&template_name) {
 		None
 	} else {
 		Some(Template::render(template_name, json!({
