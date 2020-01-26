@@ -11,7 +11,7 @@ pub mod serde_naive_datetime {
 		DateTime::<Utc>::from_utc(*time, Utc).to_rfc3339().serialize(serializer)
 	}
 
-	pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<NaiveDateTime, D::Error> {
+	pub fn _deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<NaiveDateTime, D::Error> {
 		let time: &str = Deserialize::deserialize(deserializer)?;
 		Ok(DateTime::parse_from_rfc3339(&time).map_err(D::Error::custom)?.naive_utc())
 	}

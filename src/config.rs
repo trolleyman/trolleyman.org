@@ -1,25 +1,30 @@
 
 use rocket::config::Environment;
+use serde::Deserialize;
 
-pub struct AppConfig {
-	pub recaptcha_public_key: String,
-	pub recaptcha_private_key: String,
-	pub github_webhook_secret: String,
+#[derive(Clone, Deserialize)]
+pub struct RecaptchaConfig {
+	pub public_key: String,
+	pub private_key: String,
 }
-impl AppConfig {
-	pub fn load(env: Environment) -> AppConfig {
-		if env.is_dev() {
-			AppConfig {
-				recaptcha_public_key: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI".to_string(),
-				recaptcha_private_key: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe".to_string(),
-				github_webhook_secret: String::new(),
-			}
+
+#[derive(Clone, Deserialize)]
+pub struct GithubWebhookConfig {
+	pub secret: String,
+}
+
+#[derive(Clone, Deserialize)]
+pub struct Config {
+	pub recaptcha: RecaptchaConfig,
+	pub github_webhook: Option<GithubWebhookConfig>,
+}
+impl Config {
+	pub fn load(env: Environment) -> Config {
+		let config = if env.is_dev() {
+			std::fs::read_to_string("config_dev.toml").expect("Failed to read config_dev.toml")
 		} else {
-			AppConfig {
-				recaptcha_public_key: "6LfdxE8UAAAAAN1sVEiQVDVomnIyvz-Pa4FstoHT".to_string(),
-				recaptcha_private_key: todo!("get recaptcha private key"),
-				github_webhook_secret: todo!("get github webhook secret"),
-			}
-		}
+			std::fs::read_to_string("config_release.toml").expect("Failed to read config_release.toml")
+		};
+		toml::from_str(&config).expect("Failed to parse config")
 	}
 }

@@ -5,7 +5,7 @@ use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome};
 use rocket::outcome::IntoOutcome;
 
-use super::config::AppConfig;
+use super::config::Config;
 
 
 const RECAPTCHA_VERIFY_URL: &'static str = "https://www.google.com/recaptcha/api/siteverify";
@@ -26,11 +26,11 @@ impl<'a, 'r> FromRequest<'a, 'r> for ReCaptchaGuard {
 	type Error = ReCaptchaError;
 	fn from_request(req: &'a Request<'r>) -> Outcome<Self, Self::Error> {
 		// Check if g-recaptcha-response is valid.
-		let token = req.headers().get_one("g-recaptcha-response")
+		let token = try_outcome!(req.headers().get_one("g-recaptcha-response")
 			.ok_or(ReCaptchaError::NonexistentHeader)
-			.into_outcome(Status::BadRequest)?;
+			.into_outcome(Status::BadRequest));
 
-		let private_key = &req.guard::<State<AppConfig>>().map_failure(|(status, _)| (status, ReCaptchaError::ConfigLoad))?.recaptcha_private_key;
+		let private_key = &try_outcome!(req.guard::<State<Config>>().map_failure(|(status, _)| (status, ReCaptchaError::ConfigLoad))).recaptcha.private_key;
 		let mut data = json!({
 			"secret": private_key,
 			"token": token,

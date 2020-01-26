@@ -9,6 +9,8 @@
 #[macro_use] extern crate serde_json;
 
 
+use std::collections::HashMap;
+
 use rocket::config::Environment;
 use rocket::State;
 use rocket_contrib::serve::StaticFiles;
@@ -32,18 +34,18 @@ pub use db::DbConn;
 embed_migrations!();
 
 
-use config::AppConfig;
+use config::Config;
 use recaptcha::ReCaptchaGuard;
 
 
 #[get("/")]
-fn index(config: State<AppConfig>) -> Template {
+fn index(config: State<Config>) -> Template {
 	let num_bg = 16;
 	let i = rand::thread_rng().gen_range(0, num_bg) + 1;
 
 	Template::render("index", json!({
 		"bg_url": format!("/static/img/bg/{:02}.jpg", i),
-		"sitekey": config.recaptcha_public_key.clone(),
+		"sitekey": config.recaptcha.public_key.clone(),
 	}))
 }
 
@@ -103,9 +105,9 @@ fn main() {
 	// Launch Rocket
 	rocket::custom(rocket_config)
 		.attach(Template::custom(move |f| {
-			f.tera.register_function("dot_min", Box::new(move |args| {
+			f.tera.register_function("dot_min", move |args: &HashMap<_, _>| {
 				if !args.is_empty() {
-					Err(tera::Error::from_kind(tera::ErrorKind::Msg("dot_min called with arguments (expected none)".into())))
+					Err(tera::Error::msg("dot_min called with arguments (expected none)"))
 				} else {
 					if active_env.is_prod() {
 						Ok(json!(".min"))
@@ -113,10 +115,17 @@ fn main() {
 						Ok(json!(""))
 					}
 				}
-			}));
+			});
+			f.tera.register_function("is_debug", move |args: &HashMap<_, _>| {
+				if !args.is_empty() {
+					Err(tera::Error::msg("dot_min called with arguments (expected none)"))
+				} else {
+					Ok(json!(!active_env.is_prod()))
+				}
+			});
 		}))
 		.attach(DbConn::fairing())
-		.manage(AppConfig::load(active_env))
+		.manage(Config::load(active_env))
 		.register(catchers![error_400_bad_request, error_404_not_found])
 		.mount("/", routes![index, contact_details, project])
 		.mount("/static", StaticFiles::from("./static"))
