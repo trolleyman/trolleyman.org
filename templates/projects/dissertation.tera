@@ -1,7 +1,7 @@
 {% extends "projects/_base" %}
 {% import "_macros" as macros %}
 
-{% block title %}Dissertation - Callum Tolley{% endblock %}
+{% block title %}Dissertation - {{ super() }}{% endblock %}
 
 {% block css %}
   {{ super() }}

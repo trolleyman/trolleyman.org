@@ -1,7 +1,7 @@
 {% extends "projects/_base" %}
 {% import "_macros" as macros %}
 
-{% block title %}LINC - Callum Tolley{% endblock %}
+{% block title %}LINC - {{ super() }}{% endblock %}
 
 {% block css %}
   {{ super() }}

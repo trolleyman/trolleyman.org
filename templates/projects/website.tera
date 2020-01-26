@@ -1,0 +1,36 @@
+{% extends "projects/_base" %}
+{% import "_macros" as macros %}
+
+{% block title %}trolleyman.org - {{ super() }}{% endblock %}
+
+{% block css %}
+  {{ super() }}
+  <link rel="stylesheet" href="/static/css/projects/website.css">
+{% endblock %}
+
+{% block banner_bg %}
+  {{ macros::banner(img_url="/static/img/bg/04.jpg") }}
+{% endblock %}
+
+{% block banner_content %}
+  <h2>trolleyman.org</h2>
+{% endblock %}
+
+{% block main_content %}
+  <section class="wrapper spotlight style1">
+    <div class="inner">
+      <div class="content">
+        <p>
+          I developed trolleyman.org whilst I developed <a href="../flappy">Flappy Clone</a>. It became a place to catalog all the projects I've worked on, for employers ostensibly, but in reality it's kinda a trophy case, and also another project to waste time on.
+        </p><p>
+          I used <a href="http://html5up.net">HTML5 UP</a> for the index template, and transformed the HTML into tera templates, with proper inheritance and everything.
+        </p><p>
+          For the backend I used Rust with <a href="https://rocket.rs">Rocket</a>.
+        </p>
+        <ul class="links">
+          <li><a href="https://github.com/trolleyman/trolleyman.org" class="special">Github</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endblock %}

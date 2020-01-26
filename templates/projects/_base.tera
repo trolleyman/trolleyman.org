@@ -1,5 +1,6 @@
 {% extends "index" %}
 {% import "_macros" as macros %}
+{% block title %}Projects - {{ super() }}{% endblock %}
 
 {% block css %}
   <link rel="stylesheet" href="/static/css/projects/_base.css">

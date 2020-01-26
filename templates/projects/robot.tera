@@ -1,7 +1,7 @@
 {% extends "projects/_base" %}
 {% import "_macros" as macros %}
 
-{% block title %}Robot Warehouse - Callum Tolley{% endblock %}
+{% block title %}Robot Warehouse - {{ super() }}{% endblock %}
 
 {% block css %}
   {{ super() }}

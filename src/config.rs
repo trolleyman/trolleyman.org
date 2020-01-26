@@ -1,4 +1,6 @@
 
+use std::borrow::Cow;
+
 use rocket::config::Environment;
 use serde::Deserialize;
 
@@ -20,10 +22,10 @@ pub struct Config {
 }
 impl Config {
 	pub fn load(env: Environment) -> Config {
-		let config = if env.is_dev() {
-			std::fs::read_to_string("config_dev.toml").expect("Failed to read config_dev.toml")
+		let config: Cow<'static, str> = if env.is_dev() {
+			std::fs::read_to_string("config_dev.toml").map(|s| s.into()).unwrap_or(include_str!("../config_dev.toml").into())
 		} else {
-			std::fs::read_to_string("config_release.toml").expect("Failed to read config_release.toml")
+			std::fs::read_to_string("config_release.toml").expect("Failed to read config_release.toml").into()
 		};
 		toml::from_str(&config).expect("Failed to parse config")
 	}

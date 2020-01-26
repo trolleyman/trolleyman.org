@@ -1,7 +1,7 @@
 {% extends "projects/_base" %}
 {% import "_macros" as macros %}
 
-{% block title %}Flappy Clone - Callum Tolley{% endblock %}
+{% block title %}Flappy Clone - {{ super() }}{% endblock %}
 
 {% block css %}
   {{ super() }}

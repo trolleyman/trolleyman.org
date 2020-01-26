@@ -1,7 +1,7 @@
 {% extends "projects/_base" %}
 {% import "_macros" as macros %}
 
-{% block title %}Zucchini - Callum Tolley{% endblock %}
+{% block title %}Zucchini - {{ super() }}{% endblock %}
 
 {% block css %}
   {{ super() }}

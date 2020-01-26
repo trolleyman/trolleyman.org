@@ -1,6 +1,5 @@
 {% extends "_base" %}
 {% import "_macros" as macros %}
-{% block title %}Callum Tolley{% endblock %}
 {% block head %}
   {{ super() }}
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -87,13 +86,32 @@
               <div class="used">Languages: Python</div>
               <div class="used">Frameworks: TensorFlow, PyTorch</div>
               <ul class="links">
-                  <li><a href="/static/files/Dissertation.pdf" class="special" target="_blank">Paper PDF</a></li>
+                <li><a href="/static/files/Dissertation.pdf" class="special" target="_blank">Paper PDF</a></li>
                 <li><a href="projects/dissertation" class="special">More details</a></li>
               </ul>
             </div>
           </div>
         </section>
         <section class="wrapper alt spotlight style2">
+          <div id="proj_website" class="scroll-marker"></div>
+          <div class="inner">
+            <a href="projects/website" class="image box-shadow"><img src="/static/img/projects/website/screenshot.png" alt=""></a>
+            <div class="content">
+              <div class="major">
+                <h2>trolleyman.org</h2>
+                <div class="date">2018</div>
+              </div>
+              <p>Created this website to keep track of the projects I've been working on.</p>
+              <div class="used">Languages: Rust, WASM, JavaScript, CSS, SQL</div>
+              <div class="used">Framework: Rocket</div>
+              <ul class="links">
+                <li><a href="https://github.com/trolleyman/trolleyman.org" class="special">Github</a></li>
+                <li><a href="projects/website" class="special">More details</a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section class="wrapper spotlight style3">
           <div id="proj_linc" class="scroll-marker"></div>
           <div class="inner">
             <a href="projects/linc" class="image drop-shadow"><img src="/static/img/projects/linc/logo.min.png" alt=""></a>
@@ -113,7 +131,7 @@
             </div>
           </div>
         </section>
-        <section class="wrapper spotlight style3">
+        <section class="wrapper alt spotlight style4">
           <div id="proj_flappy" class="scroll-marker"></div>
           <div class="inner">
             <a href="projects/flappy" class="image drop-shadow pixelated"><img src="/static/img/projects/flappy/logo.png" alt=""></a>
@@ -134,7 +152,7 @@
             </div>
           </div>
         </section>
-        <section class="wrapper alt spotlight style4">
+        <section class="wrapper spotlight style5">
           <div id="proj_zucchini" class="scroll-marker"></div>
           <div class="inner">
             <a href="projects/zucchini" class="image drop-shadow"><img src="/static/img/projects/zucchini/logo.min.gif" alt=""></a>
@@ -155,7 +173,7 @@
             </div>
           </div>
         </section>
-        <section class="wrapper spotlight style5">
+        <section class="wrapper alt spotlight style6">
           <div id="robot" class="scroll-marker"></div>
           <div class="inner">
             <a href="projects/robot" class="image box-shadow"><img src="/static/img/projects/robot/casterbot.min.jpg" alt=""></a>
@@ -176,7 +194,7 @@
             </div>
           </div>
         </section>
-        <section class="wrapper alt spotlight style6">
+        <section class="wrapper spotlight style5">
           <div id="portal" class="scroll-marker"></div>
           <div class="inner">
             <a href="projects/portal" class="image box-shadow"><img src="/static/img/projects/portal/screenshot.min.jpg" alt=""></a>
@@ -196,7 +214,7 @@
             </div>
           </div>
         </section>
-        <section class="wrapper spotlight style5">
+        <section class="wrapper alt spotlight style4">
           <div id="k-means" class="scroll-marker"></div>
           <div class="inner">
             <a href="projects/k-means" class="image box-shadow"><img src="/static/img/projects/k-means/alabama-hills-ca.min.jpg" alt=""></a>
@@ -216,7 +234,7 @@
             </div>
           </div>
         </section>
-        <section class="wrapper alt spotlight style4">
+        <section class="wrapper spotlight style3">
           <div id="equator" class="scroll-marker"></div>
           <div class="inner">
             <a href="projects/equator" class="image box-shadow"><img src="/static/img/projects/equator/screenshot.jpg" alt=""></a>

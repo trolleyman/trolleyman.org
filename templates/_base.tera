@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>{%block title%}Callum Tolley{% endblock %}</title>
+		<title>{%block title%}trolleyman.org{% endblock %}</title>
 		
 		{% block head %}
 		<link rel="stylesheet" href="/static/css/normalize.css">
