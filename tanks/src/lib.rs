@@ -9,7 +9,7 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 // Called when the wasm module is instantiated
 #[wasm_bindgen(start)]
-pub fn init() -> Result<(), JsValue> {
+pub fn start() -> Result<(), JsValue> {
     utils::set_panic_hook();
 
     Ok(())
@@ -35,23 +35,23 @@ pub fn main() {
 
     // Draw the outer circle.
     context
-        .arc(75.0, 75.0, 50.0, 0.0, f64::consts::PI * 2.0)
+        .arc(75.0, 75.0, 50.0, 0.0, std::f64::consts::PI * 2.0)
         .unwrap();
 
     // Draw the mouth.
     context.move_to(110.0, 75.0);
-    context.arc(75.0, 75.0, 35.0, 0.0, f64::consts::PI).unwrap();
+    context.arc(75.0, 75.0, 35.0, 0.0, std::f64::consts::PI).unwrap();
 
     // Draw the left eye.
     context.move_to(65.0, 65.0);
     context
-        .arc(60.0, 65.0, 5.0, 0.0, f64::consts::PI * 2.0)
+        .arc(60.0, 65.0, 5.0, 0.0, std::f64::consts::PI * 2.0)
         .unwrap();
 
     // Draw the right eye.
     context.move_to(95.0, 65.0);
     context
-        .arc(90.0, 65.0, 5.0, 0.0, f64::consts::PI * 2.0)
+        .arc(90.0, 65.0, 5.0, 0.0, std::f64::consts::PI * 2.0)
         .unwrap();
 
     context.stroke();

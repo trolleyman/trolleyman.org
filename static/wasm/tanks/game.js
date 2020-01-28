@@ -5,5 +5,4 @@ async function run() {
 	
 	main();
 }
-
 run();
