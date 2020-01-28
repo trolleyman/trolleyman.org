@@ -103,7 +103,7 @@
               </div>
               <p>Created this website to keep track of the projects I've been working on.</p>
               <div class="used">Languages: Rust, WASM, JavaScript, CSS, SQL</div>
-              <div class="used">Framework: Rocket</div>
+              <div class="used">Framework: <a href="https://rocket.rs">Rocket</a></div>
               <ul class="links">
                 <li><a href="https://github.com/trolleyman/trolleyman.org" class="special">Github</a></li>
                 <li><a href="projects/website" class="special">More details</a></li>

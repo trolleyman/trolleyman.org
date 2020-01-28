@@ -28,6 +28,7 @@ mod recaptcha;
 
 mod flappy;
 mod linc;
+mod tanks;
 
 pub use db::DbConn;
 
@@ -131,5 +132,6 @@ fn main() {
 		.mount("/static", StaticFiles::from("./static"))
 		.mount("/flappy", flappy::routes())
 		.mount("/linc", linc::routes())
+		.mount("/tanks", tanks::routes())
 		.launch();
 }

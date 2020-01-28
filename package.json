@@ -3,9 +3,16 @@
   "version": "0.1.0",
   "description": "https://trolleyman.org",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cargo build",
-    "start": "cargo run"
+    "build:tanks": "node scripts/build_tanks.js",
+    "build:rocket": "cargo build",
+    "build": "parallelshell \"npm run build:tanks\" \"npm run build:rocket\"",
+    "build_release:tanks": "node -- scripts/build_tanks.js --release",
+    "build_release:rocket": "cargo build --release",
+    "build_release": "parallelshell \"npm run build_release:tanks\" \"npm run build_release:rocket\"",
+    "watch:tanks": "onchange 'tanks/**' -- npm run build:tanks",
+    "watch:rocket": "onchange 'src/**' -- npm run build:rocket",
+    "watch": "parallelshell 'npm run watch:tanks' 'npm run watch:rocket'",
+    "start": "npm run build && cargo run"
   },
   "repository": {
     "type": "git",
@@ -14,6 +21,7 @@
   "keywords": [
     "website",
     "rust",
+    "rocket",
     "wasm"
   ],
   "author": "Callum Tolley",
@@ -21,5 +29,10 @@
   "bugs": {
     "url": "https://github.com/trolleyman/trolleyman.org/issues"
   },
-  "homepage": "https://github.com/trolleyman/trolleyman.org#readme"
+  "homepage": "https://trolleyman.org",
+  "devDependencies": {
+    "onchange": "^6.1.0",
+    "parallelshell": "^3.0.2",
+    "fs-extra": "^8.1.0"
+  }
 }

@@ -1,0 +1,32 @@
+{% extends "_base" %}
+{% block title %}Tanks - {{ super() }}{% endblock %}
+{% block head %}
+	{{ super() }}
+	<meta charset="utf-8">
+
+	<!-- Common CSS files -->
+	<link rel="stylesheet" href="/static/css/normalize.css">
+	<link rel="stylesheet" href="/static/css/tanks/game.css">
+
+	<!-- Resizes viewport to look good on mobile -->
+	<!-- http://stackoverflow.com/questions/11689353/disable-pinch-zoom-on-mobile-web -->
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"/>
+	<meta name="HandheldFriendly" content="true"/>
+
+	{% if is_debug() %}
+		<!-- Debug flag -->
+		<meta name="debug" value="1">
+		<script>"use strict";</script>
+	{% endif %}
+{% endblock %}
+{% block body %}
+	<div id="content">
+		<div id="game-container">
+			<div id="stats-container" style="visibility: hidden;"><div id="stats"></div></div>
+			<canvas id="canvas" width="500" height="800"></canvas>
+		</div>
+	</div>
+	<script charset="utf-8" type="text/javascript" src="/static/js/lib/jquery{{ dot_min() }}.js"></script>
+
+	<script charset="utf-8" type="module" src="/static/wasm/tanks/bootstrap.js"></script>
+{% endblock body %}
