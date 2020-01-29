@@ -29,6 +29,7 @@ mod recaptcha;
 mod flappy;
 mod linc;
 mod tanks;
+mod github;
 
 pub use db::DbConn;
 
@@ -133,5 +134,6 @@ fn main() {
 		.mount("/flappy", flappy::routes())
 		.mount("/linc", linc::routes())
 		.mount("/tanks", tanks::routes())
+		.mount("/git_hook", github::routes())
 		.launch();
 }
