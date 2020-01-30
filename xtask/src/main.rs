@@ -3,6 +3,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::ffi::OsString;
 
+use structopt::StructOpt;
 use clap::{Arg, App, SubCommand};
 
 
@@ -29,31 +30,45 @@ fn main() {
 	let matches = app.clone().get_matches();
 
 	if let Some(matches) = matches.subcommand_matches("build") {
-		run_cargo("build", matches.is_present("release"), project_root().join("tanks"), true);
-		run_cargo("build", matches.is_present("release"), project_root(), false);
+		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"));
+		run_cargo("build", matches.is_present("release"), project_root());
 	} else if let Some(_matches) = matches.subcommand_matches("run") {
-		run_cargo("build", matches.is_present("release"), project_root().join("tanks"), true);
-		run_cargo("run", matches.is_present("release"), project_root(), false);
+		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"));
+		run_cargo("run", matches.is_present("release"), project_root());
 	} else {
 		app.print_help().expect("Failed to print help");
 	}
 }
 
-fn run_cargo(subcommand: &str, release: bool, dir: impl AsRef<Path>, tanks: bool) {
+fn run_wasm_pack(release: bool, dir: impl AsRef<Path>) {
+	let dir = dir.as_ref();
+
+	let args: Vec<OsString> = if release {
+		vec!["wasm-pack".into(), "build".into(), "--release".into(), "--target=web".into(), dir.into(), "--".into(), "--no-default-features".into(), "--features=wee_alloc".into()]
+	} else {
+		vec!["wasm-pack".into(), "build".into(), "--dev".into(), "--target=web".into(), dir.into()]
+	};
+	
+	println!("{}{}", XTASK_PRINT, args.iter().map(|s| s.to_string_lossy().to_owned()).collect::<Vec<_>>().join(" "));
+	
+	let command = wasm_pack::command::Command::from_iter(&args);
+	if let Err(e) = wasm_pack::command::run_wasm_pack(command) {
+		eprintln!("\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m failed to run wasm-pack: {}", e);
+		std::process::exit(1);
+	}
+
+	let from = dir.join("pkg");
+	let to = project_root().join("static").join("wasm").join("tanks").join("pkg");
+	run_copy_dir(from, to);
+}
+
+fn run_cargo(subcommand: &str, release: bool, dir: impl AsRef<Path>) {
 	let dir = dir.as_ref();
 	let mut args: Vec<&str> = Vec::new();
 	args.push(subcommand);
 
-	if tanks {
-		args.push("--target=wasm32-unknown-unknown")
-	}
-
 	if release {
 		args.push("--release");
-		if tanks {
-			args.push("--no-default-features");
-			args.push("--features=wee_alloc");
-		}
 	}
 	println!("{}cargo {} ({})", XTASK_PRINT, args.join(" "), dir.display());
 
@@ -64,29 +79,29 @@ fn run_cargo(subcommand: &str, release: bool, dir: impl AsRef<Path>, tanks: bool
 	if !status.map(|status| status.success()).unwrap_or(false) {
 		std::process::exit(1);
 	}
-	
-	if tanks {
-		let from = dir.join("target").join("wasm32-unknown-unknown").join(if release { "release" } else { "debug" }).join("tanks.wasm");
-		let to = project_root().join("static").join("wasm").join("tanks").join("tanks.wasm");
-		run_copy(&from, &to);
-	}
 }
 
-fn run_copy(from: impl AsRef<Path>, to: impl AsRef<Path>) {
+fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 	let from = from.as_ref();
 	let to = to.as_ref();
-	
+
 	if let Some(base) = common_path(from, to) {
 		match (from.strip_prefix(&base), to.strip_prefix(&base)) {
-			(Ok(from_strip), Ok(to_strip)) => println!("{}copy {}{}{{{},{}}}", XTASK_PRINT, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
-			_ => println!("{}copy '{}' to '{}'", XTASK_PRINT, from.display(), to.display()),
+			(Ok(from_strip), Ok(to_strip)) => println!("{}copy directory from/to {}{}{{{},{}}}", XTASK_PRINT, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
+			_ => println!("{}copy directory from '{}' to '{}'", XTASK_PRINT, from.display(), to.display()),
 		}
 	} else {
-		println!("{}copy '{}' to '{}'", XTASK_PRINT, from.display(), to.display());
+		println!("{}copy directory from '{}' to '{}'", XTASK_PRINT, from.display(), to.display());
 	}
-	
-	std::fs::copy(from, to)
-		.expect("\x1B[31mFailed to copy file\x1B[0m");
+
+	if let Err(e) = fs_extra::dir::copy(from, to, &fs_extra::dir::CopyOptions {
+		overwrite: true,
+		copy_inside: true,
+		..fs_extra::dir::CopyOptions::new()
+	}) {
+		eprintln!("\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m failed to copy file: {}", e);
+		std::process::exit(1);
+	}
 }
 
 fn cargo_exe() -> OsString {
