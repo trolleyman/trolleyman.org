@@ -1,5 +1,5 @@
 [package]
-name = "tanks"
+name = "trolleyman-org-tanks"
 version = "0.1.0"
 authors = ["Callum Tolley <cgtrolley@gmail.com>"]
 edition = "2018"

@@ -22,7 +22,7 @@ var dir = path.dirname(path.resolve(__dirname));
 var buildCmd = "wasm-pack build --target web";
 if (release) {
 	buildCmd += " -- --no-default-features --features=wee_alloc"
-} 
+}
 
 execSync(buildCmd, {
 	"cwd": path.join(dir, "tanks"),
