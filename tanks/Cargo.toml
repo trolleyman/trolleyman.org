@@ -3,6 +3,8 @@ name = "trolleyman-org-tanks"
 version = "0.1.0"
 authors = ["Callum Tolley <cgtrolley@gmail.com>"]
 edition = "2018"
+description = "A small tanks game written in Rust and compiled to WASM"
+repository = "https://github.com/trolleyman.org"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

@@ -87,11 +87,11 @@ fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 
 	if let Some(base) = common_path(from, to) {
 		match (from.strip_prefix(&base), to.strip_prefix(&base)) {
-			(Ok(from_strip), Ok(to_strip)) => println!("{}copy directory from/to {}{}{{{},{}}}", XTASK_PRINT, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
-			_ => println!("{}copy directory from '{}' to '{}'", XTASK_PRINT, from.display(), to.display()),
+			(Ok(from_strip), Ok(to_strip)) => println!("{}copy directory {}{}{{{} -> {}}}", XTASK_PRINT, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
+			_ => println!("{}copy directory {} -> {}", XTASK_PRINT, from.display(), to.display()),
 		}
 	} else {
-		println!("{}copy directory from '{}' to '{}'", XTASK_PRINT, from.display(), to.display());
+		println!("{}copy directory {} -> {}", XTASK_PRINT, from.display(), to.display());
 	}
 
 	if let Err(e) = fs_extra::dir::copy(from, to, &fs_extra::dir::CopyOptions {
@@ -99,7 +99,7 @@ fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 		copy_inside: true,
 		..fs_extra::dir::CopyOptions::new()
 	}) {
-		eprintln!("\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m failed to copy file: {}", e);
+		eprintln!("\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m failed to copy folder: {}", e);
 		std::process::exit(1);
 	}
 }
