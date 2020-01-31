@@ -52,7 +52,7 @@ fn main() {
 			run_rmdir(project_root().join("static").join("wasm").join("tanks").join("pkg"), false),
 		];
 		if matches.is_present("all") {
-			rets.push(run_rmdir(project_root().join("xtask").join("target"), false),);
+			rets.push(run_rmdir(project_root().join("xtask").join("target"), false));
 		}
 		if rets.iter().any(|r| r.is_err()) {
 			std::process::exit(1);
