@@ -28,7 +28,10 @@ fn main() {
 		.subcommand(SubCommand::with_name("dist")
 			.about("Package the release for distribution in the target/dist directory"))
 		.subcommand(SubCommand::with_name("clean")
-			.about("Remove the target directories"));
+			.about("Remove the target directories")
+			.arg(Arg::with_name("all")
+				.log("all")
+				.help("Remove the xtask target directory")));
 
 	let matches = app.clone().get_matches();
 
@@ -42,12 +45,15 @@ fn main() {
 		run_wasm_pack(true, project_root().join("tanks"));
 		run_cargo("build", true, project_root());
 		run_copy_dir(project_root().join("static"), dist_dir().join("static"));
-	} else if let Some(_) = matches.subcommand_matches("clean") {
-		let rets = vec![
+	} else if let Some(matches) = matches.subcommand_matches("clean") {
+		let mut rets = vec![
 			run_rmdir(project_root().join("target"), false),
 			run_rmdir(project_root().join("tanks").join("target"), false),
 			run_rmdir(project_root().join("static").join("wasm").join("tanks").join("pkg"), false),
 		];
+		if matches.is_present("all") {
+			rets.push(run_rmdir(project_root().join("xtask").join("target"), false),);
+		}
 		if rets.iter().any(|r| r.is_err()) {
 			std::process::exit(1);
 		}
