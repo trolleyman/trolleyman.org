@@ -8,6 +8,7 @@ use clap::{Arg, App, SubCommand};
 
 
 const XTASK_PRINT: &'static str = "\x1B[1m\x1B[32m       xtask\x1B[0m ";
+const ERROR_PRINT: &'static str = "\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m ";
 
 fn main() {
 	let mut app = App::new("trolleyman-org-xtask")
@@ -15,27 +16,43 @@ fn main() {
 		.about("Build runner for the trolleyman-org project")
 		.author("Callum Tolley")
 		.subcommand(SubCommand::with_name("build")
-			.about("Builds the project")
+			.about("Compile the project")
 			.arg(Arg::with_name("release")
 				.long("release")
 				.help("Build artifacts in release mode, with optimizations")))
 		.subcommand(SubCommand::with_name("run")
-			.about("Runs the project locally")
+			.about("Run the server locally")
 			.arg(Arg::with_name("release")
 				.long("release")
 				.help("Build artifacts in release mode, with optimizations")))
 		.subcommand(SubCommand::with_name("dist")
-			.about("Packages the release for distribution in the target/dist directory"));
+			.about("Package the release for distribution in the target/dist directory"))
+		.subcommand(SubCommand::with_name("clean")
+			.about("Remove the target directories"));
 
 	let matches = app.clone().get_matches();
 
 	if let Some(matches) = matches.subcommand_matches("build") {
 		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"));
 		run_cargo("build", matches.is_present("release"), project_root());
-	} else if let Some(_matches) = matches.subcommand_matches("run") {
+	} else if let Some(matches) = matches.subcommand_matches("run") {
 		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"));
 		run_cargo("run", matches.is_present("release"), project_root());
+	} else if let Some(_) = matches.subcommand_matches("dist") {
+		run_wasm_pack(true, project_root().join("tanks"));
+		run_cargo("build", true, project_root());
+		run_copy_dir(project_root().join("static"), dist_dir().join("static"));
+	} else if let Some(_) = matches.subcommand_matches("clean") {
+		let rets = vec![
+			run_rmdir(project_root().join("target"), false),
+			run_rmdir(project_root().join("tanks").join("target"), false),
+			run_rmdir(project_root().join("static").join("wasm").join("tanks").join("pkg"), false),
+		];
+		if rets.iter().any(|r| r.is_err()) {
+			std::process::exit(1);
+		}
 	} else {
+		eprintln!("{}no subcommand specified", ERROR_PRINT);
 		app.print_help().expect("Failed to print help");
 	}
 }
@@ -49,11 +66,11 @@ fn run_wasm_pack(release: bool, dir: impl AsRef<Path>) {
 		vec!["wasm-pack".into(), "build".into(), "--dev".into(), "--target=web".into(), dir.into()]
 	};
 	
-	println!("{}{}", XTASK_PRINT, args.iter().map(|s| s.to_string_lossy().to_owned()).collect::<Vec<_>>().join(" "));
+	eprintln!("{}{}", XTASK_PRINT, args.iter().map(|s| s.to_string_lossy().to_owned()).collect::<Vec<_>>().join(" "));
 	
 	let command = wasm_pack::command::Command::from_iter(&args);
 	if let Err(e) = wasm_pack::command::run_wasm_pack(command) {
-		eprintln!("\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m failed to run wasm-pack: {}", e);
+		eprintln!("{}failed to run wasm-pack: {}", ERROR_PRINT, e);
 		std::process::exit(1);
 	}
 
@@ -70,7 +87,7 @@ fn run_cargo(subcommand: &str, release: bool, dir: impl AsRef<Path>) {
 	if release {
 		args.push("--release");
 	}
-	println!("{}cargo {} ({})", XTASK_PRINT, args.join(" "), dir.display());
+	eprintln!("{}cargo {} ({})", XTASK_PRINT, args.join(" "), dir.display());
 
 	let status = Command::new(&cargo_exe())
 		.args(&args)
@@ -88,10 +105,10 @@ fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 	if let Some(base) = common_path(from, to) {
 		match (from.strip_prefix(&base), to.strip_prefix(&base)) {
 			(Ok(from_strip), Ok(to_strip)) => println!("{}copy directory {}{}{{{} -> {}}}", XTASK_PRINT, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
-			_ => println!("{}copy directory {} -> {}", XTASK_PRINT, from.display(), to.display()),
+			_ => eprintln!("{}copy directory {} -> {}", XTASK_PRINT, from.display(), to.display()),
 		}
 	} else {
-		println!("{}copy directory {} -> {}", XTASK_PRINT, from.display(), to.display());
+		eprintln!("{}copy directory {} -> {}", XTASK_PRINT, from.display(), to.display());
 	}
 
 	if let Err(e) = fs_extra::dir::copy(from, to, &fs_extra::dir::CopyOptions {
@@ -99,14 +116,32 @@ fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 		copy_inside: true,
 		..fs_extra::dir::CopyOptions::new()
 	}) {
-		eprintln!("\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m failed to copy folder: {}", e);
+		eprintln!("{}failed to copy directory: {}", ERROR_PRINT, e);
 		std::process::exit(1);
+	}
+}
+
+fn run_rmdir(dir: impl AsRef<Path>, error_fail: bool) -> Result<(), ()> {
+	let dir = dir.as_ref();
+	eprintln!("{}delete directory {}", XTASK_PRINT, dir.display());
+	if let Err(e) = fs_extra::dir::remove(dir) {
+		eprintln!("{}failed to delete directory: {}", ERROR_PRINT, e);
+		if error_fail {
+			std::process::exit(1);
+		}
+		Err(())
+	} else {
+		Ok(())
 	}
 }
 
 fn cargo_exe() -> OsString {
 	std::env::var_os("CARGO")
 		.unwrap_or_else(|| OsString::from("cargo"))
+}
+
+fn dist_dir() -> PathBuf {
+	project_root().join("target").join("dist")
 }
 
 fn project_root() -> PathBuf {

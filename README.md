@@ -3,7 +3,9 @@
 [trolleyman.org](https://trolleyman.org) is my personal website, and this repo contains all the code to make it work.
 
 ## Development
-`cargo` and `rustc` are needed as prerequisites. To install them visit the [Rust website](https://www.rust-lang.org/tools/install).
+The nightly `cargo` and `rustc` are needed as prerequisites.
+
+To install them first install `rustup` via. the [Rust website](https://www.rust-lang.org/tools/install), and then run `rustup default nightly`.
 
 After that, run this in the root of the repo:
 ```
