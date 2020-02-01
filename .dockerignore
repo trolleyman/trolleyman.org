@@ -1,0 +1,14 @@
+.git
+.venv
+
+logs
+*.log
+
+.caddy
+database
+
+target
+tanks/target
+xtask/target
+node_modules
+tanks/pkg

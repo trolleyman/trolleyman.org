@@ -6,26 +6,28 @@ WORKDIR /usr/src/app
 
 # Buid xtask deps
 RUN mkdir xtask
-COPY Cargo.{toml,lock} xtask/
+COPY Cargo.toml Cargo.lock xtask/
 RUN mkdir xtask/src && echo "fn main() {}" > xtask/src/main.rs
 RUN cd xtask && cargo build --release
 
 # Build tanks deps
 RUN mkdir tanks
-COPY Cargo.{toml,lock} tanks/
+COPY Cargo.toml Cargo.lock tanks/
 RUN mkdir tanks/src && echo "fn main() {}" > tanks/src/main.rs
 RUN cd tanks && cargo build --release
 
 # Build main project deps
-COPY Cargo.{toml,lock} .
+COPY Cargo.toml Cargo.lock .
 RUN mkdir src && echo "fn main() {}" > src/main.rs
 RUN cargo build --release
 
 # Build xtask runner
-COPY xtask ./
+COPY xtask/src xtask/
 RUN cd xtask && cargo build
 
 # Build project
+COPY tanks/src tanks/
+COPY src ./
 RUN cargo xtask dist
 
 ## Caddy
@@ -37,10 +39,10 @@ RUN apt update &&\
 
 ## Main build
 FROM ubuntu:18.04 AS main
-COPY --from caddy /usr/local/bin/caddy /usr/local/bin/caddy
+COPY --from=caddy /usr/local/bin/caddy /usr/local/bin/caddy
 
 RUN mkdir -p /trolleyman.org
 WORKDIR /trolleyman.org
-COPY --from rust /usr/src/app/target/dist /trolleyman.org/
+COPY --from=rust /usr/src/app/target/dist /trolleyman.org/
 
 ENV ACME_AGREE=true
