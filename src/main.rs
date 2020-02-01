@@ -10,6 +10,7 @@
 
 
 use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use rocket::config::Environment;
 use rocket::State;
@@ -30,6 +31,9 @@ mod flappy;
 mod linc;
 mod tanks;
 mod github;
+
+pub const WARN_PREFIX: &'static str = "\x1B[1m\x1B[33mwarn\x1B[37m:\x1B[0m ";
+pub const ERROR_PREFIX: &'static str = "\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m ";
 
 pub use db::DbConn;
 
@@ -87,24 +91,59 @@ fn error_404_not_found(req: &rocket::Request) -> Template {
 	}))
 }
 
+fn get_configs() -> (Config, rocket::Config) {
+	use rocket::config::Value;
+
+	// Load config, based on environment
+	let active_env = Environment::active().expect("Invalid environment");
+	let config = Config::load(active_env);
+	
+	// Setup db tables
+	let db_path = config.database_path.to_string_lossy().to_string();
+	let mut config_db_table = BTreeMap::<String, rocket::config::Value>::new();
+	config_db_table.insert("url".into(), Value::String(db_path.clone()));
+	let mut config_databases_db_table = BTreeMap::<String, rocket::config::Value>::new();
+	config_databases_db_table.insert("db".into(), Value::Table(config_db_table));
+	
+	// Get default Rocket config
+	let rocket_config = {
+		let mut builder = rocket::Config::build(active_env)
+			.extra("databases", Value::Table(config_databases_db_table));
+		if let Some(secret_key) = &config.secret_key {
+			builder = builder.secret_key(secret_key);
+		}
+		builder.expect("Rocket config failed to parse")
+	};
+	(config, rocket_config)
+}
 
 fn main() {
-	let active_env = Environment::active().expect("Invalid environment");
-	let configs = rocket::config::RocketConfig::read().unwrap();
-	let rocket_config = configs.get(active_env).clone();
-
+	// Load configs
+	let (config, rocket_config) = get_configs();
+	
+	// Check database parent folder exists
+	if let Some(db_dir) = config.database_path.parent() {
+		if !db_dir.is_dir() {
+			if let Err(e) = std::fs::create_dir_all(&db_dir) {
+				eprintln!("{}Failed to create database dir ({}): {}", ERROR_PREFIX, db_dir.display(), e);
+				std::process::exit(1);
+			}
+		}
+	}
+	
 	// Migrate database
-	let db_url = rocket_config.extras
-		.get("databases").expect("databases key missing")
-		.as_table().expect("databases key not table")
-		.get("db").expect("databases.db key missing")
-		.as_table().expect("databases.db key not table")
-		.get("url").expect("databases.db.url key missing")
-		.as_str().expect("databases.db.url key not string");
-	let db_conn = diesel::sqlite::SqliteConnection::establish(&db_url).expect("Failed to open database connection");
+	let db_path = config.database_path.to_string_lossy().to_string();
+	let db_conn = match diesel::sqlite::SqliteConnection::establish(&db_path) {
+		Ok(db_conn) => db_conn,
+		Err(e) => {
+			eprintln!("{}Failed to open database connection ({}): {}", ERROR_PREFIX, db_path, e);
+			std::process::exit(1)
+		},
+	};
 	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout()).expect("Failed to migrate database");
-
+	
 	// Launch Rocket
+	let active_env = rocket_config.environment;
 	rocket::custom(rocket_config)
 		.attach(Template::custom(move |f| {
 			f.tera.register_function("dot_min", move |args: &HashMap<_, _>| {
@@ -127,7 +166,7 @@ fn main() {
 			});
 		}))
 		.attach(DbConn::fairing())
-		.manage(Config::load(active_env))
+		.manage(config)
 		.register(catchers![error_400_bad_request, error_404_not_found])
 		.mount("/", routes![index, contact_details, project])
 		.mount("/static", StaticFiles::from("./static"))

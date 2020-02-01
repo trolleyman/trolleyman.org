@@ -7,8 +7,8 @@ use structopt::StructOpt;
 use clap::{Arg, App, SubCommand};
 
 
-const XTASK_PRINT: &'static str = "\x1B[1m\x1B[32m       xtask\x1B[0m ";
-const ERROR_PRINT: &'static str = "\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m ";
+const XTASK_PREFIX: &'static str = "\x1B[1m\x1B[32m       xtask\x1B[0m ";
+const ERROR_PREFIX: &'static str = "\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m ";
 
 fn main() {
 	let mut app = App::new("trolleyman-org-xtask")
@@ -30,7 +30,7 @@ fn main() {
 		.subcommand(SubCommand::with_name("clean")
 			.about("Remove the target directories")
 			.arg(Arg::with_name("all")
-				.log("all")
+				.long("all")
 				.help("Remove the xtask target directory")));
 
 	let matches = app.clone().get_matches();
@@ -42,9 +42,15 @@ fn main() {
 		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"));
 		run_cargo("run", matches.is_present("release"), project_root());
 	} else if let Some(_) = matches.subcommand_matches("dist") {
+		// Run normal build process
 		run_wasm_pack(true, project_root().join("tanks"));
 		run_cargo("build", true, project_root());
+		
+		// Copy files to target/dist
+		run_rmdir(dist_dir(), true).unwrap();
 		run_copy_dir(project_root().join("static"), dist_dir().join("static"));
+		run_copy_exe(dist_dir());
+		run_copy_file(project_root().join("config_release.toml"), dist_dir().join("config_release.toml"))
 	} else if let Some(matches) = matches.subcommand_matches("clean") {
 		let mut rets = vec![
 			run_rmdir(project_root().join("target"), false),
@@ -58,7 +64,7 @@ fn main() {
 			std::process::exit(1);
 		}
 	} else {
-		eprintln!("{}no subcommand specified", ERROR_PRINT);
+		eprintln!("{}no subcommand specified", ERROR_PREFIX);
 		app.print_help().expect("Failed to print help");
 	}
 }
@@ -72,17 +78,18 @@ fn run_wasm_pack(release: bool, dir: impl AsRef<Path>) {
 		vec!["wasm-pack".into(), "build".into(), "--dev".into(), "--target=web".into(), dir.into()]
 	};
 	
-	eprintln!("{}{}", XTASK_PRINT, args.iter().map(|s| s.to_string_lossy().to_owned()).collect::<Vec<_>>().join(" "));
+	eprintln!("{}{}", XTASK_PREFIX, args.iter().map(|s| s.to_string_lossy().to_owned()).collect::<Vec<_>>().join(" "));
 	
 	let command = wasm_pack::command::Command::from_iter(&args);
 	if let Err(e) = wasm_pack::command::run_wasm_pack(command) {
-		eprintln!("{}failed to run wasm-pack: {}", ERROR_PRINT, e);
+		eprintln!("{}failed to run wasm-pack: {}", ERROR_PREFIX, e);
 		std::process::exit(1);
 	}
 
 	let from = dir.join("pkg");
 	let to = project_root().join("static").join("wasm").join("tanks").join("pkg");
-	run_copy_dir(from, to);
+	run_rmdir(&to, true).unwrap();
+	run_copy_dir(&from, &to);
 }
 
 fn run_cargo(subcommand: &str, release: bool, dir: impl AsRef<Path>) {
@@ -93,7 +100,7 @@ fn run_cargo(subcommand: &str, release: bool, dir: impl AsRef<Path>) {
 	if release {
 		args.push("--release");
 	}
-	eprintln!("{}cargo {} ({})", XTASK_PRINT, args.join(" "), dir.display());
+	eprintln!("{}cargo {} ({})", XTASK_PREFIX, args.join(" "), dir.display());
 
 	let status = Command::new(&cargo_exe())
 		.args(&args)
@@ -104,17 +111,45 @@ fn run_cargo(subcommand: &str, release: bool, dir: impl AsRef<Path>) {
 	}
 }
 
+fn run_copy_exe(dir: impl AsRef<Path>) {
+	let dir = dir.as_ref();
+	let exe_name = format!("trolleyman-org{}", std::env::consts::EXE_SUFFIX);
+	run_copy_file(project_root().join("target").join("release").join(&exe_name), dir.join(&exe_name));
+}
+
+fn run_copy_file(from: impl AsRef<Path>, to: impl AsRef<Path>) {
+	let from = from.as_ref();
+	let to = to.as_ref();
+	
+	if let Some(base) = common_path(from, to) {
+		match (from.strip_prefix(&base), to.strip_prefix(&base)) {
+			(Ok(from_strip), Ok(to_strip)) => println!("{}copy file {}{}{{{} -> {}}}", XTASK_PREFIX, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
+			_ => eprintln!("{}copy file {} -> {}", XTASK_PREFIX, from.display(), to.display()),
+		}
+	} else {
+		eprintln!("{}copy file {} -> {}", XTASK_PREFIX, from.display(), to.display());
+	}
+	
+	if let Err(e) = fs_extra::file::copy(from, to, &fs_extra::file::CopyOptions {
+		overwrite: true,
+		..fs_extra::file::CopyOptions::new()
+	}) {
+		eprintln!("{}failed to copy file: {}", ERROR_PREFIX, e);
+		std::process::exit(1);
+	}
+}
+
 fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 	let from = from.as_ref();
 	let to = to.as_ref();
 
 	if let Some(base) = common_path(from, to) {
 		match (from.strip_prefix(&base), to.strip_prefix(&base)) {
-			(Ok(from_strip), Ok(to_strip)) => println!("{}copy directory {}{}{{{} -> {}}}", XTASK_PRINT, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
-			_ => eprintln!("{}copy directory {} -> {}", XTASK_PRINT, from.display(), to.display()),
+			(Ok(from_strip), Ok(to_strip)) => println!("{}copy directory {}{}{{{} -> {}}}", XTASK_PREFIX, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
+			_ => eprintln!("{}copy directory {} -> {}", XTASK_PREFIX, from.display(), to.display()),
 		}
 	} else {
-		eprintln!("{}copy directory {} -> {}", XTASK_PRINT, from.display(), to.display());
+		eprintln!("{}copy directory {} -> {}", XTASK_PREFIX, from.display(), to.display());
 	}
 
 	if let Err(e) = fs_extra::dir::copy(from, to, &fs_extra::dir::CopyOptions {
@@ -122,16 +157,16 @@ fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 		copy_inside: true,
 		..fs_extra::dir::CopyOptions::new()
 	}) {
-		eprintln!("{}failed to copy directory: {}", ERROR_PRINT, e);
+		eprintln!("{}failed to copy directory: {}", ERROR_PREFIX, e);
 		std::process::exit(1);
 	}
 }
 
 fn run_rmdir(dir: impl AsRef<Path>, error_fail: bool) -> Result<(), ()> {
 	let dir = dir.as_ref();
-	eprintln!("{}delete directory {}", XTASK_PRINT, dir.display());
+	eprintln!("{}delete directory {}", XTASK_PREFIX, dir.display());
 	if let Err(e) = fs_extra::dir::remove(dir) {
-		eprintln!("{}failed to delete directory: {}", ERROR_PRINT, e);
+		eprintln!("{}failed to delete directory: {}", ERROR_PREFIX, e);
 		if error_fail {
 			std::process::exit(1);
 		}
