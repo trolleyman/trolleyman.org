@@ -41,6 +41,7 @@ RUN cd xtask && cargo build
 
 # Build project
 COPY . .
+RUN rm -f xtask/target/debug/deps/trolleyman_org_xtask*
 RUN cargo xtask dist
 
 ## Main build
