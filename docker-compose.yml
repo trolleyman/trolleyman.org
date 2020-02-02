@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  rocket:
+    build: .
+    image: trolleyman.org:latest
+    volumes:
+      - "./database:/trolleyman.org/database"
+      - "./scripts/restart_flag:/trolleyman.org/restart_flag"
+
+  caddy:
+    image: abiosoft/caddy:latest
+    volumes:
+      - "./Caddyfile:/trolleyman.org/"
+      - "./.caddy:/trolleyman.org/.caddy"
+    ports:
+      - "80:80"
+      - "443:443"

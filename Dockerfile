@@ -53,7 +53,7 @@ COPY --from=caddy /usr/local/bin/caddy /usr/local/bin/caddy
 RUN mkdir -p /trolleyman.org
 WORKDIR /trolleyman.org
 COPY --from=rust /usr/src/app/target/dist/* /trolleyman.org/
-COPY Caddyfile ./scripts/docker_entrypoint.sh ./
+COPY ./scripts/docker_entrypoint.sh ./
 RUN mkdir -p ./restart_flag
 
 ENV ACME_AGREE=true
@@ -63,4 +63,5 @@ VOLUME /trolleyman.org/database
 VOLUME /trolleyman.org/.caddy
 VOLUME /trolleyman.org/restart_flag
 
-CMD ["./docker_entrypoint.sh"]
+ENTRYPOINT ["./docker_entrypoint.sh"]
+CMD ["./trolleyman-org"]

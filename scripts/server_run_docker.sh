@@ -16,18 +16,8 @@ docker image prune --filter='until=1460h' -f
 docker build -t server .
 
 # Stop old server, and rebuild anew
-docker stop server || true
-docker rm server || true
-rm -f "$DIR/scripts/restart_flag/restart_flag" || true
-docker run --rm \
-    -d \
-    -v "$DIR/logs:/trolleyman.org/logs" \
-    -v "$DIR/database:/trolleyman.org/database" \
-    -v "$DIR/.caddy:/trolleyman.org/.caddy" \
-    -v "$DIR/scripts/restart_flag:/trolleyman.org/restart_flag" \
-    -p 80:80 -p 443:443 \
-    --name server \
-    server
+rm -f scripts/restart_flag/restart_flag || true
+docker-compose up
 
 # Wait for restart flag
 set +x
@@ -40,4 +30,6 @@ if ! [[ -e scripts/restart_flag/restart_flag ]]; then
 else
     echo "No restart flag detected, but exiting while for some reason"
 fi
+set -x
+docker-compose down || true
 echo "Done waiting."
