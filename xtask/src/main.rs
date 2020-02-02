@@ -123,7 +123,7 @@ fn run_copy_file(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 	
 	if let Some(base) = common_path(from, to) {
 		match (from.strip_prefix(&base), to.strip_prefix(&base)) {
-			(Ok(from_strip), Ok(to_strip)) => println!("{}copy file {}{}{{{} -> {}}}", XTASK_PREFIX, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
+			(Ok(from_strip), Ok(to_strip)) => eprintln!("{}copy file {}{}{{{} -> {}}}", XTASK_PREFIX, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
 			_ => eprintln!("{}copy file {} -> {}", XTASK_PREFIX, from.display(), to.display()),
 		}
 	} else {
@@ -145,7 +145,7 @@ fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 
 	if let Some(base) = common_path(from, to) {
 		match (from.strip_prefix(&base), to.strip_prefix(&base)) {
-			(Ok(from_strip), Ok(to_strip)) => println!("{}copy directory {}{}{{{} -> {}}}", XTASK_PREFIX, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
+			(Ok(from_strip), Ok(to_strip)) => eprintln!("{}copy directory {}{}{{{} -> {}}}", XTASK_PREFIX, base.display(), std::path::MAIN_SEPARATOR, from_strip.display(), to_strip.display()),
 			_ => eprintln!("{}copy directory {} -> {}", XTASK_PREFIX, from.display(), to.display()),
 		}
 	} else {

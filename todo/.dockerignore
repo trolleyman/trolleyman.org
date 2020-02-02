@@ -1,8 +1,0 @@
-# Git
-.git/
-
-database/
-logs/
-*.log
-
-target/
