@@ -36,12 +36,15 @@ fn main() {
 	let matches = app.clone().get_matches();
 
 	if let Some(matches) = matches.subcommand_matches("build") {
+		eprintln!("{}build", XTASK_PREFIX);
 		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"));
 		run_cargo("build", matches.is_present("release"), project_root());
 	} else if let Some(matches) = matches.subcommand_matches("run") {
+		eprintln!("{}run", XTASK_PREFIX);
 		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"));
 		run_cargo("run", matches.is_present("release"), project_root());
 	} else if let Some(_) = matches.subcommand_matches("dist") {
+		eprintln!("{}dist", XTASK_PREFIX);
 		// Run normal build process
 		run_wasm_pack(true, project_root().join("tanks"));
 		run_cargo("build", true, project_root());
@@ -52,6 +55,7 @@ fn main() {
 		run_copy_exe(dist_dir());
 		run_copy_file(project_root().join("config_release.toml"), dist_dir().join("config_release.toml"))
 	} else if let Some(matches) = matches.subcommand_matches("clean") {
+		eprintln!("{}clean", XTASK_PREFIX);
 		let mut rets = vec![
 			run_rmdir(project_root().join("target"), false),
 			run_rmdir(project_root().join("tanks").join("target"), false),
