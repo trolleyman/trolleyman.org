@@ -33,7 +33,7 @@ docker run --rm \
 set +x
 echo "Started waiting..."
 while ! [[ -e "$DIR/scripts/restart_flag/restart_flag" ]]; do
-    inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 "$DIR/scripts/restart_flag" || true
+    inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 "$DIR/scripts/restart_flag" >/dev/null 2>&1 || true
 done
 if ! [[ -e "$DIR/scripts/restart_flag/restart_flag" ]]; then echo "Restart flag detected"; else echo "no restart, but exiting while -- why??"; fi
 echo "Done waiting."
