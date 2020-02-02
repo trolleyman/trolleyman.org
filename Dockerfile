@@ -53,7 +53,7 @@ COPY --from=caddy /usr/local/bin/caddy /usr/local/bin/caddy
 RUN mkdir -p /trolleyman.org
 WORKDIR /trolleyman.org
 COPY --from=rust /usr/src/app/target/dist/* /trolleyman.org/
-COPY ./scripts/*.sh ./
+COPY ./scripts/docker_entrypoint.sh ./
 RUN mkdir -p ./restart_flag
 
 ENV ACME_AGREE=true
