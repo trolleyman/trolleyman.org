@@ -28,7 +28,7 @@ RUN cd xtask && cargo build
 RUN mkdir tanks
 COPY tanks/Cargo.toml tanks/Cargo.lock tanks/
 RUN mkdir tanks/src && echo "" > tanks/src/lib.rs
-RUN cd tanks && cargo build --release -- --no-default-features --features=wee_alloc
+RUN cd tanks && cargo build --release --no-default-features --features=wee_alloc
 
 # Build main project deps
 COPY Cargo.toml Cargo.lock ./
