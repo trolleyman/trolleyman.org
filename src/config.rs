@@ -16,7 +16,8 @@ pub struct RecaptchaConfig {
 
 #[derive(Clone, Deserialize)]
 pub struct GithubWebhookConfig {
-	pub secret: String,
+	pub secret: Option<String>,
+	pub restart_flag_path: Option<String>,
 }
 
 #[derive(Clone, Deserialize)]
@@ -27,7 +28,7 @@ pub struct Config {
 	/// Secret key used by Rocket
 	pub secret_key: Option<String>,
 	pub recaptcha: RecaptchaConfig,
-	pub github_webhook: Option<GithubWebhookConfig>,
+	pub github_webhook: GithubWebhookConfig,
 }
 impl Config {
 	pub fn load(env: Environment) -> Config {
