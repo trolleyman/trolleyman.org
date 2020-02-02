@@ -8,6 +8,9 @@ RUN apt-get update &&\
 ## Rust
 FROM rustlang/rust:nightly AS rust
 
+# Install std for wasm32-unknown-unknown
+RUN rustup target add wasm32-unknown-unknown
+
 # Install wasm-bindgen
 RUN cargo install wasm-bindgen-cli
 
