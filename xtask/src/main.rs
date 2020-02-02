@@ -42,11 +42,10 @@ fn main() {
 		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"));
 		run_cargo("run", matches.is_present("release"), project_root());
 	} else if let Some(_) = matches.subcommand_matches("dist") {
-		eprintln!("disapppp");
 		// Run normal build process
 		run_wasm_pack(true, project_root().join("tanks"));
 		run_cargo("build", true, project_root());
-		
+
 		// Copy files to target/dist
 		run_rmdir(dist_dir(), true).unwrap();
 		run_copy_dir(project_root().join("static"), dist_dir().join("static"));
