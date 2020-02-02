@@ -12,3 +12,5 @@ tanks/target
 xtask/target
 node_modules
 tanks/pkg
+
+Dockerfile

@@ -1,5 +1,5 @@
 ## Caddy
-FROM ubuntu:18.04 AS caddy
+FROM debian:latest AS caddy
 
 RUN apt-get update &&\
     apt-get install curl -y &&\
@@ -41,17 +41,18 @@ COPY . .
 RUN cargo xtask dist
 
 ## Main build
-FROM ubuntu:18.04
+FROM debian:latest
 
+# Install caddy
 COPY --from=caddy /usr/local/bin/caddy /usr/local/bin/caddy
 
+# Install trolleyman.org
 RUN mkdir -p /trolleyman.org
 WORKDIR /trolleyman.org
 COPY --from=rust /usr/src/app/target/dist/* /trolleyman.org/
 COPY ./scripts/*.sh ./
-RUN mkdir -p ./scripts/restart_flag
+RUN mkdir -p ./restart_flag
 
 ENV ACME_AGREE=true
 
-ENTRYPOINT ["docker_entrypoint.sh"]
-
+CMD ["./docker_entrypoint.sh"]
