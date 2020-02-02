@@ -35,4 +35,5 @@ echo "Started waiting..."
 while ! [[ -e "$DIR/scripts/restart_flag/restart_flag" ]]; do
     inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 "$DIR/scripts/restart_flag"
 done
+if ! [[ -e "$DIR/scripts/restart_flag/restart_flag" ]]; then echo "Restart flag detected"; else echo "no restart, but exiting while -- why??"; fi
 echo "Done waiting."
