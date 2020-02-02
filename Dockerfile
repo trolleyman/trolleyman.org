@@ -1,10 +1,3 @@
-## Caddy
-FROM debian:latest AS caddy
-
-RUN apt-get update &&\
-    apt-get install curl -y &&\
-    curl https://getcaddy.com | bash -s personal
-
 ## Rust
 FROM rustlang/rust:nightly AS rust
 
@@ -47,9 +40,6 @@ RUN cargo xtask dist
 ## Main build
 FROM debian:latest
 
-# Install caddy
-COPY --from=caddy /usr/local/bin/caddy /usr/local/bin/caddy
-
 # Install trolleyman.org
 RUN mkdir -p /trolleyman.org
 WORKDIR /trolleyman.org
@@ -57,11 +47,9 @@ COPY --from=rust /usr/src/app/target/dist/* /trolleyman.org/
 COPY ./scripts/docker_entrypoint.sh ./
 RUN mkdir -p ./restart_flag
 
-ENV ACME_AGREE=true
 EXPOSE 80 443
 VOLUME /trolleyman.org/logs
 VOLUME /trolleyman.org/database
-VOLUME /trolleyman.org/.caddy
 VOLUME /trolleyman.org/restart_flag
 
 ENTRYPOINT ["./docker_entrypoint.sh"]
