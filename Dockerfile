@@ -42,8 +42,6 @@ RUN cargo xtask dist
 
 ## Main build
 FROM ubuntu:18.04
-RUN apt-get update &&\
-    apt-get install inotify-tools -y
 
 COPY --from=caddy /usr/local/bin/caddy /usr/local/bin/caddy
 

@@ -18,7 +18,7 @@ docker build "$DIR" -t server
 docker stop server || true
 docker rm server || true
 rm -f ./restart_flag/* || true
-docker run \
+docker run --rm \
   -d \
   -v "$DIR/logs:/trolleyman.org/logs" \
   -v "$DIR/database:/trolleyman.org/database" \
@@ -30,5 +30,5 @@ docker run \
 
 # Wait for restart flag
 while ! [[ -e ./restart_flag/restart_flag ]]; do
-    inotifywait -e CREATE ./restart_flag
+    inotifywait -e create -e modify -e delete -e close -e open -e move ./restart_flag
 done
