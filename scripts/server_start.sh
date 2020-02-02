@@ -10,7 +10,9 @@ set -x
 
 # Redirect all output to a logfile
 mkdir -p "$DIR/logs"
-exec > "$DIR/logs/script.log" 2>&1
+exec >> "$DIR/logs/script.log" 2>&1
+
+date
 
 cd $DIR
 
