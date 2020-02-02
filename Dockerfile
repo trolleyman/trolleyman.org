@@ -56,3 +56,4 @@ RUN mkdir -p ./scripts/restart_flag
 ENV ACME_AGREE=true
 
 ENTRYPOINT ["docker_entrypoint.sh"]
+

@@ -2,7 +2,7 @@
 # This file is the base entrypoint that is running continuously on the server.
 # It reloads the repository from GitHub, and runs docker.
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 SELF="$( realpath "${BASH_SOURCE[0]}" )"
 
 # Set echo
@@ -25,7 +25,7 @@ cd $DIR
 ) || true
 
 # Run docker
-"$DIR/server_run_docker.sh"
+"$DIR/scripts/server_run_docker.sh"
 
 # Exec ourselves
 exec "$SELF"

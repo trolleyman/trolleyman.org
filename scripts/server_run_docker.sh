@@ -6,7 +6,7 @@
 set -ex
 
 # Get dir of script location
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 # Prune images that are older than 2 months
 docker image prune --filter='until=1460h' -f
@@ -23,12 +23,13 @@ docker run \
   -v "$DIR/logs:/trolleyman.org/logs" \
   -v "$DIR/database:/trolleyman.org/database" \
   -v "$DIR/.caddy:/trolleyman.org/.caddy" \
-  -v "$DIR/restart_flag:/trolleyman.org/restart_flag" \
+  -v "$DIR/scripts/restart_flag:/trolleyman.org/restart_flag" \
   -p 80:80 -p 443:443 \
   --name server \
   server
 
 # Wait for restart flag
-while ! [[ -e ./restart_flag/restart_flag ]]; do
-    inotifywait -e CREATE ./restart_flag
+while ! [[ -e "$DIR/scripts/restart_flag/restart_flag" ]]; do
+    inotifywait -e CREATE "$DIR/scripts/restart_flag"
 done
+
