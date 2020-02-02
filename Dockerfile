@@ -57,5 +57,10 @@ COPY ./scripts/docker_entrypoint.sh ./
 RUN mkdir -p ./restart_flag
 
 ENV ACME_AGREE=true
+EXPOSE 80 443
+VOLUME /trolleyman.org/logs
+VOLUME /trolleyman.org/database
+VOLUME /trolleyman.org/.caddy
+VOLUME /trolleyman.org/restart_flag
 
 CMD ["./docker_entrypoint.sh"]

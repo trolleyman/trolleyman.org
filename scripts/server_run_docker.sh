@@ -18,7 +18,7 @@ docker build -t server "$DIR"
 # Stop old server, and rebuild anew
 docker stop server || true
 docker rm server || true
-rm -f ./restart_flag/* || true
+rm -f "$DIR/restart_flag/*" || true
 docker run --rm \
   -d \
   -v "$DIR/logs:/trolleyman.org/logs" \
@@ -30,6 +30,9 @@ docker run --rm \
   server
 
 # Wait for restart flag
+set +x
+echo "Started waiting..."
 while ! [[ -e "$DIR/scripts/restart_flag/restart_flag" ]]; do
-    inotifywait -e create -e modify -e delete -e close -e open -e move "$DIR/scripts/restart_flag"
+    inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 "$DIR/scripts/restart_flag"
 done
+echo "Done waiting."
