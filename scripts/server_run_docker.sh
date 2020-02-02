@@ -7,12 +7,13 @@ set -ex
 
 # Get dir of script location
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+cd "$DIR"
 
 # Prune images that are older than 2 months
 docker image prune --filter='until=1460h' -f
 
 # Build server docker image
-docker build "$DIR" -t server
+docker build -t server "$DIR"
 
 # Stop old server, and rebuild anew
 docker stop server || true
