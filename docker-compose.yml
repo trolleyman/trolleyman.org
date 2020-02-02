@@ -11,8 +11,8 @@ services:
   caddy:
     image: abiosoft/caddy:latest
     volumes:
-      - "./Caddyfile:/trolleyman.org/"
-      - "./.caddy:/trolleyman.org/.caddy"
+      - "./Caddyfile:/etc/Caddyfile"
+      - "./.caddy:/root/.caddy"
     ports:
       - "80:80"
       - "443:443"
