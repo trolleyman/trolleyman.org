@@ -12,20 +12,23 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 docker image prune --filter='until=1460h' -f
 
 # Build server docker image
-docker build "$DIR/.." -t server
+docker build "$DIR" -t server
 
 # Stop old server, and rebuild anew
 docker stop server || true
 docker rm server || true
-docker run\
-#  -v "$DIR/rocket/TODO:/opt/rocket/TODO" \
-  -v "$DIR/../logs:/opt/django/logs" \
-  -v "$DIR/../django/database:/opt/django/database" \
-  -v "$DIR/../logs:/opt/caddy/logs" \
-  -v "$DIR/../.caddy:/opt/caddy/.caddy" \
+rm -f ./restart_flag/* || true
+docker run \
+  -d \
+  -v "$DIR/logs:/trolleyman.org/logs" \
+  -v "$DIR/database:/trolleyman.org/database" \
+  -v "$DIR/.caddy:/trolleyman.org/.caddy" \
+  -v "$DIR/restart_flag:/trolleyman.org/restart_flag" \
   -p 80:80 -p 443:443 \
   --name server \
   server
 
-echo "Docker finished"
-
+# Wait for restart flag
+while ! [[ -e ./restart_flag/restart_flag ]]; do
+    inotifywait -e CREATE ./restart_flag
+done

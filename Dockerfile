@@ -42,10 +42,17 @@ RUN cargo xtask dist
 
 ## Main build
 FROM ubuntu:18.04
+RUN apt-get update &&\
+    apt-get install inotify-tools -y
+
 COPY --from=caddy /usr/local/bin/caddy /usr/local/bin/caddy
 
 RUN mkdir -p /trolleyman.org
 WORKDIR /trolleyman.org
 COPY --from=rust /usr/src/app/target/dist/* /trolleyman.org/
+COPY ./scripts/*.sh ./
+RUN mkdir -p ./scripts/restart_flag
 
 ENV ACME_AGREE=true
+
+ENTRYPOINT ["docker_entrypoint.sh"]
