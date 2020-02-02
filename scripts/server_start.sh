@@ -5,12 +5,12 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 SELF="$( realpath "${BASH_SOURCE[0]}" )"
 
-# Set echo
-set -x
-
 # Redirect all output to a logfile
 mkdir -p "$DIR/logs"
 exec > "$DIR/logs/script.log" 2>&1
+
+# Set echo
+set -x
 
 date
 
