@@ -14,3 +14,4 @@ node_modules
 tanks/pkg
 
 Dockerfile
+scripts/restart_flag

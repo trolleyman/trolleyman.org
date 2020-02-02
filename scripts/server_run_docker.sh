@@ -18,7 +18,7 @@ docker build -t server "$DIR"
 # Stop old server, and rebuild anew
 docker stop server || true
 docker rm server || true
-rm -f "$DIR/restart_flag/*" || true
+rm -f "$DIR/scripts/restart_flag/*" || true
 docker run --rm \
   -d \
   -v "$DIR/logs:/trolleyman.org/logs" \
