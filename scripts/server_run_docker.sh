@@ -17,6 +17,8 @@ docker build -t server .
 
 # Stop old server, and rebuild anew
 rm -f scripts/restart_flag/restart_flag || true
+docker-compose build
+docker-compose down || true  # TODO: Is this necessary?
 docker-compose up
 
 # Wait for restart flag
@@ -31,5 +33,4 @@ else
     echo "No restart flag detected, but exiting while for some reason"
 fi
 set -x
-docker-compose down || true
 echo "Done waiting."
