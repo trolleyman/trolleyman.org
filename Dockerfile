@@ -14,7 +14,7 @@ WORKDIR /usr/src/app
 # Buid xtask deps
 RUN mkdir xtask
 COPY xtask/Cargo.toml xtask/Cargo.lock xtask/
-RUN mkdir xtask/src && echo "fn main() {}" > xtask/src/main.rs
+RUN mkdir xtask/src && echo "fn main() { panic!(\"Cached exe\"); }" > xtask/src/main.rs
 RUN cd xtask && cargo build
 
 # Build tanks deps
@@ -25,7 +25,7 @@ RUN cd tanks && cargo build --release --no-default-features --features=wee_alloc
 
 # Build main project deps
 COPY Cargo.toml Cargo.lock ./
-RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN mkdir src && echo "fn main() { panic!(\"Cached exe\"); }" > src/main.rs
 RUN cargo build --release
 
 # Build xtask runner
@@ -34,9 +34,9 @@ RUN cd xtask && cargo build
 
 # Build project
 COPY . .
-RUN rm -f xtask/target/debug/deps/trolleyman_org_xtask* &&\
-    rm -f tanks/target/debug/deps/trolleyman_org_tanks* &&\
-    rm -f target/debug/deps/trolleyman_org*
+RUN rm -f xtask/target/release/deps/trolleyman_org_xtask* &&\
+    rm -f tanks/target/release/deps/trolleyman_org_tanks* &&\
+    rm -f target/release/deps/trolleyman_org*
 RUN cargo xtask dist
 
 ## Main build
