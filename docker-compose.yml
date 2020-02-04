@@ -4,6 +4,7 @@ services:
   rocket:
     build: .
     image: trolleyman.org:latest
+    restart: always
     volumes:
       - "./database:/trolleyman.org/database"
       - "./scripts/restart_flag:/trolleyman.org/restart_flag"
@@ -11,6 +12,7 @@ services:
 
   caddy:
     image: abiosoft/caddy:latest
+    restart: always
     volumes:
       - "./Caddyfile:/etc/Caddyfile"
       - "./.caddy:/root/.caddy"
