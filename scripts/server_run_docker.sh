@@ -38,7 +38,7 @@ function should_restart() {
     # Heartbeat
     if [[ -z "$finished_waiting" ]]; then
         now=$(date -u '+%s')
-        if [[ $(( $now - $started_waiting )) -gt 10 ]]; then
+        if [[ $(( $now - $started_waiting )) -gt 120 ]]; then
             echo "Starting heartbeat detector..."
             finished_waiting=1
         fi
