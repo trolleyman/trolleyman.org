@@ -12,11 +12,18 @@ cd "$DIR"
 # Prune images that are older than 2 months
 docker image prune --filter='until=1460h' -f
 
-# Stop old server, and rebuild anew
+# Rebuild docker compose
 docker-compose build
+
+# Take down old server & reset restart flag
 docker-compose down || true  # TODO: Is this necessary?
 rm -f scripts/restart_flag/restart_flag || true
-docker-compose up
+
+# Redirect logs
+docker-compose logs -f -t >logs/docker-compose.log 2>&1 &
+
+# Start server
+docker-compose up -d
 
 # Wait for restart flag
 set +x
