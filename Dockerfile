@@ -46,7 +46,6 @@ RUN cargo xtask dist
 FROM debian:latest
 RUN apt-get update && apt-get install -y --no-install-recommends\
     libssl1.1
-    # libsqlite3
 
 # Install trolleyman.org
 RUN mkdir -p /trolleyman.org
