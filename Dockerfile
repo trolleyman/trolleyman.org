@@ -51,7 +51,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends\
 # Install trolleyman.org
 RUN mkdir -p /trolleyman.org
 WORKDIR /trolleyman.org
-COPY --from=rust /usr/src/app/target/dist/* /trolleyman.org/
+COPY --from=rust /usr/src/app/target/dist /trolleyman.org/
 COPY ./scripts/docker_entrypoint.sh ./
 RUN mkdir -p ./restart_flag
 
