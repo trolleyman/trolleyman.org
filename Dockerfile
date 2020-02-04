@@ -44,8 +44,9 @@ RUN cargo xtask dist
 
 ## Main build
 FROM debian:latest
-RUN apt-get update# && apt-get install -y\
-    #openssl-dev
+RUN apt-get update && apt-get install -y --no-install-recommends\
+    libssl\
+    libsqlite3
 
 # Install trolleyman.org
 RUN mkdir -p /trolleyman.org
