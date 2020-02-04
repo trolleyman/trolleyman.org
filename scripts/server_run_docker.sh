@@ -31,6 +31,7 @@ echo "Started waiting..."
 started_waiting=$(date -u '+%s')
 finished_waiting=
 last_heartbeat=$started_waiting
+last_heartbeat_success=$started_waiting
 function should_restart() {
     if [[ -e scripts/restart_flag/restart_flag ]]; then
         return 0
@@ -42,14 +43,22 @@ function should_restart() {
         if [[ $(( $now - $started_waiting )) -gt 120 ]]; then
             echo "Starting heartbeat detector..."
             finished_waiting=1
+            last_heartbeat_success=$now
         fi
     fi
 
     if [[ ! -z "$finished_waiting" ]] && [[ $(( $now - $last_heartbeat )) -gt 10 ]]; then
         last_heartbeat=$now
         if ! curl -sf http://localhost/heartbeat >/dev/null; then
-            echo "Heartbeat failed, exiting wait..."
-            return 0
+            echo "Heartbeat failed"
+            if [[ $(( $now - $last_heartbeat_success )) -gt 30 ]]; then
+                echo "Too long since last successful heartbeat. Exiting."
+                return 0
+            else
+                echo "Waiting for proper heartbeat..."
+            fi
+        else
+            last_heartbeat_success=$now
         fi
     fi
 
