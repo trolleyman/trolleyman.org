@@ -19,11 +19,11 @@ docker-compose build
 docker-compose down || true  # TODO: Is this necessary?
 rm -f scripts/restart_flag/restart_flag || true
 
-# Redirect logs
-docker-compose logs -f -t >logs/docker-compose.log 2>&1 &
-
 # Start server
 docker-compose up -d
+
+# Redirect logs
+docker-compose logs -f -t >logs/docker-compose.log 2>&1 &
 
 # Wait for restart flag
 set +x
