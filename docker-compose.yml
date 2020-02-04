@@ -7,12 +7,14 @@ services:
     volumes:
       - "./database:/trolleyman.org/database"
       - "./scripts/restart_flag:/trolleyman.org/restart_flag"
+      - "./logs:/trolleyman.org/logs"
 
   caddy:
     image: abiosoft/caddy:latest
     volumes:
       - "./Caddyfile:/etc/Caddyfile"
       - "./.caddy:/root/.caddy"
+      - "./logs:/root/logs"
     ports:
       - "80:80"
       - "443:443"
