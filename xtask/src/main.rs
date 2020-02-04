@@ -52,6 +52,7 @@ fn main() {
 		// Copy files to target/dist
 		run_rmdir(dist_dir(), true).unwrap();
 		run_copy_dir(project_root().join("static"), dist_dir().join("static"));
+		run_copy_dir(project_root().join("templates"), dist_dir().join("templates"));
 		run_copy_exe(dist_dir());
 		run_copy_file(project_root().join("config_release.toml"), dist_dir().join("config_release.toml"))
 	} else if let Some(matches) = matches.subcommand_matches("clean") {

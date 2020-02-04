@@ -117,7 +117,7 @@ fn get_configs() -> (Config, rocket::Config) {
 			builder = builder.secret_key(secret_key);
 		}
 		if active_env.is_prod() {
-			builder = builder.log_level(rocket::logger::LoggingLevel::Debug);
+			builder = builder.log_level(rocket::logger::LoggingLevel::Normal);
 		}
 		builder.expect("Rocket config failed to parse")
 	};
