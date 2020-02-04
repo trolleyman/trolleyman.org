@@ -10,8 +10,8 @@ http://localhost, https://callumgtolley.uk {
 	proxy / localhost:8000 {
 		transparent
 	}
-	errors stdout
-	log stdout /root/logs/caddy.log {
+	errors /root/logs/caddy_error.log
+	log / /root/logs/caddy.log {
 		rotate_size 10
 		rotate_compress
 	}
