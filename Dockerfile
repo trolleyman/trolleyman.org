@@ -44,6 +44,7 @@ RUN cargo xtask dist
 
 ## Main build
 FROM debian:latest
+RUN apt-get update && apt-get install -y extra-runtime-dependencies
 
 # Install trolleyman.org
 RUN mkdir -p /trolleyman.org
