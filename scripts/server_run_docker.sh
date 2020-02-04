@@ -30,6 +30,7 @@ set +x
 echo "Started waiting..."
 started_waiting=$(date -u '+%s')
 finished_waiting=
+last_heartbeat=$started_waiting
 function should_restart() {
     if [[ -e scripts/restart_flag/restart_flag ]]; then
         return 0
@@ -44,7 +45,8 @@ function should_restart() {
         fi
     fi
 
-    if [[ ! -z "$finished_waiting" ]]; then
+    if [[ ! -z "$finished_waiting" ]] && [[ $(( $now - $last_heartbeat )) -gt 10 ]]; then
+        last_heartbeat=$now
         if ! curl -sf http://localhost/heartbeat >/dev/null; then
             echo "Heartbeat failed, exiting wait..."
             return 0
