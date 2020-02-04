@@ -112,12 +112,10 @@ fn get_configs() -> (Config, rocket::Config) {
 	// Get default Rocket config
 	let rocket_config = {
 		let mut builder = rocket::Config::build(active_env)
+			.log_level(rocket::logger::LoggingLevel::Normal)
 			.extra("databases", Value::Table(config_databases_db_table));
 		if let Some(secret_key) = &config.secret_key {
 			builder = builder.secret_key(secret_key);
-		}
-		if active_env.is_prod() {
-			builder = builder.log_level(rocket::logger::LoggingLevel::Debug);
 		}
 		builder.expect("Rocket config failed to parse")
 	};
