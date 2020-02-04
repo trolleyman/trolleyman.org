@@ -36,7 +36,10 @@ RUN cd xtask && cargo build
 COPY . .
 RUN rm -f xtask/target/release/deps/trolleyman_org_xtask* &&\
     rm -f tanks/target/release/deps/trolleyman_org_tanks* &&\
-    rm -f target/release/deps/trolleyman_org*
+    rm -f target/release/deps/trolleyman_org* &&\
+    rm -f target/release/trolleyman-org-dist &&\
+    rm -f target/release/trolleyman-org-tanks.wasm &&\
+    rm -f target/release/trolleyman-org
 RUN cargo xtask dist
 
 ## Main build
