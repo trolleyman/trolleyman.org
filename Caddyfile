@@ -5,7 +5,7 @@ https://trolleyman.org, https://www.trolleyman.org, https://www.callumgtolley.uk
 	redir / https://callumgtolley.uk{uri}
 }
 
-https://callumgtolley.uk {
+http://localhost, https://callumgtolley.uk {
 	tls info@callumgtolley.uk
 	proxy / localhost:8000 {
 		transparent

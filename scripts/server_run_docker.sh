@@ -28,13 +28,33 @@ docker-compose up -d
 # Wait for restart flag
 set +x
 echo "Started waiting..."
-while ! [[ -e scripts/restart_flag/restart_flag ]]; do
+started_waiting=$(date -u '+%s')
+finished_waiting=
+function should_restart() {
+    if [[ -e scripts/restart_flag/restart_flag ]]; then
+        return 0
+    fi
+
+    # Heartbeat
+    if [[ -z "$finished_waiting" ]]; then
+        now=$(date -u '+%s')
+        if [[ $(( $now - $started_waiting )) -gt 10 ]]; then
+            echo "Starting heartbeat detector..."
+            finished_waiting=1
+        fi
+    fi
+
+    if [[ ! -z "$finished_waiting" ]]; then
+        if ! curl -sf http://localhost/heartbeat >/dev/null; then
+            echo "Heartbeat failed, exiting wait..."
+            return 0
+        fi
+    fi
+
+    return 1
+}
+while ! should_restart; do
     inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 scripts/restart_flag >/dev/null 2>&1 || true
 done
-if ! [[ -e scripts/restart_flag/restart_flag ]]; then
-    echo "Restart flag detected"
-else
-    echo "No restart flag detected, but exiting while for some reason"
-fi
 set -x
 echo "Done waiting."
