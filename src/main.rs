@@ -44,6 +44,11 @@ use config::Config;
 use recaptcha::ReCaptchaGuard;
 
 
+#[get("/heartbeat")]
+fn heartbeat() -> String {
+	"A-ok!".to_string()
+}
+
 #[get("/")]
 fn index(config: State<Config>) -> Template {
 	let num_bg = 16;
@@ -71,7 +76,6 @@ fn project(project_name: String, metadata: templates::Metadata) -> Option<Templa
 		})))
 	}
 }
-
 
 #[catch(400)]
 fn error_400_bad_request(_req: &rocket::Request) -> Template {
@@ -168,7 +172,7 @@ fn main() {
 		.attach(DbConn::fairing())
 		.manage(config)
 		.register(catchers![error_400_bad_request, error_404_not_found])
-		.mount("/", routes![index, contact_details, project])
+		.mount("/", routes![heartbeat, index, contact_details, project])
 		.mount("/static", StaticFiles::from("./static"))
 		.mount("/flappy", flappy::routes())
 		.mount("/linc", linc::routes())
