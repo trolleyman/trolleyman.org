@@ -65,7 +65,12 @@ function should_restart() {
     return 1
 }
 while ! should_restart; do
-    inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 scripts/restart_flag || true
+    if command -v inotifywait >/dev/null 2>&1; then
+        inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 scripts/restart_flag >/dev/null 2>&1 || true
+    else
+        echo "inotifywait: command not found: install using \`sudo apt install inotify-tools\`" >&2
+        sleep 10
+    fi
 done
 set -x
 echo "Done waiting."
