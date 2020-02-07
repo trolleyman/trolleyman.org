@@ -65,7 +65,6 @@ function should_restart() {
     return 1
 }
 while ! should_restart; do
-    echo "loop"
     inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 scripts/restart_flag || true
 done
 set -x
