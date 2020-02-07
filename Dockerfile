@@ -45,8 +45,7 @@ RUN cargo xtask dist
 ## Main build
 FROM debian:latest
 RUN apt-get update && apt-get install -y --no-install-recommends\
-    libssl1.1\
-    inotify-tools
+    libssl1.1
 
 # Install trolleyman.org
 RUN mkdir -p /trolleyman.org
