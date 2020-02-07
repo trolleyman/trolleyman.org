@@ -31,7 +31,6 @@ mod flappy;
 mod linc;
 mod tanks;
 mod github;
-mod log_fairing;
 
 pub const WARN_PREFIX: &'static str = "\x1B[1m\x1B[33mwarn\x1B[37m:\x1B[0m ";
 pub const ERROR_PREFIX: &'static str = "\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m ";
@@ -113,10 +112,13 @@ fn get_configs() -> (Config, rocket::Config) {
 	// Get default Rocket config
 	let rocket_config = {
 		let mut builder = rocket::Config::build(active_env)
-			.log_level(rocket::logger::LoggingLevel::Off)
+			.log_level(rocket::logger::LoggingLevel::Normal)
 			.extra("databases", Value::Table(config_databases_db_table));
 		if let Some(secret_key) = &config.secret_key {
 			builder = builder.secret_key(secret_key);
+		}
+		if active_env.is_prod() {
+			builder = builder.log_level(rocket::logger::LoggingLevel::Debug);
 		}
 		builder.expect("Rocket config failed to parse")
 	};
@@ -151,7 +153,6 @@ fn main() {
 	// Launch Rocket
 	let active_env = rocket_config.environment;
 	rocket::custom(rocket_config)
-		.attach(log_fairing::LogFairing::fairing())
 		.attach(Template::custom(move |f| {
 			f.tera.register_function("dot_min", move |args: &HashMap<_, _>| {
 				if !args.is_empty() {
