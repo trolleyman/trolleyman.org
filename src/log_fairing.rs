@@ -1,4 +1,5 @@
 
+use rocket::Rocket;
 use rocket::fairing::{Fairing, Info, Kind};
 
 pub struct LogFairing {
