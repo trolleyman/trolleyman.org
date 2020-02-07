@@ -3,6 +3,7 @@ name = "trolleyman-org-xtask"
 version = "0.1.0"
 authors = ["Callum Tolley <cgtrolley@gmail.com>"]
 edition = "2018"
+publish = false
 
 [dependencies]
 clap = "2.33.0"
