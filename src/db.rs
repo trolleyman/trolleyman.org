@@ -1,11 +1,9 @@
-
 #[database("db")]
 pub struct DbConn(diesel::SqliteConnection);
 
-
 pub mod serde_naive_datetime {
 	use chrono::prelude::*;
-	use serde::{Serialize, Serializer, Deserialize, Deserializer, de::Error};
+	use serde::{de::Error, Deserialize, Deserializer, Serialize, Serializer};
 
 	pub fn serialize<S: Serializer>(time: &NaiveDateTime, serializer: S) -> Result<S::Ok, S::Error> {
 		DateTime::<Utc>::from_utc(*time, Utc).to_rfc3339().serialize(serializer)

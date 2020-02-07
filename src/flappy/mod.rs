@@ -1,8 +1,6 @@
-
 use rocket_contrib::templates::Template;
 
 mod api;
-
 
 pub fn routes() -> Vec<rocket::Route> {
 	let mut routes = routes![game];
@@ -11,6 +9,4 @@ pub fn routes() -> Vec<rocket::Route> {
 }
 
 #[get("/")]
-fn game() -> Template {
-	Template::render("flappy/game", json!({}))
-}
+fn game() -> Template { Template::render("flappy/game", json!({})) }
