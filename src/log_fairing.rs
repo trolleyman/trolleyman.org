@@ -12,5 +12,16 @@ impl Fairing for LogFairing {
 		}
 	}
 
-	
+	fn on_attach(&self, rocket: Rocket) -> Result<Rocket, Rocket> {
+		
+	}
+	fn on_launch(&self, rocket: &Rocket) {
+		
+	}
+	fn on_request(&self, request: &mut Request, data: &Data) {
+		
+	}
+	fn on_response(&self, request: &Request, response: &mut Response) {
+		
+	}
 }
