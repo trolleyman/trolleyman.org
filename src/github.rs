@@ -33,71 +33,78 @@ impl FromDataSimple for GithubHookPayload {
 	type Error = GithubHookError;
 
 	fn from_data(req: &Request, data: Data) -> data::Outcome<Self, Self::Error> {
-		// A push has been triggered
-		// Get signature
-		let header_signature = try_outcome!(req
-			.headers()
-			.get_one("X-Hub-Signature")
-			.ok_or(GithubHookError::NonexistentHeader)
-			.into_outcome(Status::BadRequest));
+		fn inner(req: &Request, data: Data) -> data::Outcome<GithubHookPayload, GithubHookError> {
+			// A push has been triggered
+			// Get signature
+			let header_signature = try_outcome!(req
+				.headers()
+				.get_one("X-Hub-Signature")
+				.ok_or(GithubHookError::NonexistentHeader)
+				.into_outcome(Status::BadRequest));
 
-		let config = try_outcome!(req
-			.guard::<State<Config>>()
-			.success_or(GithubHookError::ConfigLoad)
-			.into_outcome(Status::InternalServerError));
+			let config = try_outcome!(req
+				.guard::<State<Config>>()
+				.success_or(GithubHookError::ConfigLoad)
+				.into_outcome(Status::InternalServerError));
 
-		let secret = try_outcome!(config
-			.github_webhook
-			.secret
-			.as_ref()
-			.ok_or(GithubHookError::ConfigLoad)
-			.into_outcome(Status::InternalServerError))
-		.clone();
+			let secret = try_outcome!(config
+				.github_webhook
+				.secret
+				.as_ref()
+				.ok_or(GithubHookError::ConfigLoad)
+				.into_outcome(Status::InternalServerError))
+			.clone();
 
-		let sig_split: Vec<_> = header_signature.split("=").collect();
-		if sig_split.len() != 2 {
-			return Outcome::Failure((Status::BadRequest, GithubHookError::InvalidHeader));
+			let sig_split: Vec<_> = header_signature.split("=").collect();
+			if sig_split.len() != 2 {
+				return Outcome::Failure((Status::BadRequest, GithubHookError::InvalidHeader));
+			}
+
+			// Get signature
+			let sha_name = sig_split[0];
+			let signature = sig_split[1];
+			if sha_name != "sha1" {
+				return Outcome::Failure((Status::BadRequest, GithubHookError::OperationNotSupported));
+			}
+
+			// Read message
+			let mut msg = String::new();
+			try_outcome!(data
+				.open()
+				.take(MSG_LIMIT)
+				.read_to_string(&mut msg)
+				.map_err(|_| GithubHookError::IoError)
+				.into_outcome(Status::BadRequest));
+
+			// Check HMAC
+			let mut mac = try_outcome!(hmac::Hmac::<sha1::Sha1>::new_varkey(secret.as_bytes())
+				.map_err(|_| GithubHookError::HmacError)
+				.into_outcome(Status::BadRequest));
+			mac.input(msg.as_bytes());
+
+			try_outcome!(mac
+				.verify(signature.as_bytes())
+				.map_err(|_| GithubHookError::HmacError)
+				.into_outcome(Status::BadRequest));
+
+			// Setup payload
+			let event_name = try_outcome!(req
+				.headers()
+				.get_one("X-GitHub-Event")
+				.ok_or(GithubHookError::NonexistentHeader)
+				.into_outcome(Status::BadRequest))
+			.to_string();
+			let payload = try_outcome!(serde_json::from_str(&msg)
+				.map_err(|_| GithubHookError::InvalidJson)
+				.into_outcome(Status::BadRequest));
+
+			Outcome::Success(GithubHookPayload { event_name, payload })
 		}
-
-		// Get signature
-		let sha_name = sig_split[0];
-		let signature = sig_split[1];
-		if sha_name != "sha1" {
-			return Outcome::Failure((Status::BadRequest, GithubHookError::OperationNotSupported));
+		let ret = inner(req, data);
+		if let data::Outcome::Failure(e) = &ret {
+			eprintln!("Warning: error when creating github web hook: {:?}", e);
 		}
-
-		// Read message
-		let mut msg = String::new();
-		try_outcome!(data
-			.open()
-			.take(MSG_LIMIT)
-			.read_to_string(&mut msg)
-			.map_err(|_| GithubHookError::IoError)
-			.into_outcome(Status::BadRequest));
-
-		// Check HMAC
-		let mut mac = try_outcome!(hmac::Hmac::<sha1::Sha1>::new_varkey(secret.as_bytes())
-			.map_err(|_| GithubHookError::HmacError)
-			.into_outcome(Status::BadRequest));
-		mac.input(msg.as_bytes());
-
-		try_outcome!(mac
-			.verify(signature.as_bytes())
-			.map_err(|_| GithubHookError::HmacError)
-			.into_outcome(Status::BadRequest));
-
-		// Setup payload
-		let event_name = try_outcome!(req
-			.headers()
-			.get_one("X-GitHub-Event")
-			.ok_or(GithubHookError::NonexistentHeader)
-			.into_outcome(Status::BadRequest))
-		.to_string();
-		let payload = try_outcome!(serde_json::from_str(&msg)
-			.map_err(|_| GithubHookError::InvalidJson)
-			.into_outcome(Status::BadRequest));
-
-		Outcome::Success(GithubHookPayload { event_name, payload })
+		ret
 	}
 }
 
