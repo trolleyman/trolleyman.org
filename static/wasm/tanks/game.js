@@ -1,4 +1,4 @@
-import init, { main } from './pkg/tanks.js';
+import init, { main } from './pkg/trolleyman_org_tanks.js';
 
 async function run() {
 	await init();
