@@ -17,6 +17,14 @@ pub struct GithubWebhookConfig {
 	pub secret: Option<String>,
 	pub restart_flag_path: Option<String>,
 }
+impl Default for GithubWebhookConfig {
+	fn default() -> GithubWebhookConfig {
+		GithubWebhookConfig {
+			secret: None,
+			restart_flag_path: None,
+		}
+	}
+}
 
 #[derive(Clone, Deserialize)]
 pub struct Config {
@@ -26,6 +34,7 @@ pub struct Config {
 	/// Secret key used by Rocket
 	pub secret_key:     Option<String>,
 	pub recaptcha:      RecaptchaConfig,
+	#[serde(default = "default_webhook_config")]
 	pub github_webhook: GithubWebhookConfig,
 }
 impl Config {
@@ -57,3 +66,5 @@ impl Config {
 }
 
 fn default_database_path() -> PathBuf { "database/db.sqlite".into() }
+
+fn default_webhook_config() -> GithubWebhookConfig { Default::default() }
