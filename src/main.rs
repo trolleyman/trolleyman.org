@@ -26,6 +26,7 @@ mod db;
 mod recaptcha;
 
 mod flappy;
+mod git_lfs;
 mod github;
 mod linc;
 mod tanks;
@@ -186,5 +187,6 @@ fn main() {
 		.mount("/linc", linc::routes())
 		.mount("/tanks", tanks::routes())
 		.mount("/git_hook", github::routes())
+		.mount("/git-lfs", git_lfs::routes())
 		.launch();
 }
