@@ -18,12 +18,12 @@ pub struct GithubWebhookConfig {
 	pub restart_flag_path: Option<String>,
 }
 impl Default for GithubWebhookConfig {
-	fn default() -> GithubWebhookConfig {
-		GithubWebhookConfig {
-			secret: None,
-			restart_flag_path: None,
-		}
-	}
+	fn default() -> GithubWebhookConfig { GithubWebhookConfig { secret: None, restart_flag_path: None } }
+}
+
+#[derive(Clone, Deserialize)]
+pub struct GitLfsConfig {
+	pub path: PathBuf,
 }
 
 #[derive(Clone, Deserialize)]
@@ -36,6 +36,8 @@ pub struct Config {
 	pub recaptcha:      RecaptchaConfig,
 	#[serde(default = "default_webhook_config")]
 	pub github_webhook: GithubWebhookConfig,
+	#[serde(rename = "git-lfs")]
+	pub git_lfs:        GitLfsConfig,
 }
 impl Config {
 	pub fn load(env: Environment) -> Config {
@@ -60,6 +62,9 @@ impl Config {
 		let mut config: Config = toml::from_str(&config).expect("Failed to parse config");
 		if config.database_path.is_relative() {
 			config.database_path = config_dir.join(&config.database_path);
+		}
+		if config.git_lfs.path.is_relative() {
+			config.git_lfs.path = config_dir.join(&config.git_lfs.path);
 		}
 		config
 	}
