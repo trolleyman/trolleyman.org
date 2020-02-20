@@ -1,13 +1,12 @@
-
-use chrono::DateTime;
-use chrono::FixedOffset;
+use chrono::{DateTime, FixedOffset};
 use std::collections::HashMap;
 
+use super::Action;
 
 #[derive(serde::Serialize)]
 pub struct BatchResponse {
 	pub transfer: String,
-	pub objects: Vec<ObjectSpec>,
+	pub objects:  Vec<ObjectSpec>,
 }
 
 #[derive(serde::Serialize)]
@@ -21,24 +20,17 @@ pub struct ObjectSpec {
 
 #[derive(serde::Serialize)]
 pub struct ActionSpec {
-	pub href: String,
+	pub href:       String,
 	#[serde(default)]
-	pub header: HashMap<String, String>,
+	pub header:     HashMap<String, String>,
 	pub expires_in: usize,
 	#[serde(with = "super::util::serde_datetime")]
 	pub expires_at: DateTime<FixedOffset>,
 }
 
-#[derive(serde::Serialize, PartialEq, Eq, Hash, Copy, Clone)]
-#[serde(rename_all = "lowercase")]
-pub enum Action {
-	Download,
-	Upload,
-}
-
 #[derive(serde::Serialize)]
 pub struct ObjectError {
-	pub code: u16,
+	pub code:    u16,
 	pub message: String,
 }
 
@@ -49,9 +41,9 @@ pub struct ErrorResponse {
 	pub request_id: Option<String>,
 }
 impl ErrorResponse {
-	pub fn new(message: String) -> ErrorResponse {
+	pub fn new(message: impl ToString) -> ErrorResponse {
 		ErrorResponse {
-			message,
+			message: message.to_string(),
 			documentation_url: Some("https://git-lfs.github.com".into()),
 			request_id: None,
 		}
