@@ -7,7 +7,7 @@ use rocket::State;
 
 use rocket_contrib::json::Json;
 
-use rocket::{http::Status, response::status};
+use rocket::{http::{Status, ContentType}, response::status};
 
 use crate::DbConn;
 
@@ -16,7 +16,7 @@ mod request;
 mod response;
 mod util;
 
-use models::{UploadToken, Repository};
+use models::{UploadToken, DownloadToken, Repository};
 use request::BatchRequest;
 use response::{BatchResponse, ErrorResponse, SuccessResponse};
 
@@ -27,7 +27,7 @@ pub enum Action {
 	Upload,
 }
 
-pub fn routes() -> Vec<rocket::Route> { routes![batch, upload] }
+pub fn routes() -> Vec<rocket::Route> { routes![batch, upload, download] }
 
 fn error_response(status: Status) -> status::Custom<Json<ErrorResponse>> {
 	status::Custom(status, Json(ErrorResponse::new(status.reason)))
@@ -119,3 +119,20 @@ fn create_download_token(conn: &DbConn, repository: &Repository, o: request::Obj
 	}
 }
 
+#[get("/-/download?<token>")]
+fn download(token: String, conn: DbConn, config: State<Config>) -> Result<rocket::response::Content<rocket::response::Stream<File>>, status::Custom<Json<ErrorResponse>>> {
+	let token = DownloadToken::get(&conn, &token)
+		.map_err(|_| error_response_db())?
+		.ok_or_else(|| error_response(Status::NotFound))?;
+
+	let object = token.get_object(&conn)
+		.map_err(|_| error_response_db())?;
+	let repository = object.get_repository(&conn)
+		.map_err(|_| error_response_db())?;
+
+	let path = config.get_object_path(&repository.owner, &repository.name, &object.oid);
+	let mut file = File::open(path)
+		.map_err(|_| error_response_io())?;
+
+	Ok(rocket::response::Content(ContentType::Binary, rocket::response::Stream::from(file)))
+}
