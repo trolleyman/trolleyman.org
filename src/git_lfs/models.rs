@@ -1,5 +1,7 @@
 use chrono::prelude::*;
+use chrono::Duration;
 use diesel::prelude::*;
+use rand::Rng;
 
 use crate::{
 	schema::{git_lfs_object as object, git_lfs_repository as repository, git_lfs_upload_token as upload_token},
@@ -23,23 +25,21 @@ impl Repository {
 	}
 
 	pub fn get_object(&self, conn: &DbConn, oid: &str) -> Result<Option<Object>, diesel::result::Error> {
-		object::table
-			.filter(object::repository.eq(&self.id))
-			.filter(object::oid.eq(oid))
-			.first(&**conn)
-			.optional()
+		object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn).optional()
 	}
-	
-	pub fn create_object(&self, conn: &DbConn, oid: &str, size: u64) -> Result<Object, diesel::result::Error> {
-		NewObject { oid, size }.insert_into(object::table).get_result(&**conn)
+
+	pub fn create_object(&self, conn: &DbConn, oid: &str, size: i64) -> Result<Object, diesel::result::Error> {
+		NewObject { oid, size, repository: self.id }.insert_into(object::table).execute(&**conn)?;
+		object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn)
 	}
 }
 
 #[derive(Insertable)]
 #[table_name = "object"]
 struct NewObject<'a> {
-	oid: &'a str,
-	size: u64,
+	oid:        &'a str,
+	size:       i64,
+	repository: i32,
 }
 
 #[derive(Queryable, Identifiable)]
@@ -47,21 +47,48 @@ struct NewObject<'a> {
 pub struct Object {
 	id:         i32,
 	oid:        String,
-	size:       u64,
+	size:       i64,
 	repository: i32,
+}
+
+#[derive(Insertable)]
+#[table_name = "upload_token"]
+struct NewUploadToken<'a> {
+	token:      &'a str,
+	object:     i32,
+	expires:    NaiveDateTime,
 }
 
 #[derive(Queryable, Identifiable)]
 #[table_name = "upload_token"]
+#[primary_key(token)]
 pub struct UploadToken {
-	id: i32,
-	token: String,
-	repository: i32,
-	object: i32,
-	expires: DateTime<Utc>,
+	token:      String,
+	object:     i32,
+	expires:    NaiveDateTime,
 }
 impl UploadToken {
-	pub fn new(conn: &DbConn, object: &Object) -> UploadToken {
-		todo!()
+	pub fn new(conn: &DbConn, object: &Object) -> Result<UploadToken, diesel::result::Error> {
+		// Remove old entries from upload token database
+		let now = Utc::now();
+		diesel::delete(upload_token::table.filter(upload_token::expires.lt(&now.naive_utc())))
+			.execute(&**conn)?;
+		
+		// Add new upload token
+		let expires = (now + Duration::minutes(5)).naive_utc();
+		let token: String = rand::thread_rng()
+			.sample_iter(&rand::distributions::Alphanumeric)
+			.take(30)
+			.collect();
+		NewUploadToken {
+			token: &token,
+			object: object.id,
+			expires,
+		}.insert_into(upload_token::table).execute(&**conn)?;
+		Ok(UploadToken {
+			token,
+			object: object.id,
+			expires,
+		})
 	}
 }

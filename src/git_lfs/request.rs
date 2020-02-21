@@ -1,4 +1,3 @@
-use rocket_contrib::json::Json;
 use std::io::Read;
 
 use rocket::{
@@ -7,6 +6,8 @@ use rocket::{
 	outcome::IntoOutcome,
 	Data, Outcome, Request,
 };
+
+use rocket_contrib::json::Json;
 
 use super::{response::ErrorResponse, Action};
 

@@ -1,3 +1,5 @@
+use std::convert::TryInto;
+
 use crate::config::Config;
 use rocket::State;
 
@@ -56,19 +58,25 @@ fn batch(
 	match req.operation {
 		Action::Upload => Ok(Json(BatchResponse {
 			transfer: "basic".into(),
-			objects:  req.objects.into_iter().map(|o| upload_object(&repository, o, &conn)).collect(),
+			objects:  req.objects.into_iter().map(|o| create_upload_token(&conn, &repository, o)).collect(),
 		})),
 		Action::Download => todo!(),
 	}
 }
 
-fn upload_object(repository: &Repository, o: request::Object, conn: &DbConn) -> response::ObjectSpec {
+fn create_upload_token(conn: &DbConn, repository: &Repository, o: request::Object) -> response::ObjectSpec {
 	match repository.get_object(conn, &o.oid) {
 		Ok(Some(_)) => response::ObjectSpec::already_uploaded(o),
-		Ok(None) => {
-			let action = response::ActionSpec::new_upload(conn, &o.oid, o.size);
-			response::ObjectSpec::from_upload_action(o, action)
-		}
+		Ok(None) =>
+			if let Ok(size) = o.size.try_into() {
+				let action = repository.create_object(conn, &o.oid, size)
+					.and_then(|o| response::ActionSpec::new_upload(conn, &o))
+					.map_err(|_| response::ObjectSpec::from_error(o, response::ObjectError::db_error()))?;
+				response::ObjectSpec::from_upload_action(o, action)
+			} else {
+				let orig_size = o.size;
+				response::ObjectSpec::from_error(o, response::ObjectError::too_large(orig_size))
+			},
 		Err(_) => response::ObjectSpec::from_error(o, response::ObjectError::db_error()),
 	}
 }

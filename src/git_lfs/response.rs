@@ -48,7 +48,15 @@ pub struct ActionSpec {
 	pub expires_at: DateTime<FixedOffset>,
 }
 impl ActionSpec {
-	pub fn new_upload(conn: &DbConn, oid: &str, size: usize) -> ActionSpec { todo!() }
+	pub fn new_upload(conn: &DbConn, object: &models::Object) -> Result<ActionSpec, diesel::result::Error> {
+		let token = models::UploadToken::new(conn, object)?;
+		Ok(ActionSpec {
+			href: todo!(),
+			header: HashMap::new(),
+			expires_in: todo!(),
+			expires_at: todo!(),
+		})
+	}
 }
 
 #[derive(serde::Serialize)]
@@ -58,6 +66,10 @@ pub struct ObjectError {
 }
 impl ObjectError {
 	pub fn not_found() -> ObjectError { ObjectError { code: 404, message: "Object not found".into() } }
+
+	pub fn too_large(size: u64) -> ObjectError {
+		ObjectError { code: 413, message: format!("Requested size {} too large", size) }
+	}
 
 	pub fn db_error() -> ObjectError { ObjectError { code: 500, message: "Database error".into() } }
 }
