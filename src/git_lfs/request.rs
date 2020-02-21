@@ -11,7 +11,7 @@ use rocket_contrib::json::Json;
 
 use super::{response::ErrorResponse, Action};
 
-#[derive(serde::Deserialize)]
+#[derive(Clone, serde::Deserialize)]
 struct BatchRequestSpec {
 	operation: Action,
 	transfers: Vec<String>,
@@ -19,17 +19,18 @@ struct BatchRequestSpec {
 	objects:   Vec<ObjectSpec>,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(Clone, serde::Deserialize)]
 struct RefSpec {
 	name: String,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(Clone, serde::Deserialize)]
 struct ObjectSpec {
 	oid:  String,
 	size: u64,
 }
 
+#[derive(Clone)]
 pub struct Object {
 	pub oid:  String,
 	pub size: u64,
@@ -38,6 +39,7 @@ impl From<ObjectSpec> for Object {
 	fn from(object: ObjectSpec) -> Object { Object { oid: object.oid, size: object.size } }
 }
 
+#[derive(Clone)]
 pub struct BatchRequest {
 	pub operation: Action,
 	pub reference: Option<String>,

@@ -1,16 +1,16 @@
 use crate::db::DbConn;
-use chrono::{DateTime, FixedOffset};
+use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 
 use super::{models, Action};
 
-#[derive(serde::Serialize)]
+#[derive(Clone, serde::Serialize)]
 pub struct BatchResponse {
 	pub transfer: String,
 	pub objects:  Vec<ObjectSpec>,
 }
 
-#[derive(serde::Serialize)]
+#[derive(Clone, serde::Serialize)]
 pub struct ObjectSpec {
 	pub oid: String,
 	pub size: u64,
@@ -38,28 +38,28 @@ impl ObjectSpec {
 	}
 }
 
-#[derive(serde::Serialize)]
+#[derive(Clone, serde::Serialize)]
 pub struct ActionSpec {
 	pub href:       String,
 	#[serde(default)]
 	pub header:     HashMap<String, String>,
 	pub expires_in: u32,
 	#[serde(with = "super::util::serde_datetime")]
-	pub expires_at: DateTime<FixedOffset>,
+	pub expires_at: DateTime<Utc>,
 }
 impl ActionSpec {
 	pub fn new_upload(conn: &DbConn, object: &models::Object) -> Result<ActionSpec, diesel::result::Error> {
 		let token = models::UploadToken::new(conn, object)?;
 		Ok(ActionSpec {
-			href: todo!(),
+			href: format!("/git-lfs/-/upload?token={}", token.token),
 			header: HashMap::new(),
-			expires_in: todo!(),
-			expires_at: todo!(),
+			expires_in: models::UPLOAD_TOKEN_EXPIRATION_SECONDS,
+			expires_at: DateTime::from_utc(token.expires, Utc),
 		})
 	}
 }
 
-#[derive(serde::Serialize)]
+#[derive(Clone, serde::Serialize)]
 pub struct ObjectError {
 	pub code:    u16,
 	pub message: String,
@@ -74,7 +74,7 @@ impl ObjectError {
 	pub fn db_error() -> ObjectError { ObjectError { code: 500, message: "Database error".into() } }
 }
 
-#[derive(serde::Serialize)]
+#[derive(Clone, serde::Serialize)]
 pub struct ErrorResponse {
 	pub message: String,
 	pub documentation_url: Option<String>,
@@ -86,6 +86,22 @@ impl ErrorResponse {
 			message: message.to_string(),
 			documentation_url: Some("https://git-lfs.github.com".into()),
 			request_id: None,
+		}
+	}
+}
+
+#[derive(Clone, serde::Serialize)]
+pub struct SuccessResponse {
+	pub message: String,
+}
+impl SuccessResponse {
+	pub fn new() -> SuccessResponse {
+		SuccessResponse::custom("Success!".into())
+	}
+
+	pub fn custom(message: String) -> SuccessResponse {
+		SuccessResponse {
+			message
 		}
 	}
 }

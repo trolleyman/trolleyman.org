@@ -68,6 +68,10 @@ impl Config {
 		}
 		config
 	}
+
+	pub fn get_object_path(&self, owner: &str, name: &str, oid: &str) -> PathBuf {
+		self.git_lfs.path.join(owner).join(name).join(oid)
+	}
 }
 
 fn default_database_path() -> PathBuf { "database/db.sqlite".into() }
