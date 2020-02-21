@@ -10,14 +10,6 @@ use rocket::{
 
 use super::{response::ErrorResponse, Action};
 
-#[derive(Debug)]
-pub enum BatchRequestError {
-	InvalidAcceptHeader,
-	InvalidUtf8,
-	InvalidJson,
-	InvalidTransferAdapter,
-}
-
 #[derive(serde::Deserialize)]
 struct BatchRequestSpec {
 	operation: Action,
@@ -58,6 +50,8 @@ impl FromDataSimple for BatchRequest {
 		if req.content_type() != Some(&git_lfs_ct) {
 			return Outcome::Failure((Status::NotAcceptable, Json(ErrorResponse::new("Invalid content type"))));
 		}
+
+		// TODO: Check Accept header
 
 		let mut data_str = String::new();
 		try_outcome!(data

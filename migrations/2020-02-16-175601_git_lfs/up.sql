@@ -8,6 +8,8 @@ CREATE TABLE git_lfs_repository (
 
 CREATE TABLE git_lfs_object (
 	"id" INTEGER PRIMARY KEY NOT NULL,
+	"oid" TEXT NOT NULL,
 	"size" INTEGER NOT NULL,
-	"repository" INTEGER NOT NULL REFERENCES git_lfs_repository(id)
+	"repository" INTEGER NOT NULL REFERENCES git_lfs_repository(id),
+	UNIQUE("oid", "repository")
 );

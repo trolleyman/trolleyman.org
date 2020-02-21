@@ -1,11 +1,10 @@
 use crate::config::Config;
 use rocket::State;
-use diesel::prelude::*;
 
 use rocket_contrib::json::Json;
 
 use rocket::{
-	http::{Accept, MediaType, QMediaType, Status},
+	http::Status,
 	response::status,
 };
 
@@ -50,7 +49,7 @@ fn batch(
 	}
 
 	// Get repo from database
-	let repository = Repository::get(conn, &owner, repository_git.trim_end_matches(".git"))
+	let repository = Repository::get(&conn, &owner, repository_git.trim_end_matches(".git"))
 		.map_err(|_| error_response_db())?
 		.ok_or_else(|| error_response(Status::NotFound))?;
 
@@ -58,7 +57,25 @@ fn batch(
 
 	// Process request
 	match req.operation {
-		Action::Upload => todo!(),
+		Action::Upload => {
+			Ok(Json(BatchResponse {
+				transfer: "basic".into(),
+				objects: req.objects.into_iter().map(|o| {
+					upload_object(&repository, o, &conn)
+				}).collect(),
+			}))
+		},
 		Action::Download => todo!(),
+	}
+}
+
+fn upload_object(repository: &Repository, o: request::Object, conn: &DbConn) -> response::ObjectSpec {
+	match repository.get_object(conn, &o.oid) {
+		Ok(Some(_)) => response::ObjectSpec::already_uploaded(o),
+		Ok(None) => {
+			let action = response::ActionSpec::new_upload(conn, &o.oid, o.size);
+			response::ObjectSpec::from_upload_action(o, action)
+		},
+		Err(_) => response::ObjectSpec::from_error(o, response::ObjectError::db_error()),
 	}
 }
