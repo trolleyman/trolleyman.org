@@ -60,13 +60,13 @@ fn batch(
 	// TODO auth
 
 	// Process request
-	match req.operation {
-		Action::Upload => Ok(Json(BatchResponse {
-			transfer: "basic".into(),
-			objects:  req.objects.into_iter().map(|o| create_upload_token(&conn, &repository, o)).collect(),
-		})),
-		Action::Download => todo!(),
-	}
+	Ok(Json(BatchResponse {
+		transfer: "basic".into(),
+		objects: req.objects.into_iter().map(|o| match req.operation {
+			Action::Upload => create_upload_token(&conn, &repository, o),
+			Action::Download => create_download_token(&conn, &repository, o),
+		}).collect(),
+	}))
 }
 
 fn create_upload_token(conn: &DbConn, repository: &Repository, o: request::Object) -> response::ObjectSpec {
@@ -106,3 +106,16 @@ fn upload(token: String, conn: DbConn, config: State<Config>, data: rocket::Data
 
 	Ok(Json(SuccessResponse::new()))
 }
+
+fn create_download_token(conn: &DbConn, repository: &Repository, o: request::Object) -> response::ObjectSpec {
+	match repository.get_object(conn, &o.oid) {
+		Ok(Some(object_model)) => {
+			response::ActionSpec::new_download(conn, &object_model)
+				.map(|action| response::ObjectSpec::from_download_action(o.clone(), action))
+				.unwrap_or_else(|_| response::ObjectSpec::from_error(o, response::ObjectError::db_error()))
+		},
+		Ok(None) => response::ObjectSpec::from_error(o, response::ObjectError::not_found()),
+		Err(_) => response::ObjectSpec::from_error(o, response::ObjectError::db_error()),
+	}
+}
+

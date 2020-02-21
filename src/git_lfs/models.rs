@@ -86,9 +86,9 @@ impl UploadToken {
 		// Add new upload token
 		let expires = (now + Duration::seconds(UPLOAD_TOKEN_EXPIRATION_SECONDS as i64)).naive_utc();
 		let token: String = rand::thread_rng()
-			.sample_iter(&rand::distributions::Alphanumeric)
-			.take(30)
-			.collect();
+		.sample_iter(&rand::distributions::Alphanumeric)
+		.take(30)
+		.collect();
 		NewUploadToken {
 			token: &token,
 			object: object.id,
@@ -100,28 +100,30 @@ impl UploadToken {
 			expires,
 		})
 	}
-
+	
 	/// Get the upload token with the specified id
 	pub fn get(conn: &DbConn, token: &str) -> DbResult<Option<UploadToken>> {
 		let now = Utc::now();
 		UploadToken::clean_table(conn, now);
-
+		
 		upload_token::table
-			.filter(upload_token::token.eq(token))
-			.first(&**conn)
-			.optional()
+		.filter(upload_token::token.eq(token))
+		.first(&**conn)
+		.optional()
 	}
-
+	
 	/// Removes old entries from upload token database
 	fn clean_table(conn: &DbConn, now: DateTime<Utc>) -> DbResult<usize> {
 		diesel::delete(upload_token::table.filter(upload_token::expires.lt(&now.naive_utc())))
-			.execute(&**conn)
+		.execute(&**conn)
 	}
-
+	
 	/// Gets the object associated with the token
 	pub fn get_object(&self, conn: &DbConn) -> DbResult<Object> {
 		object::table
-			.filter(object::id.eq(self.object))
-			.first(&**conn)
+		.filter(object::id.eq(self.object))
+		.first(&**conn)
 	}
 }
+
+pub const DOWNLOAD_TOKEN_EXPIRATION_SECONDS: u32 = 5 * 60;

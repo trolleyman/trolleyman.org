@@ -1,8 +1,8 @@
-use crate::db::DbConn;
 use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 
 use super::{models, Action};
+use crate::{DbConn, DbResult};
 
 #[derive(Clone, serde::Serialize)]
 pub struct BatchResponse {
@@ -36,6 +36,12 @@ impl ObjectSpec {
 		actions.insert(Action::Upload, action);
 		ObjectSpec { oid: o.oid, size: o.size, authenticated: true, actions: Some(actions), error: None }
 	}
+
+	pub fn from_download_action(o: super::request::Object, action: ActionSpec) -> ObjectSpec {
+		let mut actions = HashMap::new();
+		actions.insert(Action::Download, action);
+		ObjectSpec { oid: o.oid, size: o.size, authenticated: true, actions: Some(actions), error: None }
+	}
 }
 
 #[derive(Clone, serde::Serialize)]
@@ -48,12 +54,22 @@ pub struct ActionSpec {
 	pub expires_at: DateTime<Utc>,
 }
 impl ActionSpec {
-	pub fn new_upload(conn: &DbConn, object: &models::Object) -> Result<ActionSpec, diesel::result::Error> {
+	pub fn new_upload(conn: &DbConn, object: &models::Object) -> DbResult<ActionSpec> {
 		let token = models::UploadToken::new(conn, object)?;
 		Ok(ActionSpec {
 			href: format!("/git-lfs/-/upload?token={}", token.token),
 			header: HashMap::new(),
 			expires_in: models::UPLOAD_TOKEN_EXPIRATION_SECONDS,
+			expires_at: DateTime::from_utc(token.expires, Utc),
+		})
+	}
+
+	pub fn new_download(conn: &DbConn, object: &models::Object) -> DbResult<ActionSpec> {
+		let token = models::DownloadToken::new(conn, object)?;
+		Ok(ActionSpec {
+			href: format!("/git-lfs/-/download?token={}", token.token),
+			header: HashMap::new(),
+			expires_in: models::DOWNLOAD_TOKEN_EXPIRATION_SECONDS,
 			expires_at: DateTime::from_utc(token.expires, Utc),
 		})
 	}

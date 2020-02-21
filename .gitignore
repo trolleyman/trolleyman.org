@@ -2,7 +2,6 @@
 /database/
 *.log
 /.caddy/
-/.vscode
 /target
 **/*.rs.bk
 node_modules/
