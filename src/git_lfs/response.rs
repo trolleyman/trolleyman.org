@@ -2,8 +2,7 @@ use crate::db::DbConn;
 use chrono::{DateTime, FixedOffset};
 use std::collections::HashMap;
 
-use super::models;
-use super::Action;
+use super::{models, Action};
 
 #[derive(serde::Serialize)]
 pub struct BatchResponse {
@@ -14,52 +13,28 @@ pub struct BatchResponse {
 #[derive(serde::Serialize)]
 pub struct ObjectSpec {
 	pub oid: String,
-	pub size: usize,
+	pub size: u64,
 	pub authenticated: bool,
 	pub actions: Option<HashMap<Action, ActionSpec>>,
 	pub error: Option<ObjectError>,
 }
 impl ObjectSpec {
 	pub fn from_error(o: super::request::Object, error: ObjectError) -> ObjectSpec {
-		ObjectSpec {
-			oid: o.oid,
-			size: o.size,
-			authenticated: true,
-			actions: None,
-			error: Some(error),
-		}
+		ObjectSpec { oid: o.oid, size: o.size, authenticated: true, actions: None, error: Some(error) }
 	}
 
 	pub fn already_uploaded(o: super::request::Object) -> ObjectSpec {
-		ObjectSpec {
-			oid: o.oid,
-			size: o.size,
-			authenticated: true,
-			actions: None,
-			error: None,
-		}
+		ObjectSpec { oid: o.oid, size: o.size, authenticated: true, actions: None, error: None }
 	}
-	
+
 	pub fn from_actions(o: super::request::Object, actions: HashMap<Action, ActionSpec>) -> ObjectSpec {
-		ObjectSpec {
-			oid: o.oid,
-			size: o.size,
-			authenticated: true,
-			actions: Some(actions),
-			error: None,
-		}
+		ObjectSpec { oid: o.oid, size: o.size, authenticated: true, actions: Some(actions), error: None }
 	}
-	
+
 	pub fn from_upload_action(o: super::request::Object, action: ActionSpec) -> ObjectSpec {
 		let mut actions = HashMap::new();
 		actions.insert(Action::Upload, action);
-		ObjectSpec {
-			oid: o.oid,
-			size: o.size,
-			authenticated: true,
-			actions: Some(actions),
-			error: None,
-		}
+		ObjectSpec { oid: o.oid, size: o.size, authenticated: true, actions: Some(actions), error: None }
 	}
 }
 
@@ -68,14 +43,12 @@ pub struct ActionSpec {
 	pub href:       String,
 	#[serde(default)]
 	pub header:     HashMap<String, String>,
-	pub expires_in: usize,
+	pub expires_in: u32,
 	#[serde(with = "super::util::serde_datetime")]
 	pub expires_at: DateTime<FixedOffset>,
 }
 impl ActionSpec {
-	pub fn new_upload(conn: &DbConn, oid: &str, size: usize) -> ActionSpec {
-		todo!()
-	}
+	pub fn new_upload(conn: &DbConn, oid: &str, size: usize) -> ActionSpec { todo!() }
 }
 
 #[derive(serde::Serialize)]
@@ -84,19 +57,9 @@ pub struct ObjectError {
 	pub message: String,
 }
 impl ObjectError {
-	pub fn not_found() -> ObjectError {
-		ObjectError {
-			code: 404,
-			message: "Object not found".into(),
-		}
-	}
-	
-	pub fn db_error() -> ObjectError {
-		ObjectError {
-			code: 500,
-			message: "Database error".into(),
-		}
-	}
+	pub fn not_found() -> ObjectError { ObjectError { code: 404, message: "Object not found".into() } }
+
+	pub fn db_error() -> ObjectError { ObjectError { code: 500, message: "Database error".into() } }
 }
 
 #[derive(serde::Serialize)]

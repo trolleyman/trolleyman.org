@@ -26,12 +26,12 @@ struct RefSpec {
 #[derive(serde::Deserialize)]
 struct ObjectSpec {
 	oid:  String,
-	size: usize,
+	size: u64,
 }
 
 pub struct Object {
 	pub oid:  String,
-	pub size: usize,
+	pub size: u64,
 }
 impl From<ObjectSpec> for Object {
 	fn from(object: ObjectSpec) -> Object { Object { oid: object.oid, size: object.size } }

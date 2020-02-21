@@ -3,10 +3,7 @@ use rocket::State;
 
 use rocket_contrib::json::Json;
 
-use rocket::{
-	http::Status,
-	response::status,
-};
+use rocket::{http::Status, response::status};
 
 use crate::DbConn;
 
@@ -57,14 +54,10 @@ fn batch(
 
 	// Process request
 	match req.operation {
-		Action::Upload => {
-			Ok(Json(BatchResponse {
-				transfer: "basic".into(),
-				objects: req.objects.into_iter().map(|o| {
-					upload_object(&repository, o, &conn)
-				}).collect(),
-			}))
-		},
+		Action::Upload => Ok(Json(BatchResponse {
+			transfer: "basic".into(),
+			objects:  req.objects.into_iter().map(|o| upload_object(&repository, o, &conn)).collect(),
+		})),
 		Action::Download => todo!(),
 	}
 }
@@ -75,7 +68,7 @@ fn upload_object(repository: &Repository, o: request::Object, conn: &DbConn) -> 
 		Ok(None) => {
 			let action = response::ActionSpec::new_upload(conn, &o.oid, o.size);
 			response::ObjectSpec::from_upload_action(o, action)
-		},
+		}
 		Err(_) => response::ObjectSpec::from_error(o, response::ObjectError::db_error()),
 	}
 }
