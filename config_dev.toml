@@ -1,5 +1,7 @@
 
 database_path = "database/db.sqlite3"
+protocol = "http"
+hostname = "localhost:8000"
 
 [recaptcha]
 public_key = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"

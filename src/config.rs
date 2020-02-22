@@ -31,6 +31,10 @@ pub struct Config {
 	// Path of database. Relative to the config file's location.
 	#[serde(default = "default_database_path")]
 	pub database_path:  PathBuf,
+	/// Protocol that the server uses
+	pub protocol:       String,
+	/// Hostname of the server
+	pub hostname:       String,
 	/// Secret key used by Rocket
 	pub secret_key:     Option<String>,
 	pub recaptcha:      RecaptchaConfig,

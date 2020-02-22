@@ -25,11 +25,14 @@ impl Repository {
 	}
 
 	pub fn get_object(&self, conn: &DbConn, oid: &str) -> DbResult<Option<Object>> {
-		object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn).optional()
+		let ret = object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn).optional();
+		eprintln!("git lfs: get_object({}) = {:?}", oid, ret);
+		ret
 	}
 
 	pub fn create_object(&self, conn: &DbConn, oid: &str, size: i64) -> DbResult<Object> {
-		NewObject { oid, size, repository: self.id }.insert_into(object::table).execute(&**conn)?;
+		eprintln!("git lfs: create_object({}, {})", oid, size);
+		NewObject { oid, size, valid: false, repository: self.id }.insert_into(object::table).execute(&**conn)?;
 		object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn)
 	}
 }
@@ -39,15 +42,17 @@ impl Repository {
 struct NewObject<'a> {
 	oid:        &'a str,
 	size:       i64,
+	valid:      bool,
 	repository: i32,
 }
 
-#[derive(Clone, Queryable, Identifiable)]
+#[derive(Clone, Debug, Queryable, Identifiable)]
 #[table_name = "object"]
 pub struct Object {
 	pub id:         i32,
 	pub oid:        String,
 	pub size:       i64,
+	pub valid:      bool,
 	pub repository: i32,
 }
 impl Object {
@@ -56,6 +61,11 @@ impl Object {
 		repository::table
 			.filter(repository::id.eq(self.repository))
 			.first(&**conn)
+	}
+
+	/// Makes the object valid, and saves the changes of the object to the database
+	pub fn make_valid(&self, conn: &DbConn) -> DbResult<()> {
+		diesel::update(self).set(object::valid.eq(true)).execute(&**conn).map(|_| ())
 	}
 }
 
@@ -188,7 +198,7 @@ impl DownloadToken {
 	/// Gets the object associated with the token
 	pub fn get_object(&self, conn: &DbConn) -> DbResult<Object> {
 		object::table
-		.filter(object::id.eq(self.object))
-		.first(&**conn)
+			.filter(object::id.eq(self.object))
+			.first(&**conn)
 	}
 }

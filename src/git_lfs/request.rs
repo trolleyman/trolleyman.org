@@ -11,20 +11,21 @@ use rocket_contrib::json::Json;
 
 use super::{response::ErrorResponse, Action};
 
-#[derive(Clone, serde::Deserialize)]
+#[derive(Clone, Debug, serde::Deserialize)]
 struct BatchRequestSpec {
 	operation: Action,
+	#[serde(default)]
 	transfers: Vec<String>,
 	reference: Option<RefSpec>,
 	objects:   Vec<ObjectSpec>,
 }
 
-#[derive(Clone, serde::Deserialize)]
+#[derive(Clone, Debug, serde::Deserialize)]
 struct RefSpec {
 	name: String,
 }
 
-#[derive(Clone, serde::Deserialize)]
+#[derive(Clone, Debug, serde::Deserialize)]
 struct ObjectSpec {
 	oid:  String,
 	size: u64,
@@ -66,14 +67,15 @@ impl FromDataSimple for BatchRequest {
 		let spec: BatchRequestSpec = try_outcome!(serde_json::from_str(&data_str)
 			.map_err(|_| Json(ErrorResponse::new("Invalid JSON")))
 			.into_outcome(Status::BadRequest));
-
-		if !spec.transfers.iter().any(|t| t == "basic") {
+			
+		if spec.transfers.len() != 0 && !spec.transfers.iter().any(|t| t == "basic") {
 			return Outcome::Failure((
 				Status::BadRequest,
 				Json(ErrorResponse::new("Unsupported transfer adapter (only basic supported)")),
 			));
 		}
-
+		
+		eprintln!("git lfs: batch request: {:?}", &spec);
 		Outcome::Success(BatchRequest {
 			operation: spec.operation,
 			reference: spec.reference.map(|r| r.name),

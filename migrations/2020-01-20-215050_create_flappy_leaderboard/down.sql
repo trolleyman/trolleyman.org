@@ -1,1 +1,1 @@
-DROP TABLE flappy_leaderboard;
+DROP TABLE IF EXISTS flappy_leaderboard;

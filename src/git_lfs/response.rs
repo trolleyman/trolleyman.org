@@ -1,16 +1,16 @@
 use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 
-use super::{models, Action};
+use super::{models, Action, Config};
 use crate::{DbConn, DbResult};
 
-#[derive(Clone, serde::Serialize)]
+#[derive(Clone, Debug, serde::Serialize)]
 pub struct BatchResponse {
 	pub transfer: String,
 	pub objects:  Vec<ObjectSpec>,
 }
 
-#[derive(Clone, serde::Serialize)]
+#[derive(Clone, Debug, serde::Serialize)]
 pub struct ObjectSpec {
 	pub oid: String,
 	pub size: u64,
@@ -30,6 +30,7 @@ impl ObjectSpec {
 	pub fn from_upload_action(o: super::request::Object, action: ActionSpec) -> ObjectSpec {
 		let mut actions = HashMap::new();
 		actions.insert(Action::Upload, action);
+		eprintln!("git lfs: from_upload_action: {:?}", actions);
 		ObjectSpec { oid: o.oid, size: o.size, authenticated: true, actions: Some(actions), error: None }
 	}
 
@@ -40,7 +41,7 @@ impl ObjectSpec {
 	}
 }
 
-#[derive(Clone, serde::Serialize)]
+#[derive(Clone, Debug, serde::Serialize)]
 pub struct ActionSpec {
 	pub href:       String,
 	#[serde(default)]
@@ -50,20 +51,20 @@ pub struct ActionSpec {
 	pub expires_at: DateTime<Utc>,
 }
 impl ActionSpec {
-	pub fn new_upload(conn: &DbConn, object: &models::Object) -> DbResult<ActionSpec> {
+	pub fn new_upload(conn: &DbConn, config: &Config, object: &models::Object) -> DbResult<ActionSpec> {
 		let token = models::UploadToken::new(conn, object)?;
 		Ok(ActionSpec {
-			href: format!("/git-lfs/-/upload?token={}", token.token),
+			href: format!("{}://{}/git-lfs/-/upload?token={}", config.protocol, config.hostname, token.token),
 			header: HashMap::new(),
 			expires_in: models::UPLOAD_TOKEN_EXPIRATION_SECONDS,
 			expires_at: DateTime::from_utc(token.expires, Utc),
 		})
 	}
 
-	pub fn new_download(conn: &DbConn, object: &models::Object) -> DbResult<ActionSpec> {
+	pub fn new_download(conn: &DbConn, config: &Config, object: &models::Object) -> DbResult<ActionSpec> {
 		let token = models::DownloadToken::new(conn, object)?;
 		Ok(ActionSpec {
-			href: format!("/git-lfs/-/download?token={}", token.token),
+			href: format!("{}://{}/git-lfs/-/download?token={}", config.protocol, config.hostname, token.token),
 			header: HashMap::new(),
 			expires_in: models::DOWNLOAD_TOKEN_EXPIRATION_SECONDS,
 			expires_at: DateTime::from_utc(token.expires, Utc),
@@ -71,7 +72,7 @@ impl ActionSpec {
 	}
 }
 
-#[derive(Clone, serde::Serialize)]
+#[derive(Clone, Debug, serde::Serialize)]
 pub struct ObjectError {
 	pub code:    u16,
 	pub message: String,
@@ -83,7 +84,7 @@ impl ObjectError {
 		ObjectError { code: 413, message: format!("Requested size {} too large", size) }
 	}
 
-	pub fn db_error() -> ObjectError { ObjectError { code: 500, message: "Database error".into() } }
+	pub fn db_error_msg(e: impl std::fmt::Debug) -> ObjectError { ObjectError { code: 500, message: format!("Database error: {:?}", e) } }
 }
 
 #[derive(Clone, serde::Serialize)]
