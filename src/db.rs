@@ -1,4 +1,3 @@
-
 pub type DbError = diesel::result::Error;
 pub type DbResult<T> = Result<T, DbError>;
 

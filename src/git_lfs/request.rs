@@ -67,14 +67,14 @@ impl FromDataSimple for BatchRequest {
 		let spec: BatchRequestSpec = try_outcome!(serde_json::from_str(&data_str)
 			.map_err(|_| Json(ErrorResponse::new("Invalid JSON")))
 			.into_outcome(Status::BadRequest));
-			
+
 		if spec.transfers.len() != 0 && !spec.transfers.iter().any(|t| t == "basic") {
 			return Outcome::Failure((
 				Status::BadRequest,
 				Json(ErrorResponse::new("Unsupported transfer adapter (only basic supported)")),
 			));
 		}
-		
+
 		eprintln!("git lfs: batch request: {:?}", &spec);
 		Outcome::Success(BatchRequest {
 			operation: spec.operation,

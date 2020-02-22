@@ -12,7 +12,7 @@
 
 use std::collections::{BTreeMap, HashMap};
 
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
 use diesel::prelude::*;
 use rocket::{config::Environment, State};
 use rocket_contrib::{
@@ -37,7 +37,7 @@ mod tanks;
 pub const WARN_PREFIX: &'static str = "\x1B[1m\x1B[33mwarn\x1B[37m:\x1B[0m ";
 pub const ERROR_PREFIX: &'static str = "\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m ";
 
-pub use db::{DbConn, DbResult, DbError};
+pub use db::{DbConn, DbError, DbResult};
 
 embed_migrations!();
 
@@ -148,15 +148,14 @@ fn setup_database(config: &Config) -> Result<()> {
 				}
 
 				eprintln!("{}Failed to open database connection ({}): {}", WARN_PREFIX, db_url, e);
-				
+
 				std::thread::sleep(std::time::Duration::from_secs(1));
-			},
+			}
 		}
 	};
 
 	// Migrate database
-	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout())
-		.context("Failed to migrate database")
+	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout()).context("Failed to migrate database")
 }
 
 pub fn main() -> Result<()> {

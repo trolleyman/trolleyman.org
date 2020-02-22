@@ -54,8 +54,8 @@ impl ActionSpec {
 	pub fn new_upload(conn: &DbConn, config: &Config, object: &models::Object) -> DbResult<ActionSpec> {
 		let token = models::UploadToken::new(conn, object)?;
 		Ok(ActionSpec {
-			href: format!("{}://{}/git-lfs/-/upload?token={}", config.protocol, config.hostname, token.token),
-			header: HashMap::new(),
+			href:       format!("{}://{}/git-lfs/-/upload?token={}", config.protocol, config.hostname, token.token),
+			header:     HashMap::new(),
 			expires_in: models::UPLOAD_TOKEN_EXPIRATION_SECONDS,
 			expires_at: DateTime::from_utc(token.expires, Utc),
 		})
@@ -64,8 +64,8 @@ impl ActionSpec {
 	pub fn new_download(conn: &DbConn, config: &Config, object: &models::Object) -> DbResult<ActionSpec> {
 		let token = models::DownloadToken::new(conn, object)?;
 		Ok(ActionSpec {
-			href: format!("{}://{}/git-lfs/-/download?token={}", config.protocol, config.hostname, token.token),
-			header: HashMap::new(),
+			href:       format!("{}://{}/git-lfs/-/download?token={}", config.protocol, config.hostname, token.token),
+			header:     HashMap::new(),
 			expires_in: models::DOWNLOAD_TOKEN_EXPIRATION_SECONDS,
 			expires_at: DateTime::from_utc(token.expires, Utc),
 		})
@@ -84,7 +84,9 @@ impl ObjectError {
 		ObjectError { code: 413, message: format!("Requested size {} too large", size) }
 	}
 
-	pub fn db_error_msg(e: impl std::fmt::Debug) -> ObjectError { ObjectError { code: 500, message: format!("Database error: {:?}", e) } }
+	pub fn db_error_msg(e: impl std::fmt::Debug) -> ObjectError {
+		ObjectError { code: 500, message: format!("Database error: {:?}", e) }
+	}
 }
 
 #[derive(Clone, serde::Serialize)]
@@ -108,13 +110,7 @@ pub struct SuccessResponse {
 	pub message: String,
 }
 impl SuccessResponse {
-	pub fn new() -> SuccessResponse {
-		SuccessResponse::custom("Success!".into())
-	}
+	pub fn new() -> SuccessResponse { SuccessResponse::custom("Success!".into()) }
 
-	pub fn custom(message: String) -> SuccessResponse {
-		SuccessResponse {
-			message
-		}
-	}
+	pub fn custom(message: String) -> SuccessResponse { SuccessResponse { message } }
 }

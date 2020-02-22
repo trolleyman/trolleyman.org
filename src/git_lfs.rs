@@ -1,13 +1,14 @@
-use std::convert::TryInto;
-use std::io::prelude::*;
-use std::fs::File;
+use std::{convert::TryInto, fs::File, io::prelude::*};
 
 use crate::config::Config;
 use rocket::State;
 
 use rocket_contrib::json::Json;
 
-use rocket::{http::{Status, ContentType}, response::status};
+use rocket::{
+	http::{ContentType, Status},
+	response::status,
+};
 
 use crate::DbConn;
 
@@ -16,7 +17,7 @@ mod request;
 mod response;
 mod util;
 
-use models::{UploadToken, DownloadToken, Repository};
+use models::{DownloadToken, Repository, UploadToken};
 use request::BatchRequest;
 use response::{BatchResponse, ErrorResponse, SuccessResponse};
 
@@ -51,7 +52,7 @@ fn batch(
 	repository_git: String,
 	req: BatchRequest,
 	conn: DbConn,
-	config: State<Config>
+	config: State<Config>,
 ) -> Result<Json<BatchResponse>, status::Custom<Json<ErrorResponse>>> {
 	if !repository_git.ends_with(".git") {
 		return Err(error_response(Status::NotFound));
@@ -61,7 +62,7 @@ fn batch(
 	let repository = Repository::get(&conn, &owner, repository_git.trim_end_matches(".git"))
 		.map_err(|e| error_response_db(e))?
 		.ok_or_else(|| error_response(Status::NotFound))?;
-	
+
 	eprintln!("git lfs: batch: {}/{}", repository.owner, repository.name);
 
 	// TODO auth
@@ -70,16 +71,25 @@ fn batch(
 	let operation = req.operation;
 	let batch_response = BatchResponse {
 		transfer: "basic".into(),
-		objects: req.objects.into_iter().map(|o| match operation {
-			Action::Upload => create_upload_token(&conn, &*config, &repository, o),
-			Action::Download => create_download_token(&conn, &*config, &repository, o),
-		}).collect(),
+		objects:  req
+			.objects
+			.into_iter()
+			.map(|o| match operation {
+				Action::Upload => create_upload_token(&conn, &*config, &repository, o),
+				Action::Download => create_download_token(&conn, &*config, &repository, o),
+			})
+			.collect(),
 	};
 	eprintln!("git lfs: batch response: {:?}", batch_response);
 	Ok(Json(batch_response))
 }
 
-fn create_upload_token(conn: &DbConn, config: &Config, repository: &Repository, o: request::Object) -> response::ObjectSpec {
+fn create_upload_token(
+	conn: &DbConn,
+	config: &Config,
+	repository: &Repository,
+	o: request::Object,
+) -> response::ObjectSpec {
 	let orig_size = o.size;
 	match repository.get_object(conn, &o.oid) {
 		Ok(Some(object_model)) if object_model.valid => response::ObjectSpec::already_uploaded(o),
@@ -88,7 +98,8 @@ fn create_upload_token(conn: &DbConn, config: &Config, repository: &Repository, 
 				if orig_size > GIT_LFS_MAX_BYTES {
 					response::ObjectSpec::from_error(o, response::ObjectError::too_large(orig_size))
 				} else {
-					o_opt.map(|o| Ok(o))
+					o_opt
+						.map(|o| Ok(o))
 						.unwrap_or_else(|| repository.create_object(conn, &o.oid, size))
 						.and_then(|o| response::ActionSpec::new_upload(conn, config, &o))
 						.map(|action| response::ObjectSpec::from_upload_action(o.clone(), action))
@@ -102,59 +113,62 @@ fn create_upload_token(conn: &DbConn, config: &Config, repository: &Repository, 
 }
 
 #[put("/-/upload?<token>", data = "<data>")]
-fn upload(token: String, conn: DbConn, config: State<Config>, data: rocket::Data) -> Result<Json<SuccessResponse>, status::Custom<Json<ErrorResponse>>> {
+fn upload(
+	token: String,
+	conn: DbConn,
+	config: State<Config>,
+	data: rocket::Data,
+) -> Result<Json<SuccessResponse>, status::Custom<Json<ErrorResponse>>> {
 	let token = UploadToken::get(&conn, &token)
 		.map_err(|e| error_response_db(e))?
 		.ok_or_else(|| error_response(Status::NotFound))?;
 
-	let object = token.get_object(&conn)
-		.map_err(|e| error_response_db(e))?;
-	let repository = object.get_repository(&conn)
-		.map_err(|e| error_response_db(e))?;
+	let object = token.get_object(&conn).map_err(|e| error_response_db(e))?;
+	let repository = object.get_repository(&conn).map_err(|e| error_response_db(e))?;
 
 	let path = config.get_object_path(&repository.owner, &repository.name, &object.oid);
 	if let Some(parent) = path.parent() {
-		std::fs::create_dir_all(&parent)
-			.map_err(|e| error_response_io(e))?;
+		std::fs::create_dir_all(&parent).map_err(|e| error_response_io(e))?;
 	}
-	let mut file = File::create(&path)
-		.map_err(|e| error_response_io(e))?;
+	let mut file = File::create(&path).map_err(|e| error_response_io(e))?;
 
-	std::io::copy(&mut data.open().take(object.size as u64), &mut file)
-		.map_err(|e| error_response_io(e))?;
+	std::io::copy(&mut data.open().take(object.size as u64), &mut file).map_err(|e| error_response_io(e))?;
 
-	object.make_valid(&conn)
-		.map_err(|e| error_response_db(e))?;
+	object.make_valid(&conn).map_err(|e| error_response_db(e))?;
 
 	Ok(Json(SuccessResponse::new()))
 }
 
-fn create_download_token(conn: &DbConn, config: &Config, repository: &Repository, o: request::Object) -> response::ObjectSpec {
+fn create_download_token(
+	conn: &DbConn,
+	config: &Config,
+	repository: &Repository,
+	o: request::Object,
+) -> response::ObjectSpec {
 	match repository.get_object(conn, &o.oid) {
-		Ok(Some(object_model)) => {
-			response::ActionSpec::new_download(conn, config, &object_model)
-				.map(|action| response::ObjectSpec::from_download_action(o.clone(), action))
-				.unwrap_or_else(|e| response::ObjectSpec::from_error(o, response::ObjectError::db_error_msg(e)))
-		},
+		Ok(Some(object_model)) => response::ActionSpec::new_download(conn, config, &object_model)
+			.map(|action| response::ObjectSpec::from_download_action(o.clone(), action))
+			.unwrap_or_else(|e| response::ObjectSpec::from_error(o, response::ObjectError::db_error_msg(e))),
 		Ok(None) => response::ObjectSpec::from_error(o, response::ObjectError::not_found()),
 		Err(e) => response::ObjectSpec::from_error(o, response::ObjectError::db_error_msg(e)),
 	}
 }
 
 #[get("/-/download?<token>")]
-fn download(token: String, conn: DbConn, config: State<Config>) -> Result<rocket::response::Content<rocket::response::Stream<File>>, status::Custom<Json<ErrorResponse>>> {
+fn download(
+	token: String,
+	conn: DbConn,
+	config: State<Config>,
+) -> Result<rocket::response::Content<rocket::response::Stream<File>>, status::Custom<Json<ErrorResponse>>> {
 	let token = DownloadToken::get(&conn, &token)
 		.map_err(|e| error_response_db(e))?
 		.ok_or_else(|| error_response(Status::NotFound))?;
 
-	let object = token.get_object(&conn)
-		.map_err(|e| error_response_db(e))?;
-	let repository = object.get_repository(&conn)
-		.map_err(|e| error_response_db(e))?;
+	let object = token.get_object(&conn).map_err(|e| error_response_db(e))?;
+	let repository = object.get_repository(&conn).map_err(|e| error_response_db(e))?;
 
 	let path = config.get_object_path(&repository.owner, &repository.name, &object.oid);
-	let file = File::open(path)
-		.map_err(|e| error_response_io(e))?;
+	let file = File::open(path).map_err(|e| error_response_io(e))?;
 
 	Ok(rocket::response::Content(ContentType::Binary, rocket::response::Stream::from(file)))
 }

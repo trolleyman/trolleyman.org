@@ -1,11 +1,13 @@
-use chrono::prelude::*;
-use chrono::Duration;
+use chrono::{prelude::*, Duration};
 use diesel::prelude::*;
 use rand::Rng;
 
 use crate::{
-	schema::{git_lfs_object as object, git_lfs_repository as repository, git_lfs_upload_token as upload_token, git_lfs_download_token as download_token},
-	DbConn, DbResult
+	schema::{
+		git_lfs_download_token as download_token, git_lfs_object as object, git_lfs_repository as repository,
+		git_lfs_upload_token as upload_token,
+	},
+	DbConn, DbResult,
 };
 
 #[derive(Clone, Queryable, Identifiable)]
@@ -25,7 +27,8 @@ impl Repository {
 	}
 
 	pub fn get_object(&self, conn: &DbConn, oid: &str) -> DbResult<Option<Object>> {
-		let ret = object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn).optional();
+		let ret =
+			object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn).optional();
 		eprintln!("git lfs: get_object({}) = {:?}", oid, ret);
 		ret
 	}
@@ -58,9 +61,7 @@ pub struct Object {
 impl Object {
 	/// Gets the repository associated with the object
 	pub fn get_repository(&self, conn: &DbConn) -> DbResult<Repository> {
-		repository::table
-			.filter(repository::id.eq(self.repository))
-			.first(&**conn)
+		repository::table.filter(repository::id.eq(self.repository)).first(&**conn)
 	}
 
 	/// Makes the object valid, and saves the changes of the object to the database
@@ -72,9 +73,9 @@ impl Object {
 #[derive(Insertable)]
 #[table_name = "upload_token"]
 struct NewUploadToken<'a> {
-	token:      &'a str,
-	object:     i32,
-	expires:    NaiveDateTime,
+	token:   &'a str,
+	object:  i32,
+	expires: NaiveDateTime,
 }
 
 pub const UPLOAD_TOKEN_EXPIRATION_SECONDS: u32 = 5 * 60;
@@ -83,56 +84,41 @@ pub const UPLOAD_TOKEN_EXPIRATION_SECONDS: u32 = 5 * 60;
 #[table_name = "upload_token"]
 #[primary_key(token)]
 pub struct UploadToken {
-	pub token:      String,
-	pub object:     i32,
-	pub expires:    NaiveDateTime,
+	pub token:   String,
+	pub object:  i32,
+	pub expires: NaiveDateTime,
 }
 impl UploadToken {
 	/// Create a new upload token for the specified object
 	pub fn new(conn: &DbConn, object: &Object) -> DbResult<UploadToken> {
 		let now = Utc::now();
 		UploadToken::clean_table(conn, now)?;
-		
+
 		// Add new upload token
 		let expires = (now + Duration::seconds(UPLOAD_TOKEN_EXPIRATION_SECONDS as i64)).naive_utc();
-		let token: String = rand::thread_rng()
-		.sample_iter(&rand::distributions::Alphanumeric)
-		.take(30)
-		.collect();
-		NewUploadToken {
-			token: &token,
-			object: object.id,
-			expires,
-		}.insert_into(upload_token::table).execute(&**conn)?;
-		Ok(UploadToken {
-			token,
-			object: object.id,
-			expires,
-		})
+		let token: String = rand::thread_rng().sample_iter(&rand::distributions::Alphanumeric).take(30).collect();
+		NewUploadToken { token: &token, object: object.id, expires }
+			.insert_into(upload_token::table)
+			.execute(&**conn)?;
+		Ok(UploadToken { token, object: object.id, expires })
 	}
-	
+
 	/// Get the upload token with the specified id
 	pub fn get(conn: &DbConn, token: &str) -> DbResult<Option<UploadToken>> {
 		let now = Utc::now();
 		UploadToken::clean_table(conn, now)?;
-		
-		upload_token::table
-		.filter(upload_token::token.eq(token))
-		.first(&**conn)
-		.optional()
+
+		upload_token::table.filter(upload_token::token.eq(token)).first(&**conn).optional()
 	}
-	
+
 	/// Removes old entries from upload token database
 	fn clean_table(conn: &DbConn, now: DateTime<Utc>) -> DbResult<usize> {
-		diesel::delete(upload_token::table.filter(upload_token::expires.lt(&now.naive_utc())))
-		.execute(&**conn)
+		diesel::delete(upload_token::table.filter(upload_token::expires.lt(&now.naive_utc()))).execute(&**conn)
 	}
-	
+
 	/// Gets the object associated with the token
 	pub fn get_object(&self, conn: &DbConn) -> DbResult<Object> {
-		object::table
-		.filter(object::id.eq(self.object))
-		.first(&**conn)
+		object::table.filter(object::id.eq(self.object)).first(&**conn)
 	}
 }
 
@@ -141,18 +127,18 @@ pub const DOWNLOAD_TOKEN_EXPIRATION_SECONDS: u32 = 5 * 60;
 #[derive(Insertable)]
 #[table_name = "download_token"]
 struct NewDownloadToken<'a> {
-	token:      &'a str,
-	object:     i32,
-	expires:    NaiveDateTime,
+	token:   &'a str,
+	object:  i32,
+	expires: NaiveDateTime,
 }
 
 #[derive(Clone, Queryable, Identifiable)]
 #[table_name = "download_token"]
 #[primary_key(token)]
 pub struct DownloadToken {
-	pub token:      String,
-	pub object:     i32,
-	pub expires:    NaiveDateTime,
+	pub token:   String,
+	pub object:  i32,
+	pub expires: NaiveDateTime,
 }
 impl DownloadToken {
 	/// Create a new download token for the specified object
@@ -162,43 +148,28 @@ impl DownloadToken {
 
 		// Add new download token
 		let expires = (now + Duration::seconds(UPLOAD_TOKEN_EXPIRATION_SECONDS as i64)).naive_utc();
-		let token: String = rand::thread_rng()
-			.sample_iter(&rand::distributions::Alphanumeric)
-			.take(30)
-			.collect();
-		NewDownloadToken {
-			token: &token,
-			object: object.id,
-			expires,
-		}.insert_into(download_token::table).execute(&**conn)?;
-		Ok(DownloadToken {
-			token,
-			object: object.id,
-			expires,
-		})
+		let token: String = rand::thread_rng().sample_iter(&rand::distributions::Alphanumeric).take(30).collect();
+		NewDownloadToken { token: &token, object: object.id, expires }
+			.insert_into(download_token::table)
+			.execute(&**conn)?;
+		Ok(DownloadToken { token, object: object.id, expires })
 	}
 
 	/// Get the download token with the specified id
 	pub fn get(conn: &DbConn, token: &str) -> DbResult<Option<DownloadToken>> {
 		let now = Utc::now();
 		DownloadToken::clean_table(conn, now)?;
-		
-		download_token::table
-		.filter(download_token::token.eq(token))
-		.first(&**conn)
-		.optional()
+
+		download_token::table.filter(download_token::token.eq(token)).first(&**conn).optional()
 	}
 
 	/// Removes old entries from download token database
 	fn clean_table(conn: &DbConn, now: DateTime<Utc>) -> DbResult<usize> {
-		diesel::delete(download_token::table.filter(download_token::expires.lt(&now.naive_utc())))
-		.execute(&**conn)
+		diesel::delete(download_token::table.filter(download_token::expires.lt(&now.naive_utc()))).execute(&**conn)
 	}
 
 	/// Gets the object associated with the token
 	pub fn get_object(&self, conn: &DbConn) -> DbResult<Object> {
-		object::table
-			.filter(object::id.eq(self.object))
-			.first(&**conn)
+		object::table.filter(object::id.eq(self.object)).first(&**conn)
 	}
 }
