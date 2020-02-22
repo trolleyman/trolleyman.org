@@ -6,6 +6,7 @@ logs
 
 .caddy
 database
+data
 
 target
 tanks/target
@@ -15,3 +16,4 @@ tanks/pkg
 
 Dockerfile
 scripts/restart_flag
+
