@@ -1,8 +1,10 @@
 /logs/
 /database/
-*.log
+/data
+/.vscode
 /.caddy/
 /target
+*.log
 **/*.rs.bk
 node_modules/
 config_release.toml
