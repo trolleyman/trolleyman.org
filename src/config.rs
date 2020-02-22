@@ -1,5 +1,6 @@
 use std::{borrow::Cow, path::PathBuf};
 
+use anyhow::{Context, Result};
 use rocket::config::Environment;
 use serde::Deserialize;
 
@@ -29,8 +30,8 @@ pub struct GitLfsConfig {
 #[derive(Clone, Deserialize)]
 pub struct Config {
 	// Path of database. Relative to the config file's location.
-	#[serde(default = "default_database_path")]
-	pub database_path:  PathBuf,
+	#[serde(default = "default_database_url")]
+	pub database_url:   String,
 	/// Protocol that the server uses
 	pub protocol:       String,
 	/// Hostname of the server
@@ -44,7 +45,7 @@ pub struct Config {
 	pub git_lfs:        GitLfsConfig,
 }
 impl Config {
-	pub fn load(env: Environment) -> Config {
+	pub fn load(env: Environment) -> Result<Config> {
 		let exe_dir = match std::env::current_exe() {
 			Ok(p) => p.parent().map(|p| p.to_path_buf()).unwrap_or_else(|| p.clone()),
 			Err(e) => {
@@ -61,16 +62,13 @@ impl Config {
 			std::fs::read_to_string(exe_dir.join(CONFIG_RELEASE_FILENAME))
 				.map(|s| (exe_dir, s.into()))
 				.or_else(|_| std::fs::read_to_string(CONFIG_RELEASE_FILENAME).map(|s| ("".into(), s.into())))
-				.expect("Failed to read config_release.toml")
+				.context("Failed to read config_release.toml")?
 		};
-		let mut config: Config = toml::from_str(&config).expect("Failed to parse config");
-		if config.database_path.is_relative() {
-			config.database_path = config_dir.join(&config.database_path);
-		}
+		let mut config: Config = toml::from_str(&config).context("Failed to parse config")?;
 		if config.git_lfs.path.is_relative() {
 			config.git_lfs.path = config_dir.join(&config.git_lfs.path);
 		}
-		config
+		Ok(config)
 	}
 
 	pub fn get_object_path(&self, owner: &str, name: &str, oid: &str) -> PathBuf {
@@ -78,6 +76,6 @@ impl Config {
 	}
 }
 
-fn default_database_path() -> PathBuf { "database/db.sqlite".into() }
+fn default_database_url() -> String { "postgres://postres:postgres@localhost:5432".into() }
 
 fn default_webhook_config() -> GithubWebhookConfig { Default::default() }

@@ -1,0 +1,18 @@
+version: "3.3"
+
+services:
+  rocket:
+    environment:
+      ROCKET_ENV: dev
+
+  caddy:
+    volumes:
+      - "./Caddyfile_dev:/etc/Caddyfile"
+
+  db:
+    volumes:
+      - "database:/var/lib/postgresql/data"
+
+volumes:
+  database:
+    external: true

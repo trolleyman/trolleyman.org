@@ -1,5 +1,7 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
+#[macro_use] extern crate anyhow;
+
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
 
@@ -10,6 +12,7 @@
 
 use std::collections::{BTreeMap, HashMap};
 
+use anyhow::{Result, Context};
 use diesel::prelude::*;
 use rocket::{config::Environment, State};
 use rocket_contrib::{
@@ -100,17 +103,16 @@ fn error_404_not_found(req: &rocket::Request) -> Template {
 	)
 }
 
-fn get_configs() -> (Config, rocket::Config) {
+fn get_configs() -> Result<(Config, rocket::Config)> {
 	use rocket::config::Value;
 
 	// Load config, based on environment
-	let active_env = Environment::active().expect("Invalid environment");
-	let config = Config::load(active_env);
+	let active_env = Environment::active().context("Invalid environment config")?;
+	let config = Config::load(active_env).context("Failed to load config")?;
 
 	// Setup db tables
-	let db_path = config.database_path.to_string_lossy().to_string();
 	let mut config_db_table = BTreeMap::<String, rocket::config::Value>::new();
-	config_db_table.insert("url".into(), Value::String(db_path.clone()));
+	config_db_table.insert("url".into(), Value::String(config.database_url.clone()));
 	let mut config_databases_db_table = BTreeMap::<String, rocket::config::Value>::new();
 	config_databases_db_table.insert("db".into(), Value::Table(config_db_table));
 
@@ -125,35 +127,41 @@ fn get_configs() -> (Config, rocket::Config) {
 		if active_env.is_prod() {
 			builder = builder.log_level(rocket::logger::LoggingLevel::Debug);
 		}
-		builder.expect("Rocket config failed to parse")
+		builder.finalize().context("Rocket config failed to parse")?
 	};
-	(config, rocket_config)
+	Ok((config, rocket_config))
 }
 
-fn main() {
-	// Load configs
-	let (config, rocket_config) = get_configs();
+fn setup_database(config: &Config) -> Result<()> {
+	let start_time = std::time::Instant::now();
+	let db_conn = loop {
+		match diesel::sqlite::SqliteConnection::establish(&config.database_url) {
+			Ok(db_conn) => break db_conn,
+			Err(e) => {
+				let now = std::time::Instant::now();
+				if now - start_time > std::time::Duration::from_secs(60) {
+					// > 1 min waiting, exit
+					eprintln!("{}Retried too many times, exiting", WARN_PREFIX);
+					return Err(e).context(format!("Failed to open database connection ({})", config.database_url));
+				}
 
-	// Check database parent folder exists
-	if let Some(db_dir) = config.database_path.parent() {
-		if !db_dir.is_dir() {
-			if let Err(e) = std::fs::create_dir_all(&db_dir) {
-				eprintln!("{}Failed to create database dir ({}): {}", ERROR_PREFIX, db_dir.display(), e);
-				std::process::exit(1);
-			}
-		}
-	}
-
-	// Migrate database
-	let db_path = config.database_path.to_string_lossy().to_string();
-	let db_conn = match diesel::sqlite::SqliteConnection::establish(&db_path) {
-		Ok(db_conn) => db_conn,
-		Err(e) => {
-			eprintln!("{}Failed to open database connection ({}): {}", ERROR_PREFIX, db_path, e);
-			std::process::exit(1)
+				eprintln!("{}Failed to open database connection ({}): {}", WARN_PREFIX, config.database_url, e);
+				
+				std::thread::sleep(std::time::Duration::from_secs(1));
+			},
 		}
 	};
-	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout()).expect("Failed to migrate database");
+
+	// Migrate database
+	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout())
+		.context("Failed to migrate database")
+}
+
+pub fn main() -> Result<()> {
+	// Load configs
+	let (config, rocket_config) = get_configs()?;
+
+	setup_database(&config)?;
 
 	// Launch Rocket
 	let active_env = rocket_config.environment;
@@ -189,4 +197,5 @@ fn main() {
 		.mount("/git_hook", github::routes())
 		.mount("/git-lfs", git_lfs::routes())
 		.launch();
+	Ok(())
 }

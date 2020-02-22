@@ -1,0 +1,12 @@
+
+# Redirects
+http://localhost {
+	proxy / rocket:8000 {
+		transparent
+	}
+	errors /root/logs/caddy_error.log
+	log / /root/logs/caddy.log {
+		rotate_size 10
+		rotate_compress
+	}
+}

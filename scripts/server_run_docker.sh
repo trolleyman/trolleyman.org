@@ -17,7 +17,7 @@ docker-compose build
 
 # Take down old server & reset restart flag
 docker-compose down || true  # TODO: Is this necessary?
-rm -f scripts/restart_flag/restart_flag || true
+rm -rf scripts/restart_flag || true
 
 # Start server
 docker-compose up -d
@@ -33,7 +33,7 @@ finished_waiting=
 last_heartbeat=$started_waiting
 last_heartbeat_success=$started_waiting
 function should_restart() {
-    if [[ -e scripts/restart_flag/restart_flag ]]; then
+    if [[ -e scripts/restart_flag ]]; then
         return 0
     fi
 
@@ -61,12 +61,11 @@ function should_restart() {
             last_heartbeat_success=$now
         fi
     fi
-
     return 1
 }
 while ! should_restart; do
     if command -v inotifywait >/dev/null 2>&1; then
-        inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 scripts/restart_flag >/dev/null 2>&1 || true
+        inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 scripts >/dev/null 2>&1 || true
     else
         echo "inotifywait: command not found: install using \`sudo apt install inotify-tools\`" >&2
         sleep 10

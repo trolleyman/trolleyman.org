@@ -52,12 +52,11 @@ RUN mkdir -p /trolleyman.org
 WORKDIR /trolleyman.org
 COPY --from=rust /usr/src/app/target/dist /trolleyman.org/
 COPY ./scripts/docker_entrypoint.sh ./
-RUN mkdir -p ./restart_flag
+RUN rm -f /trolleyman.org/data/restart_flag
 
 EXPOSE 80 443
 VOLUME /trolleyman.org/logs
-VOLUME /trolleyman.org/database
-VOLUME /trolleyman.org/restart_flag
+VOLUME /trolleyman.org/data
 
 ENTRYPOINT ["./docker_entrypoint.sh"]
 CMD ["./trolleyman-org"]

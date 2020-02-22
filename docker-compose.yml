@@ -6,9 +6,10 @@ services:
     image: trolleyman.org:latest
     restart: always
     volumes:
-      - "./database:/trolleyman.org/database"
-      - "./scripts/restart_flag:/trolleyman.org/restart_flag"
+      - "./data:/trolleyman.org/data"
       - "./logs:/trolleyman.org/logs"
+    depends_on:
+      - db
 
   caddy:
     image: abiosoft/caddy:latest
@@ -22,3 +23,12 @@ services:
       - "443:443"
     environment:
       ACME_AGREE: "true"
+
+  db:
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - "./database:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
