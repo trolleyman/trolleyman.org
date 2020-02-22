@@ -8,4 +8,5 @@ public_key = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
 private_key = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
 
 [git-lfs]
-path = "database/git-lfs"
+path = "data/git-lfs"
+
