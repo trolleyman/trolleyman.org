@@ -148,7 +148,7 @@ impl DownloadToken {
 	/// Create a new download token for the specified object
 	pub fn new(conn: &DbConn, object: &Object) -> DbResult<DownloadToken> {
 		let now = Utc::now();
-		DownloadToken::clean_table(conn, now);
+		DownloadToken::clean_table(conn, now)?;
 
 		// Add new download token
 		let expires = (now + Duration::seconds(UPLOAD_TOKEN_EXPIRATION_SECONDS as i64)).naive_utc();
@@ -171,7 +171,7 @@ impl DownloadToken {
 	/// Get the download token with the specified id
 	pub fn get(conn: &DbConn, token: &str) -> DbResult<Option<DownloadToken>> {
 		let now = Utc::now();
-		DownloadToken::clean_table(conn, now);
+		DownloadToken::clean_table(conn, now)?;
 		
 		download_token::table
 		.filter(download_token::token.eq(token))

@@ -60,9 +60,10 @@ fn batch(
 	// TODO auth
 
 	// Process request
+	let operation = req.operation;
 	Ok(Json(BatchResponse {
 		transfer: "basic".into(),
-		objects: req.objects.into_iter().map(|o| match req.operation {
+		objects: req.objects.into_iter().map(|o| match operation {
 			Action::Upload => create_upload_token(&conn, &repository, o),
 			Action::Download => create_download_token(&conn, &repository, o),
 		}).collect(),
