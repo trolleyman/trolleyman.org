@@ -25,6 +25,7 @@ use response::{BatchResponse, ErrorResponse, SuccessResponse};
 pub enum Action {
 	Download,
 	Upload,
+	// TODO: Verify
 }
 
 pub fn routes() -> Vec<rocket::Route> { routes![batch, upload, download] }
