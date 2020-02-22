@@ -27,10 +27,6 @@ impl ObjectSpec {
 		ObjectSpec { oid: o.oid, size: o.size, authenticated: true, actions: None, error: None }
 	}
 
-	pub fn from_actions(o: super::request::Object, actions: HashMap<Action, ActionSpec>) -> ObjectSpec {
-		ObjectSpec { oid: o.oid, size: o.size, authenticated: true, actions: Some(actions), error: None }
-	}
-
 	pub fn from_upload_action(o: super::request::Object, action: ActionSpec) -> ObjectSpec {
 		let mut actions = HashMap::new();
 		actions.insert(Action::Upload, action);

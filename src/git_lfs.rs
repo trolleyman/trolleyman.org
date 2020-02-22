@@ -132,7 +132,7 @@ fn download(token: String, conn: DbConn, config: State<Config>) -> Result<rocket
 		.map_err(|_| error_response_db())?;
 
 	let path = config.get_object_path(&repository.owner, &repository.name, &object.oid);
-	let mut file = File::open(path)
+	let file = File::open(path)
 		.map_err(|_| error_response_io())?;
 
 	Ok(rocket::response::Content(ContentType::Binary, rocket::response::Stream::from(file)))

@@ -81,7 +81,7 @@ impl UploadToken {
 	/// Create a new upload token for the specified object
 	pub fn new(conn: &DbConn, object: &Object) -> DbResult<UploadToken> {
 		let now = Utc::now();
-		UploadToken::clean_table(conn, now);
+		UploadToken::clean_table(conn, now)?;
 		
 		// Add new upload token
 		let expires = (now + Duration::seconds(UPLOAD_TOKEN_EXPIRATION_SECONDS as i64)).naive_utc();
@@ -104,7 +104,7 @@ impl UploadToken {
 	/// Get the upload token with the specified id
 	pub fn get(conn: &DbConn, token: &str) -> DbResult<Option<UploadToken>> {
 		let now = Utc::now();
-		UploadToken::clean_table(conn, now);
+		UploadToken::clean_table(conn, now)?;
 		
 		upload_token::table
 		.filter(upload_token::token.eq(token))
