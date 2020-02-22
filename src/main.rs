@@ -1,6 +1,6 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-#[macro_use] extern crate anyhow;
+//#[macro_use] extern crate anyhow;
 
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
@@ -111,8 +111,9 @@ fn get_configs() -> Result<(Config, rocket::Config)> {
 	let config = Config::load(active_env).context("Failed to load config")?;
 
 	// Setup db tables
+	let db_url = config.database_path.to_string_lossy().to_string();
 	let mut config_db_table = BTreeMap::<String, rocket::config::Value>::new();
-	config_db_table.insert("url".into(), Value::String(config.database_url.clone()));
+	config_db_table.insert("url".into(), Value::String(db_url));
 	let mut config_databases_db_table = BTreeMap::<String, rocket::config::Value>::new();
 	config_databases_db_table.insert("db".into(), Value::Table(config_db_table));
 
@@ -133,19 +134,20 @@ fn get_configs() -> Result<(Config, rocket::Config)> {
 }
 
 fn setup_database(config: &Config) -> Result<()> {
+	let db_url = config.database_path.to_string_lossy().to_string();
 	let start_time = std::time::Instant::now();
 	let db_conn = loop {
-		match diesel::sqlite::SqliteConnection::establish(&config.database_url) {
+		match diesel::sqlite::SqliteConnection::establish(&db_url) {
 			Ok(db_conn) => break db_conn,
 			Err(e) => {
 				let now = std::time::Instant::now();
 				if now - start_time > std::time::Duration::from_secs(60) {
 					// > 1 min waiting, exit
 					eprintln!("{}Retried too many times, exiting", WARN_PREFIX);
-					return Err(e).context(format!("Failed to open database connection ({})", config.database_url));
+					return Err(e).context(format!("Failed to open database connection ({})", db_url));
 				}
 
-				eprintln!("{}Failed to open database connection ({}): {}", WARN_PREFIX, config.database_url, e);
+				eprintln!("{}Failed to open database connection ({}): {}", WARN_PREFIX, db_url, e);
 				
 				std::thread::sleep(std::time::Duration::from_secs(1));
 			},

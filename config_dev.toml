@@ -1,5 +1,5 @@
 
-database_url = "postgres://postgres:postgres@localhost:5432"
+database_path = "data/db.sqlite3"
 protocol = "http"
 hostname = "localhost:8000"
 

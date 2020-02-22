@@ -8,7 +8,7 @@ edition = "2018"
 rocket = { git = "https://github.com/SergioBenitez/Rocket" }
 rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket", default-features = false, features = ["serve", "json", "tera_templates", "diesel_sqlite_pool"] }
 
-diesel = { version = "1.4.3", features = ["chrono", "postgres"] }
+diesel = { version = "1.4.3", features = ["chrono", "sqlite"] }
 diesel_migrations = "1.4.0"
 libsqlite3-sys = { version = ">=0.8.0, <0.17.0", features = ["min_sqlite_version_3_7_16", "bundled"] }  # Note: Update this if diesel is updated. This is a bit of a hack in order to get sqlite3.lib to be bundled on Windows.
 

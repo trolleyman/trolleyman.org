@@ -30,8 +30,8 @@ pub struct GitLfsConfig {
 #[derive(Clone, Deserialize)]
 pub struct Config {
 	// Path of database. Relative to the config file's location.
-	#[serde(default = "default_database_url")]
-	pub database_url:   String,
+	#[serde(default = "default_database_path")]
+	pub database_path:  PathBuf,
 	/// Protocol that the server uses
 	pub protocol:       String,
 	/// Hostname of the server
@@ -65,6 +65,9 @@ impl Config {
 				.context("Failed to read config_release.toml")?
 		};
 		let mut config: Config = toml::from_str(&config).context("Failed to parse config")?;
+		if config.database_path.is_relative() {
+			config.database_path = config_dir.join(&config.database_path);
+		}
 		if config.git_lfs.path.is_relative() {
 			config.git_lfs.path = config_dir.join(&config.git_lfs.path);
 		}
@@ -76,6 +79,6 @@ impl Config {
 	}
 }
 
-fn default_database_url() -> String { "postgres://postres:postgres@localhost:5432".into() }
+fn default_database_path() -> PathBuf { "data/db.sqlite3".into() }
 
 fn default_webhook_config() -> GithubWebhookConfig { Default::default() }

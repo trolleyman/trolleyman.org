@@ -17,7 +17,7 @@ docker-compose build
 
 # Take down old server & reset restart flag
 docker-compose down || true  # TODO: Is this necessary?
-rm -rf scripts/restart_flag || true
+rm -rf data/restart_flag || true
 
 # Start server
 docker-compose up -d
@@ -33,7 +33,7 @@ finished_waiting=
 last_heartbeat=$started_waiting
 last_heartbeat_success=$started_waiting
 function should_restart() {
-    if [[ -e scripts/restart_flag ]]; then
+    if [[ -e data/restart_flag ]]; then
         return 0
     fi
 
