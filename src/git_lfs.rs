@@ -46,6 +46,10 @@ fn error_response_io(e: impl std::fmt::Debug) -> status::Custom<Json<ErrorRespon
 	status::Custom(Status::InternalServerError, Json(ErrorResponse::new(format!("I/O error: {:?}", e))))
 }
 
+fn error_response_unauthorized() -> status::Custom<Json<ErrorResponse>> {
+	status::Custom(Status::Unauthorized, Json(ErrorResponse::new("Unauthorized")))
+}
+
 #[post("/<owner>/<repository_git>/info/lfs/objects/batch", data = "<req>")]
 fn batch(
 	owner: String,
@@ -65,10 +69,14 @@ fn batch(
 
 	eprintln!("git lfs: batch: {}/{}", repository.owner, repository.name);
 
-	// TODO auth
+	// Auth (TODO: proper auth)
+	let operation = req.operation;
+	if operation == Action::Upload {
+		eprintln!("git lfs: unathorized upload");
+		return Err(error_response_unauthorized());
+	}
 
 	// Process request
-	let operation = req.operation;
 	let batch_response = BatchResponse {
 		transfer: "basic".into(),
 		objects:  req
