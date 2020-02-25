@@ -23,5 +23,3 @@ toml = "0.5.6"
 
 hmac = "0.7.1"
 sha-1 = "0.8.2"
-
-hex = { version = "0.4.2", features = ["serde"] }

@@ -66,7 +66,7 @@ impl FromDataSimple for GithubHookPayload {
 				.into_outcome(Status::BadRequest));
 
 			// Check HMAC
-			let mut mac = try_outcome!(hmac::Hmac::<sha1::Sha1>::new_varkey(secret)
+			let mut mac = try_outcome!(hmac::Hmac::<sha1::Sha1>::new_varkey(secret.as_bytes())
 				.map_err(|e| anyhow!("HMAC error: {}", e))
 				.into_outcome(Status::BadRequest));
 			mac.input(msg.as_bytes());

@@ -15,8 +15,7 @@ pub struct RecaptchaConfig {
 
 #[derive(Clone, Deserialize)]
 pub struct GithubWebhookConfig {
-	#[serde(with = "hex::serde")]
-	pub secret: Vec<u8>,
+	pub secret: String,
 	pub restart_flag_path: PathBuf,
 }
 
