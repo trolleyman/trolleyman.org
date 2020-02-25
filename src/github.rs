@@ -66,7 +66,7 @@ impl FromDataSimple for GithubHookPayload {
 				.into_outcome(Status::BadRequest));
 
 			// Check HMAC
-			let mut mac = try_outcome!(hmac::Hmac::<sha1::Sha1>::new_varkey(secret)
+			let mut mac = try_outcome!(hmac::Hmac::<sha1::Sha1>::new_varkey(secret.as_bytes())
 				.map_err(|e| anyhow!("HMAC error: {}", e))
 				.into_outcome(Status::BadRequest));
 			mac.input(msg.as_bytes());
@@ -127,4 +127,3 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 		_ => Err(format!("Unknown event '{}'", payload.event_name)),
 	}
 }
-
