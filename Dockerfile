@@ -21,7 +21,7 @@ RUN cd xtask && cargo build
 RUN mkdir tanks
 COPY tanks/Cargo.toml tanks/Cargo.lock tanks/
 RUN mkdir tanks/src && echo "" > tanks/src/lib.rs
-RUN cd tanks && cargo build --release --no-default-features --features=wee_alloc
+RUN cd tanks && cargo build --release --target=wasm32-unknown-unknown --no-default-features --features=wee_alloc
 
 # Build main project deps
 COPY Cargo.toml Cargo.lock ./
@@ -37,7 +37,9 @@ COPY . .
 RUN rm -f xtask/target/debug/deps/trolleyman_org_xtask* &&\
     rm -f xtask/target/debug/trolleyman-org-xtask &&\
     rm -f tanks/target/release/deps/trolleyman_org_tanks* &&\
+    rm -f tanks/target/wasm32-unknown-unknown/release/deps/trolleyman_org_tanks* &&\
     rm -f tanks/target/release/trolleyman-org-tanks.wasm &&\
+    rm -f tanks/target/wasm32-unknown-unknown/release/trolleyman-org-tanks.wasm &&\
     rm -f target/release/deps/trolleyman_org* &&\
     rm -f target/release/trolleyman-org
 RUN cargo xtask dist
