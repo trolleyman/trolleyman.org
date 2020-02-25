@@ -15,7 +15,7 @@ pub struct RecaptchaConfig {
 
 #[derive(Clone, Deserialize)]
 pub struct GithubWebhookConfig {
-	#[serde(with = "crate::util::serde_hexstring")]
+	#[serde(with = "hex::serde")]
 	pub secret: Option<Vec<u8>>,
 	pub restart_flag_path: Option<String>,
 }

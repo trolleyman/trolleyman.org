@@ -3,7 +3,7 @@ use rocket::request::LenientForm;
 use rocket_contrib::json::Json;
 use serde::Serialize;
 
-use crate::{db::serde_naive_datetime, schema::flappy_leaderboard as leaderboard, DbConn};
+use crate::{schema::flappy_leaderboard as leaderboard, DbConn};
 
 #[derive(Queryable, Identifiable, Serialize)]
 #[table_name = "leaderboard"]
@@ -11,7 +11,7 @@ struct LeaderboardEntry {
 	id:        i32,
 	name:      String,
 	score:     i32,
-	#[serde(with = "serde_naive_datetime")]
+	#[serde(with = "crate::util::serde_naive_datetime")]
 	timestamp: chrono::NaiveDateTime,
 }
 

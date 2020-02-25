@@ -4,7 +4,6 @@ use rocket_contrib::templates::Template;
 use serde::Serialize;
 
 use crate::{
-	db::serde_naive_datetime,
 	schema::{linc_interest as interest, linc_lastedited as lastedited, linc_person as person},
 	DbConn,
 };
@@ -33,7 +32,7 @@ struct Person {
 #[table_name = "lastedited"]
 struct LastEdited {
 	id:        i32,
-	#[serde(with = "serde_naive_datetime")]
+	#[serde(with = "crate::util::serde_naive_datetime")]
 	timestamp: NaiveDateTime,
 }
 
