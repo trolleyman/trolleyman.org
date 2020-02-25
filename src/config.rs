@@ -16,11 +16,8 @@ pub struct RecaptchaConfig {
 #[derive(Clone, Deserialize)]
 pub struct GithubWebhookConfig {
 	#[serde(with = "hex::serde")]
-	pub secret: Option<Vec<u8>>,
-	pub restart_flag_path: Option<String>,
-}
-impl Default for GithubWebhookConfig {
-	fn default() -> GithubWebhookConfig { GithubWebhookConfig { secret: None, restart_flag_path: None } }
+	pub secret: Vec<u8>,
+	pub restart_flag_path: PathBuf,
 }
 
 #[derive(Clone, Deserialize)]
@@ -40,8 +37,7 @@ pub struct Config {
 	/// Secret key used by Rocket
 	pub secret_key:     Option<String>,
 	pub recaptcha:      RecaptchaConfig,
-	#[serde(default = "default_webhook_config")]
-	pub github_webhook: GithubWebhookConfig,
+	pub github_webhook: Option<GithubWebhookConfig>,
 	#[serde(rename = "git-lfs")]
 	pub git_lfs:        GitLfsConfig,
 }
@@ -72,6 +68,9 @@ impl Config {
 		if config.git_lfs.path.is_relative() {
 			config.git_lfs.path = config_dir.join(&config.git_lfs.path);
 		}
+		if let Some(github_webhook_config) = &mut config.github_webhook {
+			github_webhook_config.restart_flag_path = config_dir.join(&github_webhook_config.restart_flag_path);
+		}
 		Ok(config)
 	}
 
@@ -81,5 +80,3 @@ impl Config {
 }
 
 fn default_database_path() -> PathBuf { "data/db.sqlite3".into() }
-
-fn default_webhook_config() -> GithubWebhookConfig { Default::default() }

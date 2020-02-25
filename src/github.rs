@@ -1,4 +1,4 @@
-use std::{io::Read, path::Path};
+use std::io::Read;
 
 use anyhow::Context;
 use hmac::Mac;
@@ -37,13 +37,12 @@ impl FromDataSimple for GithubHookPayload {
 				.success_or_else(|| anyhow!("Config could not be loaded"))
 				.into_outcome(Status::InternalServerError));
 
-			let secret = try_outcome!(config
+			let secret = &try_outcome!(config
 				.github_webhook
-				.secret
 				.as_ref()
 				.ok_or_else(|| anyhow!("Github secret not specified"))
 				.into_outcome(Status::InternalServerError))
-			.clone();
+				.secret;
 
 			let sig_split: Vec<_> = header_signature.split("=").collect();
 			if sig_split.len() != 2 {
@@ -107,9 +106,9 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 			match push_ref {
 				Some("ref/heads/prod") => {
 					// Update server
-					if let Some(path) = config.github_webhook.restart_flag_path.as_ref() {
+					if let Some(github_webhook_config) = &config.github_webhook {
 						// Write restart flag
-						let path = Path::new(path);
+						let path = &github_webhook_config.restart_flag_path;
 						if let Some(parent) = path.parent() {
 							std::fs::create_dir_all(parent)
 								.map_err(|_| format!("Failed to create dir of restart flag"))?;
