@@ -33,6 +33,7 @@ mod git_lfs;
 mod github;
 mod linc;
 mod tanks;
+mod util;
 
 pub const WARN_PREFIX: &'static str = "\x1B[1m\x1B[33mwarn\x1B[37m:\x1B[0m ";
 pub const ERROR_PREFIX: &'static str = "\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m ";

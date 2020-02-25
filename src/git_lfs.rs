@@ -15,7 +15,6 @@ use crate::DbConn;
 mod models;
 mod request;
 mod response;
-mod util;
 
 use models::{DownloadToken, Repository, UploadToken};
 use request::BatchRequest;

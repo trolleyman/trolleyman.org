@@ -47,7 +47,7 @@ pub struct ActionSpec {
 	#[serde(default)]
 	pub header:     HashMap<String, String>,
 	pub expires_in: u32,
-	#[serde(with = "super::util::serde_datetime")]
+	#[serde(with = "crate::util::serde_datetime")]
 	pub expires_at: DateTime<Utc>,
 }
 impl ActionSpec {
