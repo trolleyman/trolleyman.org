@@ -14,7 +14,7 @@ use std::collections::{BTreeMap, HashMap};
 
 use anyhow::{Context, Result};
 use diesel::prelude::*;
-use rocket::{config::Environment, State};
+use rocket::{config::Environment, State, http::Status, response::status};
 use rocket_contrib::{
 	serve::StaticFiles,
 	templates::{self, tera, Template},
@@ -79,8 +79,17 @@ fn project(project_name: String, metadata: templates::Metadata) -> Option<Templa
 	}
 }
 
+#[get("/error?<code>")]
+fn error(code: u16) -> Result<status::Custom<String>, String> {
+	if let Some(status) = Status::from_code(code) {
+		Ok(status::Custom(status, format!("{}: {}", code, status.reason)))
+	} else {
+		Err(format!("Unknown code: {}", code))
+	}
+}
+
 #[catch(400)]
-fn error_400_bad_request(_req: &rocket::Request) -> Template {
+fn error_handler_400_bad_request(_req: &rocket::Request) -> Template {
 	Template::render(
 		"error",
 		json!({
@@ -92,7 +101,7 @@ fn error_400_bad_request(_req: &rocket::Request) -> Template {
 }
 
 #[catch(404)]
-fn error_404_not_found(req: &rocket::Request) -> Template {
+fn error_handler_404_not_found(req: &rocket::Request) -> Template {
 	Template::render(
 		"error",
 		json!({
@@ -186,8 +195,8 @@ pub fn main() -> Result<()> {
 		}))
 		.attach(DbConn::fairing())
 		.manage(config)
-		.register(catchers![error_400_bad_request, error_404_not_found])
-		.mount("/", routes![heartbeat, index, contact_details, project])
+		.register(catchers![error_handler_400_bad_request, error_handler_404_not_found])
+		.mount("/", routes![heartbeat, index, error, contact_details, project])
 		.mount("/static", StaticFiles::from("./static"))
 		.mount("/flappy", flappy::routes())
 		.mount("/linc", linc::routes())
