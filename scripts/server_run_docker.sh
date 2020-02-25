@@ -65,7 +65,7 @@ function should_restart() {
 }
 while ! should_restart; do
     if command -v inotifywait >/dev/null 2>&1; then
-        inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 scripts >/dev/null 2>&1 || true
+        inotifywait -e create -e modify -e delete -e close -e open -e move --timeout 10 data >/dev/null 2>&1 || true
     else
         echo "inotifywait: command not found: install using \`sudo apt install inotify-tools\`" >&2
         sleep 10
