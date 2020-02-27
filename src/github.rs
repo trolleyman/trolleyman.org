@@ -127,3 +127,4 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 		_ => Err(format!("Unknown event '{}'", payload.event_name)),
 	}
 }
+
