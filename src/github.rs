@@ -55,6 +55,7 @@ impl FromDataSimple for GithubHookPayload {
 			if sha_name != "sha1" {
 				return Outcome::Failure((Status::BadRequest, anyhow!("Hash algorithm not supported: {}", sha_name)));
 			}
+			eprintln!("GitHub signature: {}", signature);
 
 			// Read message
 			let mut msg = String::new();
@@ -69,6 +70,7 @@ impl FromDataSimple for GithubHookPayload {
 			let mut mac = try_outcome!(hmac::Hmac::<sha1::Sha1>::new_varkey(secret.as_bytes())
 				.map_err(|e| anyhow!("HMAC error: {}", e))
 				.into_outcome(Status::BadRequest));
+			eprintln!("=== Start GitHub msg ===\n{}\n=== End GitHub msg ===", signature);
 			mac.input(msg.as_bytes());
 
 			try_outcome!(mac
@@ -113,9 +115,9 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 							std::fs::create_dir_all(parent)
 								.map_err(|_| format!("Failed to create dir of restart flag"))?;
 						}
-						std::fs::write(path, b"please restart").map_err(|_| format!("Failed to write restart flag"))?;
+						std::fs::write(path, b"please restart\n").map_err(|_| format!("Failed to write restart flag"))?;
 					} else {
-						eprintln!("Warning: restart flag config item not found");
+						return Err(format!("Restart flag config item not found"));
 					}
 
 					Ok("Thanks, git.".to_string())
@@ -127,4 +129,3 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 		_ => Err(format!("Unknown event '{}'", payload.event_name)),
 	}
 }
-
