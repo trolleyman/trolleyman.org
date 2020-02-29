@@ -70,7 +70,7 @@ impl FromDataSimple for GithubHookPayload {
 			let mut mac = try_outcome!(hmac::Hmac::<sha1::Sha1>::new_varkey(secret.as_bytes())
 				.map_err(|e| anyhow!("HMAC error: {}", e))
 				.into_outcome(Status::BadRequest));
-			eprintln!("=== Start GitHub msg ===\n{}\n=== End GitHub msg ===", signature);
+			eprintln!("=== Start GitHub msg ===\n{}\n=== End GitHub msg ===", msg);
 			mac.input(msg.as_bytes());
 
 			try_outcome!(mac
