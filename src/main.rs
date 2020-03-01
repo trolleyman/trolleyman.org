@@ -112,7 +112,7 @@ fn error_handler_404_not_found(req: &rocket::Request) -> Template {
 	)
 }
 
-fn get_configs() -> Result<(Config, rocket::Config)> {
+fn get_configs() -> Result<(Config, rocket::Config, simplelog::Config)> {
 	use rocket::config::Value;
 
 	// Load config, based on environment
@@ -136,7 +136,22 @@ fn get_configs() -> Result<(Config, rocket::Config)> {
 		}
 		builder.finalize().context("Rocket config failed to parse")?
 	};
-	Ok((config, rocket_config))
+
+	// Get simple log config
+	let mut log_config_builder = simplelog::ConfigBuilder::new();
+	log_config_builder.set_target_level(simplelog::LevelFilter::Error);
+	let simplelog_config = if active_env.is_dev() {
+		log_config_builder
+			.set_time_to_local(true)
+			.set_time_format_str("%k:%M:%S.%3f")
+			.build()
+	} else {
+		log_config_builder
+			.set_time_format_str("%Y-%m-%d %H:%M:%S.%9f")
+			.build()
+	};
+
+	Ok((config, rocket_config, simplelog_config))
 }
 
 fn setup_database(config: &Config) -> Result<()> {
@@ -164,21 +179,51 @@ fn setup_database(config: &Config) -> Result<()> {
 	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout()).context("Failed to migrate database")
 }
 
-fn setup_logging() -> Result<()> {
-	use simplelog::{ConfigBuilder, TermLogger, SimpleLogger, LevelFilter, TerminalMode};
-	let config = ConfigBuilder::new().build();
-	if let Err(e) = TermLogger::init(LevelFilter::Info, config.clone(), TerminalMode::Mixed) {
-		SimpleLogger::init(LevelFilter::Warn, config).context("Logger already set")?;
-		warn!("Terminal logger could not be initialized: {}", e);
+fn setup_logging(config: &Config, log_config: &simplelog::Config) -> Result<()> {
+	use std::fs::OpenOptions;
+	use simplelog::{TermLogger, CombinedLogger, SimpleLogger, SharedLogger, WriteLogger, LevelFilter, TerminalMode};
+
+	let mut warn_msgs = vec![];
+	let mut loggers: Vec<Box<dyn SharedLogger>> = vec![];
+
+	// Terminal logger
+	match TermLogger::new(LevelFilter::Info, log_config.clone(), TerminalMode::Mixed) {
+		Some(l) => loggers.push(l),
+		None => {
+			loggers.push(SimpleLogger::new(LevelFilter::Info, log_config.clone()));
+			warn_msgs.push("Terminal logger could not be initialized".to_string());
+		}
 	}
-	Ok(())
+
+	// Log file
+	if let Some(parent) = config.log_path.parent() {
+		if let Err(e) = std::fs::create_dir_all(&parent) {
+			warn_msgs.push(format!("Log file directory could not be created: {}: {}", parent.display(), e));
+		}
+	}
+	match OpenOptions::new().create(true).append(true).open(&config.log_path) {
+		Ok(file) => loggers.push(WriteLogger::new(LevelFilter::Debug, log_config.clone(), file)),
+		Err(e) => warn_msgs.push(format!("Log file path could not be opened: {}: {}", &config.log_path.display(), e)),
+	}
+
+	// Combined final logger
+	let ret = CombinedLogger::init(loggers)
+		.context("Failed to init combined logger");
+
+	if ret.is_ok() {
+		for warn_msg in warn_msgs.iter() {
+			warn!("{}", warn_msg);
+		}
+	}
+
+	ret
 }
 
 pub fn main() -> Result<()> {
-	setup_logging()?;
-
 	// Load configs
-	let (config, rocket_config) = get_configs()?;
+	let (config, rocket_config, simplelog_config) = get_configs()?;
+
+	setup_logging(&config, &simplelog_config)?;
 
 	setup_database(&config)?;
 

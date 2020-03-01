@@ -15,12 +15,15 @@ pub struct RecaptchaConfig {
 
 #[derive(Clone, Deserialize)]
 pub struct GithubWebhookConfig {
+	/// GitHub shared secret key
 	pub secret: String,
+	/// File that is created when the server wants to restart. Relative to the config file's location.
 	pub restart_flag_path: PathBuf,
 }
 
 #[derive(Clone, Deserialize)]
 pub struct GitLfsConfig {
+	/// Directory holding LFS files. Relative to the config file's location.
 	pub path: PathBuf,
 }
 
@@ -33,6 +36,9 @@ pub struct Config {
 	pub protocol:       String,
 	/// Hostname of the server
 	pub hostname:       String,
+	/// Log filepath. Relative to the config file's location.
+	#[serde(default = "default_log_path")]
+	pub log_path:       PathBuf,
 	/// Secret key used by Rocket
 	pub secret_key:     Option<String>,
 	pub recaptcha:      RecaptchaConfig,
@@ -67,6 +73,9 @@ impl Config {
 		if config.git_lfs.path.is_relative() {
 			config.git_lfs.path = config_dir.join(&config.git_lfs.path);
 		}
+		if config.log_path.is_relative() {
+			config.log_path = config_dir.join(&config.log_path);
+		}
 		if let Some(github_webhook_config) = &mut config.github_webhook {
 			github_webhook_config.restart_flag_path = config_dir.join(&github_webhook_config.restart_flag_path);
 		}
@@ -79,3 +88,7 @@ impl Config {
 }
 
 fn default_database_path() -> PathBuf { "data/db.sqlite3".into() }
+
+fn default_log_path() -> PathBuf {
+	"logs/server.log".into()
+}
