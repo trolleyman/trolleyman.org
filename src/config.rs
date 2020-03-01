@@ -90,5 +90,5 @@ impl Config {
 fn default_database_path() -> PathBuf { "data/db.sqlite3".into() }
 
 fn default_log_path() -> PathBuf {
-	"logs/server.log".into()
+	"logs/rocket.debug.log".into()
 }
