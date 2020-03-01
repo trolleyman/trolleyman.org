@@ -8,6 +8,7 @@ use rocket::{
 	outcome::IntoOutcome,
 	Data, Outcome, Request, State,
 };
+use subtle::ConstantTimeEq;
 
 use super::config::Config;
 
@@ -51,11 +52,14 @@ impl FromDataSimple for GithubHookPayload {
 
 			// Get signature
 			let sha_name = sig_split[0];
-			let signature = sig_split[1];
+			let expected_signature = sig_split[1];
 			if sha_name != "sha1" {
 				return Outcome::Failure((Status::BadRequest, anyhow!("Hash algorithm not supported: {}", sha_name)));
 			}
-			eprintln!("GitHub signature: {}", signature);
+			let expected_signature = try_outcome!(hex::decode(expected_signature)
+				.context("GitHub signature not in hex string format")
+				.into_outcome(Status::BadRequest));
+			debug!("GitHub signature: {}", hex::encode(&expected_signature));
 
 			// Read message
 			let mut msg = String::new();
@@ -70,13 +74,15 @@ impl FromDataSimple for GithubHookPayload {
 			let mut mac = try_outcome!(hmac::Hmac::<sha1::Sha1>::new_varkey(secret.as_bytes())
 				.map_err(|e| anyhow!("HMAC error: {}", e))
 				.into_outcome(Status::BadRequest));
-			eprintln!("=== Start GitHub msg ===\n{}\n=== End GitHub msg ===", msg);
+			debug!("=== Start GitHub msg ===\n{}\n=== End GitHub msg ===", msg);
 			mac.input(msg.as_bytes());
 
-			try_outcome!(mac
-				.verify(signature.as_bytes())
-				.map_err(|e| anyhow!("HMAC verify error: {}", e))
-				.into_outcome(Status::BadRequest));
+			let signature = mac.result().code();
+			debug!("Calculated signature: {}", hex::encode(&signature));
+
+			if signature.as_slice().ct_eq(&expected_signature).unwrap_u8() == 0 {
+				return Outcome::Failure((Status::BadRequest, anyhow!("HMAC verify error")));
+			}
 
 			// Setup payload
 			let event_name = try_outcome!(req
