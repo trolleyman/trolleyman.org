@@ -122,14 +122,14 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 								.map_err(|_| format!("Failed to create dir of restart flag"))?;
 						}
 						std::fs::write(path, b"please restart\n").map_err(|_| format!("Failed to write restart flag"))?;
+						info!("GitHub push webhook received. Wrote to restart flag file: {}", path.display());
+						Ok("Thanks, git.".into())
 					} else {
-						return Err(format!("Restart flag config item not found"));
+						Err(format!("Restart flag config item not found"))
 					}
-
-					Ok("Thanks, git.".to_string())
 				}
-				Some(_) => Ok("Ignoring ref".to_string()),
-				_ => Err("Invalid JSON".to_string()),
+				Some(_) => Ok("Ignoring ref".into()),
+				_ => Err("Invalid JSON".into()),
 			}
 		}
 		_ => Err(format!("Unknown event '{}'", payload.event_name)),
