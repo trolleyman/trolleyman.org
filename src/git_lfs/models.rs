@@ -29,12 +29,12 @@ impl Repository {
 	pub fn get_object(&self, conn: &DbConn, oid: &str) -> DbResult<Option<Object>> {
 		let ret =
 			object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn).optional();
-		eprintln!("git lfs: get_object({}) = {:?}", oid, ret);
+		debug!("git lfs: get_object({}) = {:?}", oid, ret);
 		ret
 	}
 
 	pub fn create_object(&self, conn: &DbConn, oid: &str, size: i64) -> DbResult<Object> {
-		eprintln!("git lfs: create_object({}, {})", oid, size);
+		debug!("git lfs: create_object({}, {})", oid, size);
 		NewObject { oid, size, valid: false, repository: self.id }.insert_into(object::table).execute(&**conn)?;
 		object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn)
 	}

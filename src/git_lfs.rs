@@ -66,12 +66,12 @@ fn batch(
 		.map_err(|e| error_response_db(e))?
 		.ok_or_else(|| error_response(Status::NotFound))?;
 
-	eprintln!("git lfs: batch: {}/{}", repository.owner, repository.name);
+	debug!("git lfs: batch: {}/{}", repository.owner, repository.name);
 
 	// Auth (TODO: proper auth)
 	let operation = req.operation;
 	if operation == Action::Upload {
-		eprintln!("git lfs: unathorized upload");
+		warn!("git lfs: unathorized upload");
 		return Err(error_response_unauthorized());
 	}
 
@@ -87,7 +87,7 @@ fn batch(
 			})
 			.collect(),
 	};
-	eprintln!("git lfs: batch response: {:?}", batch_response);
+	debug!("git lfs: batch response: {:?}", batch_response);
 	Ok(Json(batch_response))
 }
 

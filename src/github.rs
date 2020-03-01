@@ -93,7 +93,7 @@ impl FromDataSimple for GithubHookPayload {
 		}
 		let ret = inner(req, data);
 		if let data::Outcome::Failure(e) = &ret {
-			eprintln!("Warning: error when creating github web hook: {}: {}", e.0, e.1);
+			debug!("Warning: error when creating github web hook: {}: {}", e.0, e.1);
 		}
 		ret
 	}

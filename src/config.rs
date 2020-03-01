@@ -45,7 +45,7 @@ impl Config {
 		let exe_dir = match std::env::current_exe() {
 			Ok(p) => p.parent().map(|p| p.to_path_buf()).unwrap_or_else(|| p.clone()),
 			Err(e) => {
-				eprintln!("{}executable directory could not be found: {}", super::WARN_PREFIX, e);
+				warn!("executable directory could not be found: {}", e);
 				".".into()
 			}
 		};

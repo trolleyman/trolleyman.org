@@ -9,6 +9,8 @@
 #[macro_use] extern crate diesel_migrations;
 
 #[macro_use] extern crate serde_json;
+#[macro_use] extern crate log;
+
 
 use std::collections::{BTreeMap, HashMap};
 
@@ -34,9 +36,6 @@ mod github;
 mod linc;
 mod tanks;
 mod util;
-
-pub const WARN_PREFIX: &'static str = "\x1B[1m\x1B[33mwarn\x1B[37m:\x1B[0m ";
-pub const ERROR_PREFIX: &'static str = "\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m ";
 
 pub use db::{DbConn, DbError, DbResult};
 
@@ -150,11 +149,11 @@ fn setup_database(config: &Config) -> Result<()> {
 				let now = std::time::Instant::now();
 				if now - start_time > std::time::Duration::from_secs(60) {
 					// > 1 min waiting, exit
-					eprintln!("{}Retried too many times, exiting", WARN_PREFIX);
+					warn!("Retried too many times, exiting");
 					return Err(e).context(format!("Failed to open database connection ({})", db_url));
 				}
 
-				eprintln!("{}Failed to open database connection ({}): {}", WARN_PREFIX, db_url, e);
+				warn!("Failed to open database connection ({}): {}", db_url, e);
 
 				std::thread::sleep(std::time::Duration::from_secs(1));
 			}
@@ -165,7 +164,19 @@ fn setup_database(config: &Config) -> Result<()> {
 	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout()).context("Failed to migrate database")
 }
 
+fn setup_logging() -> Result<()> {
+	use simplelog::{ConfigBuilder, TermLogger, SimpleLogger, LevelFilter, TerminalMode};
+	let config = ConfigBuilder::new().build();
+	if let Err(e) = TermLogger::init(LevelFilter::Info, config.clone(), TerminalMode::Mixed) {
+		SimpleLogger::init(LevelFilter::Warn, config).context("Logger already set")?;
+		warn!("Terminal logger could not be initialized: {}", e);
+	}
+	Ok(())
+}
+
 pub fn main() -> Result<()> {
+	setup_logging()?;
+
 	// Load configs
 	let (config, rocket_config) = get_configs()?;
 

@@ -75,7 +75,7 @@ impl FromDataSimple for BatchRequest {
 			));
 		}
 
-		eprintln!("git lfs: batch request: {:?}", &spec);
+		debug!("git lfs: batch request: {:?}", &spec);
 		Outcome::Success(BatchRequest {
 			operation: spec.operation,
 			reference: spec.reference.map(|r| r.name),

@@ -30,7 +30,7 @@ impl ObjectSpec {
 	pub fn from_upload_action(o: super::request::Object, action: ActionSpec) -> ObjectSpec {
 		let mut actions = HashMap::new();
 		actions.insert(Action::Upload, action);
-		eprintln!("git lfs: from_upload_action: {:?}", actions);
+		debug!("git lfs: from_upload_action: {:?}", actions);
 		ObjectSpec { oid: o.oid, size: o.size, authenticated: true, actions: Some(actions), error: None }
 	}
 
