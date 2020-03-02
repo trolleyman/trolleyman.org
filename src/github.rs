@@ -112,7 +112,7 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 		"push" => {
 			let push_ref = payload.payload.get("ref").and_then(|r| r.as_str());
 			match push_ref {
-				Some("ref/heads/prod") => {
+				Some("refs/heads/prod") => {
 					// Update server
 					if let Some(github_webhook_config) = &config.github_webhook {
 						// Write restart flag
@@ -135,4 +135,3 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 		_ => Err(format!("Unknown event '{}'", payload.event_name)),
 	}
 }
-
