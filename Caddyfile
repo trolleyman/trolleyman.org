@@ -1,12 +1,12 @@
 
 # Redirects
-https://trolleyman.org, https://www.trolleyman.org, https://www.callumgtolley.uk {
-	tls info@callumgtolley.uk
-	redir / https://callumgtolley.uk{uri}
+https://www.trolleyman.org, https://www.callumgtolley.uk, https://callumgtolley.uk {
+	tls info@trolleyman.org
+	redir / https://trolleyman.org{uri}
 }
 
-http://localhost, https://callumgtolley.uk {
-	tls info@callumgtolley.uk
+http://localhost, https://trolleyman.org {
+	tls info@trolleyman.org
 	proxy / rocket:8000 {
 		transparent
 	}
