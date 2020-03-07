@@ -48,14 +48,13 @@ impl<'a, 'r> FromRequest<'a, 'r> for ReCaptchaGuard {
 				.body(data.to_string())
 				.send()
 				.map(|_| ())
-				.context("Failed to verify ReCaptcha")
-				.map_err(|e| (Status::InternalServerError, e))
+				.map_err(|e| (Status::InternalServerError, Error::new(e).context(format!("Failed to request {}", RECAPTCHA_VERIFY_URL))))
 		}
 
 		match process(req) {
 			Ok(()) => Outcome::Success(ReCaptchaGuard { _phantom_data: std::marker::PhantomData }),
 			Err((status, e)) => {
-				warn!("ReCAPTCHA failed: {}", e);
+				warn!("ReCAPTCHA failed: {:#}", e);
 				Err(e).into_outcome(status)
 			}
 		}
