@@ -1,6 +1,6 @@
 use std::io::Read;
 
-use anyhow::Context;
+use anyhow::{Context, Error};
 use hmac::Mac;
 use rocket::{
 	data::{self, FromDataSimple},
@@ -21,10 +21,10 @@ pub struct GithubHookPayload {
 	payload:    serde_json::Value,
 }
 impl FromDataSimple for GithubHookPayload {
-	type Error = anyhow::Error;
+	type Error = Error;
 
 	fn from_data(req: &Request, data: Data) -> data::Outcome<Self, Self::Error> {
-		fn inner(req: &Request, data: Data) -> data::Outcome<GithubHookPayload, anyhow::Error> {
+		fn inner(req: &Request, data: Data) -> data::Outcome<GithubHookPayload, Error> {
 			// A push has been triggered
 			// Get signature
 			let header_signature = try_outcome!(req
@@ -99,7 +99,7 @@ impl FromDataSimple for GithubHookPayload {
 		}
 		let ret = inner(req, data);
 		if let data::Outcome::Failure(e) = &ret {
-			debug!("Warning: error when creating github web hook: {}: {}", e.0, e.1);
+			debug!("Warning: error when creating github web hook: {}: {:#}", e.0, e.1);
 		}
 		ret
 	}
