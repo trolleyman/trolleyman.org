@@ -1,4 +1,4 @@
-use anyhow::{Context, Error};
+use anyhow::Error;
 use rocket::{
 	http::Status,
 	outcome::IntoOutcome,

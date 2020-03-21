@@ -10,5 +10,5 @@ private_key = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
 [git-lfs]
 path = "data/git-lfs"
 
-[facebook_grpc]
-url = "grpc://localhost:9001"
+[facebook-grpc]
+url = "localhost:9001"

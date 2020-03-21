@@ -1,4 +1,4 @@
-use std::{borrow::Cow, path::PathBuf};
+use std::{borrow::Cow, net::SocketAddr, path::PathBuf};
 
 use anyhow::{Context, Result};
 use rocket::config::Environment;
@@ -28,6 +28,12 @@ pub struct GitLfsConfig {
 }
 
 #[derive(Clone, Deserialize)]
+pub struct FacebookGrpc {
+	/// Socket address of the gRPC server hosting the Facebook service
+	pub url: SocketAddr,
+}
+
+#[derive(Clone, Deserialize)]
 pub struct Config {
 	// Path of database. Relative to the config file's location.
 	#[serde(default = "default_database_path")]
@@ -45,6 +51,8 @@ pub struct Config {
 	pub github_webhook: Option<GithubWebhookConfig>,
 	#[serde(rename = "git-lfs")]
 	pub git_lfs:        GitLfsConfig,
+	#[serde(rename = "facebook-grpc")]
+	pub facebook_grpc:  FacebookGrpc,
 }
 impl Config {
 	pub fn load(env: Environment) -> Result<Config> {
@@ -89,6 +97,4 @@ impl Config {
 
 fn default_database_path() -> PathBuf { "data/db.sqlite3".into() }
 
-fn default_log_path() -> PathBuf {
-	"logs/rocket.debug.log".into()
-}
+fn default_log_path() -> PathBuf { "logs/rocket.debug.log".into() }
