@@ -1,0 +1,2 @@
+fbchat==1.9.6
+grpcio-tools==1.27.2

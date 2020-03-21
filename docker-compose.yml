@@ -21,3 +21,11 @@ services:
       - "443:443"
     environment:
       ACME_AGREE: "true"
+
+  facebook:
+    build: ./facebook
+    image: facebook:latest
+    restart: always
+
+environment:
+  FACEBOOK_PORT: 9001

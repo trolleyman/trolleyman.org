@@ -32,3 +32,6 @@ A small project completed for Millenium Point.
 ### `/git_hook`
 The [git_hook/push endpoint](django/git_hook) can be used to automatically update the server every time a branch is updated on GitHub.
 For example, [trolleyman.org](https://trolleyman.org) is hooked up to restart when the [`prod`](https://github.com/trolleyman/trolleyman.org/tree/prod) branch of this repo is updated.
+
+### `/facebook`
+A facebook controller. See [./facebooksrv](./facebooksrv).
