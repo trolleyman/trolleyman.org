@@ -30,6 +30,7 @@ mod config;
 mod db;
 mod recaptcha;
 
+mod facebook;
 mod flappy;
 mod git_lfs;
 mod github;
@@ -255,11 +256,12 @@ pub fn main() -> Result<()> {
 		.register(catchers![error_handler_400_bad_request, error_handler_404_not_found])
 		.mount("/", routes![heartbeat, index, error, contact_details, project])
 		.mount("/static", StaticFiles::from("./static"))
+		.mount("/facebook", facebook::routes())
 		.mount("/flappy", flappy::routes())
-		.mount("/linc", linc::routes())
-		.mount("/tanks", tanks::routes())
 		.mount("/git_hook", github::routes())
 		.mount("/git-lfs", git_lfs::routes())
+		.mount("/linc", linc::routes())
+		.mount("/tanks", tanks::routes())
 		.launch();
 	Ok(())
 }
