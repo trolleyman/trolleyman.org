@@ -175,16 +175,16 @@ fn run_python_grpc_version() -> Result<(), i32> {
 }
 
 fn run_python_grpc_compile() -> Result<(), i32> {
-	let python_rpc_command = "python -m grpc_tools.protoc --proto_path=facebooksrv --python_out=facebooksrv --grpc_python_out=facebooksrv facebooksrv/proto/facebooksrv.proto";
+	let python_rpc_command = "python -m grpc_tools.protoc --proto_path=facebook_grpc --python_out=facebook_grpc --grpc_python_out=facebook_grpc facebook_grpc/proto/facebook_grpc.proto";
 	println!("{}run `{}`", XTASK_PREFIX, python_rpc_command);
 	match Command::new("python")
 		.current_dir(project_root())
 		.arg("-m")
 		.arg("grpc_tools.protoc")
-		.arg("--proto_path=facebooksrv")
-		.arg("--python_out=facebooksrv")
-		.arg("--grpc_python_out=facebooksrv")
-		.arg("facebooksrv/proto/facebooksrv.proto")
+		.arg("--proto_path=facebook_grpc")
+		.arg("--python_out=facebook_grpc")
+		.arg("--grpc_python_out=facebook_grpc")
+		.arg("facebook_grpc/proto/facebook_grpc.proto")
 		.output()
 	{
 		Ok(out) if !out.status.success() => {

@@ -22,10 +22,7 @@ services:
     environment:
       ACME_AGREE: "true"
 
-  facebook:
-    build: ./facebook
-    image: facebook:latest
+  facebook_grpc:
+    build: ./facebook_grpc
+    image: facebook_grpc:latest
     restart: always
-
-environment:
-  FACEBOOK_PORT: 9001
