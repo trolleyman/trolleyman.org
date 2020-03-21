@@ -7,8 +7,9 @@ use std::{
 use clap::{App, AppSettings, Arg, SubCommand};
 use structopt::StructOpt;
 
-const XTASK_PREFIX: &'static str = "\x1B[1m\x1B[32m       xtask\x1B[0m ";
-const ERROR_PREFIX: &'static str = "\x1B[1m\x1B[31merror\x1B[37m:\x1B[0m ";
+const XTASK_PREFIX: &'static str = "\x1B[1m\x1B[92m       xtask\x1B[0m ";
+const ERROR_PREFIX: &'static str = "\x1B[1m\x1B[91merror\x1B[37m:\x1B[0m ";
+const HELP_PREFIX: &'static str = "\x1B[1m\x1B[96mhelp \x1B[37m:\x1B[0m ";
 
 fn main() {
 	use std::io::Write;
@@ -76,6 +77,7 @@ fn run() -> Result<(), i32> {
 		if let Some(_) = matches.subcommand_matches("grpc") {
 			println!("{}generate Python gRPC bindings", XTASK_PREFIX);
 			run_python_version()?;
+			run_python_grpc_version()?;
 			run_python_grpc_compile()?;
 			Ok(())
 		} else {
@@ -131,6 +133,7 @@ fn run_python_version() -> Result<(), i32> {
 		Ok(out) if !out.status.success() => {
 			if let Some(code) = out.status.code() {
 				eprintln!("{}`python --version` returned a non-zero exit code ({})", ERROR_PREFIX, code);
+				eprintln!("{}Python may not be installed: install via. https://python.org/downloads", HELP_PREFIX);
 			} else {
 				eprintln!("{}`python --version` was terminated by a signal", ERROR_PREFIX);
 			}
@@ -138,6 +141,33 @@ fn run_python_version() -> Result<(), i32> {
 		}
 		Err(e) => {
 			eprintln!("{}`python --version` encountered an error: {}", ERROR_PREFIX, e);
+			Err(1)
+		}
+		_ => Ok(()),
+	}
+}
+
+fn run_python_grpc_version() -> Result<(), i32> {
+	let python_rpc_command = "python -m grpc_tools.protoc --version";
+	println!("{}run `{}`", XTASK_PREFIX, python_rpc_command);
+	match Command::new("python")
+		.current_dir(project_root())
+		.arg("-m")
+		.arg("grpc_tools.protoc")
+		.arg("--version")
+		.output()
+	{
+		Ok(out) if !out.status.success() => {
+			if let Some(code) = out.status.code() {
+				eprintln!("{}`{}` returned a non-zero exit code ({})", ERROR_PREFIX, python_rpc_command, code);
+				eprintln!("{}grpc_tools may not be installed: install with `pip install grpc_tools`", HELP_PREFIX);
+			} else {
+				eprintln!("{}`{}` was terminated by a signal", ERROR_PREFIX, python_rpc_command);
+			}
+			Err(1)
+		}
+		Err(e) => {
+			eprintln!("{}`{}` encountered an error: {}", ERROR_PREFIX, python_rpc_command, e);
 			Err(1)
 		}
 		_ => Ok(()),
