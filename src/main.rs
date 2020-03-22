@@ -11,12 +11,11 @@
 #[macro_use] extern crate serde_json;
 #[macro_use] extern crate log;
 
-
 use std::collections::{BTreeMap, HashMap};
 
 use anyhow::{Context, Result};
 use diesel::prelude::*;
-use rocket::{config::Environment, State, http::Status, response::status};
+use rocket::{config::Environment, http::Status, response::status, State};
 use rocket_contrib::{
 	serve::StaticFiles,
 	templates::{self, tera, Template},
@@ -142,14 +141,9 @@ fn get_configs() -> Result<(Config, rocket::Config, simplelog::Config)> {
 	let mut log_config_builder = simplelog::ConfigBuilder::new();
 	log_config_builder.set_target_level(simplelog::LevelFilter::Error);
 	let simplelog_config = if active_env.is_dev() {
-		log_config_builder
-			.set_time_to_local(true)
-			.set_time_format_str("%k:%M:%S.%3f")
-			.build()
+		log_config_builder.set_time_to_local(true).set_time_format_str("%k:%M:%S.%3f").build()
 	} else {
-		log_config_builder
-			.set_time_format_str("%Y-%m-%d %H:%M:%S.%9f")
-			.build()
+		log_config_builder.set_time_format_str("%Y-%m-%d %H:%M:%S.%9f").build()
 	};
 
 	Ok((config, rocket_config, simplelog_config))
@@ -181,8 +175,8 @@ fn setup_database(config: &Config) -> Result<()> {
 }
 
 fn setup_logging(config: &Config, log_config: &simplelog::Config) -> Result<()> {
+	use simplelog::{CombinedLogger, LevelFilter, SharedLogger, SimpleLogger, TermLogger, TerminalMode, WriteLogger};
 	use std::fs::OpenOptions;
-	use simplelog::{TermLogger, CombinedLogger, SimpleLogger, SharedLogger, WriteLogger, LevelFilter, TerminalMode};
 
 	let mut warn_msgs = vec![];
 	let mut loggers: Vec<Box<dyn SharedLogger>> = vec![];
@@ -208,15 +202,13 @@ fn setup_logging(config: &Config, log_config: &simplelog::Config) -> Result<()> 
 	}
 
 	// Combined final logger
-	let ret = CombinedLogger::init(loggers)
-		.context("Failed to init combined logger");
+	let ret = CombinedLogger::init(loggers).context("Failed to init combined logger");
 
 	if ret.is_ok() {
 		for warn_msg in warn_msgs.iter() {
 			warn!("{}", warn_msg);
 		}
 	}
-
 	ret
 }
 

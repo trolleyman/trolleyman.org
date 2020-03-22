@@ -26,10 +26,11 @@ impl<'a, 'r> FromRequest<'a, 'r> for ReCaptchaGuard {
 				.get_one("g-recaptcha-response")
 				.ok_or((Status::BadRequest, anyhow!("G-Recaptcha-Response header not found")))?;
 
-			let private_key =
-				&req.guard::<State<Config>>().success_or((Status::InternalServerError, anyhow!("Config failed to load")))?
-					.recaptcha
-					.private_key;
+			let private_key = &req
+				.guard::<State<Config>>()
+				.success_or((Status::InternalServerError, anyhow!("Config failed to load")))?
+				.recaptcha
+				.private_key;
 			let mut data = json!({
 				"secret": private_key,
 				"token": token,
@@ -48,7 +49,12 @@ impl<'a, 'r> FromRequest<'a, 'r> for ReCaptchaGuard {
 				.body(data.to_string())
 				.send()
 				.map(|_| ())
-				.map_err(|e| (Status::InternalServerError, Error::new(e).context(format!("Failed to request {}", RECAPTCHA_VERIFY_URL))))
+				.map_err(|e| {
+					(
+						Status::InternalServerError,
+						Error::new(e).context(format!("Failed to request {}", RECAPTCHA_VERIFY_URL)),
+					)
+				})
 		}
 
 		match process(req) {

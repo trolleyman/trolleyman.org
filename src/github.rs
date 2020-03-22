@@ -43,7 +43,7 @@ impl FromDataSimple for GithubHookPayload {
 				.as_ref()
 				.ok_or_else(|| anyhow!("Github secret not specified"))
 				.into_outcome(Status::InternalServerError))
-				.secret;
+			.secret;
 
 			let sig_split: Vec<_> = header_signature.split("=").collect();
 			if sig_split.len() != 2 {
@@ -121,7 +121,8 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 							std::fs::create_dir_all(parent)
 								.map_err(|_| format!("Failed to create dir of restart flag"))?;
 						}
-						std::fs::write(path, b"please restart\n").map_err(|_| format!("Failed to write restart flag"))?;
+						std::fs::write(path, b"please restart\n")
+							.map_err(|_| format!("Failed to write restart flag"))?;
 						info!("GitHub push webhook received. Wrote to restart flag file: {}", path.display());
 						Ok("Thanks, git.".into())
 					} else {
