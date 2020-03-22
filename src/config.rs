@@ -30,7 +30,8 @@ pub struct GitLfsConfig {
 #[derive(Clone, Deserialize)]
 pub struct FacebookGrpc {
 	/// Socket address of the gRPC server hosting the Facebook service
-	pub url: SocketAddr,
+	#[serde(with = "crate::util::serde_socketaddr")]
+	pub host: SocketAddr,
 }
 
 #[derive(Clone, Deserialize)]

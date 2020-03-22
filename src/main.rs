@@ -39,6 +39,7 @@ mod tanks;
 mod util;
 
 pub use db::{DbConn, DbError, DbResult};
+pub use user::User;
 
 embed_migrations!();
 

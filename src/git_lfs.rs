@@ -132,8 +132,9 @@ fn upload(
 
 	let object = token.get_object(&conn).map_err(|e| error_response_db(e))?;
 	let repository = object.get_repository(&conn).map_err(|e| error_response_db(e))?;
+	let owner = repository.get_owner(&conn).map_err(|e| error_response_db(e))?;
 
-	let path = config.get_object_path(&repository.owner, &repository.name, &object.oid);
+	let path = config.get_object_path(&owner.name, &repository.name, &object.oid);
 	if let Some(parent) = path.parent() {
 		std::fs::create_dir_all(&parent).map_err(|e| error_response_io(e))?;
 	}
@@ -173,8 +174,9 @@ fn download(
 
 	let object = token.get_object(&conn).map_err(|e| error_response_db(e))?;
 	let repository = object.get_repository(&conn).map_err(|e| error_response_db(e))?;
+	let owner = repository.get_owner(&conn).map_err(|e| error_response_db(e))?;
 
-	let path = config.get_object_path(&repository.owner, &repository.name, &object.oid);
+	let path = config.get_object_path(&owner.name, &repository.name, &object.oid);
 	let file = File::open(path).map_err(|e| error_response_io(e))?;
 
 	Ok(rocket::response::Content(ContentType::Binary, rocket::response::Stream::from(file)))

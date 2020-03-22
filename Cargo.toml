@@ -13,6 +13,7 @@ diesel_migrations = "1.4.0"
 libsqlite3-sys = { version = ">=0.8.0, <0.17.0", features = ["min_sqlite_version_3_7_16", "bundled"] }  # Note: Update this if diesel is updated. This is a bit of a hack in order to get sqlite3.lib to be bundled on Windows.
 
 anyhow = "1.0.26"
+thiserror = "1.0.12"
 reqwest = { version = "0.10.1", features = ["blocking"] }
 chrono = "0.4"
 rand = "0.7.3"

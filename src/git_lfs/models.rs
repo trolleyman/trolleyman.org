@@ -6,21 +6,25 @@ use crate::{
 	schema::{
 		git_lfs_download_token as download_token, git_lfs_object as object, git_lfs_repository as repository,
 		git_lfs_upload_token as upload_token,
+		user
 	},
 	DbConn, DbResult,
+	User,
 };
 
-#[derive(Clone, Queryable, Identifiable)]
+#[derive(Clone, Queryable, Identifiable, Associations)]
+#[belongs_to(User, foreign_key = "owner")]
 #[table_name = "repository"]
 pub struct Repository {
-	pub id:    i32,
-	pub owner: String,
+	id:    i32,
+	pub owner: i32,
 	pub name:  String,
 }
 impl Repository {
 	pub fn get(conn: &DbConn, owner: &str, name: &str) -> DbResult<Option<Repository>> {
-		repository::table
-			.filter(repository::owner.eq(owner))
+		let user = user::table.filter(user::name.eq(owner)).first::<User>(&**conn)?;
+
+		Repository::belonging_to(&user)
 			.filter(repository::name.eq(name))
 			.first(&**conn)
 			.optional()
@@ -37,6 +41,10 @@ impl Repository {
 		debug!("git lfs: create_object({}, {})", oid, size);
 		NewObject { oid, size, valid: false, repository: self.id }.insert_into(object::table).execute(&**conn)?;
 		object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn)
+	}
+	
+	pub fn get_owner(&self, conn: &DbConn) -> DbResult<User> {
+		user::table.filter(user::id.eq(self.owner)).first(&**conn)
 	}
 }
 
