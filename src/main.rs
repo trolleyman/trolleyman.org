@@ -28,6 +28,7 @@ mod schema;
 mod config;
 mod db;
 mod recaptcha;
+mod user;
 
 mod facebook;
 mod flappy;
