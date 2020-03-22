@@ -1,3 +1,3 @@
 
-DROP TABLE IF EXISTS linc_person;
-DROP TABLE IF EXISTS linc_interest;
+DROP TABLE linc_person;
+DROP TABLE linc_interest;

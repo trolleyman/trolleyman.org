@@ -1,2 +1,2 @@
 
-DROP TABLE IF EXISTS linc_lastedited;
+DROP TABLE linc_lastedited;

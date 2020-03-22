@@ -1,2 +1,2 @@
 
-DROP TABLE IF EXISTS git_lfs_download_token;
+DROP TABLE git_lfs_download_token;

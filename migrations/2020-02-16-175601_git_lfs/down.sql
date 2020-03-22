@@ -1,3 +1,3 @@
 
-DROP TABLE IF EXISTS git_lfs_object;
-DROP TABLE IF EXISTS git_lfs_repository;
+DROP TABLE git_lfs_object;
+DROP TABLE git_lfs_repository;
