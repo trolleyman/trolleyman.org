@@ -1,0 +1,111 @@
+{% extends "account/_base" %}
+{% import "_macros" as macros %}
+{% block css %}
+  {{ super() }}
+  {# <link rel="stylesheet" href="/static/css/account/signin.css"> #}
+{% endblock %}
+{% block content %}
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col border p-3" style="max-width: 400px;">
+        <form method="post" action="" class="needs-validation" novalidate>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" class="form-control" required data-custom-validation="validateUsername">
+            <div class="invalid-feedback">
+              Please enter a valid username.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" class="form-control" required data-custom-validation="validateEmail">
+            <div class="invalid-feedback">
+              Please enter a valid email address.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email2">Confirm Email Address</label>
+            <input id="email2" name="email2" type="email" class="form-control" required data-custom-validation="validateConfirmEmail">
+            <div class="invalid-feedback">
+              Please enter a valid email address.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" class="form-control" required data-custom-validation="validatePassword">
+            <div class="invalid-feedback">
+              Please enter a password.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password2">Confirm Password</label>
+            <input id="password2" name="password2" type="password" class="form-control" required data-custom-validation="validateConfirmPassword">
+            <div class="invalid-feedback">
+              Please enter a password.
+            </div>
+          </div>
+          <div class="text-right mr-3">
+            <button class="btn btn-primary" type="submit">Register</button>
+          </div>
+          <hr/>
+          <div class="text-small text-muted col">Already a user? <a href="register">Login</a></div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block js %}
+  {{ super() }}
+  <script>
+    function validateUsername(value) {
+      if (value.length == 0) {
+        return "Please enter a username.";
+      } else if (value.length < {{ username_min_length }}) {
+        return "Please enter a username that is at least {{ username_min_length }} characters long.";
+      } else if (value.length > {{ username_max_length }}) {
+        return "Please enter a username that is at most {{ username_max_length }} characters long.";
+      } else if (!/{{ username_regex }}/u.test(value)) {
+        return "Please enter a username that consists of only alphanumeric, hyphen or full stop characters.";
+      }
+      return "";
+    }
+
+    function validateEmail(value) {
+      if (value.length == 0) {
+        return "Please enter an email address.";
+      } else if (!/^\S+@\S+\.\S+$/u.test(value)) {
+        return "Please enter a valid email address of the form name@example.com"
+      } else if (value.length > {{ email_max_length }}) {
+        return "Please enter an email address that is at most {{ email_max_length }} characters long.";
+      }
+      return "";
+    }
+
+    function validateConfirmEmail(value) {
+      if (value != $('#email').val()) {
+        return "Entered email addresses do not match";
+      }
+      return "";
+    }
+
+    function validatePassword(value) {
+      if (value.length == 0) {
+        return "Please enter a password.";
+      } else if (value.length < {{ password_min_length }}) {
+        return "Please enter a password that is at least {{ password_min_length }} characters long.";
+      } else if (value.length > {{ password_max_length }}) {
+        return "Please enter a password that is at most {{ password_max_length }} characters long.";
+      } else if (!/[0-9]/.test(value)) {
+        return "Please enter a password that contains numeric characters (0-9).";
+      }
+      return "";
+    }
+
+    function validateConfirmPassword(value) {
+      if (value != $('#password').val()) {
+        return "Entered passwords do not match";
+      }
+      return "";
+    }
+  </script>
+{% endblock %}

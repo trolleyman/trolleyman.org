@@ -1,0 +1,12 @@
+
+.bg-header {
+	background-color: #2d3a69;
+}
+
+nav.navbar {
+	box-shadow: 0px 0px 8px 0;
+}
+
+label {
+	margin-bottom: 0.15rem;
+}
