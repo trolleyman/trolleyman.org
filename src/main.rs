@@ -30,6 +30,7 @@ mod db;
 mod recaptcha;
 mod user;
 
+mod account;
 mod facebook;
 mod flappy;
 mod git_lfs;
@@ -250,6 +251,7 @@ pub fn main() -> Result<()> {
 		.register(catchers![error_handler_400_bad_request, error_handler_404_not_found])
 		.mount("/", routes![heartbeat, index, error, contact_details, project])
 		.mount("/static", StaticFiles::from("./static"))
+		.mount("/account", account::routes())
 		.mount("/facebook", facebook::routes())
 		.mount("/flappy", flappy::routes())
 		.mount("/git_hook", github::routes())

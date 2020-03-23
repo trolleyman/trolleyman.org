@@ -128,13 +128,4 @@ mod tests {
 			"sha3_512:salt:eWIL5kh062FCGJ0jC0NklczuNkq+Bigyrmscrvv+0F9I53W8uqFb8skx83jB4NodoUqRanKyvx7s3w9lnaV/bQ=="
 		);
 	}
-
-	// #[test]
-	// fn test_password_sql() {
-	// 	use crate::diesel::IntoSql;
-
-	// 	let password = "sha3_512:salt:eWIL5kh062FCGJ0jC0NklczuNkq+Bigyrmscrvv+0F9I53W8uqFb8skx83jB4NodoUqRanKyvx7s3w9lnaV/bQ==";
-	// 	let password_obj: Password = password.parse().unwrap();
-	// 	assert_eq!(password_obj.into_sql(), "TODO".to_string());
-	// }
 }
