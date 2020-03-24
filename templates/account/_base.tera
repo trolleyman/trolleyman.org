@@ -103,9 +103,9 @@
             
             var promise = func(value, cancellationToken);
             input.data('hasStartedLoading', true);
+            input.data('prevValue', value);
             
             promise.then(invalid => {
-              input.data('prevValue', value);
               input[0].classList.remove('loading');
               if (invalid) {
                 input[0].classList.add('is-invalid');
