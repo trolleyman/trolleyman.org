@@ -5,9 +5,9 @@
   {# <link rel="stylesheet" href="/static/css/account/signin.css"> #}
 {% endblock %}
 {% block content %}
-  <div class="container-fluid">
+  <div class="container-fluid mt-5">
     <div class="row justify-content-center">
-      <div class="col border p-3" style="max-width: 400px;">
+      <div class="col border p-3 form-container shadow">
         <form method="post" action="" class="needs-validation" novalidate>
           <div class="form-group">
             <label for="username">Username</label>
