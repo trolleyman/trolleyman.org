@@ -33,6 +33,23 @@ form.was-validated input#password2:not(:invalid) {
 	border-top-right-radius: 0;
 }
 
-#username:not(.loading)~.input-group-append .spinner-border {
-	visibility: hidden;
+#username~.spinner-border {
+	display: none;
+	top: calc((1.5em + .75rem + 2px) / 2 - (.75em + .375rem)/2);
+	height: calc(.75em + .375rem);
+	width: calc(.75em + .375rem);
+	right: calc(.375em + .1875rem);
+}
+
+#username.loading~.spinner-border {
+	display: inline-block;
+}
+
+.form-control.loading {
+	border-color: #2196F3;
+}
+
+.form-control.loading:focus {
+	border-color: #2196F3;
+	box-shadow: 0 0 0 0.2rem rgba(38, 152, 243, 0.21);
 }
