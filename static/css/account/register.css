@@ -1,0 +1,38 @@
+
+form:not(.was-validated) input#email,
+form.was-validated input#email:not(:invalid) {
+	margin-bottom: -1px;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+input#email~.invalid-feedback {
+	margin-bottom: .75rem;
+}
+
+form:not(.was-validated) input#email2,
+form.was-validated input#email2:not(:invalid) {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+form:not(.was-validated) input#password,
+form.was-validated input#password:not(:invalid) {
+	margin-bottom: -1px;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+input#password~.invalid-feedback {
+	margin-bottom: .75rem;
+}
+
+form:not(.was-validated) input#password2,
+form.was-validated input#password2:not(:invalid) {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+#username:not(.loading)~.input-group-append .spinner-border {
+	visibility: hidden;
+}

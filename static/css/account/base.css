@@ -14,20 +14,3 @@ label {
 body {
 	background-color: #f5f5f5;
 }
-
-form:not(.was-validated) input#name,
-form.was-validated input#name:not(:invalid) {
-	margin-bottom: -1px;
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
-}
-
-input#name~.invalid-feedback {
-	margin-bottom: .75rem;
-}
-
-form:not(.was-validated) input#password,
-form.was-validated input#password:not(:invalid) {
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
-}

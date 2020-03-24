@@ -1,45 +1,55 @@
 {% extends "account/_base" %}
 {% import "_macros" as macros %}
 {% block css %}
-  {{ super() }}
-  {# <link rel="stylesheet" href="/static/css/account/signin.css"> #}
+{{ super() }}
+<link rel="stylesheet" href="/static/css/account/register.css">
 {% endblock %}
 {% block content %}
   <div class="container-fluid mt-5">
     <div class="row justify-content-center">
-      <div class="col border p-3 form-container shadow">
+      <div class="col p-3 form-container">
         <form method="post" action="" class="needs-validation" novalidate>
+        <h1 class="h3 mb-3 align-middle font-weight-normal">Register</h1>
           <div class="form-group">
-            <label for="username">Username</label>
-            <input id="username" name="username" type="text" class="form-control" required data-custom-validation="validateUsername">
-            <div class="invalid-feedback">
-              Please enter a valid username.
+            <label class="sr-only" for="username">Username</label>
+            <div class="input-group">
+              <input class="form-control" id="username" name="username" type="text" placeholder="Username" required data-custom-validation="validateUsername" data-custom-validation-promise="validateUsernameUnique">
+              <div class="input-group-append">
+                <span class="input-group-text">
+                  <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </span>
+              </div>
+              <div class="invalid-feedback">
+                Please enter a valid username.
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input id="email" name="email" type="email" class="form-control" required data-custom-validation="validateEmail">
+          <div class="form-group mb-0">
+            <label class="sr-only" for="email">Email address</label>
+            <input class="form-control" id="email" name="email" type="email" placeholder="Email address" required data-custom-validation="validateEmail">
             <div class="invalid-feedback">
               Please enter a valid email address.
             </div>
           </div>
           <div class="form-group">
-            <label for="email2">Confirm Email Address</label>
-            <input id="email2" name="email2" type="email" class="form-control" required data-custom-validation="validateConfirmEmail">
+            <label class="sr-only" for="email2">Confirm email address</label>
+            <input class="form-control" id="email2" name="email2" type="email" placeholder="Confirm email address" required data-custom-validation="validateConfirmEmail">
             <div class="invalid-feedback">
               Please enter a valid email address.
             </div>
           </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password" class="form-control" required data-custom-validation="validatePassword">
+          <div class="form-group mb-0">
+            <label class="sr-only" for="password">Password</label>
+            <input class="form-control" id="password" name="password" type="password" placeholder="Password" required data-custom-validation="validatePassword">
             <div class="invalid-feedback">
               Please enter a password.
             </div>
           </div>
           <div class="form-group">
-            <label for="password2">Confirm Password</label>
-            <input id="password2" name="password2" type="password" class="form-control" required data-custom-validation="validateConfirmPassword">
+            <label class="sr-only" for="password2">Confirm password</label>
+            <input class="form-control" id="password2" name="password2" type="password" placeholder="Confirm password" required data-custom-validation="validateConfirmPassword">
             <div class="invalid-feedback">
               Please enter a password.
             </div>
@@ -69,6 +79,27 @@
       }
       return "";
     }
+    
+    function validateUsernameUnique(value, cancellationToken) {
+      cancellationToken.cancel = () => {
+        cancellationToken.cancelled = true;
+      };
+      return new Promise((resolve, reject) => {
+        if (cancellationToken.cancelled) {
+          reject(cancellationToken);
+        }
+        setTimeout(() => {
+          if (cancellationToken.cancelled) {
+            reject(cancellationToken);
+          }
+          if (value === 'test123') {
+            resolve('Name cannot be "test123"');
+          } else {
+            resolve('');
+          }
+        }, 1000);
+      });
+    }
 
     function validateEmail(value) {
       if (value.length == 0) {
@@ -82,7 +113,10 @@
     }
 
     function validateConfirmEmail(value) {
-      if (value != $('#email').val()) {
+      var invalid = validateEmail(value);
+      if (invalid) {
+        return invalid;
+      } else if (value != $('#email').val()) {
         return "Entered email addresses do not match";
       }
       return "";
