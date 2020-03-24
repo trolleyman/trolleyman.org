@@ -1,6 +1,6 @@
 
 .bg-header {
-	background-color: #061496;
+	background-color: #2a38bf;
 }
 
 .form-container {
@@ -13,4 +13,10 @@ label {
 
 body {
 	background-color: #f5f5f5;
+}
+
+.btn-primary {
+	color: #fff !important;
+	background-color: #2a38bf !important;
+	border-color: #2a38bf !important;
 }
