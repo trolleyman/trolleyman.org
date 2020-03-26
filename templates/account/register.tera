@@ -87,6 +87,7 @@
             reject(cancellationToken);
           }
           if (value === 'test123') {
+            // TODO: contact server
             resolve('Name cannot be "test123"');
           } else {
             resolve('');
