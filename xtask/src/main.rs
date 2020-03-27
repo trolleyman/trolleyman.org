@@ -1,9 +1,11 @@
 use std::{
 	ffi::OsString,
+	fmt::Write,
 	path::{Path, PathBuf},
 	process::Command,
 };
 
+use anyhow::{anyhow, bail, Context, Result};
 use clap::{App, AppSettings, Arg, SubCommand};
 use structopt::StructOpt;
 
@@ -12,18 +14,33 @@ const ERROR_PREFIX: &'static str = "\x1B[1m\x1B[91merror\x1B[37m:\x1B[0m ";
 const HELP_PREFIX: &'static str = "\x1B[1m\x1B[96mhelp \x1B[37m:\x1B[0m ";
 
 fn main() {
-	use std::io::Write;
-	let ret = run();
-	std::io::stdout().flush().ok();
-	std::io::stderr().flush().ok();
-	match ret {
-		Err(code) if code != 0 => std::process::exit(code),
-		Err(_) => std::process::exit(1),
-		_ => {}
+	fn submain() -> i32 {
+		use std::io::Write;
+		let ret = run();
+		std::io::stdout().flush().ok();
+		std::io::stderr().flush().ok();
+		if let Err(e) = ret {
+			let msg = format!("{}", e);
+			let chain = e.chain();
+			if msg.len() == 0 && chain.len() == 0 {
+				return 1;
+			}
+			eprintln!("{}{}", ERROR_PREFIX, msg);
+			if chain.len() > 0 {
+				eprintln!("\nCaused by:");
+				for suberror in chain {
+					eprintln!(" - {}", suberror);
+				}
+			}
+			1
+		} else {
+			0
+		}
 	}
+	std::process::exit(submain());
 }
 
-fn run() -> Result<(), i32> {
+fn run() -> Result<()> {
 	let app = App::new("trolleyman-org-xtask")
 		.setting(AppSettings::ColoredHelp)
 		.setting(AppSettings::GlobalVersion)
@@ -60,6 +77,16 @@ fn run() -> Result<(), i32> {
 				),
 		)
 		.subcommand(
+			SubCommand::with_name("watch")
+				.setting(AppSettings::DisableHelpSubcommand)
+				.about("Run the server locally, and restart if files change")
+				.arg(
+					Arg::with_name("release")
+						.long("release")
+						.help("Build artifacts in release mode, with optimizations"),
+				),
+		)
+		.subcommand(
 			SubCommand::with_name("dist")
 				.setting(AppSettings::DisableHelpSubcommand)
 				.about("Package the release for distribution in the target/dist directory"),
@@ -81,137 +108,132 @@ fn run() -> Result<(), i32> {
 			run_python_grpc_compile()?;
 			Ok(())
 		} else {
-			Err(1)
+			bail!("unknown subcommand");
 		}
 	} else if let Some(matches) = matches.subcommand_matches("build") {
 		println!("{}build", XTASK_PREFIX);
-		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"));
-		run_cargo("build", matches.is_present("release"), project_root());
-		Ok(())
+		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"))?;
+		run_cargo("build", matches.is_present("release"), project_root())
 	} else if let Some(matches) = matches.subcommand_matches("run") {
 		println!("{}run", XTASK_PREFIX);
-		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"));
-		run_cargo("run", matches.is_present("release"), project_root());
-		Ok(())
+		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"))?;
+		run_cargo("run", matches.is_present("release"), project_root())
+	} else if let Some(matches) = matches.subcommand_matches("watch") {
+		println!("{}watch", XTASK_PREFIX);
+		run_cargo_watch(matches.is_present("release"), project_root())
 	} else if let Some(_) = matches.subcommand_matches("dist") {
 		println!("{}dist", XTASK_PREFIX);
 		// Run normal build process
-		run_wasm_pack(true, project_root().join("tanks"));
-		run_cargo("build", true, project_root());
+		run_wasm_pack(true, project_root().join("tanks"))?;
+		run_cargo("build", true, project_root())?;
 
 		// Copy files to target/dist
-		run_rmdir(dist_dir(), true).unwrap();
-		run_copy_dir(project_root().join("static"), dist_dir().join("static"));
-		run_copy_dir(project_root().join("templates"), dist_dir().join("templates"));
-		run_copy_exe(dist_dir());
-		run_copy_file(project_root().join("config_dev.toml"), dist_dir().join("config_dev.toml"));
-		run_copy_file(project_root().join("config_release.toml"), dist_dir().join("config_release.toml"));
+		run_rmdir(dist_dir())?;
+		run_copy_dir(project_root().join("static"), dist_dir().join("static"))?;
+		run_copy_dir(project_root().join("templates"), dist_dir().join("templates"))?;
+		run_copy_exe(dist_dir())?;
+		run_copy_file(project_root().join("config_dev.toml"), dist_dir().join("config_dev.toml"))?;
+		run_copy_file(project_root().join("config_release.toml"), dist_dir().join("config_release.toml"))?;
 		Ok(())
 	} else if let Some(matches) = matches.subcommand_matches("clean") {
 		println!("{}clean", XTASK_PREFIX);
 		let mut rets = vec![
-			run_rmdir(project_root().join("target"), false),
-			run_rmdir(project_root().join("tanks").join("target"), false),
-			run_rmdir(project_root().join("static").join("wasm").join("tanks").join("pkg"), false),
+			run_rmdir(project_root().join("target")),
+			run_rmdir(project_root().join("tanks").join("target")),
+			run_rmdir(project_root().join("static").join("wasm").join("tanks").join("pkg")),
 		];
 		if matches.is_present("all") {
-			rets.push(run_rmdir(project_root().join("xtask").join("target"), false));
+			rets.push(run_rmdir(project_root().join("xtask").join("target")));
 		}
-		if rets.iter().any(|r| r.is_err()) {
-			Err(1)
-		} else {
-			Ok(())
-		}
+		rets.into_iter().find(|r| r.is_err()).unwrap_or(Ok(()))
 	} else {
-		Err(1)
+		bail!("unknown subcommand");
 	}
 }
 
-fn run_python_version() -> Result<(), i32> {
-	println!("{}run `python --version`", XTASK_PREFIX);
-	match Command::new("python").arg("--version").output() {
-		Ok(out) if !out.status.success() => {
-			if let Some(code) = out.status.code() {
-				eprintln!("{}`python --version` returned a non-zero exit code ({})", ERROR_PREFIX, code);
-				eprintln!("{}Python may not be installed: install via. https://python.org/downloads", HELP_PREFIX);
-			} else {
-				eprintln!("{}`python --version` was terminated by a signal", ERROR_PREFIX);
-			}
-			Err(1)
-		}
-		Err(e) => {
-			eprintln!("{}`python --version` encountered an error: {}", ERROR_PREFIX, e);
-			Err(1)
-		}
-		_ => Ok(()),
+fn run_command(
+	command: &str,
+	args: &[&str],
+	dir: impl AsRef<Path>,
+	help: Option<&str>,
+	show_output: bool,
+) -> Result<std::process::Output> {
+	let dir = dir.as_ref();
+	let debug_command = format!("{} {}", command, args.join(" "));
+	println!("{}run `{}` ({})", XTASK_PREFIX, debug_command, dir.display());
+	let mut command = Command::new(command);
+	command.current_dir(dir);
+	for arg in args {
+		command.arg(arg);
 	}
-}
 
-fn run_python_grpc_version() -> Result<(), i32> {
-	let python_rpc_command = "python -m grpc_tools.protoc --version";
-	println!("{}run `{}`", XTASK_PREFIX, python_rpc_command);
-	match Command::new("python")
-		.current_dir(project_root())
-		.arg("-m")
-		.arg("grpc_tools.protoc")
-		.arg("--version")
-		.output()
-	{
-		Ok(out) if !out.status.success() => {
-			if let Some(code) = out.status.code() {
-				eprintln!("{}`{}` returned a non-zero exit code ({})", ERROR_PREFIX, python_rpc_command, code);
-				eprintln!("{}grpc_tools may not be installed: install with `pip install grpc_tools`", HELP_PREFIX);
-			} else {
-				eprintln!("{}`{}` was terminated by a signal", ERROR_PREFIX, python_rpc_command);
+	let out = command.output().with_context(|| format!("`{}` encountered an error", debug_command))?;
+	if !out.status.success() {
+		let mut ret = if let Some(code) = out.status.code() {
+			let mut ret = format!("`{}` returned a non-zero exit code ({})", debug_command, code);
+			if let Some(help) = &help {
+				write!(&mut ret, "\n{}{}", HELP_PREFIX, help).ok();
 			}
-			Err(1)
-		}
-		Err(e) => {
-			eprintln!("{}`{}` encountered an error: {}", ERROR_PREFIX, python_rpc_command, e);
-			Err(1)
-		}
-		_ => Ok(()),
-	}
-}
-
-fn run_python_grpc_compile() -> Result<(), i32> {
-	let python_rpc_command = "python -m grpc_tools.protoc --proto_path=facebook_grpc --python_out=facebook_grpc --grpc_python_out=facebook_grpc facebook_grpc/proto/facebook_grpc.proto";
-	println!("{}run `{}`", XTASK_PREFIX, python_rpc_command);
-	match Command::new("python")
-		.current_dir(project_root())
-		.arg("-m")
-		.arg("grpc_tools.protoc")
-		.arg("--proto_path=facebook_grpc")
-		.arg("--python_out=facebook_grpc")
-		.arg("--grpc_python_out=facebook_grpc")
-		.arg("facebook_grpc/proto/facebook_grpc.proto")
-		.output()
-	{
-		Ok(out) if !out.status.success() => {
-			if let Some(code) = out.status.code() {
-				eprintln!("{}`{}` returned a non-zero exit code ({})", ERROR_PREFIX, python_rpc_command, code);
-			} else {
-				eprintln!("{}`{}` was terminated by a signal", ERROR_PREFIX, python_rpc_command);
-			}
+			ret
+		} else {
+			format!("`{}` was terminated by a signal", debug_command)
+		};
+		if show_output {
 			let stdout = String::from_utf8_lossy(&out.stdout).to_owned();
 			let stderr = String::from_utf8_lossy(&out.stderr).to_owned();
 			if stdout.len() > 0 {
-				eprintln!("{}--- stdout ---\n{}", ERROR_PREFIX, stdout);
+				writeln!(&mut ret, "\n--- stdout ---\n{}\n", stdout.trim_end()).ok();
 			}
 			if stderr.len() > 0 {
-				eprintln!("{}--- stderr ---\n{}", ERROR_PREFIX, stderr);
+				writeln!(&mut ret, "\n--- stderr ---\n{}\n", stderr.trim_end()).ok();
 			}
-			Err(1)
 		}
-		Err(e) => {
-			eprintln!("{}`{}` encountered an error: {}", ERROR_PREFIX, python_rpc_command, e);
-			Err(1)
-		}
-		_ => Ok(()),
+		bail!("{}", ret)
 	}
+	Ok(out)
 }
 
-fn run_wasm_pack(release: bool, dir: impl AsRef<Path>) {
+fn run_python_version() -> Result<()> {
+	run_command(
+		"python",
+		&["--version"],
+		".",
+		"Python may not be installed: install via. https://python.org/downloads".into(),
+		false,
+	)
+	.map(|_| ())
+}
+
+fn run_python_grpc_version() -> Result<()> {
+	run_command(
+		"python",
+		&["-m", "grpc_tools.protoc", "--version"],
+		".",
+		"grpc_tools may not be installed: install with `pip install grpc_tools`".into(),
+		false,
+	)
+	.map(|_| ())
+}
+
+fn run_python_grpc_compile() -> Result<()> {
+	run_command(
+		"python",
+		&[
+			"-m",
+			"grpc_tools.protoc",
+			"--proto_path=facebook_grpc",
+			"--python_out=facebook_grpc",
+			"--grpc_python_out=facebook_grpc",
+			"facebook_grpc/proto/facebook_grpc.proto",
+		],
+		project_root(),
+		None,
+		true,
+	)
+	.map(|_| ())
+}
+
+fn run_wasm_pack(release: bool, dir: impl AsRef<Path>) -> Result<()> {
 	let dir = dir.as_ref();
 
 	let args: Vec<OsString> = if release {
@@ -232,18 +254,16 @@ fn run_wasm_pack(release: bool, dir: impl AsRef<Path>) {
 	println!("{}{}", XTASK_PREFIX, args.iter().map(|s| s.to_string_lossy().to_owned()).collect::<Vec<_>>().join(" "));
 
 	let command = wasm_pack::command::Command::from_iter(&args);
-	if let Err(e) = wasm_pack::command::run_wasm_pack(command) {
-		eprintln!("{}failed to run wasm-pack: {}", ERROR_PREFIX, e);
-		std::process::exit(1);
-	}
+	wasm_pack::command::run_wasm_pack(command).map_err(|e| anyhow!("{}", e)).context("failed to run wasm-pack")?;
 
 	let from = dir.join("pkg");
 	let to = project_root().join("static").join("wasm").join("tanks").join("pkg");
-	run_rmdir(&to, true).unwrap();
-	run_copy_dir(&from, &to);
+	run_rmdir(&to)?;
+	run_copy_dir(&from, &to)?;
+	Ok(())
 }
 
-fn run_cargo(subcommand: &str, release: bool, dir: impl AsRef<Path>) {
+fn run_cargo(subcommand: &str, release: bool, dir: impl AsRef<Path>) -> Result<()> {
 	let dir = dir.as_ref();
 	let mut args: Vec<&str> = Vec::new();
 	args.push(subcommand);
@@ -253,19 +273,18 @@ fn run_cargo(subcommand: &str, release: bool, dir: impl AsRef<Path>) {
 	}
 	println!("{}cargo {} ({})", XTASK_PREFIX, args.join(" "), dir.display());
 
-	let status = Command::new(&cargo_exe()).args(&args).current_dir(dir).status();
-	if !status.map(|status| status.success()).unwrap_or(false) {
-		std::process::exit(1);
-	}
+	run_command(&cargo_exe(), &args, dir, None, false).map(|_| ())
 }
 
-fn run_copy_exe(dir: impl AsRef<Path>) {
+fn run_cargo_watch(_release: bool, _dir: impl AsRef<Path>) -> Result<()> { todo!("impl cargo run, cargo run tanks") }
+
+fn run_copy_exe(dir: impl AsRef<Path>) -> Result<()> {
 	let dir = dir.as_ref();
 	let exe_name = format!("trolleyman-org{}", std::env::consts::EXE_SUFFIX);
-	run_copy_file(project_root().join("target").join("release").join(&exe_name), dir.join(&exe_name));
+	run_copy_file(project_root().join("target").join("release").join(&exe_name), dir.join(&exe_name))
 }
 
-fn run_copy_file(from: impl AsRef<Path>, to: impl AsRef<Path>) {
+fn run_copy_file(from: impl AsRef<Path>, to: impl AsRef<Path>) -> Result<()> {
 	let from = from.as_ref();
 	let to = to.as_ref();
 
@@ -285,16 +304,15 @@ fn run_copy_file(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 		println!("{}copy file {} -> {}", XTASK_PREFIX, from.display(), to.display());
 	}
 
-	if let Err(e) = fs_extra::file::copy(from, to, &fs_extra::file::CopyOptions {
+	fs_extra::file::copy(from, to, &fs_extra::file::CopyOptions {
 		overwrite: true,
 		..fs_extra::file::CopyOptions::new()
-	}) {
-		eprintln!("{}failed to copy file: {}", ERROR_PREFIX, e);
-		std::process::exit(1);
-	}
+	})
+	.context("failed to copy file")
+	.map(|_| ())
 }
 
-fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) {
+fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) -> Result<()> {
 	let from = from.as_ref();
 	let to = to.as_ref();
 
@@ -314,31 +332,22 @@ fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) {
 		println!("{}copy directory {} -> {}", XTASK_PREFIX, from.display(), to.display());
 	}
 
-	if let Err(e) = fs_extra::dir::copy(from, to, &fs_extra::dir::CopyOptions {
+	fs_extra::dir::copy(from, to, &fs_extra::dir::CopyOptions {
 		overwrite: true,
 		copy_inside: true,
 		..fs_extra::dir::CopyOptions::new()
-	}) {
-		eprintln!("{}failed to copy directory: {}", ERROR_PREFIX, e);
-		std::process::exit(1);
-	}
+	})
+	.context("failed to copy directory")
+	.map(|_| ())
 }
 
-fn run_rmdir(dir: impl AsRef<Path>, error_fail: bool) -> Result<(), ()> {
+fn run_rmdir(dir: impl AsRef<Path>) -> Result<()> {
 	let dir = dir.as_ref();
 	println!("{}delete directory {}", XTASK_PREFIX, dir.display());
-	if let Err(e) = fs_extra::dir::remove(dir) {
-		eprintln!("{}failed to delete directory: {}", ERROR_PREFIX, e);
-		if error_fail {
-			std::process::exit(1);
-		}
-		Err(())
-	} else {
-		Ok(())
-	}
+	fs_extra::dir::remove(dir).context("failed to delete directory")
 }
 
-fn cargo_exe() -> OsString { std::env::var_os("CARGO").unwrap_or_else(|| OsString::from("cargo")) }
+fn cargo_exe() -> String { std::env::var("CARGO").unwrap_or("cargo".into()) }
 
 fn dist_dir() -> PathBuf { project_root().join("target").join("dist") }
 
