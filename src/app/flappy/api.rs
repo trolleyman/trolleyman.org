@@ -3,7 +3,7 @@ use rocket::request::LenientForm;
 use rocket_contrib::json::Json;
 use serde::Serialize;
 
-use crate::{schema::flappy_leaderboard as leaderboard, DbConn};
+use crate::{schema::flappy_leaderboard as leaderboard, db::DbConn};
 
 #[derive(Queryable, Identifiable, Serialize)]
 #[table_name = "leaderboard"]

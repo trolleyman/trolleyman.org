@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 
 use super::{models, Action, Config};
-use crate::{DbConn, DbResult};
+use crate::db::{DbConn, DbResult};
 
 #[derive(Clone, Debug, serde::Serialize)]
 pub struct BatchResponse {

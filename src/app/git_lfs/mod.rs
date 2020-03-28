@@ -10,7 +10,7 @@ use rocket::{
 	response::status,
 };
 
-use crate::DbConn;
+use crate::db::DbConn;
 
 mod models;
 mod request;

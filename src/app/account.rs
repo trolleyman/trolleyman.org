@@ -1,15 +1,16 @@
 
 use std::collections::HashSet;
 
-use rocket::response::content;
+use rocket::response::{content, Redirect};
 use rocket_contrib::templates::Template;
 
-use crate::{DbConn, User};
+use crate::models::User;
+use crate::db::DbConn;
 
 
 pub fn routes() -> Vec<rocket::Route> { routes![login_get, login_post, register_get, register_post, api_username_exists] }
 
-const RESERVED_USERNAMES_STRING: &'static str = include_str!("account/reserved_usernames.csv");
+const RESERVED_USERNAMES_STRING: &'static str = include_str!("../account/reserved_usernames.csv");
 pub const USERNAME_REGEX: &'static str = "^\\w(\\w|[-_.])+$";
 pub const USERNAME_MIN_LENGTH: i32 = 3;
 pub const USERNAME_MAX_LENGTH: i32 = 20;
@@ -63,8 +64,8 @@ fn login_get() -> Template {
 }
 
 #[post("/login")]
-fn login_post() -> Template {
-	Template::render("account/login", default_context(json!({})))
+fn login_post() -> Redirect {
+	todo!()
 }
 
 #[get("/register")]

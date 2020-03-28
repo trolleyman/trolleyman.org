@@ -6,7 +6,7 @@ use rocket::{
 	Request, State,
 };
 
-use super::config::Config;
+use crate::config::Config;
 
 const RECAPTCHA_VERIFY_URL: &'static str = "https://www.google.com/recaptcha/api/siteverify";
 

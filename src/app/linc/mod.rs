@@ -4,8 +4,8 @@ use rocket_contrib::templates::Template;
 use serde::Serialize;
 
 use crate::{
+	db::DbConn,
 	schema::{linc_interest as interest, linc_lastedited as lastedited, linc_person as person},
-	DbConn,
 };
 
 #[derive(Queryable, Identifiable, Serialize)]

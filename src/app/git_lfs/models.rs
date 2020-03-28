@@ -3,20 +3,19 @@ use diesel::prelude::*;
 use rand::Rng;
 
 use crate::{
+	db::{DbConn, DbResult},
+	models::User,
 	schema::{
 		git_lfs_download_token as download_token, git_lfs_object as object, git_lfs_repository as repository,
-		git_lfs_upload_token as upload_token,
-		user
+		git_lfs_upload_token as upload_token, user,
 	},
-	DbConn, DbResult,
-	User,
 };
 
 #[derive(Clone, Queryable, Identifiable, Associations)]
 #[belongs_to(User, foreign_key = "owner")]
 #[table_name = "repository"]
 pub struct Repository {
-	id:    i32,
+	id:        i32,
 	pub owner: i32,
 	pub name:  String,
 }
@@ -24,10 +23,7 @@ impl Repository {
 	pub fn get(conn: &DbConn, owner: &str, name: &str) -> DbResult<Option<Repository>> {
 		let user = user::table.filter(user::name.eq(owner)).first::<User>(&**conn)?;
 
-		Repository::belonging_to(&user)
-			.filter(repository::name.eq(name))
-			.first(&**conn)
-			.optional()
+		Repository::belonging_to(&user).filter(repository::name.eq(name)).first(&**conn).optional()
 	}
 
 	pub fn get_object(&self, conn: &DbConn, oid: &str) -> DbResult<Option<Object>> {
@@ -42,7 +38,7 @@ impl Repository {
 		NewObject { oid, size, valid: false, repository: self.id }.insert_into(object::table).execute(&**conn)?;
 		object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn)
 	}
-	
+
 	pub fn get_owner(&self, conn: &DbConn) -> DbResult<User> {
 		user::table.filter(user::id.eq(self.owner)).first(&**conn)
 	}

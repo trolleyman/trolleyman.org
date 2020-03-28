@@ -1,14 +1,12 @@
-
 use chrono::prelude::*;
 use diesel::prelude::*;
 
-use crate::schema::user;
-use crate::{DbConn, DbResult};
+use crate::{
+	db::{DbConn, DbResult},
+	schema::user,
+};
 
-mod password;
-
-pub use password::Password;
-
+pub use super::password::Password;
 
 #[derive(Clone, Queryable, Identifiable)]
 #[table_name = "user"]
@@ -22,7 +20,7 @@ pub struct User {
 }
 impl User {
 	pub fn exists_with_name(conn: &DbConn, name: &str) -> DbResult<bool> {
-		use diesel::dsl::{select, exists};
+		use diesel::dsl::{exists, select};
 		select(exists(user::table.filter(user::dsl::name.eq(name)))).get_result(&**conn)
 	}
 }

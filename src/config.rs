@@ -28,7 +28,7 @@ pub struct GitLfsConfig {
 }
 
 #[derive(Clone, Deserialize)]
-pub struct FacebookGrpc {
+pub struct FacebookGrpcConfig {
 	/// Socket address of the gRPC server hosting the Facebook service
 	#[serde(with = "crate::util::serde_socketaddr")]
 	pub host: SocketAddr,
@@ -53,7 +53,7 @@ pub struct Config {
 	#[serde(rename = "git-lfs")]
 	pub git_lfs:        GitLfsConfig,
 	#[serde(rename = "facebook-grpc")]
-	pub facebook_grpc:  FacebookGrpc,
+	pub facebook_grpc: FacebookGrpcConfig,
 }
 impl Config {
 	pub fn load(env: Environment) -> Result<Config> {

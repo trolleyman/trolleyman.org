@@ -10,7 +10,7 @@ use rocket::{
 };
 use subtle::ConstantTimeEq;
 
-use super::config::Config;
+use crate::config::Config;
 
 const MSG_LIMIT: u64 = 10 * 1024;
 
