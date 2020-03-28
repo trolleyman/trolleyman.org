@@ -160,7 +160,7 @@ fn run_command(
 ) -> Result<std::process::Output> {
 	let dir = dir.as_ref();
 	let debug_command = format!("{} {}", command, args.join(" "));
-	println!("{}run `{}` ({})", XTASK_PREFIX, debug_command, dir.display());
+	println!("{}run `{}`{}", XTASK_PREFIX, debug_command, if dir == Path::new(".") { "".into() } else { format!(" ({})", dir.display()) });
 	let mut command = Command::new(command);
 	command.current_dir(dir);
 	for arg in args {
