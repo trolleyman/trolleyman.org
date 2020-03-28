@@ -10,13 +10,14 @@ use rocket::{
 	response::status,
 };
 
-use crate::db::DbConn;
+use crate::{
+	db::DbConn,
+	models::git_lfs::{DownloadToken, Repository, UploadToken},
+};
 
-mod models;
 mod request;
 mod response;
 
-use models::{DownloadToken, Repository, UploadToken};
 use request::BatchRequest;
 use response::{BatchResponse, ErrorResponse, SuccessResponse};
 
