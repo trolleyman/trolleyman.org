@@ -16,21 +16,19 @@
 use std::collections::{BTreeMap, HashMap};
 
 use diesel::prelude::*;
-use rocket::{config::Environment};
+use rocket::config::Environment;
 use rocket_contrib::{
 	serve::StaticFiles,
 	templates::{tera, Template},
 };
 
-
-mod schema;
 mod app;
-mod models;
 mod config;
 mod db;
-mod util;
 mod error;
-
+mod models;
+mod schema;
+mod util;
 
 embed_migrations!();
 

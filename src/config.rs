@@ -53,7 +53,7 @@ pub struct Config {
 	#[serde(rename = "git-lfs")]
 	pub git_lfs:        GitLfsConfig,
 	#[serde(rename = "facebook-grpc")]
-	pub facebook_grpc: FacebookGrpcConfig,
+	pub facebook_grpc:  FacebookGrpcConfig,
 }
 impl Config {
 	pub fn load(env: Environment) -> Result<Config> {

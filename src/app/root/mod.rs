@@ -1,8 +1,8 @@
 use super::recaptcha::ReCaptchaGuard;
 use crate::config::Config;
-use rocket::{Route, State, response::status, http::Status};
-use rocket_contrib::templates::{self, Template};
 use rand::Rng;
+use rocket::{http::Status, response::status, Route, State};
+use rocket_contrib::templates::{self, Template};
 
 pub fn routes() -> Vec<Route> { routes![heartbeat, index, error, contact_details, project] }
 

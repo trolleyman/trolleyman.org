@@ -1,14 +1,13 @@
-
 use std::collections::HashSet;
 
 use rocket::response::{content, Redirect};
 use rocket_contrib::templates::Template;
 
-use crate::models::User;
-use crate::db::DbConn;
+use crate::{db::DbConn, models::User};
 
-
-pub fn routes() -> Vec<rocket::Route> { routes![login_get, login_post, register_get, register_post, api_username_exists] }
+pub fn routes() -> Vec<rocket::Route> {
+	routes![login_get, login_post, register_get, register_post, api_username_exists]
+}
 
 const RESERVED_USERNAMES_STRING: &'static str = include_str!("../account/reserved_usernames.csv");
 pub const USERNAME_REGEX: &'static str = "^\\w(\\w|[-_.])+$";
@@ -31,9 +30,7 @@ lazy_static! {
 	};
 }
 
-pub fn is_username_reserved(username: &str) -> bool {
-	RESERVED_USERNAMES_LOWERCASE.contains(&username.to_lowercase())
-}
+pub fn is_username_reserved(username: &str) -> bool { RESERVED_USERNAMES_LOWERCASE.contains(&username.to_lowercase()) }
 
 fn default_context(patch: serde_json::Value) -> serde_json::Value {
 	let mut ctx = json!({
@@ -51,7 +48,9 @@ fn default_context(patch: serde_json::Value) -> serde_json::Value {
 #[get("/api/username_exists?<username>")]
 fn api_username_exists(conn: DbConn, username: String) -> Result<content::Json<&'static str>, String> {
 	std::thread::sleep(std::time::Duration::from_secs(5));
-	if is_username_reserved(&username) || User::exists_with_name(&conn, &username).map_err(|_| format!("database error"))? {
+	if is_username_reserved(&username)
+		|| User::exists_with_name(&conn, &username).map_err(|_| format!("database error"))?
+	{
 		Ok(content::Json("true"))
 	} else {
 		Ok(content::Json("false"))
@@ -59,21 +58,13 @@ fn api_username_exists(conn: DbConn, username: String) -> Result<content::Json<&
 }
 
 #[get("/login")]
-fn login_get() -> Template {
-	Template::render("account/login", default_context(json!({})))
-}
+fn login_get() -> Template { Template::render("account/login", default_context(json!({}))) }
 
 #[post("/login")]
-fn login_post() -> Redirect {
-	todo!()
-}
+fn login_post() -> Redirect { todo!() }
 
 #[get("/register")]
-fn register_get() -> Template {
-	Template::render("account/register", default_context(json!({})))
-}
+fn register_get() -> Template { Template::render("account/register", default_context(json!({}))) }
 
 #[post("/register")]
-fn register_post() -> Template {
-	Template::render("account/register", default_context(json!({})))
-}
+fn register_post() -> Template { Template::render("account/register", default_context(json!({}))) }

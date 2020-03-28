@@ -29,8 +29,8 @@ pub mod serde_naive_datetime {
 }
 
 pub mod serde_socketaddr {
-	use std::net::{SocketAddr, ToSocketAddrs};
 	use serde::{de::Error, Deserialize, Deserializer, Serializer};
+	use std::net::{SocketAddr, ToSocketAddrs};
 
 	#[allow(dead_code)]
 	pub fn serialize<S: Serializer>(addr: &SocketAddr, serializer: S) -> Result<S::Ok, S::Error> {

@@ -59,7 +59,9 @@ impl Password {
 		Password::from_hash(hash, algorithm, salt)
 	}
 
-	pub fn matches(&self, password: &str) -> bool { &Password::from_password(password, self.algorithm, self.salt.clone()) == self }
+	pub fn matches(&self, password: &str) -> bool {
+		&Password::from_password(password, self.algorithm, self.salt.clone()) == self
+	}
 }
 impl FromStr for Password {
 	type Err = anyhow::Error;
@@ -102,7 +104,6 @@ where
 #[derive(Debug, thiserror::Error)]
 #[error(transparent)]
 struct AnyError(anyhow::Error);
-
 
 #[allow(dead_code)]
 #[derive(FromSqlRow, AsExpression)]
