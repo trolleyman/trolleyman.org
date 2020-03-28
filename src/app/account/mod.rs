@@ -9,7 +9,7 @@ pub fn routes() -> Vec<rocket::Route> {
 	routes![login_get, login_post, register_get, register_post, api_username_exists]
 }
 
-const RESERVED_USERNAMES_STRING: &'static str = include_str!("../account/reserved_usernames.csv");
+const RESERVED_USERNAMES_STRING: &'static str = include_str!("reserved_usernames.csv");
 pub const USERNAME_REGEX: &'static str = "^\\w(\\w|[-_.])+$";
 pub const USERNAME_MIN_LENGTH: i32 = 3;
 pub const USERNAME_MAX_LENGTH: i32 = 20;
