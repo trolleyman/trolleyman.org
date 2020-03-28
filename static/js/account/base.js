@@ -5,18 +5,24 @@ $(".needs-validation").each((_, form) => {
 	var inputs = $form.find('input').map((_, input) => $(input));
 	
 	var check = input => {
+		var value = input.val();
+		
+		// Get custom-validation data attribute
 		var custom = input.data('custom-validation');
 		if (custom == null)
 			return '';
 		
+		// Run the custom validation function
 		try {
 			var func = eval(custom);
-			var invalid = func(input.val());
+			var invalid = func(value);
 		} catch(err) {
 			console.error(err);
 			var invalid = 'Unknown error: ' + err;
 		}
 		invalid = invalid || '';
+		
+		// Set input validity
 		if (invalid) {
 			input.siblings('.invalid-feedback').text(invalid);
 		}
@@ -24,13 +30,20 @@ $(".needs-validation").each((_, form) => {
 		return invalid;
 	};
 	
-	var checkAll = () => {
-		inputs.each((_, input) => {
-			check(input);
-		});
-	};
-	
 	var checkPromise = input => {
+		var value = input.val();
+		if (input.data('loadedValue') === value) {
+			return;
+		}
+		input.data('loadedValue', '');
+		
+		// Cancel previous loading task
+		var cancellationToken = input.data('cancellationToken');
+		if (cancellationToken != null && cancellationToken.value != value) {
+			cancellationToken.cancel();
+		}
+		
+		// Check input is valid without loading
 		var invalid = check(input);
 		if (invalid) {
 			if (input.data('hasStartedLoading')) {
@@ -40,10 +53,6 @@ $(".needs-validation").each((_, form) => {
 			}
 			input[0].classList.remove('is-valid');
 			input[0].classList.remove('loading');
-			var cancellationToken = input.data('cancellationToken');
-			if (cancellationToken != null) {
-				cancellationToken.cancel();
-			}
 			return invalid;
 		}
 		
@@ -51,30 +60,36 @@ $(".needs-validation").each((_, form) => {
 		if (customPromise == null)
 			return;
 		
-		var value = input.val();
-		if (value === input.data('prevValue'))
+		// Set loading
+		input.data('hasStartedLoading', true);
+		input[0].classList.remove('is-invalid');
+		input[0].classList.remove('is-valid');
+		input[0].classList.add('loading');
+		input[0].setCustomValidity("Loading...");
+		input.siblings('.invalid-feedback').text('');
+
+		// If previous task is the same as the current one, don't send another request
+		if (cancellationToken != null && cancellationToken.value == value) {
 			return;
-		
-		var cancellationToken = input.data('cancellationToken');
-		if (cancellationToken != null) {
-			cancellationToken.cancel();
 		}
+		
+		// Evaluate and run promise
 		var func = eval(customPromise);
-		var cancellationToken = { cancel: function() {} };
+		cancellationToken = { cancel: function() {}, value: value };
 		input.data('cancellationToken', cancellationToken)
 		
 		var promise = func(value, cancellationToken);
-		input.data('hasStartedLoading', true);
-		input.data('prevValue', value);
 		
 		promise.then(invalid => {
 			input[0].classList.remove('loading');
+			input.data('loadedValue', value);
 			if (invalid) {
 				input[0].classList.add('is-invalid');
 				input[0].setCustomValidity(invalid);
 				input.siblings('.invalid-feedback').text(invalid);
 			} else {
 				input[0].classList.add('is-valid');
+				input[0].setCustomValidity('');
 			}
 		}, err => {
 			if (cancellationToken.cancelled)
@@ -86,14 +101,13 @@ $(".needs-validation").each((_, form) => {
 			input[0].setCustomValidity(msg);
 			input.siblings('.invalid-feedback').text(msg);
 		});
-		
-		// Set loading
-		input[0].classList.remove('is-invalid');
-		input[0].classList.remove('is-valid');
-		input[0].classList.add('loading');
-		input[0].setCustomValidity("Username is being checked");
-		input.siblings('.invalid-feedback').text('');
 	}
+	
+	var checkAll = () => {
+		inputs.each((_, input) => {
+			checkPromise(input);
+		});
+	};
 	
 	inputs.each((_, input) => {
 		var customPromise = input.data('custom-validation-promise');
@@ -101,18 +115,18 @@ $(".needs-validation").each((_, form) => {
 			input.on('change input', () => checkPromise(input));
 		}
 		input.on('change input', checkAll);
-		$form.submit(checkAll);
 	});
+	$form.submit(checkAll);
 	$form.submit(event => {
 		if (form.checkValidity() === false) {
 			event.preventDefault();
 			event.stopPropagation();
+			inputs.each((_, input) => {
+				var customPromise = input.data('custom-validation-promise');
+				if (customPromise == null) {
+					input.parent()[0].classList.add('was-validated');
+				}
+			});
 		}
-		inputs.each((_, input) => {
-			var customPromise = input.data('custom-validation-promise');
-			if (customPromise == null) {
-				input.parent()[0].classList.add('was-validated');
-			}
-		});
 	});
 });
