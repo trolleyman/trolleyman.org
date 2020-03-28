@@ -61,80 +61,12 @@
 {% block js %}
   {{ super() }}
   <script>
-    function validateUsername(value) {
-      if (value.length == 0) {
-        return "Please enter a username.";
-      } else if (value.length < {{ username_min_length }}) {
-        return "Please enter a username that is at least {{ username_min_length }} characters long.";
-      } else if (value.length > {{ username_max_length }}) {
-        return "Please enter a username that is at most {{ username_max_length }} characters long.";
-      } else if (!/{{ username_regex }}/u.test(value)) {
-        return "Please enter a username that consists of only alphanumeric, hyphen or full stop characters.";
-      }
-      return "";
-    }
-    
-    function validateUsernameUnique(value, cancellationToken) {
-      cancellationToken.cancel = () => {
-        cancellationToken.cancelled = true;
-      };
-      return new Promise((resolve, reject) => {
-        if (cancellationToken.cancelled) {
-          reject(cancellationToken);
-        }
-        setTimeout(() => {
-          if (cancellationToken.cancelled) {
-            reject(cancellationToken);
-          }
-          if (value === 'test123') {
-            // TODO: contact server
-            resolve('Name cannot be "test123"');
-          } else {
-            resolve('');
-          }
-        }, 3000);
-      });
-    }
-
-    function validateEmail(value) {
-      if (value.length == 0) {
-        return "Please enter an email address.";
-      } else if (!/^\S+@\S+\.\S+$/u.test(value)) {
-        return "Please enter a valid email address of the form name@example.com"
-      } else if (value.length > {{ email_max_length }}) {
-        return "Please enter an email address that is at most {{ email_max_length }} characters long.";
-      }
-      return "";
-    }
-
-    function validateConfirmEmail(value) {
-      var invalid = validateEmail(value);
-      if (invalid) {
-        return invalid;
-      } else if (value != $('#email').val()) {
-        return "Entered email addresses do not match";
-      }
-      return "";
-    }
-
-    function validatePassword(value) {
-      if (value.length == 0) {
-        return "Please enter a password.";
-      } else if (value.length < {{ password_min_length }}) {
-        return "Please enter a password that is at least {{ password_min_length }} characters long.";
-      } else if (value.length > {{ password_max_length }}) {
-        return "Please enter a password that is at most {{ password_max_length }} characters long.";
-      } else if (!/[0-9]/.test(value)) {
-        return "Please enter a password that contains numeric characters (0-9).";
-      }
-      return "";
-    }
-
-    function validateConfirmPassword(value) {
-      if (value != $('#password').val()) {
-        return "Entered passwords do not match";
-      }
-      return "";
-    }
+    window.username_min_length = {{ username_min_length }};
+    window.username_max_length = {{ username_max_length }};
+    window.username_regex = /{{ username_regex }}/u;
+    window.email_max_length = {{ email_max_length }};
+    window.password_min_length = {{ password_min_length }};
+    window.password_max_length = {{ password_max_length }};
   </script>
+  <script src="/static/js/account/register.js"></script>
 {% endblock %}
