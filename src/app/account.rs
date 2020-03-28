@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use rocket::response::{content, Redirect};
 use rocket_contrib::templates::Template;
 
-use crate::{db::DbConn, models::User};
+use crate::{db::DbConn, models::account::User};
 
 pub fn routes() -> Vec<rocket::Route> {
 	routes![login_get, login_post, register_get, register_post, api_username_exists]

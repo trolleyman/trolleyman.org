@@ -4,7 +4,7 @@ use rand::Rng;
 
 use crate::{
 	db::{DbConn, DbResult},
-	models::User,
+	models::account::User,
 	schema::{
 		git_lfs_download_token as download_token, git_lfs_object as object, git_lfs_repository as repository,
 		git_lfs_upload_token as upload_token, user,
