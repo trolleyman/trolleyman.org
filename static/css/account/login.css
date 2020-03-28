@@ -1,12 +1,12 @@
 
-form:not(.was-validated) input#name,
-form.was-validated input#name:not(:invalid) {
+form:not(.was-validated) input#username,
+form.was-validated input#username:not(:invalid) {
 	margin-bottom: -1px;
 	border-bottom-right-radius: 0;
 	border-bottom-left-radius: 0;
 }
 
-input#name~.invalid-feedback {
+input#username~.invalid-feedback {
 	margin-bottom: .75rem;
 }
 

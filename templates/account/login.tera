@@ -11,8 +11,8 @@
         <form method="post" action="" class="needs-validation" novalidate>
           <h1 class="h3 mb-3 align-middle font-weight-normal">Sign in</h1>
           <div class="form-group mb-0">
-            <label class="sr-only" for="name">Username or email address</label>
-            <input id="name" name="name" type="text" class="form-control" placeholder="Username or email address" required>
+            <label class="sr-only" for="username">Username or email address</label>
+            <input id="username" name="username" type="text" class="form-control" placeholder="Username or email address" required>
             <div class="invalid-feedback">
               Please enter a username or email address.
             </div>
