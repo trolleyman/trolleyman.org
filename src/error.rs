@@ -22,7 +22,7 @@ impl Responder<'_> for Error {
 			// TODO: When in debug mode, print out database error inner details
 			Error::Db(inner) => {
 				let msg = if is_dev {
-					format!("There was a database error: {}", inner)
+					format!("There was a database error: {:?}", inner)
 				} else {
 					"There was a database error.".into()
 				};
