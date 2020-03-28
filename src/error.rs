@@ -6,14 +6,14 @@ use rocket::{
 };
 use rocket_contrib::templates::Template;
 
-pub type Result<T, E=Error> = std::result::Result<T, E>;
+pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
 	#[error("database error")]
 	Db(#[from] crate::db::DbError),
 	#[error(transparent)]
-	Other(#[from] anyhow::Error)
+	Other(#[from] anyhow::Error),
 }
 impl Responder<'_> for Error {
 	fn respond_to(self, request: &Request) -> response::Result<'static> {
@@ -27,13 +27,10 @@ impl Responder<'_> for Error {
 					"There was a database error.".into()
 				};
 				error_response(request, Status::InternalServerError, &msg)
-			},
+			}
 			Error::Other(inner) => {
-				let msg = if is_dev {
-					format!("{:?}", inner)
-				} else {
-					"There was an unknown internal server error.".into()
-				};
+				let msg =
+					if is_dev { format!("{:?}", inner) } else { "There was an unknown internal server error.".into() };
 				error_response(request, Status::InternalServerError, &msg)
 			}
 		}

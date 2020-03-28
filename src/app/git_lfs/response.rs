@@ -1,9 +1,11 @@
 use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 
-use crate::app::git_lfs::{Action, Config};
-use crate::models::git_lfs as models;
-use crate::db::{DbConn, DbResult};
+use crate::{
+	app::git_lfs::{Action, Config},
+	db::{DbConn, DbResult},
+	models::git_lfs as models,
+};
 
 #[derive(Clone, Debug, serde::Serialize)]
 pub struct BatchResponse {

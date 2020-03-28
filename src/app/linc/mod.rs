@@ -2,7 +2,8 @@ use rocket_contrib::templates::Template;
 
 use crate::{
 	db::DbConn,
-	models::linc::{LastEdited, Person, Interest}, error::Result,
+	error::Result,
+	models::linc::{Interest, LastEdited, Person},
 };
 
 pub fn routes() -> Vec<rocket::Route> { routes![index, demo, graph] }

@@ -3,8 +3,8 @@ use diesel::prelude::*;
 use serde::Serialize;
 
 use crate::{
-	db::{DbResult, DbConn},
-	schema::{linc_interest as interest, linc_lastedited as lastedited, linc_person as person},
+	db::{DbConn, DbResult},
+	models::schema::{linc_interest as interest, linc_lastedited as lastedited, linc_person as person},
 };
 
 #[derive(Queryable, Identifiable, Serialize)]
@@ -15,9 +15,7 @@ pub struct Interest {
 	pub desc: String,
 }
 impl Interest {
-	pub fn load_all(conn: &DbConn) -> DbResult<Vec<Interest>> {
-		interest::table.load::<Interest>(&**conn)
-	}
+	pub fn load_all(conn: &DbConn) -> DbResult<Vec<Interest>> { interest::table.load::<Interest>(&**conn) }
 }
 
 #[derive(Queryable, Identifiable, Serialize)]
@@ -32,9 +30,7 @@ pub struct Person {
 	pub twitter: Option<String>,
 }
 impl Person {
-	pub fn load_all(conn: &DbConn) -> DbResult<Vec<Person>> {
-		person::table.load::<Person>(&**conn)
-	}
+	pub fn load_all(conn: &DbConn) -> DbResult<Vec<Person>> { person::table.load::<Person>(&**conn) }
 }
 
 #[derive(Queryable, Identifiable, Serialize)]
@@ -46,14 +42,17 @@ pub struct LastEdited {
 }
 impl LastEdited {
 	pub fn get(conn: &DbConn) -> DbResult<DateTime<Utc>> {
-		Ok(DateTime::<Utc>::from_utc(match lastedited::table.first::<LastEdited>(&**conn).optional()? {
-			Some(e) => e.timestamp,
-			None => {
-				let timestamp = Utc::now().naive_utc();
-				NewLastEdited { timestamp }.save_new(&conn)?;
-				timestamp
-			}
-		}, Utc))
+		Ok(DateTime::<Utc>::from_utc(
+			match lastedited::table.first::<LastEdited>(&**conn).optional()? {
+				Some(e) => e.timestamp,
+				None => {
+					let timestamp = Utc::now().naive_utc();
+					NewLastEdited { timestamp }.save_new(&conn)?;
+					timestamp
+				}
+			},
+			Utc,
+		))
 	}
 }
 

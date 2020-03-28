@@ -3,7 +3,7 @@ use serde::Serialize;
 
 use crate::{
 	db::{DbConn, DbResult},
-	schema::flappy_leaderboard as leaderboard,
+	models::schema::flappy_leaderboard as leaderboard,
 };
 
 #[derive(Queryable, Identifiable, Serialize)]
@@ -28,5 +28,7 @@ pub struct NewLeaderboardEntry {
 	pub score: i32,
 }
 impl NewLeaderboardEntry {
-	pub fn save_new(&self, conn: &DbConn) -> DbResult<()> { self.insert_into(leaderboard::table).execute(&**conn).map(|_| ()) }
+	pub fn save_new(&self, conn: &DbConn) -> DbResult<()> {
+		self.insert_into(leaderboard::table).execute(&**conn).map(|_| ())
+	}
 }

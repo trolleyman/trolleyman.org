@@ -3,7 +3,7 @@ use diesel::prelude::*;
 
 use crate::{
 	db::{DbConn, DbResult},
-	schema::user,
+	models::schema::user,
 };
 
 pub use super::password::Password;
