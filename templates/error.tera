@@ -90,7 +90,7 @@
 		<h1 class="status">Error {{status}}</h1>
 		<h2 class="title">{{title}}</h2>
 		{% if msg %}
-		<p class="msg">{{msg}}</p>
+		<p class="msg"><pre>{{msg}}</pre></p>
 		{% endif %}
 	</div>
 </body>

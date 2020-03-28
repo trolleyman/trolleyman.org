@@ -17,5 +17,5 @@ fn leaderboard(conn: DbConn) -> Result<Json<Vec<LeaderboardEntry>>> {
 // TODO: CSRF attacks
 #[post("/api/submit", data = "<leaderboard_entry>")]
 fn submit(leaderboard_entry: LenientForm<NewLeaderboardEntry>, conn: DbConn) -> Result<()> {
-	leaderboard_entry.0.save_new(&conn)
+	Ok(leaderboard_entry.0.save_new(&conn)?)
 }

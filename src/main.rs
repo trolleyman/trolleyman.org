@@ -15,6 +15,7 @@
 
 use std::collections::{BTreeMap, HashMap};
 
+use anyhow::Context;
 use diesel::prelude::*;
 use rocket::config::Environment;
 use rocket_contrib::{
@@ -107,7 +108,7 @@ fn setup_database(config: &Config) -> Result<()> {
 				if now - start_time > std::time::Duration::from_secs(60) {
 					// > 1 min waiting, exit
 					warn!("Retried too many times, exiting");
-					return Err(e).context(format!("Failed to open database connection ({})", db_url));
+					return Err(e).context(format!("Failed to open database connection ({})", db_url)).map_err(From::from);
 				}
 
 				warn!("Failed to open database connection ({}): {}", db_url, e);
@@ -118,7 +119,7 @@ fn setup_database(config: &Config) -> Result<()> {
 	};
 
 	// Migrate database
-	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout()).context("Failed to migrate database")
+	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout()).context("Failed to migrate database").map_err(From::from)
 }
 
 fn setup_logging(config: &Config, log_config: &simplelog::Config) -> Result<()> {
@@ -149,7 +150,7 @@ fn setup_logging(config: &Config, log_config: &simplelog::Config) -> Result<()> 
 	}
 
 	// Combined final logger
-	let ret = CombinedLogger::init(loggers).context("Failed to init combined logger");
+	let ret = CombinedLogger::init(loggers).context("Failed to init combined logger").map_err(From::from);
 
 	if ret.is_ok() {
 		for warn_msg in warn_msgs.iter() {
