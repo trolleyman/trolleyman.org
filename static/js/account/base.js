@@ -1,5 +1,4 @@
 // Disable form submissions if there are invalid fields
-// TODO: Fix validity when one field is still loading
 $(".needs-validation").each((_, form) => {
 	var $form = $(form);
 	var inputs = $form.find('input').map((_, input) => $(input));
