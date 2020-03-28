@@ -15,7 +15,6 @@
 
 use std::collections::{BTreeMap, HashMap};
 
-use anyhow::{Context, Result};
 use diesel::prelude::*;
 use rocket::{config::Environment};
 use rocket_contrib::{

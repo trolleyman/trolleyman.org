@@ -1,41 +1,21 @@
-use diesel::prelude::*;
 use rocket::request::LenientForm;
 use rocket_contrib::json::Json;
-use serde::Serialize;
 
-use crate::{schema::flappy_leaderboard as leaderboard, db::DbConn};
-
-#[derive(Queryable, Identifiable, Serialize)]
-#[table_name = "leaderboard"]
-struct LeaderboardEntry {
-	id:        i32,
-	name:      String,
-	score:     i32,
-	#[serde(with = "crate::util::serde_naive_datetime")]
-	timestamp: chrono::NaiveDateTime,
-}
-
-#[derive(Insertable, FromForm)]
-#[table_name = "leaderboard"]
-struct NewLeaderboardEntry {
-	pub name:  String,
-	pub score: i32,
-}
+use crate::{
+	db::DbConn,
+	error::Result,
+	models::flappy::{LeaderboardEntry, NewLeaderboardEntry},
+};
 
 pub fn routes() -> Vec<rocket::Route> { routes![leaderboard, submit] }
 
 #[get("/api/leaderboard")]
-fn leaderboard(conn: DbConn) -> Json<Vec<LeaderboardEntry>> {
-	Json(leaderboard::table.order(leaderboard::score.desc()).limit(10).load(&*conn).unwrap_or_else(|_| vec![]))
+fn leaderboard(conn: DbConn) -> Result<Json<Vec<LeaderboardEntry>>> {
+	Ok(Json(LeaderboardEntry::get_top_entries(&conn, 10)?))
 }
 
 // TODO: CSRF attacks
 #[post("/api/submit", data = "<leaderboard_entry>")]
-fn submit(leaderboard_entry: LenientForm<NewLeaderboardEntry>, conn: DbConn) -> Result<String, String> {
-	leaderboard_entry
-		.0
-		.insert_into(leaderboard::table)
-		.execute(&*conn)
-		.map(|_| format!("Success"))
-		.map_err(|_| format!("Error inserting new entry"))
+fn submit(leaderboard_entry: LenientForm<NewLeaderboardEntry>, conn: DbConn) -> Result<()> {
+	leaderboard_entry.0.save_new(&conn)
 }
