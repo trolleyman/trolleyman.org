@@ -1,3 +1,10 @@
 
 [*.rs]
 indent_style = tab
+
+[*.tera]
+indent_style = space
+tab_width = 2
+
+[*.js]
+indent_style = tab

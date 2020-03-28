@@ -2,7 +2,7 @@ use std::{
 	ffi::OsString,
 	fmt::Write,
 	path::{Path, PathBuf},
-	process::Command,
+	process::{Command, ExitStatus},
 };
 
 use anyhow::{anyhow, bail, Context, Result};
@@ -156,8 +156,8 @@ fn run_command(
 	args: &[&str],
 	dir: impl AsRef<Path>,
 	help: Option<&str>,
-	show_output: bool,
-) -> Result<std::process::Output> {
+	capture_output: bool,
+) -> Result<ExitStatus> {
 	let dir = dir.as_ref();
 	let debug_command = format!("{} {}", command, args.join(" "));
 	println!("{}run `{}`{}", XTASK_PREFIX, debug_command, if dir == Path::new(".") { "".into() } else { format!(" ({})", dir.display()) });
@@ -167,9 +167,15 @@ fn run_command(
 		command.arg(arg);
 	}
 
-	let out = command.output().with_context(|| format!("`{}` encountered an error", debug_command))?;
-	if !out.status.success() {
-		let mut ret = if let Some(code) = out.status.code() {
+	let (out, status) = if capture_output {
+		let out = command.output().with_context(|| format!("`{}` encountered an error", debug_command))?;
+		let status = out.status;
+		(Some(out), status)
+	} else {
+		(None, command.status().with_context(|| format!("`{}` encountered an error", debug_command))?)
+	};
+	if !status.success() {
+		let mut ret = if let Some(code) = status.code() {
 			let mut ret = format!("`{}` returned a non-zero exit code ({})", debug_command, code);
 			if let Some(help) = &help {
 				write!(&mut ret, "\n{}{}", HELP_PREFIX, help).ok();
@@ -178,7 +184,7 @@ fn run_command(
 		} else {
 			format!("`{}` was terminated by a signal", debug_command)
 		};
-		if show_output {
+		if let Some(out) = out {
 			let stdout = String::from_utf8_lossy(&out.stdout).to_owned();
 			let stderr = String::from_utf8_lossy(&out.stderr).to_owned();
 			if stdout.len() > 0 {
@@ -190,7 +196,7 @@ fn run_command(
 		}
 		bail!("{}", ret)
 	}
-	Ok(out)
+	Ok(status)
 }
 
 fn run_python_version() -> Result<()> {
@@ -228,7 +234,7 @@ fn run_python_grpc_compile() -> Result<()> {
 		],
 		project_root(),
 		None,
-		true,
+		false,
 	)
 	.map(|_| ())
 }
