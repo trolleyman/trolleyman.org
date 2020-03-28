@@ -33,6 +33,7 @@ mod util;
 embed_migrations!();
 
 use config::Config;
+use error::Result;
 
 #[catch(400)]
 fn error_handler_400_bad_request(_req: &rocket::Request) -> Template {

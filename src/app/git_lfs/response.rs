@@ -1,7 +1,8 @@
 use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 
-use super::{models, Action, Config};
+use crate::app::git_lfs::{Action, Config};
+use crate::models::git_lfs as models;
 use crate::db::{DbConn, DbResult};
 
 #[derive(Clone, Debug, serde::Serialize)]

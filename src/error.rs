@@ -6,7 +6,7 @@ use rocket::{
 };
 use rocket_contrib::templates::Template;
 
-pub type Result<T> = std::result::Result<T, Error>;
+pub type Result<T, E=Error> = std::result::Result<T, E>;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
