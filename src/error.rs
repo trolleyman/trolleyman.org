@@ -10,7 +10,9 @@ pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
-	#[error("database error")]
+	#[error("{0}")]
+	NotFound(String),
+	#[error("A database error occured")]
 	Db(#[from] crate::db::DbError),
 	#[error(transparent)]
 	Other(#[from] anyhow::Error),
@@ -20,6 +22,7 @@ impl Responder<'_> for Error {
 		let is_dev = request.guard::<State<Environment>>().map(|f| f.is_dev()).succeeded().unwrap_or(false);
 		match self {
 			// TODO: When in debug mode, print out database error inner details
+			Error::NotFound(msg) => error_response(request, Status::NotFound, &msg),
 			Error::Db(inner) => {
 				let msg = if is_dev {
 					format!("There was a database error: {:?}", inner)

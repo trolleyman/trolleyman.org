@@ -41,13 +41,6 @@
               Please enter a password.
             </div>
           </div>
-          <div class="form-group">
-            <label class="sr-only" for="password2">Confirm password</label>
-            <input class="form-control" id="password2" name="password2" type="password" placeholder="Confirm password" required data-custom-validation="validateConfirmPassword">
-            <div class="invalid-feedback">
-              Please enter a password.
-            </div>
-          </div>
           <div class="text-right mr-3">
             <button class="btn btn-primary" type="submit">Register</button>
           </div>

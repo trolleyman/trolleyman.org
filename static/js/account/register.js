@@ -71,10 +71,3 @@ window.validatePassword = function(value) {
 	}
 	return "";
 }
-
-window.validateConfirmPassword = function(value) {
-	if (value != $('#password').val()) {
-		return "Entered passwords do not match";
-	}
-	return "";
-}

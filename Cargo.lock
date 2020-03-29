@@ -225,6 +225,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "derive_more"
+version = "0.99.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "proc-macro2 1.0.9 (registry+https://github.com/rust-lang/crates.io-index)",
+ "quote 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 1.0.17 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "deunicode"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1836,6 +1846,7 @@ dependencies = [
  "anyhow 1.0.27 (registry+https://github.com/rust-lang/crates.io-index)",
  "base64 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.11 (registry+https://github.com/rust-lang/crates.io-index)",
+ "derive_more 0.99.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "diesel 1.4.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "diesel_migrations 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hex 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -2196,6 +2207,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum crossbeam-channel 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)" = "cced8691919c02aac3cb0a1bc2e9b73d89e832bf9a06fc579d4e71b68a2da061"
 "checksum crossbeam-utils 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)" = "c3c7c73a2d1e9fc0886a08b93e98eb643461230d5f1925e4036204d5f2e261a8"
 "checksum crypto-mac 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "4434400df11d95d556bac068ddfedd482915eb18fe8bea89bc80b6e4b1c179e5"
+"checksum derive_more 0.99.5 (registry+https://github.com/rust-lang/crates.io-index)" = "e2323f3f47db9a0e77ce7a300605d8d2098597fc451ed1a97bb1f6411bb550a7"
 "checksum deunicode 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)" = "850878694b7933ca4c9569d30a34b55031b9b139ee1fc7b94a527c4ef960d690"
 "checksum devise 0.3.0 (git+https://github.com/SergioBenitez/Devise.git?rev=e58b3ac9a)" = "<none>"
 "checksum devise_codegen 0.3.0 (git+https://github.com/SergioBenitez/Devise.git?rev=e58b3ac9a)" = "<none>"

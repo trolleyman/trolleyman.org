@@ -1,9 +1,14 @@
 use std::collections::HashSet;
 
-use rocket::response::{content, Redirect};
+use rocket::{
+	request::LenientForm,
+	response::{content, Redirect},
+};
 use rocket_contrib::templates::Template;
 
-use crate::{db::DbConn, models::account::User};
+use crate::{db::DbConn, error::Result, models::account::User};
+
+mod types;
 
 pub fn routes() -> Vec<rocket::Route> {
 	routes![login_get, login_post, register_get, register_post, api_username_exists]
@@ -45,6 +50,10 @@ fn default_context(patch: serde_json::Value) -> serde_json::Value {
 	ctx
 }
 
+fn login_error(msg: &str) -> types::TemplateRedirect {
+	types::TemplateRedirect::from(Template::render("account/login", default_context(json!({ "error": msg }))))
+}
+
 #[get("/api/username_exists?<username>")]
 fn api_username_exists(conn: DbConn, username: String) -> Result<content::Json<&'static str>, String> {
 	std::thread::sleep(std::time::Duration::from_secs(5));
@@ -60,11 +69,24 @@ fn api_username_exists(conn: DbConn, username: String) -> Result<content::Json<&
 #[get("/login")]
 fn login_get() -> Template { Template::render("account/login", default_context(json!({}))) }
 
-#[post("/login")]
-fn login_post() -> Redirect { todo!() }
+#[post("/login", data = "<form>")]
+fn login_post(conn: DbConn, form: LenientForm<types::LoginForm>) -> Result<types::TemplateRedirect> {
+	let user = match User::get_with_username_or_email(&conn, &form.username)? {
+		Some(u) => u,
+		None => return Ok(login_error("A user with that name could not be found")),
+	};
+
+	// Check password
+	if !user.password.matches(&form.password) {
+		return Ok(login_error("The password is not correct"));
+	}
+	
+	// Login by setting cookies
+	todo!();
+}
 
 #[get("/register")]
 fn register_get() -> Template { Template::render("account/register", default_context(json!({}))) }
 
-#[post("/register")]
-fn register_post() -> Template { Template::render("account/register", default_context(json!({}))) }
+#[post("/register", data = "<form>")]
+fn register_post(form: LenientForm<types::RegisterForm>) -> Result<Redirect> { todo!() }

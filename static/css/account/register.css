@@ -16,23 +16,6 @@ form.was-validated input#email2:not(:invalid) {
 	border-top-right-radius: 0;
 }
 
-form:not(.was-validated) input#password,
-form.was-validated input#password:not(:invalid) {
-	margin-bottom: -1px;
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
-}
-
-input#password~.invalid-feedback {
-	margin-bottom: .75rem;
-}
-
-form:not(.was-validated) input#password2,
-form.was-validated input#password2:not(:invalid) {
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
-}
-
 #username~.spinner-border {
 	display: none;
 	top: calc((1.5em + .75rem + 2px) / 2 - (.75em + .375rem)/2);
