@@ -50,6 +50,20 @@ lazy_static! {
 	pub static ref PASSWORD_REGEX: Regex = Regex::new(PASSWORD_REGEX_STRING).expect("Invalid regex");
 }
 
+pub fn get_errors_for_password(password: &str) -> Vec<String> {
+	let mut errors = Vec::new();
+	if password.len() < PASSWORD_MIN_LENGTH {
+		errors.push(format!("Password must be at least {} characters in length", PASSWORD_MIN_LENGTH));
+	}
+	if password.len() > PASSWORD_MAX_LENGTH {
+		errors.push(format!("Password must be at most {} characters in length", PASSWORD_MAX_LENGTH));
+	}
+	if !PASSWORD_REGEX.is_match(&password) {
+		errors.push(format!("Password must contain numeric characters (0-9)"));
+	}
+	errors
+}
+
 pub fn is_username_reserved(username: &str) -> bool { RESERVED_USERNAMES_LOWERCASE.contains(&username.to_lowercase()) }
 
 fn default_context(patch: &JsonValue) -> JsonValue {
@@ -173,15 +187,7 @@ fn register_post(conn: DbConnGuard, form: LenientForm<types::RegisterForm>) -> R
 	}
 
 	// Password
-	if form.password.len() < PASSWORD_MIN_LENGTH {
-		errors.insert("password", format!("Password must be at least {} characters in length", PASSWORD_MIN_LENGTH));
-	}
-	if form.password.len() > PASSWORD_MAX_LENGTH {
-		errors.insert("password", format!("Password must be at most {} characters in length", PASSWORD_MAX_LENGTH));
-	}
-	if !PASSWORD_REGEX.is_match(&form.password) {
-		errors.insert("password", format!("Password must contain numeric characters (0-9)"));
-	}
+	errors.insert_many("password", get_errors_for_password(&form.password));
 
 	if errors.len() > 0 {
 		Ok(register_error(

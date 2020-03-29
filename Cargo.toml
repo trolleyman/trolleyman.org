@@ -46,4 +46,5 @@ multimap = "0.8.1"
 rand = "0.7.3"
 regex = "1.3.6"
 rpassword = "4.0"
+rprompt = "1.0.5"
 reqwest = { version = "0.10.1", features = ["blocking"] }

@@ -186,7 +186,22 @@ pub fn main() -> Result<()> {
 	let matches = app.get_matches();
 	let user_details = if let Some(submatches) =  matches.subcommand_matches("set-password") {
 		let username = submatches.value_of("username").ok_or(anyhow!("Username not specified"))?;
-		Some((username, rpassword::prompt_password_stderr("Password: ")?))
+		let password = loop {
+			let password = rpassword::prompt_password_stderr("Password: ")?;
+			let errors = app::account::get_errors_for_password(&password);
+			if errors.len() > 0 {
+				println!("Password breaks rule{}:", if errors.len() == 1 { "" } else { "s" });
+				for error in errors {
+					println!("\t- {}", error);
+				}
+				let reply = rprompt::prompt_reply_stderr("Force? y/n ")?;
+				if reply.to_lowercase() != "y" {
+					continue;
+				}
+			}
+			break password;
+		};
+		Some((username, password))
 	} else {
 		None
 	};
