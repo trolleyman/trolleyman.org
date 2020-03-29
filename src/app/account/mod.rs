@@ -115,7 +115,7 @@ fn login_post(
 ) -> Result<types::TemplateRedirect> {
 	let user = match User::get_with_username_or_email(&conn, &form.username)? {
 		Some(u) => u,
-		None => return Ok(login_error(&form.0, "A user with that name could not be found")),
+		None => return Ok(login_error(&form.0, "A user with that username or email address could not be found")),
 	};
 
 	// Create login session
