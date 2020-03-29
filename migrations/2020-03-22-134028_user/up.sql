@@ -18,7 +18,12 @@ CREATE TABLE git_lfs_repository_new (
 	UNIQUE("owner", "name")
 );
 
-INSERT INTO user (id, name, email, password) SELECT DISTINCT owner, name, (name || "-invalid-email@"), "sha3_512:EomFe4Y5H2a8dnqasQC5Brze8bmg56mY:J60DMhbyM6vN8m15bLsPdurMXvbEi2dpyOroAm7/WHWTvqeNJIouBeruZ719izuTyG/QebuOpf6PHtsFcKEcGQ==" FROM git_lfs_repository;
-INSERT INTO git_lfs_repository_new(owner, name) SELECT user.id, git_lfs_repository.name FROM git_lfs_repository LEFT JOIN user ON user.name == git_lfs_repository.owner;
+INSERT INTO user (name, email, password) SELECT DISTINCT owner, (owner || "-invalid-email@"), "sha3_512:EomFe4Y5H2a8dnqasQC5Brze8bmg56mY:J60DMhbyM6vN8m15bLsPdurMXvbEi2dpyOroAm7/WHWTvqeNJIouBeruZ719izuTyG/QebuOpf6PHtsFcKEcGQ==" FROM git_lfs_repository;
+INSERT INTO git_lfs_repository_new(id, owner, name) SELECT git_lfs_repository.id, user.id, git_lfs_repository.name FROM git_lfs_repository LEFT JOIN user ON user.name == git_lfs_repository.owner;
+
+PRAGMA defer_foreign_keys=on;
+PRAGMA foreign_keys=off;
 DROP TABLE git_lfs_repository;
 ALTER TABLE git_lfs_repository_new RENAME TO git_lfs_repository;
+PRAGMA foreign_keys=on;
+PRAGMA defer_foreign_keys=off;
