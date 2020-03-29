@@ -58,14 +58,18 @@ impl Password {
 		Password { hash, algorithm, salt }
 	}
 
-	pub fn from_password(password: &str, algorithm: HashAlgorithm, salt: String) -> Password {
+	pub fn from_password(password: &str) -> Password {
+		Password::from_password_ext(password, HashAlgorithm::Sha3_512, Password::random_salt())
+	}
+
+	fn from_password_ext(password: &str, algorithm: HashAlgorithm, salt: String) -> Password {
 		let full_password = format!("{}:{}", salt, password);
 		let hash = algorithm.hash(&full_password);
 		Password::from_hash(hash, algorithm, salt)
 	}
 
 	pub fn matches(&self, password: &str) -> bool {
-		&Password::from_password(password, self.algorithm, self.salt.clone()) == self
+		&Password::from_password_ext(password, self.algorithm, self.salt.clone()) == self
 	}
 
 	pub fn random_salt() -> String {
@@ -141,7 +145,7 @@ mod tests {
 
 	#[test]
 	fn test_password_serialization() {
-		let password = Password::from_password("password", HashAlgorithm::Sha3_512, "salt".into());
+		let password = Password::from_password_ext("password", HashAlgorithm::Sha3_512, "salt".into());
 		assert_eq!(
 			format!("{}", password),
 			"sha3_512:salt:eWIL5kh062FCGJ0jC0NklczuNkq+Bigyrmscrvv+0F9I53W8uqFb8skx83jB4NodoUqRanKyvx7s3w9lnaV/bQ=="

@@ -5,7 +5,7 @@ use crate::{
 	db::{DbConn, DbResult},
 	error::{Error, Result},
 	models::{
-		account::password::{HashAlgorithm, Password},
+		account::password::Password,
 		schema::{session_token, user},
 	},
 	util,
@@ -21,6 +21,15 @@ struct NewSessionToken<'a> {
 	pub expires: NaiveDateTime,
 }
 
+#[derive(Insertable)]
+#[table_name = "user"]
+struct NewUser<'a> {
+	pub name:     &'a str,
+	pub email:    &'a str,
+	pub password: &'a Password,
+	pub admin:    bool,
+}
+
 #[derive(Clone, Queryable, Identifiable)]
 #[table_name = "user"]
 pub struct User {
@@ -32,6 +41,12 @@ pub struct User {
 	pub admin:    bool,
 }
 impl User {
+	pub fn create(conn: &DbConn, name: &str, email: &str, password: &Password, admin: bool) -> DbResult<User> {
+		let new_user = NewUser { name, email, password, admin };
+		new_user.insert_into(user::table).execute(conn)?;
+		user::table.filter(user::name.eq(name)).filter(user::email.eq(email)).first(conn)
+	}
+
 	pub fn exists_with_name(conn: &DbConn, name: &str) -> DbResult<bool> {
 		use diesel::dsl::{exists, select};
 		select(exists(user::table.filter(user::name.eq(name)))).get_result(conn)
@@ -45,7 +60,7 @@ impl User {
 	pub fn get_with_name(conn: &DbConn, username: &str) -> DbResult<Option<User>> {
 		user::table.filter(user::name.eq(username)).first(conn).optional()
 	}
-	
+
 	pub fn get_with_email(conn: &DbConn, email: &str) -> DbResult<Option<User>> {
 		user::table.filter(user::email.eq(email)).first(conn).optional()
 	}
@@ -61,18 +76,8 @@ impl User {
 	// Errors if the user could not be found, or if there was a database error
 	pub fn set_password(conn: &DbConn, username: &str, password: &str) -> Result<()> {
 		if let Some(user) = User::get_with_username_or_email(conn, username)? {
-			let password = Password::from_password(password, HashAlgorithm::Sha3_512, Password::random_salt());
+			let password = Password::from_password(password);
 			diesel::update(user::table.filter(user::id.eq(user.id))).set(user::password.eq(password)).execute(conn)?;
-			Ok(())
-		} else {
-			Err(Error::NotFound("The user was not found".into()))
-		}
-	}
-
-	// Errors if the user could not be found, or if there was a database error
-	pub fn set_email(conn: &DbConn, username: &str, email: &str) -> Result<()> {
-		if let Some(user) = User::get_with_name(conn, username)? {
-			diesel::update(user::table.filter(user::id.eq(user.id))).set(user::email.eq(email)).execute(conn)?;
 			Ok(())
 		} else {
 			Err(Error::NotFound("The user was not found".into()))

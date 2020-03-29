@@ -26,6 +26,7 @@ use rocket_contrib::{
 use serde_json::Value as JsonValue;
 
 mod app;
+mod cli;
 mod config;
 mod db;
 mod error;
@@ -35,8 +36,9 @@ mod util;
 embed_migrations!();
 
 use config::Config;
-use error::Result;
 use db::DbConn;
+use error::Result;
+use models::account::{Password, User};
 
 #[catch(400)]
 fn error_handler_400_bad_request(_req: &rocket::Request) -> Template {
@@ -123,8 +125,7 @@ fn setup_database(config: &Config) -> Result<DbConn> {
 	};
 
 	// Migrate database
-	embedded_migrations::run_with_output(&conn, &mut std::io::stdout())
-		.context("Failed to migrate database")?;
+	embedded_migrations::run_with_output(&conn, &mut std::io::stdout()).context("Failed to migrate database")?;
 	Ok(conn)
 }
 
@@ -166,50 +167,27 @@ fn setup_logging(config: &Config, log_config: &simplelog::Config) -> Result<()> 
 	ret
 }
 
-fn perform_command(conn: &SqliteConnection, matches: &clap::ArgMatches<'_>) -> Result<bool> {
-	if let Some(submatches) =  matches.subcommand_matches("set-password") {
+fn perform_command(conn: &DbConn, matches: &clap::ArgMatches<'_>) -> Result<bool> {
+	if let Some(submatches) = matches.subcommand_matches("set-password") {
 		let username = submatches.value_of("username").ok_or(anyhow!("Username not specified"))?;
 		info!("Getting password for {}.", username);
-		let password = loop {
-			let password = rpassword::prompt_password_stderr("Password: ")?;
-			let errors = app::account::validation::get_errors_for_password(&password);
-			if errors.len() > 0 {
-				println!("Password breaks rule{}:", if errors.len() == 1 { "" } else { "s" });
-				for error in errors {
-					println!("\t- {}", error);
-				}
-				let reply = rprompt::prompt_reply_stderr("Force? y/n ")?;
-				if reply.to_lowercase() != "y" {
-					continue;
-				}
-			}
-			break password;
-		};
-		
+		let password = cli::prompt_password()?;
+
 		// Set password & exit
 		crate::models::account::User::set_password(&conn, &username, &password)?;
 		info!("Password updated for {}.", username);
 		Ok(true)
-	} else if let Some(submatches) =  matches.subcommand_matches("set-email") {
-		let username = submatches.value_of("username").ok_or(anyhow!("Username not specified"))?;
-		let email = submatches.value_of("email").ok_or(anyhow!("Email not specified"))?;
+	} else if let Some(_) = matches.subcommand_matches("create-account") {
+		let username = cli::prompt_username(conn)?;
+		let email = cli::prompt_email(conn)?;
+		let password = cli::prompt_password()?;
+		let admin = cli::prompt_yn("Admin")?;
 
-		let errors = app::account::validation::get_errors_for_email(conn, &email)?;
-		if errors.len() > 0 {
-			println!("Email address breaks rule{}:", if errors.len() == 1 { "" } else { "s" });
-			for error in errors {
-				println!("\t- {}", error);
-			}
-			let reply = rprompt::prompt_reply_stderr("Force? y/n ")?;
-			if reply.to_lowercase() != "y" {
-				info!("Email address not updated for {}", username);
-				return Ok(true);
-			}
-		}
-		
+		let password = Password::from_password(&password);
+
 		// Set email address & exit
-		crate::models::account::User::set_email(&conn, &username, &email)?;
-		info!("Email address updated for {} to {}.", username, email);
+		User::create(&conn, &username, &email, &password, admin)?;
+		info!("Created {} account {} ({}).", if admin { "admin" } else { "normal" }, username, password);
 		Ok(true)
 	} else {
 		Ok(false)
@@ -233,11 +211,9 @@ pub fn main() -> Result<()> {
 				.arg(Arg::with_name("username").required(true)),
 		)
 		.subcommand(
-			SubCommand::with_name("set-email")
+			SubCommand::with_name("create-account")
 				.setting(AppSettings::DisableHelpSubcommand)
-				.about("Set the email address of a specified user")
-				.arg(Arg::with_name("username").required(true))
-				.arg(Arg::with_name("email").required(true)),
+				.about("Create a new account with user-provided details"),
 		);
 
 	let matches = app.get_matches();
@@ -252,7 +228,7 @@ pub fn main() -> Result<()> {
 	if perform_command(&conn, &matches)? {
 		return Ok(());
 	}
-	
+
 	// Launch Rocket
 	let active_env = rocket_config.environment;
 	rocket::custom(rocket_config)

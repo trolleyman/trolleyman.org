@@ -42,8 +42,11 @@ pub fn is_username_reserved(username: &str) -> bool { RESERVED_USERNAMES_LOWERCA
 
 pub fn get_errors_for_username(conn: &DbConn, username: &str) -> Result<Vec<String>> {
 	let mut errors = Vec::new();
-	if !username_available(conn, &username)? {
-		errors.push("User with name already exists".into());
+	if is_username_reserved(username) {
+		errors.push("Username is reserved".into());
+	}
+	if User::exists_with_name(conn, username)? {
+		errors.push("Username already taken".into());
 	}
 	if username.len() < USERNAME_MIN_LENGTH {
 		errors.push(format!("Username must be at least {} characters in length", USERNAME_MIN_LENGTH));
