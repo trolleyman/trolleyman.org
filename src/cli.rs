@@ -17,7 +17,7 @@ where
 		};
 		let errors = get_validation_errors(&property)?;
 		if errors.len() > 0 {
-			println!("{} breaks rule{}:", name, if errors.len() == 1 { "" } else { "s" });
+			println!("{} validation error{}:", name, if errors.len() == 1 { "" } else { "s" });
 			for error in errors {
 				println!("\t- {}", error);
 			}
