@@ -42,11 +42,19 @@ impl User {
 		select(exists(user::table.filter(user::email.eq(email)))).get_result(conn)
 	}
 
+	pub fn get_with_name(conn: &DbConn, username: &str) -> DbResult<Option<User>> {
+		user::table.filter(user::name.eq(username)).first(conn).optional()
+	}
+	
+	pub fn get_with_email(conn: &DbConn, email: &str) -> DbResult<Option<User>> {
+		user::table.filter(user::email.eq(email)).first(conn).optional()
+	}
+
 	pub fn get_with_username_or_email(conn: &DbConn, username_email: &str) -> DbResult<Option<User>> {
 		if username_email.contains('@') {
-			user::table.filter(user::email.eq(username_email)).first(conn).optional()
+			User::get_with_email(conn, username_email)
 		} else {
-			user::table.filter(user::name.eq(username_email)).first(conn).optional()
+			User::get_with_name(conn, username_email)
 		}
 	}
 
@@ -55,6 +63,16 @@ impl User {
 		if let Some(user) = User::get_with_username_or_email(conn, username)? {
 			let password = Password::from_password(password, HashAlgorithm::Sha3_512, Password::random_salt());
 			diesel::update(user::table.filter(user::id.eq(user.id))).set(user::password.eq(password)).execute(conn)?;
+			Ok(())
+		} else {
+			Err(Error::NotFound("The user was not found".into()))
+		}
+	}
+
+	// Errors if the user could not be found, or if there was a database error
+	pub fn set_email(conn: &DbConn, username: &str, email: &str) -> Result<()> {
+		if let Some(user) = User::get_with_name(conn, username)? {
+			diesel::update(user::table.filter(user::id.eq(user.id))).set(user::email.eq(email)).execute(conn)?;
 			Ok(())
 		} else {
 			Err(Error::NotFound("The user was not found".into()))
