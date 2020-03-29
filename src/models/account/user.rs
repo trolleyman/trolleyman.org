@@ -63,7 +63,7 @@ impl User {
 	}
 
 	pub fn get_from_token(conn: &DbConn, token: &str) -> DbResult<Option<User>> {
-		if let Some(token) = SessionToken::get(conn, token)? {
+		if let Some(token) = SessionToken::get_unexpired(conn, token)? {
 			user::table.filter(user::id.eq(token.user)).get_result(conn).optional()
 		} else {
 			Ok(None)

@@ -16,7 +16,7 @@ pub struct SessionToken {
 	pub expires: NaiveDateTime,
 }
 impl SessionToken {
-	pub fn get(conn: &DbConn, token: &str) -> DbResult<Option<SessionToken>> {
-		session_token::table.filter(session_token::token.eq(token)).get_result(conn).optional()
+	pub fn get_unexpired(conn: &DbConn, token: &str) -> DbResult<Option<SessionToken>> {
+		session_token::table.filter(session_token::expires.gt(Utc::now().naive_utc())).filter(session_token::token.eq(token)).get_result(conn).optional()
 	}
 }

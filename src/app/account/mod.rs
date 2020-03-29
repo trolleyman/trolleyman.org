@@ -12,7 +12,7 @@ use serde_json::Value as JsonValue;
 
 use crate::{
 	config::Config,
-	db::{DbConnGuard},
+	db::DbConnGuard,
 	error::Result,
 	models::account::User,
 };
@@ -21,21 +21,34 @@ mod types;
 pub mod validation;
 
 pub fn routes() -> Vec<rocket::Route> {
-	routes![login_get, login_post, register_get, register_post, api_username_available]
+	// TODO: /account, /account/logout, /account/forgot, /account/<user>(?)
+	routes![api_username_available, login_get, login_post, register_get, register_post, me, me_no_user]
 }
 
-fn default_context(patch: &JsonValue) -> JsonValue {
+fn default_context(user: Option<&User>, patch: &JsonValue) -> JsonValue {
+	let mut base = json!({
+		"USERNAME_REGEX": validation::USERNAME_REGEX_STRING,
+		"USERNAME_MIN_LENGTH": validation::USERNAME_MIN_LENGTH,
+		"USERNAME_MAX_LENGTH": validation::USERNAME_MAX_LENGTH,
+		"EMAIL_REGEX": validation::EMAIL_REGEX_STRING,
+		"EMAIL_MAX_LENGTH": validation::EMAIL_MAX_LENGTH,
+		"PASSWORD_REGEX": validation::PASSWORD_REGEX_STRING,
+		"PASSWORD_MIN_LENGTH": validation::PASSWORD_MIN_LENGTH,
+		"PASSWORD_MAX_LENGTH": validation::PASSWORD_MAX_LENGTH,
+	});
+	if let Some(user) = user {
+		base = merge(
+			base, &json!({
+				"current_user": {
+					"name": user.name,
+					"email": user.email,
+					"admin": user.admin,
+				},
+			})
+		);
+	}
 	merge(
-		json!({
-			"USERNAME_REGEX": validation::USERNAME_REGEX_STRING,
-			"USERNAME_MIN_LENGTH": validation::USERNAME_MIN_LENGTH,
-			"USERNAME_MAX_LENGTH": validation::USERNAME_MAX_LENGTH,
-			"EMAIL_REGEX": validation::EMAIL_REGEX_STRING,
-			"EMAIL_MAX_LENGTH": validation::EMAIL_MAX_LENGTH,
-			"PASSWORD_REGEX": validation::PASSWORD_REGEX_STRING,
-			"PASSWORD_MIN_LENGTH": validation::PASSWORD_MIN_LENGTH,
-			"PASSWORD_MAX_LENGTH": validation::PASSWORD_MAX_LENGTH,
-		}),
+		base,
 		patch,
 	)
 }
@@ -45,17 +58,17 @@ fn merge(mut base: JsonValue, patch: &JsonValue) -> JsonValue {
 	base
 }
 
-fn login_error(form: &types::LoginForm, msg: &str) -> types::TemplateRedirect {
+fn login_error(user: Option<&User>, form: &types::LoginForm, msg: &str) -> types::TemplateRedirect {
 	types::TemplateRedirect::from(Template::render(
 		"account/login",
-		default_context(&json!({ "error": msg, "username": form.username, "remember": form.remember })),
+		default_context(user, &json!({ "error": msg, "username": form.username, "remember": form.remember })),
 	))
 }
 
-fn register_error(form: &types::RegisterForm, value: &JsonValue) -> types::TemplateRedirect {
+fn register_error(user: Option<&User>, form: &types::RegisterForm, value: &JsonValue) -> types::TemplateRedirect {
 	types::TemplateRedirect::from(Template::render(
 		"account/register",
-		default_context(&merge(
+		default_context(user, &merge(
 			json!({
 				"username": form.username,
 				"email": form.email,
@@ -72,44 +85,45 @@ fn api_username_available(conn: DbConnGuard, username: String) -> Result<Json<bo
 }
 
 #[get("/login")]
-fn login_get() -> Template { Template::render("account/login", default_context(&json!({}))) }
+fn login_get(user: Option<User>) -> Template { Template::render("account/login", default_context(user.as_ref(), &json!({}))) }
 
 #[post("/login", data = "<form>")]
 fn login_post(
 	conn: DbConnGuard,
+	user: Option<User>,
 	mut cookies: Cookies,
 	config: State<Config>,
 	form: LenientForm<types::LoginForm>,
 ) -> Result<types::TemplateRedirect> {
-	let user = match User::get_with_username_or_email(&conn, &form.username)? {
+	let new_user = match User::get_with_username_or_email(&conn, &form.username)? {
 		Some(u) => u,
-		None => return Ok(login_error(&form.0, "A user with that username or email address could not be found")),
+		None => return Ok(login_error(user.as_ref(), &form.0, "A user with that username or email address could not be found")),
 	};
 
 	// Create login session
 	let secs = 60 * 24 * 365;
 	let max_age = Duration::from_secs(secs);
-	let token = match user.new_session_token(&conn, &form.password, max_age)? {
+	let token = match new_user.new_session_token(&conn, &form.password, max_age)? {
 		Some(token) => token,
-		None => return Ok(login_error(&form.0, "The password entered is not correct")),
+		None => return Ok(login_error(user.as_ref(), &form.0, "The password entered is not correct")),
 	};
 
 	cookies.add_private(
 		Cookie::build(crate::models::account::SESSION_TOKEN_COOKIE_NAME, token)
-			.secure(true)
-			.same_site(SameSite::Strict)
-			.domain(config.domain.clone())
-			.expires(time::OffsetDateTime::now() + time::Duration::seconds(secs as i64))
+			// .secure(true)
+			// .same_site(SameSite::Strict)
+			// .domain(config.domain.clone())
+			// .expires(time::OffsetDateTime::now() + time::Duration::seconds(secs as i64))
 			.finish(),
 	);
-	Ok(Redirect::to("/").into())
+	Ok(Redirect::to("/account/me").into())
 }
 
 #[get("/register")]
-fn register_get() -> Template { Template::render("account/register", default_context(&json!({}))) }
+fn register_get(user: Option<User>) -> Template { Template::render("account/register", default_context(user.as_ref(), &json!({}))) }
 
 #[post("/register", data = "<form>")]
-fn register_post(conn: DbConnGuard, form: LenientForm<types::RegisterForm>) -> Result<types::TemplateRedirect> {
+fn register_post(user: Option<User>, conn: DbConnGuard, form: LenientForm<types::RegisterForm>) -> Result<types::TemplateRedirect> {
 	let mut errors = MultiMap::new();
 
 	// Username
@@ -123,6 +137,7 @@ fn register_post(conn: DbConnGuard, form: LenientForm<types::RegisterForm>) -> R
 
 	if errors.len() > 0 {
 		Ok(register_error(
+			user.as_ref(),
 			&form.0,
 			&json!({
 				"errors": {
@@ -135,4 +150,15 @@ fn register_post(conn: DbConnGuard, form: LenientForm<types::RegisterForm>) -> R
 	} else {
 		todo!()
 	}
+}
+
+#[get("/me")]
+fn me(user: User) -> Template {
+	Template::render("account/account", default_context(Some(&user), &json!({})))
+}
+
+#[get("/me", rank = 1)]
+fn me_no_user() -> Redirect {
+	// TODO: Flash message
+	Redirect::to("/account/login")
 }

@@ -5,12 +5,48 @@
 <link rel="stylesheet" href="/static/css/account/account.css">
 {% endblock %}
 {% block content %}
-  <div class="container-fluid mt-5">
-    <div class="row justify-content-center">
-      <h1></h1>
+  <div class="container-fluid mt-3">
+    <div class="row">
+      <div class="col-auto">
+        <h1 class="h3 mb-3">{{ current_user.name }}</h1>
+        <table class="table table-striped">
+          <tr><th>Email address</th><td>{{ current_user.email }}</td></tr>
+          <tr><th>Admin</th><td>{{ current_user.admin }}</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-auto">
+        <form method="post" action="logout">
+          <input class="btn btn-primary" type="submit" value="Logout"/>
+        </form>
+      </div>
+      <div class="col-auto">
+        <form id="delete-form" method="post" action="delete">
+          <input class="btn btn-danger" type="submit" value="Delete account"/>
+        </form>
+      </div>
+      <!-- "Are you sure?" modal -->
+      <div id="delete-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Are you sure?</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>Deleting your account is a permanent action that cannot be undone.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            <button type="button" id="confirm-delete-button" class="btn btn-danger" data-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}
 {% block js %}
   {{ super() }}
+  <script src="/static/js/account/account.js"></script>
 {% endblock %}
