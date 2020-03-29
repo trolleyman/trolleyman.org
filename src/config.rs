@@ -42,7 +42,7 @@ pub struct Config {
 	/// Protocol that the server uses
 	pub protocol:       String,
 	/// Hostname of the server
-	pub hostname:       String,
+	pub domain:         String,
 	/// Log filepath. Relative to the config file's location.
 	#[serde(default = "default_log_path")]
 	pub log_path:       PathBuf,

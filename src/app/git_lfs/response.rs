@@ -57,7 +57,7 @@ impl ActionSpec {
 	pub fn new_upload(conn: &DbConn, config: &Config, object: &models::Object) -> DbResult<ActionSpec> {
 		let token = models::UploadToken::new(conn, object)?;
 		Ok(ActionSpec {
-			href:       format!("{}://{}/git-lfs/-/upload?token={}", config.protocol, config.hostname, token.token),
+			href:       format!("{}://{}/git-lfs/-/upload?token={}", config.protocol, config.domain, token.token),
 			header:     HashMap::new(),
 			expires_in: models::UPLOAD_TOKEN_EXPIRATION_SECONDS,
 			expires_at: DateTime::from_utc(token.expires, Utc),
@@ -67,7 +67,7 @@ impl ActionSpec {
 	pub fn new_download(conn: &DbConn, config: &Config, object: &models::Object) -> DbResult<ActionSpec> {
 		let token = models::DownloadToken::new(conn, object)?;
 		Ok(ActionSpec {
-			href:       format!("{}://{}/git-lfs/-/download?token={}", config.protocol, config.hostname, token.token),
+			href:       format!("{}://{}/git-lfs/-/download?token={}", config.protocol, config.domain, token.token),
 			header:     HashMap::new(),
 			expires_in: models::DOWNLOAD_TOKEN_EXPIRATION_SECONDS,
 			expires_at: DateTime::from_utc(token.expires, Utc),

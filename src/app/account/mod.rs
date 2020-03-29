@@ -1,13 +1,15 @@
 use std::{collections::HashSet, time::Duration};
 
+use multimap::MultiMap;
+use regex::Regex;
 use rocket::{
 	http::{Cookie, Cookies, SameSite},
 	request::LenientForm,
-	response::{content, Redirect},
+	response::{content, Redirect}, State,
 };
 use rocket_contrib::templates::Template;
 
-use crate::{db::DbConn, error::Result, models::account::User};
+use crate::{db::DbConn, error::Result, models::account::User, config::Config};
 
 mod types;
 
@@ -16,12 +18,14 @@ pub fn routes() -> Vec<rocket::Route> {
 }
 
 const RESERVED_USERNAMES_STRING: &'static str = include_str!("reserved_usernames.csv");
-pub const USERNAME_REGEX: &'static str = "^\\w(\\w|[-_.])+$";
-pub const USERNAME_MIN_LENGTH: i32 = 3;
-pub const USERNAME_MAX_LENGTH: i32 = 20;
-pub const EMAIL_MAX_LENGTH: i32 = 30;
-pub const PASSWORD_MIN_LENGTH: i32 = 8;
-pub const PASSWORD_MAX_LENGTH: i32 = 32;
+pub const USERNAME_REGEX_STRING: &'static str = r"^\w(\w|[-_.])+$";
+pub const USERNAME_MIN_LENGTH: usize = 3;
+pub const USERNAME_MAX_LENGTH: usize = 20;
+pub const EMAIL_REGEX_STRING: &'static str = r"^\S+@\S+\.\S+$";
+pub const EMAIL_MAX_LENGTH: usize = 30;
+pub const PASSWORD_REGEX_STRING: &'static str = r"[0-9]";
+pub const PASSWORD_MIN_LENGTH: usize = 8;
+pub const PASSWORD_MAX_LENGTH: usize = 32;
 
 lazy_static! {
 	static ref RESERVED_USERNAMES_LOWERCASE: HashSet<String> = {
@@ -34,18 +38,23 @@ lazy_static! {
 		}
 		set
 	};
+	pub static ref USERNAME_REGEX: Regex = Regex::new(USERNAME_REGEX_STRING).expect("Invalid regex");
+	pub static ref EMAIL_REGEX: Regex = Regex::new(EMAIL_REGEX_STRING).expect("Invalid regex");
+	pub static ref PASSWORD_REGEX: Regex = Regex::new(PASSWORD_REGEX_STRING).expect("Invalid regex");
 }
 
 pub fn is_username_reserved(username: &str) -> bool { RESERVED_USERNAMES_LOWERCASE.contains(&username.to_lowercase()) }
 
 fn default_context(patch: serde_json::Value) -> serde_json::Value {
 	let mut ctx = json!({
-		"username_regex": USERNAME_REGEX,
-		"username_min_length": USERNAME_MIN_LENGTH,
-		"username_max_length": USERNAME_MAX_LENGTH,
-		"email_max_length": EMAIL_MAX_LENGTH,
-		"password_min_length": PASSWORD_MIN_LENGTH,
-		"password_max_length": PASSWORD_MAX_LENGTH,
+		"USERNAME_REGEX": USERNAME_REGEX_STRING,
+		"USERNAME_MIN_LENGTH": USERNAME_MIN_LENGTH,
+		"USERNAME_MAX_LENGTH": USERNAME_MAX_LENGTH,
+		"EMAIL_REGEX": EMAIL_REGEX_STRING,
+		"EMAIL_MAX_LENGTH": EMAIL_MAX_LENGTH,
+		"PASSWORD_REGEX": PASSWORD_REGEX_STRING,
+		"PASSWORD_MIN_LENGTH": PASSWORD_MIN_LENGTH,
+		"PASSWORD_MAX_LENGTH": PASSWORD_MAX_LENGTH,
 	});
 	json_patch::merge(&mut ctx, &patch);
 	ctx
@@ -53,6 +62,10 @@ fn default_context(patch: serde_json::Value) -> serde_json::Value {
 
 fn login_error(msg: &str) -> types::TemplateRedirect {
 	types::TemplateRedirect::from(Template::render("account/login", default_context(json!({ "error": msg }))))
+}
+
+fn register_error(value: serde_json::Value) -> types::TemplateRedirect {
+	types::TemplateRedirect::from(Template::render("account/login", default_context(value)))
 }
 
 #[get("/api/username_exists?<username>")]
@@ -71,7 +84,12 @@ fn api_username_exists(conn: DbConn, username: String) -> Result<content::Json<&
 fn login_get() -> Template { Template::render("account/login", default_context(json!({}))) }
 
 #[post("/login", data = "<form>")]
-fn login_post(conn: DbConn, mut cookies: Cookies, form: LenientForm<types::LoginForm>) -> Result<types::TemplateRedirect> {
+fn login_post(
+	conn: DbConn,
+	mut cookies: Cookies,
+	config: State<Config>,
+	form: LenientForm<types::LoginForm>,
+) -> Result<types::TemplateRedirect> {
 	let user = match User::get_with_username_or_email(&conn, &form.username)? {
 		Some(u) => u,
 		None => return Ok(login_error("A user with that name could not be found")),
@@ -86,7 +104,12 @@ fn login_post(conn: DbConn, mut cookies: Cookies, form: LenientForm<types::Login
 	};
 
 	cookies.add_private(
-		Cookie::build(crate::models::account::SESSION_TOKEN_COOKIE_NAME, token).same_site(SameSite::Strict).max_age(time::Duration::seconds(secs as i64)).finish(),
+		Cookie::build(crate::models::account::SESSION_TOKEN_COOKIE_NAME, token)
+			.secure(true)
+			.same_site(SameSite::Strict)
+			.domain(config.domain.clone())
+			.expires(time::OffsetDateTime::now() + time::Duration::seconds(secs as i64))
+			.finish(),
 	);
 	Ok(Redirect::to("/").into())
 }
@@ -94,5 +117,58 @@ fn login_post(conn: DbConn, mut cookies: Cookies, form: LenientForm<types::Login
 #[get("/register")]
 fn register_get() -> Template { Template::render("account/register", default_context(json!({}))) }
 
-#[post("/register", data = "<_form>")]
-fn register_post(_form: LenientForm<types::RegisterForm>) -> Result<Redirect> { todo!() }
+#[post("/register", data = "<form>")]
+fn register_post(conn: DbConn, form: LenientForm<types::RegisterForm>) -> Result<types::TemplateRedirect> {
+	let mut errors = MultiMap::new();
+	
+	// Username
+	if User::exists_with_name(&conn, &form.username)? {
+		errors.insert("username", "User with name already exists".into());
+	}
+	if form.username.len() < USERNAME_MIN_LENGTH {
+		errors.insert("username", format!("Username must be at least {} characters in length", USERNAME_MIN_LENGTH));
+	}
+	if form.username.len() > USERNAME_MAX_LENGTH {
+		errors.insert("username", format!("Username must be at most {} characters in length", USERNAME_MAX_LENGTH));
+	}
+	if !USERNAME_REGEX.is_match(&form.username) {
+		errors.insert("username", "Username must contain only alphanumeric characters, hyphens, and full stops".into());
+	}
+
+	// Email address
+	if User::exists_with_email(&conn, &form.email)? {
+		errors.insert(
+			"email",
+			"User with email address already exists. <a href=\"/account/forgot\">Forgot your password?</a>".into(),
+		);
+	}
+	if form.email.len() > EMAIL_MAX_LENGTH {
+		errors.insert("email", format!("Email address must be at most {} characters in length", EMAIL_MAX_LENGTH));
+	}
+	if !EMAIL_REGEX.is_match(&form.email) {
+		errors.insert("email", "Email address must be of the form user@example.com".into());
+	}
+
+	// Password
+	if form.password.len() < PASSWORD_MIN_LENGTH {
+		errors.insert("password", format!("Password must be at least {} characters in length", PASSWORD_MIN_LENGTH));
+	}
+	if form.password.len() > PASSWORD_MAX_LENGTH {
+		errors.insert("password", format!("Password must be at most {} characters in length", PASSWORD_MAX_LENGTH));
+	}
+	if !PASSWORD_REGEX.is_match(&form.password) {
+		errors.insert("password", format!("Password must contain numeric characters (0-9)"));
+	}
+	
+	if errors.len() > 0 {
+		Ok(register_error(json!({
+			"errors": {
+				"username": errors.get_vec("username"),
+				"email": errors.get_vec("email"),
+				"password": errors.get_vec("password"),
+			}
+		})))
+	} else {
+		todo!()
+	}
+}

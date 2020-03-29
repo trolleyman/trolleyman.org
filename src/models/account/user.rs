@@ -34,6 +34,11 @@ impl User {
 		select(exists(user::table.filter(user::name.eq(name)))).get_result(&**conn)
 	}
 
+	pub fn exists_with_email(conn: &DbConn, email: &str) -> DbResult<bool> {
+		use diesel::dsl::{exists, select};
+		select(exists(user::table.filter(user::email.eq(email)))).get_result(&**conn)
+	}
+
 	pub fn get_with_username_or_email(conn: &DbConn, username_email: &str) -> DbResult<Option<User>> {
 		if username_email.contains('@') {
 			user::table.filter(user::email.eq(username_email)).first(&**conn).optional()

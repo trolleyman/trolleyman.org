@@ -10,13 +10,13 @@ pub struct RegisterForm {
 	pub email:    String,
 	pub email2:   String,
 	pub password: String,
-	pub remember: bool,
 }
 
 #[derive(FromForm)]
 pub struct LoginForm {
 	pub username: String,
 	pub password: String,
+	pub remember: bool,
 }
 
 #[derive(derive_more::From)]
