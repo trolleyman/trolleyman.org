@@ -8,6 +8,7 @@ edition = "2018"
 # Rocket
 rocket = { git = "https://github.com/SergioBenitez/Rocket" }
 rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket", default-features = false, features = ["serve", "json", "tera_templates", "diesel_sqlite_pool"] }
+time = "0.2.9"  # Only used for interacting with cookie builder
 
 # Diesel
 diesel = { version = "1.4.3", features = ["chrono", "sqlite"] }

@@ -37,7 +37,7 @@ impl Person {
 #[table_name = "lastedited"]
 pub struct LastEdited {
 	pub id:        i32,
-	#[serde(with = "crate::util::serde_naive_datetime")]
+	#[serde(with = "crate::util::serde::naive_datetime")]
 	pub timestamp: NaiveDateTime,
 }
 impl LastEdited {

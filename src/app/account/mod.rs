@@ -1,6 +1,7 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, time::Duration};
 
 use rocket::{
+	http::{Cookie, Cookies, SameSite},
 	request::LenientForm,
 	response::{content, Redirect},
 };
@@ -70,23 +71,28 @@ fn api_username_exists(conn: DbConn, username: String) -> Result<content::Json<&
 fn login_get() -> Template { Template::render("account/login", default_context(json!({}))) }
 
 #[post("/login", data = "<form>")]
-fn login_post(conn: DbConn, form: LenientForm<types::LoginForm>) -> Result<types::TemplateRedirect> {
+fn login_post(conn: DbConn, mut cookies: Cookies, form: LenientForm<types::LoginForm>) -> Result<types::TemplateRedirect> {
 	let user = match User::get_with_username_or_email(&conn, &form.username)? {
 		Some(u) => u,
 		None => return Ok(login_error("A user with that name could not be found")),
 	};
 
-	// Check password
-	if !user.password.matches(&form.password) {
-		return Ok(login_error("The password is not correct"));
-	}
-	
-	// Login by setting cookies
-	todo!();
+	// Create login session
+	let secs = 60 * 24 * 365;
+	let max_age = Duration::from_secs(secs);
+	let token = match user.new_session_token(&conn, &form.password, max_age)? {
+		Some(token) => token,
+		None => return Ok(login_error("The password entered is not correct")),
+	};
+
+	cookies.add_private(
+		Cookie::build(crate::models::account::SESSION_TOKEN_COOKIE_NAME, token).same_site(SameSite::Strict).max_age(time::Duration::seconds(secs as i64)).finish(),
+	);
+	Ok(Redirect::to("/").into())
 }
 
 #[get("/register")]
 fn register_get() -> Template { Template::render("account/register", default_context(json!({}))) }
 
-#[post("/register", data = "<form>")]
-fn register_post(form: LenientForm<types::RegisterForm>) -> Result<Redirect> { todo!() }
+#[post("/register", data = "<_form>")]
+fn register_post(_form: LenientForm<types::RegisterForm>) -> Result<Redirect> { todo!() }

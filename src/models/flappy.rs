@@ -12,7 +12,7 @@ pub struct LeaderboardEntry {
 	pub id:        i32,
 	pub name:      String,
 	pub score:     i32,
-	#[serde(with = "crate::util::serde_naive_datetime")]
+	#[serde(with = "crate::util::serde::naive_datetime")]
 	pub timestamp: chrono::NaiveDateTime,
 }
 impl LeaderboardEntry {

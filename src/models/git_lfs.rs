@@ -1,6 +1,5 @@
 use chrono::{prelude::*, Duration};
 use diesel::prelude::*;
-use rand::Rng;
 
 use crate::{
 	db::{DbConn, DbResult},
@@ -10,7 +9,7 @@ use crate::{
 			git_lfs_download_token as download_token, git_lfs_object as object, git_lfs_repository as repository,
 			git_lfs_upload_token as upload_token, user,
 		},
-	},
+	}, util,
 };
 
 #[derive(Clone, Queryable, Identifiable, Associations)]
@@ -102,7 +101,7 @@ impl UploadToken {
 
 		// Add new upload token
 		let expires = (now + Duration::seconds(UPLOAD_TOKEN_EXPIRATION_SECONDS as i64)).naive_utc();
-		let token: String = rand::thread_rng().sample_iter(&rand::distributions::Alphanumeric).take(30).collect();
+		let token: String = util::random_token();
 		NewUploadToken { token: &token, object: object.id, expires }
 			.insert_into(upload_token::table)
 			.execute(&**conn)?;
@@ -154,7 +153,7 @@ impl DownloadToken {
 
 		// Add new download token
 		let expires = (now + Duration::seconds(UPLOAD_TOKEN_EXPIRATION_SECONDS as i64)).naive_utc();
-		let token: String = rand::thread_rng().sample_iter(&rand::distributions::Alphanumeric).take(30).collect();
+		let token: String = util::random_token();
 		NewDownloadToken { token: &token, object: object.id, expires }
 			.insert_into(download_token::table)
 			.execute(&**conn)?;
