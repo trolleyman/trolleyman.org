@@ -15,6 +15,8 @@ pub enum Error {
 	#[error("An input/output error occured")]
 	Io(#[from] std::io::Error),
 	#[error("A database error occured")]
+	GenericDb,
+	#[error("A database error occured")]
 	Db(#[from] crate::db::DbError),
 	#[error(transparent)]
 	Other(#[from] anyhow::Error),
@@ -32,6 +34,9 @@ impl Responder<'_> for Error {
 					"There was an input/output error.".into()
 				};
 				error_response(request, Status::InternalServerError, &msg)
+			},
+			Error::GenericDb => {
+				error_response(request, Status::InternalServerError, &format!("{}", self))
 			},
 			Error::Db(inner) => {
 				let msg = if is_dev {

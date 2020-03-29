@@ -1,4 +1,8 @@
 
+.form-container {
+	max-width: 400px;
+}
+
 form:not(.was-validated) input#email,
 form.was-validated input#email:not(:invalid) {
 	margin-bottom: -1px;

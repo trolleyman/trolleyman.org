@@ -2,15 +2,20 @@ use chrono::prelude::*;
 use diesel::prelude::*;
 
 use crate::{
-	db::{DbConn, DbResult},
+	db::{DbConn, DbConnGuard, DbResult},
 	error::{Error, Result},
 	models::{
-		account::password::Password,
+		account::{Password, SessionToken},
 		schema::{session_token, user},
 	},
 	util,
 };
 
+use rocket::{
+	http::Status,
+	request::{self, FromRequest},
+	Request,
+};
 use std::time::Duration;
 
 #[derive(Insertable)]
@@ -57,6 +62,14 @@ impl User {
 		select(exists(user::table.filter(user::email.eq(email)))).get_result(conn)
 	}
 
+	pub fn get_from_token(conn: &DbConn, token: &str) -> DbResult<Option<User>> {
+		if let Some(token) = SessionToken::get(conn, token)? {
+			user::table.filter(user::id.eq(token.user)).get_result(conn).optional()
+		} else {
+			Ok(None)
+		}
+	}
+
 	pub fn get_with_name(conn: &DbConn, username: &str) -> DbResult<Option<User>> {
 		user::table.filter(user::name.eq(username)).first(conn).optional()
 	}
@@ -97,5 +110,27 @@ impl User {
 			(Utc::now() + chrono::Duration::from_std(expires).unwrap_or(chrono::Duration::max_value())).naive_utc();
 		NewSessionToken { token: &token, user: self.id, expires }.insert_into(session_token::table).execute(conn)?;
 		Ok(Some(token))
+	}
+}
+impl<'a, 'r> FromRequest<'a, 'r> for User {
+	type Error = Error;
+
+	fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, Self::Error> {
+		let conn = try_outcome!(request
+			.guard::<DbConnGuard>()
+			.map_failure(|_| (Status::InternalServerError, Error::GenericDb)));
+		match get_logged_in_user(&conn, request) {
+			Ok(Some(user)) => request::Outcome::Success(user),
+			Ok(None) => request::Outcome::Forward(()),
+			Err(e) => request::Outcome::Failure((Status::InternalServerError, e)),
+		}
+	}
+}
+
+fn get_logged_in_user(conn: &DbConn, request: &'_ Request<'_>) -> Result<Option<User>> {
+	if let Some(token) = request.cookies().get_private(crate::models::account::SESSION_TOKEN_COOKIE_NAME) {
+		User::get_from_token(conn, token.value()).map_err(From::from)
+	} else {
+		Ok(None)
 	}
 }

@@ -1,8 +1,9 @@
 use chrono::prelude::*;
 
 use crate::{
-	models::schema::session_token,
+	models::schema::session_token, db::{DbResult, DbConn},
 };
+use diesel::prelude::*;
 
 pub const SESSION_TOKEN_COOKIE_NAME: &'static str = "session_token";
 
@@ -13,4 +14,9 @@ pub struct SessionToken {
 	pub token: String,
 	pub user: i32,
 	pub expires: NaiveDateTime,
+}
+impl SessionToken {
+	pub fn get(conn: &DbConn, token: &str) -> DbResult<Option<SessionToken>> {
+		session_token::table.filter(session_token::token.eq(token)).get_result(conn).optional()
+	}
 }
