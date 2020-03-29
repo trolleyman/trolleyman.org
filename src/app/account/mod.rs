@@ -5,7 +5,7 @@ use rocket::{
 	http::{Cookie, Cookies, SameSite},
 	request::LenientForm,
 	response::Redirect,
-	State,
+	State, config::Environment,
 };
 use rocket_contrib::{json::Json, templates::Template};
 use serde_json::Value as JsonValue;
@@ -14,7 +14,7 @@ use crate::{
 	config::Config,
 	db::DbConnGuard,
 	error::Result,
-	models::account::User,
+	models::account::{User, SESSION_TOKEN_COOKIE_NAME},
 };
 
 mod types;
@@ -22,7 +22,7 @@ pub mod validation;
 
 pub fn routes() -> Vec<rocket::Route> {
 	// TODO: /account, /account/logout, /account/forgot, /account/<user>(?)
-	routes![api_username_available, login_get, login_post, register_get, register_post, me, me_no_user]
+	routes![api_username_available, login_get, login_post, register_get, register_post, me, me_no_user, logout]
 }
 
 fn default_context(user: Option<&User>, patch: &JsonValue) -> JsonValue {
@@ -38,19 +38,17 @@ fn default_context(user: Option<&User>, patch: &JsonValue) -> JsonValue {
 	});
 	if let Some(user) = user {
 		base = merge(
-			base, &json!({
+			base,
+			&json!({
 				"current_user": {
 					"name": user.name,
 					"email": user.email,
 					"admin": user.admin,
 				},
-			})
+			}),
 		);
 	}
-	merge(
-		base,
-		patch,
-	)
+	merge(base, patch)
 }
 
 fn merge(mut base: JsonValue, patch: &JsonValue) -> JsonValue {
@@ -68,14 +66,17 @@ fn login_error(user: Option<&User>, form: &types::LoginForm, msg: &str) -> types
 fn register_error(user: Option<&User>, form: &types::RegisterForm, value: &JsonValue) -> types::TemplateRedirect {
 	types::TemplateRedirect::from(Template::render(
 		"account/register",
-		default_context(user, &merge(
-			json!({
-				"username": form.username,
-				"email": form.email,
-				"email2": form.email2,
-			}),
-			value,
-		)),
+		default_context(
+			user,
+			&merge(
+				json!({
+					"username": form.username,
+					"email": form.email,
+					"email2": form.email2,
+				}),
+				value,
+			),
+		),
 	))
 }
 
@@ -85,7 +86,9 @@ fn api_username_available(conn: DbConnGuard, username: String) -> Result<Json<bo
 }
 
 #[get("/login")]
-fn login_get(user: Option<User>) -> Template { Template::render("account/login", default_context(user.as_ref(), &json!({}))) }
+fn login_get(user: Option<User>) -> Template {
+	Template::render("account/login", default_context(user.as_ref(), &json!({})))
+}
 
 #[post("/login", data = "<form>")]
 fn login_post(
@@ -93,11 +96,17 @@ fn login_post(
 	user: Option<User>,
 	mut cookies: Cookies,
 	config: State<Config>,
+	environment: State<Environment>,
 	form: LenientForm<types::LoginForm>,
 ) -> Result<types::TemplateRedirect> {
 	let new_user = match User::get_with_username_or_email(&conn, &form.username)? {
 		Some(u) => u,
-		None => return Ok(login_error(user.as_ref(), &form.0, "A user with that username or email address could not be found")),
+		None =>
+			return Ok(login_error(
+				user.as_ref(),
+				&form.0,
+				"A user with that username or email address could not be found",
+			)),
 	};
 
 	// Create login session
@@ -108,22 +117,33 @@ fn login_post(
 		None => return Ok(login_error(user.as_ref(), &form.0, "The password entered is not correct")),
 	};
 
-	cookies.add_private(
-		Cookie::build(crate::models::account::SESSION_TOKEN_COOKIE_NAME, token)
-			// .secure(true)
-			// .same_site(SameSite::Strict)
-			// .domain(config.domain.clone())
-			// .expires(time::OffsetDateTime::now() + time::Duration::seconds(secs as i64))
-			.finish(),
-	);
+	cookies.add_private(get_session_cookie(token, &*config, *environment, secs as i64));
 	Ok(Redirect::to("/account/me").into())
 }
 
+fn get_session_cookie(token: String, config: &Config, environment: Environment, seconds: i64) -> Cookie<'static> {
+	let mut builder = Cookie::build(SESSION_TOKEN_COOKIE_NAME, token)
+		.same_site(SameSite::Strict)
+		.expires(time::OffsetDateTime::now() + time::Duration::seconds(seconds));
+	
+	if !environment.is_dev() {
+		builder = builder.secure(true)
+			.domain(config.domain.clone());
+	}
+	builder.finish()
+}
+
 #[get("/register")]
-fn register_get(user: Option<User>) -> Template { Template::render("account/register", default_context(user.as_ref(), &json!({}))) }
+fn register_get(user: Option<User>) -> Template {
+	Template::render("account/register", default_context(user.as_ref(), &json!({})))
+}
 
 #[post("/register", data = "<form>")]
-fn register_post(user: Option<User>, conn: DbConnGuard, form: LenientForm<types::RegisterForm>) -> Result<types::TemplateRedirect> {
+fn register_post(
+	user: Option<User>,
+	conn: DbConnGuard,
+	form: LenientForm<types::RegisterForm>,
+) -> Result<types::TemplateRedirect> {
 	let mut errors = MultiMap::new();
 
 	// Username
@@ -153,12 +173,17 @@ fn register_post(user: Option<User>, conn: DbConnGuard, form: LenientForm<types:
 }
 
 #[get("/me")]
-fn me(user: User) -> Template {
-	Template::render("account/account", default_context(Some(&user), &json!({})))
-}
+fn me(user: User) -> Template { Template::render("account/account", default_context(Some(&user), &json!({}))) }
 
 #[get("/me", rank = 1)]
 fn me_no_user() -> Redirect {
+	// TODO: Flash message
+	Redirect::to("/account/login")
+}
+
+#[post("/logout")]
+fn logout(mut cookies: Cookies) -> Redirect {
+	cookies.remove_private(Cookie::named(SESSION_TOKEN_COOKIE_NAME));
 	// TODO: Flash message
 	Redirect::to("/account/login")
 }
