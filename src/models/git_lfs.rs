@@ -22,26 +22,26 @@ pub struct Repository {
 }
 impl Repository {
 	pub fn get(conn: &DbConn, owner: &str, name: &str) -> DbResult<Option<Repository>> {
-		let user = user::table.filter(user::name.eq(owner)).first::<User>(&**conn)?;
+		let user = user::table.filter(user::name.eq(owner)).first::<User>(conn)?;
 
-		Repository::belonging_to(&user).filter(repository::name.eq(name)).first(&**conn).optional()
+		Repository::belonging_to(&user).filter(repository::name.eq(name)).first(conn).optional()
 	}
 
 	pub fn get_object(&self, conn: &DbConn, oid: &str) -> DbResult<Option<Object>> {
 		let ret =
-			object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn).optional();
+			object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(conn).optional();
 		debug!("git lfs: get_object({}) = {:?}", oid, ret);
 		ret
 	}
 
 	pub fn create_object(&self, conn: &DbConn, oid: &str, size: i64) -> DbResult<Object> {
 		debug!("git lfs: create_object({}, {})", oid, size);
-		NewObject { oid, size, valid: false, repository: self.id }.insert_into(object::table).execute(&**conn)?;
-		object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(&**conn)
+		NewObject { oid, size, valid: false, repository: self.id }.insert_into(object::table).execute(conn)?;
+		object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(conn)
 	}
 
 	pub fn get_owner(&self, conn: &DbConn) -> DbResult<User> {
-		user::table.filter(user::id.eq(self.owner)).first(&**conn)
+		user::table.filter(user::id.eq(self.owner)).first(conn)
 	}
 }
 
@@ -66,12 +66,12 @@ pub struct Object {
 impl Object {
 	/// Gets the repository associated with the object
 	pub fn get_repository(&self, conn: &DbConn) -> DbResult<Repository> {
-		repository::table.filter(repository::id.eq(self.repository)).first(&**conn)
+		repository::table.filter(repository::id.eq(self.repository)).first(conn)
 	}
 
 	/// Makes the object valid, and saves the changes of the object to the database
 	pub fn make_valid(&self, conn: &DbConn) -> DbResult<()> {
-		diesel::update(self).set(object::valid.eq(true)).execute(&**conn).map(|_| ())
+		diesel::update(self).set(object::valid.eq(true)).execute(conn).map(|_| ())
 	}
 }
 
@@ -104,7 +104,7 @@ impl UploadToken {
 		let token: String = util::random_token();
 		NewUploadToken { token: &token, object: object.id, expires }
 			.insert_into(upload_token::table)
-			.execute(&**conn)?;
+			.execute(conn)?;
 		Ok(UploadToken { token, object: object.id, expires })
 	}
 
@@ -113,17 +113,17 @@ impl UploadToken {
 		let now = Utc::now();
 		UploadToken::clean_table(conn, now)?;
 
-		upload_token::table.filter(upload_token::token.eq(token)).first(&**conn).optional()
+		upload_token::table.filter(upload_token::token.eq(token)).first(conn).optional()
 	}
 
 	/// Removes old entries from upload token database
 	fn clean_table(conn: &DbConn, now: DateTime<Utc>) -> DbResult<usize> {
-		diesel::delete(upload_token::table.filter(upload_token::expires.lt(&now.naive_utc()))).execute(&**conn)
+		diesel::delete(upload_token::table.filter(upload_token::expires.lt(&now.naive_utc()))).execute(conn)
 	}
 
 	/// Gets the object associated with the token
 	pub fn get_object(&self, conn: &DbConn) -> DbResult<Object> {
-		object::table.filter(object::id.eq(self.object)).first(&**conn)
+		object::table.filter(object::id.eq(self.object)).first(conn)
 	}
 }
 
@@ -156,7 +156,7 @@ impl DownloadToken {
 		let token: String = util::random_token();
 		NewDownloadToken { token: &token, object: object.id, expires }
 			.insert_into(download_token::table)
-			.execute(&**conn)?;
+			.execute(conn)?;
 		Ok(DownloadToken { token, object: object.id, expires })
 	}
 
@@ -165,16 +165,16 @@ impl DownloadToken {
 		let now = Utc::now();
 		DownloadToken::clean_table(conn, now)?;
 
-		download_token::table.filter(download_token::token.eq(token)).first(&**conn).optional()
+		download_token::table.filter(download_token::token.eq(token)).first(conn).optional()
 	}
 
 	/// Removes old entries from download token database
 	fn clean_table(conn: &DbConn, now: DateTime<Utc>) -> DbResult<usize> {
-		diesel::delete(download_token::table.filter(download_token::expires.lt(&now.naive_utc()))).execute(&**conn)
+		diesel::delete(download_token::table.filter(download_token::expires.lt(&now.naive_utc()))).execute(conn)
 	}
 
 	/// Gets the object associated with the token
 	pub fn get_object(&self, conn: &DbConn) -> DbResult<Object> {
-		object::table.filter(object::id.eq(self.object)).first(&**conn)
+		object::table.filter(object::id.eq(self.object)).first(conn)
 	}
 }

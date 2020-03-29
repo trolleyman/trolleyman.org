@@ -12,6 +12,8 @@ pub type Result<T, E = Error> = std::result::Result<T, E>;
 pub enum Error {
 	#[error("{0}")]
 	NotFound(String),
+	#[error("An input/output error occured")]
+	Io(#[from] std::io::Error),
 	#[error("A database error occured")]
 	Db(#[from] crate::db::DbError),
 	#[error(transparent)]
@@ -23,6 +25,14 @@ impl Responder<'_> for Error {
 		match self {
 			// TODO: When in debug mode, print out database error inner details
 			Error::NotFound(msg) => error_response(request, Status::NotFound, &msg),
+			Error::Io(inner) => {
+				let msg = if is_dev {
+					format!("There was an input/output error: {:?}", inner)
+				} else {
+					"There was an input/output error.".into()
+				};
+				error_response(request, Status::InternalServerError, &msg)
+			},
 			Error::Db(inner) => {
 				let msg = if is_dev {
 					format!("There was a database error: {:?}", inner)

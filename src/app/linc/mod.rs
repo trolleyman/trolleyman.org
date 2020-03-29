@@ -1,7 +1,7 @@
 use rocket_contrib::templates::Template;
 
 use crate::{
-	db::DbConn,
+	db::DbConnGuard,
 	error::Result,
 	models::linc::{Interest, LastEdited, Person},
 };
@@ -15,7 +15,7 @@ fn index() -> Template { Template::render("linc/index", json!({})) }
 fn demo() -> Template { Template::render("linc/demo", json!({})) }
 
 #[get("/api/graph")]
-fn graph(conn: DbConn) -> Result<String> {
+fn graph(conn: DbConnGuard) -> Result<String> {
 	Ok(json!({
 		"last_edited": LastEdited::get(&conn)?.to_rfc3339(),
 		"people": Person::load_all(&conn)?,

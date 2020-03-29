@@ -3,11 +3,14 @@ use diesel::prelude::*;
 
 use crate::{
 	db::{DbConn, DbResult},
-	models::schema::{session_token, user},
+	error::{Error, Result},
+	models::{
+		account::password::{HashAlgorithm, Password},
+		schema::{session_token, user},
+	},
 	util,
 };
 
-pub use super::{password::Password, SessionToken};
 use std::time::Duration;
 
 #[derive(Insertable)]
@@ -31,19 +34,30 @@ pub struct User {
 impl User {
 	pub fn exists_with_name(conn: &DbConn, name: &str) -> DbResult<bool> {
 		use diesel::dsl::{exists, select};
-		select(exists(user::table.filter(user::name.eq(name)))).get_result(&**conn)
+		select(exists(user::table.filter(user::name.eq(name)))).get_result(conn)
 	}
 
 	pub fn exists_with_email(conn: &DbConn, email: &str) -> DbResult<bool> {
 		use diesel::dsl::{exists, select};
-		select(exists(user::table.filter(user::email.eq(email)))).get_result(&**conn)
+		select(exists(user::table.filter(user::email.eq(email)))).get_result(conn)
 	}
 
 	pub fn get_with_username_or_email(conn: &DbConn, username_email: &str) -> DbResult<Option<User>> {
 		if username_email.contains('@') {
-			user::table.filter(user::email.eq(username_email)).first(&**conn).optional()
+			user::table.filter(user::email.eq(username_email)).first(conn).optional()
 		} else {
-			user::table.filter(user::name.eq(username_email)).first(&**conn).optional()
+			user::table.filter(user::name.eq(username_email)).first(conn).optional()
+		}
+	}
+
+	// Errors if the user could not be found, or if there was a database error
+	pub fn set_password(conn: &DbConn, username: &str, password: &str) -> Result<()> {
+		if let Some(user) = User::get_with_username_or_email(conn, username)? {
+			let password = Password::from_password(password, HashAlgorithm::Sha3_512, Password::random_salt());
+			diesel::update(user::table.filter(user::id.eq(user.id))).set(user::password.eq(password)).execute(conn)?;
+			Ok(())
+		} else {
+			Err(Error::NotFound("The user was not found".into()))
 		}
 	}
 
@@ -56,8 +70,9 @@ impl User {
 		}
 
 		let token = util::random_token();
-		let expires = (Utc::now() + chrono::Duration::from_std(expires).unwrap_or(chrono::Duration::max_value())).naive_utc();
-		NewSessionToken { token: &token, user: self.id, expires }.insert_into(session_token::table).execute(&**conn)?;
+		let expires =
+			(Utc::now() + chrono::Duration::from_std(expires).unwrap_or(chrono::Duration::max_value())).naive_utc();
+		NewSessionToken { token: &token, user: self.id, expires }.insert_into(session_token::table).execute(conn)?;
 		Ok(Some(token))
 	}
 }

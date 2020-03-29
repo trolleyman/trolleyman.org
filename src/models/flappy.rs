@@ -17,7 +17,7 @@ pub struct LeaderboardEntry {
 }
 impl LeaderboardEntry {
 	pub fn get_top_entries(conn: &DbConn, num: i64) -> DbResult<Vec<LeaderboardEntry>> {
-		leaderboard::table.order(leaderboard::score.desc()).limit(num).load(&**conn)
+		leaderboard::table.order(leaderboard::score.desc()).limit(num).load(conn)
 	}
 }
 
@@ -29,6 +29,6 @@ pub struct NewLeaderboardEntry {
 }
 impl NewLeaderboardEntry {
 	pub fn save_new(&self, conn: &DbConn) -> DbResult<()> {
-		self.insert_into(leaderboard::table).execute(&**conn).map(|_| ())
+		self.insert_into(leaderboard::table).execute(conn).map(|_| ())
 	}
 }

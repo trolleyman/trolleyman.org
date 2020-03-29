@@ -15,7 +15,7 @@ pub struct Interest {
 	pub desc: String,
 }
 impl Interest {
-	pub fn load_all(conn: &DbConn) -> DbResult<Vec<Interest>> { interest::table.load::<Interest>(&**conn) }
+	pub fn load_all(conn: &DbConn) -> DbResult<Vec<Interest>> { interest::table.load::<Interest>(conn) }
 }
 
 #[derive(Queryable, Identifiable, Serialize)]
@@ -30,7 +30,7 @@ pub struct Person {
 	pub twitter: Option<String>,
 }
 impl Person {
-	pub fn load_all(conn: &DbConn) -> DbResult<Vec<Person>> { person::table.load::<Person>(&**conn) }
+	pub fn load_all(conn: &DbConn) -> DbResult<Vec<Person>> { person::table.load::<Person>(conn) }
 }
 
 #[derive(Queryable, Identifiable, Serialize)]
@@ -43,7 +43,7 @@ pub struct LastEdited {
 impl LastEdited {
 	pub fn get(conn: &DbConn) -> DbResult<DateTime<Utc>> {
 		Ok(DateTime::<Utc>::from_utc(
-			match lastedited::table.first::<LastEdited>(&**conn).optional()? {
+			match lastedited::table.first::<LastEdited>(conn).optional()? {
 				Some(e) => e.timestamp,
 				None => {
 					let timestamp = Utc::now().naive_utc();
@@ -63,6 +63,6 @@ pub struct NewLastEdited {
 }
 impl NewLastEdited {
 	pub fn save_new(&self, conn: &DbConn) -> DbResult<()> {
-		self.insert_into(lastedited::table).execute(&**conn).map(|_| ())
+		self.insert_into(lastedited::table).execute(conn).map(|_| ())
 	}
 }

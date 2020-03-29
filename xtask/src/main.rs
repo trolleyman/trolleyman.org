@@ -41,14 +41,15 @@ fn main() {
 }
 
 fn run() -> Result<()> {
-	let app = App::new("trolleyman-org-xtask")
+	let authors_string = env!("CARGO_PKG_AUTHORS").split(';').collect::<Vec<_>>().join(", ");
+	let app = App::new(clap::crate_name!())
+		.version(clap::crate_version!())
+		.about(clap::crate_description!())
+		.author(authors_string.as_ref())
 		.setting(AppSettings::ColoredHelp)
 		.setting(AppSettings::GlobalVersion)
 		.setting(AppSettings::SubcommandRequiredElseHelp)
 		.setting(AppSettings::VersionlessSubcommands)
-		.version("0.1.0")
-		.about("Build runner for the trolleyman-org project")
-		.author("Callum Tolley")
 		.subcommand(
 			SubCommand::with_name("generate")
 				.setting(AppSettings::SubcommandRequiredElseHelp)

@@ -11,7 +11,7 @@ use rocket::{
 };
 
 use crate::{
-	db::DbConn,
+	db::DbConnGuard,
 	models::git_lfs::{DownloadToken, Repository, UploadToken},
 };
 
@@ -55,7 +55,7 @@ fn batch(
 	owner: String,
 	repository_git: String,
 	req: BatchRequest,
-	conn: DbConn,
+	conn: DbConnGuard,
 	config: State<Config>,
 ) -> Result<Json<BatchResponse>, status::Custom<Json<ErrorResponse>>> {
 	if !repository_git.ends_with(".git") {
@@ -93,7 +93,7 @@ fn batch(
 }
 
 fn create_upload_token(
-	conn: &DbConn,
+	conn: &DbConnGuard,
 	config: &Config,
 	repository: &Repository,
 	o: request::Object,
@@ -123,7 +123,7 @@ fn create_upload_token(
 #[put("/-/upload?<token>", data = "<data>")]
 fn upload(
 	token: String,
-	conn: DbConn,
+	conn: DbConnGuard,
 	config: State<Config>,
 	data: rocket::Data,
 ) -> Result<Json<SuccessResponse>, status::Custom<Json<ErrorResponse>>> {
@@ -149,7 +149,7 @@ fn upload(
 }
 
 fn create_download_token(
-	conn: &DbConn,
+	conn: &DbConnGuard,
 	config: &Config,
 	repository: &Repository,
 	o: request::Object,
@@ -166,7 +166,7 @@ fn create_download_token(
 #[get("/-/download?<token>")]
 fn download(
 	token: String,
-	conn: DbConn,
+	conn: DbConnGuard,
 	config: State<Config>,
 ) -> Result<rocket::response::Content<rocket::response::Stream<File>>, status::Custom<Json<ErrorResponse>>> {
 	let token = DownloadToken::get(&conn, &token)

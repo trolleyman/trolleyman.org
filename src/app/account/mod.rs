@@ -13,7 +13,7 @@ use serde_json::Value as JsonValue;
 
 use crate::{
 	config::Config,
-	db::{DbConn, DbResult},
+	db::{DbConnGuard, DbResult},
 	error::Result,
 	models::account::User,
 };
@@ -94,12 +94,12 @@ fn register_error(form: &types::RegisterForm, value: &JsonValue) -> types::Templ
 	))
 }
 
-fn username_available(conn: &DbConn, username: &str) -> DbResult<bool> {
+fn username_available(conn: &DbConnGuard, username: &str) -> DbResult<bool> {
 	Ok(!is_username_reserved(username) && !User::exists_with_name(&conn, username)?)
 }
 
 #[get("/api/username_available?<username>")]
-fn api_username_available(conn: DbConn, username: String) -> Result<Json<bool>> {
+fn api_username_available(conn: DbConnGuard, username: String) -> Result<Json<bool>> {
 	Ok(Json(username_available(&conn, &username)?))
 }
 
@@ -108,7 +108,7 @@ fn login_get() -> Template { Template::render("account/login", default_context(&
 
 #[post("/login", data = "<form>")]
 fn login_post(
-	conn: DbConn,
+	conn: DbConnGuard,
 	mut cookies: Cookies,
 	config: State<Config>,
 	form: LenientForm<types::LoginForm>,
@@ -141,7 +141,7 @@ fn login_post(
 fn register_get() -> Template { Template::render("account/register", default_context(&json!({}))) }
 
 #[post("/register", data = "<form>")]
-fn register_post(conn: DbConn, form: LenientForm<types::RegisterForm>) -> Result<types::TemplateRedirect> {
+fn register_post(conn: DbConnGuard, form: LenientForm<types::RegisterForm>) -> Result<types::TemplateRedirect> {
 	let mut errors = MultiMap::new();
 
 	// Username

@@ -16,6 +16,7 @@
 use std::collections::{BTreeMap, HashMap};
 
 use anyhow::Context;
+use clap::{App, AppSettings, Arg, SubCommand};
 use diesel::prelude::*;
 use rocket::config::Environment;
 use rocket_contrib::{
@@ -35,6 +36,7 @@ embed_migrations!();
 
 use config::Config;
 use error::Result;
+use db::DbConn;
 
 #[catch(400)]
 fn error_handler_400_bad_request(_req: &rocket::Request) -> Template {
@@ -97,12 +99,12 @@ fn get_configs() -> Result<(Config, rocket::Config, simplelog::Config)> {
 	Ok((config, rocket_config, simplelog_config))
 }
 
-fn setup_database(config: &Config) -> Result<()> {
+fn setup_database(config: &Config) -> Result<DbConn> {
 	let db_url = config.database_path.to_string_lossy().to_string();
 	let start_time = std::time::Instant::now();
-	let db_conn = loop {
-		match diesel::sqlite::SqliteConnection::establish(&db_url) {
-			Ok(db_conn) => break db_conn,
+	let conn = loop {
+		match DbConn::establish(&db_url) {
+			Ok(conn) => break conn,
 			Err(e) => {
 				let now = std::time::Instant::now();
 				if now - start_time > std::time::Duration::from_secs(60) {
@@ -121,9 +123,9 @@ fn setup_database(config: &Config) -> Result<()> {
 	};
 
 	// Migrate database
-	embedded_migrations::run_with_output(&db_conn, &mut std::io::stdout())
-		.context("Failed to migrate database")
-		.map_err(From::from)
+	embedded_migrations::run_with_output(&conn, &mut std::io::stdout())
+		.context("Failed to migrate database")?;
+	Ok(conn)
 }
 
 fn setup_logging(config: &Config, log_config: &simplelog::Config) -> Result<()> {
@@ -165,12 +167,43 @@ fn setup_logging(config: &Config, log_config: &simplelog::Config) -> Result<()> 
 }
 
 pub fn main() -> Result<()> {
+	// Get app args
+	let authors_string = env!("CARGO_PKG_AUTHORS").split(';').collect::<Vec<_>>().join(", ");
+	let app = App::new(clap::crate_name!())
+		.version(clap::crate_version!())
+		.about(clap::crate_description!())
+		.author(authors_string.as_ref())
+		.setting(AppSettings::ColoredHelp)
+		.setting(AppSettings::GlobalVersion)
+		.setting(AppSettings::VersionlessSubcommands)
+		.subcommand(
+			SubCommand::with_name("set-password")
+				.setting(AppSettings::DisableHelpSubcommand)
+				.about("Set the password of a specified user")
+				.arg(Arg::with_name("username").required(true)),
+		);
+	
+	let matches = app.get_matches();
+	let user_details = if let Some(submatches) =  matches.subcommand_matches("set-password") {
+		let username = submatches.value_of("username").ok_or(anyhow!("Username not specified"))?;
+		Some((username, rpassword::prompt_password_stderr("Password: ")?))
+	} else {
+		None
+	};
+
 	// Load configs
 	let (config, rocket_config, simplelog_config) = get_configs()?;
 
 	setup_logging(&config, &simplelog_config)?;
 
-	setup_database(&config)?;
+	let conn = setup_database(&config)?;
+
+	if let Some((username, password)) = user_details {
+		// Set password & exit
+		crate::models::account::User::set_password(&conn, &username, &password)?;
+		info!("Password updated for {}.", username);
+		return Ok(());
+	}
 
 	// Launch Rocket
 	let active_env = rocket_config.environment;
@@ -209,7 +242,7 @@ pub fn main() -> Result<()> {
 				}
 			});
 		}))
-		.attach(db::DbConn::fairing())
+		.attach(db::DbConnGuard::fairing())
 		.manage(active_env)
 		.manage(config)
 		.register(catchers![error_handler_400_bad_request, error_handler_404_not_found])
