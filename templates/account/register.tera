@@ -12,7 +12,7 @@
         <h1 class="h3 mb-3 align-middle font-weight-normal">Register</h1>
           <div class="form-group position-relative">
             <label class="sr-only" for="username">Username</label>
-            <input class="form-control" id="username" name="username" type="text" placeholder="Username" required data-custom-validation="validateUsername" data-custom-validation-promise="validateUsernameUnique">
+            <input class="form-control" id="username" name="username" type="text" placeholder="Username" value="{{ username | default(value='') }}" data-existing-errors="{{ errors.username | default(value='') | escape_data }}" data-custom-validation="validateUsername" data-custom-validation-promise="validateUsernameUnique" required>
             <div class="position-absolute spinner-border spinner-border-sm" role="status">
               <span class="sr-only">Loading...</span>
             </div>
@@ -22,21 +22,21 @@
           </div>
           <div class="form-group mb-0">
             <label class="sr-only" for="email">Email address</label>
-            <input class="form-control" id="email" name="email" type="email" placeholder="Email address" required data-custom-validation="validateEmail">
+            <input class="form-control" id="email" name="email" type="email" placeholder="Email address" value="{{ email | default(value='') }}" data-existing-errors="{{ errors.email | default(value='') | escape_data }}" required data-custom-validation="validateEmail">
             <div class="invalid-feedback">
               Please enter a valid email address.
             </div>
           </div>
           <div class="form-group">
             <label class="sr-only" for="email2">Confirm email address</label>
-            <input class="form-control" id="email2" name="email2" type="email" placeholder="Confirm email address" required data-custom-validation="validateConfirmEmail">
+            <input class="form-control" id="email2" name="email2" type="email" placeholder="Confirm email address" value="{{ email2 | default(value='') }}" required data-custom-validation="validateConfirmEmail">
             <div class="invalid-feedback">
               Please enter a valid email address.
             </div>
           </div>
-          <div class="form-group mb-0">
+          <div class="form-group">
             <label class="sr-only" for="password">Password</label>
-            <input class="form-control" id="password" name="password" type="password" placeholder="Password" required data-custom-validation="validatePassword">
+            <input class="form-control" id="password" name="password" type="password" placeholder="Password" required data-custom-validation="validatePassword" data-existing-errors="{{ errors.password | default(value='') | escape_data }}">
             <div class="invalid-feedback">
               Please enter a password.
             </div>
@@ -52,7 +52,6 @@
   </div>
 {% endblock %}
 {% block js %}
-  {{ super() }}
   <script>
     window.USERNAME_MIN_LENGTH = {{ USERNAME_MIN_LENGTH }};
     window.USERNAME_MAX_LENGTH = {{ USERNAME_MAX_LENGTH }};
@@ -64,4 +63,5 @@
     window.PASSWORD_MAX_LENGTH = {{ PASSWORD_MAX_LENGTH }};
   </script>
   <script src="/static/js/account/register.js"></script>
+  {{ super() }}
 {% endblock %}

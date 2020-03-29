@@ -22,6 +22,7 @@ use rocket_contrib::{
 	serve::StaticFiles,
 	templates::{tera, Template},
 };
+use serde_json::Value as JsonValue;
 
 mod app;
 mod config;
@@ -191,6 +192,20 @@ pub fn main() -> Result<()> {
 					Err(tera::Error::msg("dot_min called with arguments (expected none)"))
 				} else {
 					Ok(json!(!active_env.is_prod()))
+				}
+			});
+			f.tera.register_filter("escape_data", move |value: &JsonValue, args: &HashMap<_, _>| {
+				if !args.is_empty() {
+					Err(tera::Error::msg("escape_data called with arguments (expected none)"))
+				} else {
+					Ok(JsonValue::String(tera::escape_html(&match value {
+						JsonValue::Null => "".into(),
+						JsonValue::Bool(b) => format!("{}", b),
+						JsonValue::Number(num) => format!("{}", num),
+						JsonValue::String(s) => s.clone(),
+						JsonValue::Array(_) => format!("{}", value),
+						JsonValue::Object(_) => format!("{}", value),
+					})))
 				}
 			});
 		}))

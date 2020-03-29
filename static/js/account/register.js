@@ -20,9 +20,9 @@ window.validateUsernameUnique = function(value, cancellationToken) {
 		if (cancellationToken.cancelled) {
 			reject(cancellationToken);
 		}
-		var xhr = $.get("api/username_exists?username=" + value, undefined, undefined, 'json')
+		var xhr = $.get("api/username_available?username=" + value, undefined, undefined, 'json')
 			.done((data) => {
-				if (data) {
+				if (!data) {
 					resolve('Username already taken');
 				} else {
 					resolve('');

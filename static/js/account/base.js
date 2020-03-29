@@ -61,6 +61,7 @@ $(".needs-validation").each((_, form) => {
 		
 		// Set loading
 		input.data('hasStartedLoading', true);
+		input.parent()[0].classList.remove('was-validated');
 		input[0].classList.remove('is-invalid');
 		input[0].classList.remove('is-valid');
 		input[0].classList.add('loading');
@@ -114,6 +115,22 @@ $(".needs-validation").each((_, form) => {
 			input.on('change input', () => checkPromise(input));
 		}
 		input.on('change input', checkAll);
+	});
+	inputs.each((_, input) => {
+		var existingErrors = input.data('existing-errors');
+		if (existingErrors && existingErrors.length > 0) {
+			input[0].setCustomValidity(existingErrors.join('\n'));
+			input.parent()[0].classList.add('was-validated');
+			if (existingErrors.length === 1) {
+				input.siblings('.invalid-feedback').text(existingErrors[0]);
+			} else {
+				input.siblings('.invalid-feedback')
+					.text(`<ul>${existingErrors.map(e => `<li>${e}</li>`).join('\n')}</ul>`);
+			}
+		} else if (input.val() && (input.data('custom-validation') || input.data('custom-validation-promise'))) {
+			checkPromise(input);
+			input.parent()[0].classList.add('was-validated');
+		}
 	});
 	$form.submit(checkAll);
 	$form.submit(event => {
