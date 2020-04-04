@@ -26,11 +26,7 @@
 			<canvas id="canvas" width="500" height="800"></canvas>
 		</div>
 	</div>
-  {% if is_debug() %}
-    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha384-mlceH9HlqLp7GMKHrj5Ara1+LvdTZVMx4S1U43/NxCvAkzIo8WJ0FE7duLel3wVo" crossorigin="anonymous"></script> 
-  {% else %}
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script> 
-  {% endif %}
+	<script src="https://unpkg.com/jquery@3.4.1/dist/jquery{{ dot_min() }}.js"></script>
 
 	<script charset="utf-8" type="module" src="/static/wasm/tanks/bootstrap.js"></script>
 {% endblock body %}

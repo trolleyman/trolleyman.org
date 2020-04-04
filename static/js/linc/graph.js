@@ -230,14 +230,13 @@ function Graph(scene) {
     
     // Nodes
     this.nodes = [];
-    this.simulation = d3_force.forceSimulation(this.nodes)
-        .numDimensions(3)
-        .force("manyBodies", d3_force.forceManyBody()
+    this.simulation = d3.forceSimulation(this.nodes, 3)
+        .force("manyBodies", d3.forceManyBody()
             .strength(-0.08)
             .distanceMin(0.05)
             .distanceMax(10.0))
-        .force("centering", d3_force.forceCenter(0, 0, 0))
-        .force("links", d3_force.forceLink(this.conns)
+        .force("centering", d3.forceCenter(0, 0, 0))
+        .force("links", d3.forceLink(this.conns)
             .strength(function() { return 0.3; })
             .distance(function() { return 1.0; }));
     this.simulation.stop();

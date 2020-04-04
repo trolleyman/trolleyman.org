@@ -9,7 +9,7 @@
   <!-- Windows Phone -->
   <meta name="msapplication-navbutton-color" content="#2e3141">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.6.3/css/font-awesome{{ dot_min() }}.css">
 
   <link rel="stylesheet" href="/static/css/main.css">
   <link rel="stylesheet" href="/static/css/main-mod.css">
@@ -320,13 +320,8 @@
   </div>
 
   <!-- Scripts -->
-  {% if is_debug() %}
-    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha384-mlceH9HlqLp7GMKHrj5Ara1+LvdTZVMx4S1U43/NxCvAkzIo8WJ0FE7duLel3wVo" crossorigin="anonymous"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollex/0.2.1/jquery.scrollex.js" integrity="sha384-kRbmrQiHU9K/s1zbc0+EctrfqoHWT7NaSZBSCMfRlOe1TuAi66R/3gboAsq4R3yq" crossorigin="anonymous"></script> 
-  {% else %}
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollex/0.2.1/jquery.scrollex.min.js" integrity="sha384-bPcZa++B7xdyzfI4TaGdwPq9546+60b9teRezwovDNZEB2I2pilBt2oJWEwI/dgO" crossorigin="anonymous"></script> 
-  {% endif %}
+  <script src="https://unpkg.com/jquery@3.4.1/dist/jquery{{ dot_min() }}.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollex/0.2.1/jquery.scrollex{{ dot_min() }}.js"></script> 
   <script charset="utf-8" type="text/javascript" src="/static/js/util.js"></script>
   <script charset="utf-8" type="text/javascript" src="/static/js/main.js"></script>
 
