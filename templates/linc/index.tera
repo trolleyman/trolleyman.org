@@ -103,7 +103,11 @@
   </div>
   
   <!-- Scripts -->
-  <script type="text/javascript" src="/static/js/lib/jquery{{ dot_min() }}.js"></script>
+  {% if is_debug() %}
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha384-mlceH9HlqLp7GMKHrj5Ara1+LvdTZVMx4S1U43/NxCvAkzIo8WJ0FE7duLel3wVo" crossorigin="anonymous"></script> 
+  {% else %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script> 
+  {% endif %}
   <script type="text/javascript" src="/static/js/linc/mainpage/skel.min.js"></script>
   <script type="text/javascript" src="/static/js/linc/mainpage/util.js"></script>
   <script type="text/javascript" src="/static/js/linc/mainpage/main.js"></script>
