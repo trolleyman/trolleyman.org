@@ -41,8 +41,7 @@
         <div class="content">
           <h3>This is LINC: Network</h3>
           <p>LINC visualises connections between people; connections between interests; or even connections between events.</p>
-          <p
-            style="text-align: right;"> You decide.</p>
+          <p style="text-align: right;"> You decide.</p>
         </div>
       </section>
       <section class="feature left">
