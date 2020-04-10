@@ -35,15 +35,15 @@ struct NewUser<'a> {
 	pub admin:    bool,
 }
 
-#[derive(Clone, Queryable, Identifiable)]
+#[derive(Clone, Queryable, Identifiable, Debug)]
 #[table_name = "user"]
 pub struct User {
-	pub id:       i32,
-	pub name:     String,
-	pub email:    String,
+	id: i32,
+	pub name: String,
+	pub email: String,
 	pub password: Password,
-	pub created:  NaiveDateTime,
-	pub admin:    bool,
+	pub created: NaiveDateTime,
+	pub admin: bool,
 }
 impl User {
 	pub fn create(conn: &DbConn, name: &str, email: &str, password: &Password, admin: bool) -> DbResult<User> {
@@ -70,31 +70,51 @@ impl User {
 		}
 	}
 
-	pub fn get_with_name(conn: &DbConn, username: &str) -> DbResult<Option<User>> {
+	pub fn try_get_from_name(conn: &DbConn, username: &str) -> DbResult<Option<User>> {
 		user::table.filter(user::name.eq(username)).first(conn).optional()
 	}
 
-	pub fn get_with_email(conn: &DbConn, email: &str) -> DbResult<Option<User>> {
+	pub fn try_get_from_email(conn: &DbConn, email: &str) -> DbResult<Option<User>> {
 		user::table.filter(user::email.eq(email)).first(conn).optional()
 	}
 
-	pub fn get_with_username_or_email(conn: &DbConn, username_email: &str) -> DbResult<Option<User>> {
-		if username_email.contains('@') {
-			User::get_with_email(conn, username_email)
+	pub fn try_get_from_name_or_email(conn: &DbConn, name_or_email: &str) -> DbResult<Option<User>> {
+		if name_or_email.contains('@') {
+			User::try_get_from_email(conn, name_or_email)
 		} else {
-			User::get_with_name(conn, username_email)
+			User::try_get_from_name(conn, name_or_email)
 		}
 	}
 
-	// Errors if the user could not be found, or if there was a database error
-	pub fn set_password(conn: &DbConn, username: &str, password: &str) -> Result<()> {
-		if let Some(user) = User::get_with_username_or_email(conn, username)? {
-			let password = Password::from_password(password);
-			diesel::update(user::table.filter(user::id.eq(user.id))).set(user::password.eq(password)).execute(conn)?;
-			Ok(())
-		} else {
-			Err(Error::NotFound("The user was not found".into()))
-		}
+	pub fn get_from_name(conn: &DbConn, username: &str) -> Result<User> {
+		User::try_get_from_name(conn, username)?
+			.ok_or_else(|| Error::NotFound(format!("User not found with username {}", username)))
+	}
+
+	pub fn get_from_email(conn: &DbConn, email: &str) -> Result<User> {
+		User::try_get_from_email(conn, email)?
+			.ok_or_else(|| Error::NotFound(format!("User not found with email {}", email)))
+	}
+
+	pub fn get_from_name_or_email(conn: &DbConn, name_or_email: &str) -> Result<User> {
+		User::try_get_from_name_or_email(conn, name_or_email)?
+			.ok_or_else(|| Error::NotFound(format!("User not found with name or email {}", name_or_email)))
+	}
+
+	pub fn id(&self) -> i32 { self.id }
+
+	/// Saves the `User` to the database
+	pub fn save(&self, conn: &DbConn) -> DbResult<()> {
+		diesel::update(user::table.filter(user::id.eq(self.id)))
+			.set((
+				user::name.eq(&self.name),
+				user::email.eq(&self.email),
+				user::password.eq(&self.password),
+				user::created.eq(self.created),
+				user::admin.eq(self.admin),
+			))
+			.execute(conn)?;
+		Ok(())
 	}
 
 	/// Creates a new session token for the user given.

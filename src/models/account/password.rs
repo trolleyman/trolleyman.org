@@ -46,7 +46,7 @@ impl fmt::Display for HashAlgorithm {
 	}
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, AsExpression)]
+#[derive(Clone, PartialEq, Eq, AsExpression)]
 #[sql_type = "diesel::sql_types::Text"]
 pub struct Password {
 	hash:      Vec<u8>,
@@ -100,6 +100,9 @@ impl fmt::Display for Password {
 		f.write_str(&base64::encode(&self.hash))?;
 		Ok(())
 	}
+}
+impl fmt::Debug for Password {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { f.write_fmt(format_args!("{:?}", self.to_string())) }
 }
 impl<ST, DB> FromSql<ST, DB> for Password
 where

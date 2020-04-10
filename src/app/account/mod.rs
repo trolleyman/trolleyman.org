@@ -100,7 +100,7 @@ fn login_post(
 	environment: State<Environment>,
 	form: LenientForm<types::LoginForm>,
 ) -> Result<types::TemplateRedirect> {
-	let new_user = match User::get_with_username_or_email(&conn, &form.username)? {
+	let new_user = match User::try_get_from_name_or_email(&conn, &form.username)? {
 		Some(u) => u,
 		None =>
 			return Ok(login_error(
@@ -128,7 +128,7 @@ fn get_session_cookie(token: String, config: &Config, environment: Environment, 
 	let mut builder = Cookie::build(SESSION_TOKEN_COOKIE_NAME, token)
 		.same_site(SameSite::Strict)
 		.expires(time::OffsetDateTime::now() + time::Duration::seconds(seconds));
-	
+
 	if !environment.is_dev() {
 		builder = builder.secure(true).domain(config.domain.clone());
 	}
