@@ -105,6 +105,7 @@ impl User {
 
 	/// Saves the `User` to the database
 	pub fn save(&self, conn: &DbConn) -> DbResult<()> {
+		// TODO: Remove login tokens when password changes
 		diesel::update(user::table.filter(user::id.eq(self.id)))
 			.set((
 				user::name.eq(&self.name),
