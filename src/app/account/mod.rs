@@ -2,10 +2,11 @@ use std::time::Duration;
 
 use multimap::MultiMap;
 use rocket::{
+	config::Environment,
 	http::{Cookie, Cookies, SameSite},
 	request::LenientForm,
 	response::Redirect,
-	State, config::Environment,
+	State,
 };
 use rocket_contrib::{json::Json, templates::Template};
 use serde_json::Value as JsonValue;
@@ -129,8 +130,7 @@ fn get_session_cookie(token: String, config: &Config, environment: Environment, 
 		.expires(time::OffsetDateTime::now() + time::Duration::seconds(seconds));
 	
 	if !environment.is_dev() {
-		builder = builder.secure(true)
-			.domain(config.domain.clone());
+		builder = builder.secure(true).domain(config.domain.clone());
 	}
 	builder.finish()
 }

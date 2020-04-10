@@ -30,11 +30,15 @@ where
 }
 
 pub fn prompt_username(conn: &DbConn) -> Result<String> {
-	prompt_property("Username", false, |username| crate::app::account::validation::get_errors_for_username(conn, &username))
+	prompt_property("Username", false, |username| {
+		crate::app::account::validation::get_errors_for_username(conn, &username)
+	})
 }
 
 pub fn prompt_password() -> Result<String> {
-	prompt_property("Password", true, |password| Ok(crate::app::account::validation::get_errors_for_password(&password)))
+	prompt_property("Password", true, |password| {
+		Ok(crate::app::account::validation::get_errors_for_password(&password))
+	})
 }
 
 pub fn prompt_email(conn: &DbConn) -> Result<String> {

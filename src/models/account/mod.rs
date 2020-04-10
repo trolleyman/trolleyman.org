@@ -1,7 +1,7 @@
 mod password;
-mod user;
 mod session;
+mod user;
 
 pub use password::*;
-pub use user::*;
 pub use session::*;
+pub use user::*;

@@ -9,7 +9,8 @@ use crate::{
 			git_lfs_download_token as download_token, git_lfs_object as object, git_lfs_repository as repository,
 			git_lfs_upload_token as upload_token, user,
 		},
-	}, util,
+	},
+	util,
 };
 
 #[derive(Clone, Queryable, Identifiable, Associations)]
@@ -40,9 +41,7 @@ impl Repository {
 		object::table.filter(object::repository.eq(&self.id)).filter(object::oid.eq(oid)).first(conn)
 	}
 
-	pub fn get_owner(&self, conn: &DbConn) -> DbResult<User> {
-		user::table.filter(user::id.eq(self.owner)).first(conn)
-	}
+	pub fn get_owner(&self, conn: &DbConn) -> DbResult<User> { user::table.filter(user::id.eq(self.owner)).first(conn) }
 }
 
 #[derive(Insertable)]
@@ -102,9 +101,7 @@ impl UploadToken {
 		// Add new upload token
 		let expires = (now + Duration::seconds(UPLOAD_TOKEN_EXPIRATION_SECONDS as i64)).naive_utc();
 		let token: String = util::random_token();
-		NewUploadToken { token: &token, object: object.id, expires }
-			.insert_into(upload_token::table)
-			.execute(conn)?;
+		NewUploadToken { token: &token, object: object.id, expires }.insert_into(upload_token::table).execute(conn)?;
 		Ok(UploadToken { token, object: object.id, expires })
 	}
 

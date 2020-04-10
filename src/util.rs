@@ -14,12 +14,15 @@ pub enum ReadLimitedError {
 	#[error(transparent)]
 	IoError(#[from] io::Error),
 	#[error("read more bytes than expected (read {}, expected {})", .buffer.len(), .limit)]
-	LimitedRead{limit: usize, buffer: Vec<u8>},
+	LimitedRead { limit: usize, buffer: Vec<u8> },
 }
 
-pub fn read_limited<R>(reader: &mut R, limit: usize) -> Result<Vec<u8>, ReadLimitedError> where R: Read {
+pub fn read_limited<R>(reader: &mut R, limit: usize) -> Result<Vec<u8>, ReadLimitedError>
+where
+	R: Read,
+{
 	let mut buffer = vec![0u8; 1024];
-	
+
 	let mut offset = 0usize;
 	loop {
 		if buffer.len() - offset < 1024 {
@@ -30,18 +33,21 @@ pub fn read_limited<R>(reader: &mut R, limit: usize) -> Result<Vec<u8>, ReadLimi
 		offset += read;
 		if offset > limit {
 			buffer.resize(offset, 0);
-			return Err(ReadLimitedError::LimitedRead{limit, buffer});
+			return Err(ReadLimitedError::LimitedRead { limit, buffer });
 		}
 		if read == 0 {
 			break;
 		}
 	}
-	
+
 	buffer.resize(offset, 0);
 	Ok(buffer)
 }
 
-pub fn read_limited_string<R>(reader: &mut R, limit: usize) -> Result<String, ReadLimitedError> where R: Read {
+pub fn read_limited_string<R>(reader: &mut R, limit: usize) -> Result<String, ReadLimitedError>
+where
+	R: Read,
+{
 	let buffer = read_limited(reader, limit)?;
 	String::from_utf8(buffer).map_err(|_| io::Error::from(io::ErrorKind::InvalidData).into())
 }

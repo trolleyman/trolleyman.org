@@ -23,7 +23,12 @@ pub enum Error {
 }
 impl Responder<'_> for Error {
 	fn respond_to(self, request: &Request) -> response::Result<'static> {
-		debug!("Error responder: {}: {}: {}", request.real_ip().map(|ip| format!("{}", ip)).unwrap_or("<unknown IP>".into()), request.uri(), self);
+		debug!(
+			"Error responder: {}: {}: {}",
+			request.real_ip().map(|ip| format!("{}", ip)).unwrap_or("<unknown IP>".into()),
+			request.uri(),
+			self
+		);
 		let is_dev = request.guard::<State<Environment>>().map(|f| f.is_dev()).succeeded().unwrap_or(false);
 		match self {
 			Error::NotFound(msg) => error_response(request, Status::NotFound, &msg),
@@ -34,10 +39,8 @@ impl Responder<'_> for Error {
 					"There was an input/output error.".into()
 				};
 				error_response(request, Status::InternalServerError, &msg)
-			},
-			Error::GenericDb => {
-				error_response(request, Status::InternalServerError, &format!("{}", self))
-			},
+			}
+			Error::GenericDb => error_response(request, Status::InternalServerError, &format!("{}", self)),
 			Error::Db(inner) => {
 				let msg = if is_dev {
 					format!("There was a database error: {:?}", inner)
