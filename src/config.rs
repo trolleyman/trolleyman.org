@@ -1,4 +1,4 @@
-use std::{borrow::Cow, net::SocketAddr, path::PathBuf};
+use std::{borrow::Cow, collections::BTreeMap, net::SocketAddr, path::PathBuf};
 
 use anyhow::{Context, Result};
 use rocket::config::Environment;
@@ -99,3 +99,40 @@ impl Config {
 fn default_database_path() -> PathBuf { "data/db.sqlite3".into() }
 
 fn default_log_path() -> PathBuf { "logs/rocket.debug.log".into() }
+
+pub fn get_configs() -> Result<(Config, rocket::Config, simplelog::Config)> {
+	use rocket::config::Value;
+
+	// Load config, based on environment
+	let active_env = Environment::active().context("Invalid environment config")?;
+	let config = Config::load(active_env).context("Failed to load config")?;
+
+	// Setup db tables
+	let db_url = config.database_path.to_string_lossy().to_string();
+	let mut config_db_table = BTreeMap::<String, rocket::config::Value>::new();
+	config_db_table.insert("url".into(), Value::String(db_url));
+	let mut config_databases_db_table = BTreeMap::<String, rocket::config::Value>::new();
+	config_databases_db_table.insert("db".into(), Value::Table(config_db_table));
+
+	// Get default Rocket config
+	let rocket_config = {
+		let mut builder = rocket::Config::build(active_env)
+			.log_level(rocket::logger::LoggingLevel::Normal)
+			.extra("databases", Value::Table(config_databases_db_table));
+		if let Some(secret_key) = &config.secret_key {
+			builder = builder.secret_key(secret_key);
+		}
+		builder.finalize().context("Rocket config failed to parse")?
+	};
+
+	// Get simple log config
+	let mut log_config_builder = simplelog::ConfigBuilder::new();
+	log_config_builder.set_target_level(simplelog::LevelFilter::Error);
+	let simplelog_config = if active_env.is_dev() {
+		log_config_builder.set_time_to_local(true).set_time_format_str("%k:%M:%S.%3f").build()
+	} else {
+		log_config_builder.set_time_format_str("%Y-%m-%d %H:%M:%S.%9f").build()
+	};
+
+	Ok((config, rocket_config, simplelog_config))
+}
