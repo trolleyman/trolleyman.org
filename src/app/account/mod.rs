@@ -152,7 +152,7 @@ fn register_post(
 	errors.insert_many("username", validation::get_errors_for_username(&conn, &form.username)?);
 
 	// Email address
-	errors.insert_many("email", validation::get_errors_for_email(&conn, &form.email)?);
+	errors.insert_many("email", validation::get_errors_for_account_email(&conn, &form.email)?);
 
 	// Password
 	errors.insert_many("password", validation::get_errors_for_password(&form.password));

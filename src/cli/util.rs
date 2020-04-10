@@ -61,8 +61,12 @@ pub fn prompt_password() -> Result<String> {
 	}
 }
 
-pub fn prompt_email(conn: &DbConn) -> Result<String> {
+pub fn prompt_email() -> Result<String> {
+	prompt_property("Email address", false, true, crate::app::account::validation::get_errors_for_email)
+}
+
+pub fn prompt_account_email(conn: &DbConn) -> Result<String> {
 	prompt_property("Email address", false, true, |email| {
-		crate::app::account::validation::get_errors_for_email(conn, &email)
+		crate::app::account::validation::get_errors_for_account_email(conn, email)
 	})
 }

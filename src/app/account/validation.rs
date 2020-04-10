@@ -60,19 +60,25 @@ pub fn get_errors_for_username(conn: &DbConn, username: &str) -> Result<Vec<Stri
 	Ok(errors)
 }
 
-pub fn get_errors_for_email(conn: &DbConn, email: &str) -> Result<Vec<String>> {
+pub fn get_errors_for_email(email: &str) -> Result<Vec<String>> {
 	let mut errors = Vec::new();
-	if User::exists_with_email(conn, &email)? {
-		errors.push(
-			"User with email address already exists. <a href=\"/account/forgot\">Forgot your password?</a>".into(),
-		);
-	}
 	if email.len() > EMAIL_MAX_LENGTH {
 		errors.push(format!("Email address must be at most {} characters in length", EMAIL_MAX_LENGTH));
 	}
 	if !EMAIL_REGEX.is_match(&email) {
 		errors.push("Email address must be of the form user@example.com".into());
 	}
+	Ok(errors)
+}
+
+pub fn get_errors_for_account_email(conn: &DbConn, email: &str) -> Result<Vec<String>> {
+	let mut errors = Vec::new();
+	if User::exists_with_email(conn, &email)? {
+		errors.push(
+			"User with email address already exists. <a href=\"/account/forgot\">Forgot your password?</a>".into(),
+		);
+	}
+	errors.append(&mut get_errors_for_email(email)?);
 	Ok(errors)
 }
 
