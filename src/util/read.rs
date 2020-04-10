@@ -1,4 +1,3 @@
-
 use std::io::{self, Read};
 
 #[derive(thiserror::Error, Debug)]
@@ -53,7 +52,7 @@ mod test {
 			super::read_limited(&mut cursor, limit)
 		}
 		use std::io::Cursor;
-		
+
 		let bytes = (0u8..255).cycle().take(1100).collect::<Vec<_>>();
 		assert!(read_bytes(&bytes, 0).is_err());
 		assert!(read_bytes(&bytes, 16).is_err());

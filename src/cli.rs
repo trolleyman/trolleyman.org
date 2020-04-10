@@ -82,11 +82,11 @@ pub fn perform_command(conn: &DbConn, matches: &clap::ArgMatches<'_>) -> Result<
 		} else if let Some(submatches) = matches.subcommand_matches("user-admin-set") {
 			let username = submatches.value_of("username").ok_or(anyhow!("Username/email not specified"))?;
 			let is_admin = submatches
-			.value_of("is_admin")
-			.map(|s| s.parse().context("is_admin is not a boolean"))
-			.transpose()?
-			.unwrap_or(true);
-			
+				.value_of("is_admin")
+				.map(|s| s.parse().context("is_admin is not a boolean"))
+				.transpose()?
+				.unwrap_or(true);
+
 			// Set admin
 			let mut user = crate::models::account::User::get_from_name_or_email(conn, &username)?;
 			user.admin = is_admin;
