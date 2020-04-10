@@ -1,5 +1,3 @@
-use std::io::Read;
-
 use anyhow::{Context, Error};
 use hmac::Mac;
 use rocket::{
@@ -10,9 +8,9 @@ use rocket::{
 };
 use subtle::ConstantTimeEq;
 
-use crate::config::Config;
+use crate::{config::Config, util};
 
-const MSG_LIMIT: u64 = 10 * 1024;
+const MSG_LIMIT: usize = 32 * 1024;
 
 pub fn routes() -> Vec<rocket::Route> { routes![push_hook] }
 
@@ -62,11 +60,7 @@ impl FromDataSimple for GithubHookPayload {
 			debug!("GitHub signature: {}", hex::encode(&expected_signature));
 
 			// Read message
-			let mut msg = String::new();
-			try_outcome!(data
-				.open()
-				.take(MSG_LIMIT)
-				.read_to_string(&mut msg)
+			let msg = try_outcome!(util::read_limited_string(&mut data.open(), MSG_LIMIT)
 				.context("IO error while reading")
 				.into_outcome(Status::BadRequest));
 
@@ -136,4 +130,3 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 		_ => Err(format!("Unknown event '{}'", payload.event_name)),
 	}
 }
-
