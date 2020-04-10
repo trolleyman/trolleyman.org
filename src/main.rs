@@ -59,7 +59,7 @@ fn error_handler_404_not_found(req: &rocket::Request) -> Template {
 		json!({
 			"status": "404",
 			"title": "Not Found",
-			"msg": format!("'{}' could not be found.", req.uri().path()),
+			"msg": format!("{} {} could not be found.", req.method(), req.uri().path()),
 		}),
 	)
 }

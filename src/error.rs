@@ -23,9 +23,9 @@ pub enum Error {
 }
 impl Responder<'_> for Error {
 	fn respond_to(self, request: &Request) -> response::Result<'static> {
+		debug!("Error responder: {}: {}: {}", request.real_ip().map(|ip| format!("{}", ip)).unwrap_or("<unknown IP>".into()), request.uri(), self);
 		let is_dev = request.guard::<State<Environment>>().map(|f| f.is_dev()).succeeded().unwrap_or(false);
 		match self {
-			// TODO: When in debug mode, print out database error inner details
 			Error::NotFound(msg) => error_response(request, Status::NotFound, &msg),
 			Error::Io(inner) => {
 				let msg = if is_dev {

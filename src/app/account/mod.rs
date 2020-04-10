@@ -110,6 +110,7 @@ fn login_post(
 	};
 
 	// Create login session
+	debug!("Logging in {}...", new_user.name);
 	let secs = 60 * 24 * 365;
 	let max_age = Duration::from_secs(secs);
 	let token = match new_user.new_session_token(&conn, &form.password, max_age)? {
@@ -117,6 +118,7 @@ fn login_post(
 		None => return Ok(login_error(user.as_ref(), &form.0, "The password entered is not correct")),
 	};
 
+	debug!("Logged in {} (token={})", new_user.name, token);
 	cookies.add_private(get_session_cookie(token, &*config, *environment, secs as i64));
 	Ok(Redirect::to("/account/me").into())
 }
@@ -168,6 +170,7 @@ fn register_post(
 			}),
 		))
 	} else {
+		debug!("Registered new user {} ({})", form.username, form.email);
 		todo!()
 	}
 }
