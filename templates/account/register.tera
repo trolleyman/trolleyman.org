@@ -45,7 +45,7 @@
             <button class="btn btn-primary" type="submit">Register</button>
           </div>
           <hr/>
-          <div class="text-small text-muted col">Already a user? <a href="register">Login</a></div>
+          <div class="text-small text-muted col">Already a user? <a href="login">Login</a></div>
         </form>
       </div>
     </div>
