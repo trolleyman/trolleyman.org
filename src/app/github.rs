@@ -60,7 +60,7 @@ impl FromDataSimple for GithubHookPayload {
 			debug!("GitHub signature: {}", hex::encode(&expected_signature));
 
 			// Read message
-			let msg = try_outcome!(util::read_limited_string(&mut data.open(), MSG_LIMIT)
+			let msg = try_outcome!(util::read::read_limited_string(&mut data.open(), MSG_LIMIT)
 				.context("IO error while reading")
 				.into_outcome(Status::BadRequest));
 

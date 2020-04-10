@@ -21,16 +21,20 @@ pub fn get_matches() -> clap::ArgMatches<'static> {
 		.setting(AppSettings::VersionlessSubcommands)
 		.subcommand(
 			SubCommand::with_name("database")
+				.setting(AppSettings::ColoredHelp)
 				.setting(AppSettings::DisableHelpSubcommand)
+				.setting(AppSettings::SubcommandRequiredElseHelp)
 				.about("Modifies the database")
 				.subcommand(
 					SubCommand::with_name("set-password")
+						.setting(AppSettings::ColoredHelp)
 						.setting(AppSettings::DisableHelpSubcommand)
 						.about("Set the password of a specified user")
 						.arg(Arg::with_name("username").required(true)),
 				)
 				.subcommand(
 					SubCommand::with_name("set-admin")
+						.setting(AppSettings::ColoredHelp)
 						.setting(AppSettings::DisableHelpSubcommand)
 						.about("Set the admin status of a specified user")
 						.arg(Arg::with_name("username").required(true))
@@ -38,12 +42,14 @@ pub fn get_matches() -> clap::ArgMatches<'static> {
 				)
 				.subcommand(
 					SubCommand::with_name("view-user")
+						.setting(AppSettings::ColoredHelp)
 						.setting(AppSettings::DisableHelpSubcommand)
 						.about("View the details of a specified user")
 						.arg(Arg::with_name("username").required(true)),
 				)
 				.subcommand(
 					SubCommand::with_name("create-account")
+						.setting(AppSettings::ColoredHelp)
 						.setting(AppSettings::DisableHelpSubcommand)
 						.about("Create a new account with user-provided details"),
 				),

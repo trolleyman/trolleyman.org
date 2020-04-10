@@ -52,6 +52,7 @@ fn run() -> Result<()> {
 		.setting(AppSettings::VersionlessSubcommands)
 		.subcommand(
 			SubCommand::with_name("generate")
+				.setting(AppSettings::ColoredHelp)
 				.setting(AppSettings::SubcommandRequiredElseHelp)
 				.setting(AppSettings::DisableHelpSubcommand)
 				.about("Generates source files")
@@ -59,6 +60,7 @@ fn run() -> Result<()> {
 		)
 		.subcommand(
 			SubCommand::with_name("build")
+				.setting(AppSettings::ColoredHelp)
 				.setting(AppSettings::DisableHelpSubcommand)
 				.about("Compile the project")
 				.arg(
@@ -69,6 +71,7 @@ fn run() -> Result<()> {
 		)
 		.subcommand(
 			SubCommand::with_name("run")
+				.setting(AppSettings::ColoredHelp)
 				.setting(AppSettings::DisableHelpSubcommand)
 				.about("Run the server locally")
 				.arg(
@@ -79,6 +82,7 @@ fn run() -> Result<()> {
 		)
 		.subcommand(
 			SubCommand::with_name("watch")
+				.setting(AppSettings::ColoredHelp)
 				.setting(AppSettings::DisableHelpSubcommand)
 				.about("Run the server locally, and restart if files change")
 				.arg(
@@ -89,11 +93,13 @@ fn run() -> Result<()> {
 		)
 		.subcommand(
 			SubCommand::with_name("dist")
+				.setting(AppSettings::ColoredHelp)
 				.setting(AppSettings::DisableHelpSubcommand)
 				.about("Package the release for distribution in the target/dist directory"),
 		)
 		.subcommand(
 			SubCommand::with_name("clean")
+				.setting(AppSettings::ColoredHelp)
 				.setting(AppSettings::DisableHelpSubcommand)
 				.about("Remove the target directories")
 				.arg(Arg::with_name("all").long("all").help("Remove the xtask target directory")),
@@ -161,7 +167,12 @@ fn run_command(
 ) -> Result<ExitStatus> {
 	let dir = dir.as_ref();
 	let debug_command = format!("{} {}", command, args.join(" "));
-	println!("{}run `{}`{}", XTASK_PREFIX, debug_command, if dir == Path::new(".") { "".into() } else { format!(" ({})", dir.display()) });
+	println!(
+		"{}run `{}`{}",
+		XTASK_PREFIX,
+		debug_command,
+		if dir == Path::new(".") { "".into() } else { format!(" ({})", dir.display()) }
+	);
 	let mut command = Command::new(command);
 	command.current_dir(dir);
 	for arg in args {
