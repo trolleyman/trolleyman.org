@@ -1,6 +1,7 @@
 use rand::Rng;
 
 pub mod read;
+pub mod retry;
 pub mod serde;
 
 pub fn random_token() -> String {

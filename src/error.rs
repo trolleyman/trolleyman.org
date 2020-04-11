@@ -10,13 +10,17 @@ pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
+	#[error("gRPC encountered an error with the underlying transport channel: {0}")]
+	GrpcTransport(#[from] tonic::transport::Error),
+	#[error("gRPC encountered an error: {0}")]
+	Grpc(#[from] tonic::Status),
 	#[error("{0}")]
 	NotFound(String),
-	#[error("An input/output error occured")]
+	#[error("An input/output error occured: {0}")]
 	Io(#[from] std::io::Error),
 	#[error("A database error occured")]
 	GenericDb,
-	#[error("A database error occured")]
+	#[error("A database error occured: {0}")]
 	Db(#[from] crate::db::DbError),
 	#[error(transparent)]
 	Other(#[from] anyhow::Error),
@@ -31,6 +35,22 @@ impl Responder<'_> for Error {
 		);
 		let is_dev = request.guard::<State<Environment>>().map(|f| f.is_dev()).succeeded().unwrap_or(false);
 		match self {
+			Error::GrpcTransport(inner) => {
+				let msg = if is_dev {
+					format!("There was a gRPC error with the underlying transport channel: {:?}", inner)
+				} else {
+					"There was a gRPC error with the underlying transport channel.".into()
+				};
+				error_response(request, Status::InternalServerError, &msg)
+			},
+			Error::Grpc(inner) => {
+				let msg = if is_dev {
+					format!("There was a gRPC error: {:?}", inner)
+				} else {
+					"There was a gRPC error.".into()
+				};
+				error_response(request, Status::InternalServerError, &msg)
+			},
 			Error::NotFound(msg) => error_response(request, Status::NotFound, &msg),
 			Error::Io(inner) => {
 				let msg = if is_dev {

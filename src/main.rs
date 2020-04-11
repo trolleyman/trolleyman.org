@@ -26,6 +26,7 @@ mod cli;
 mod config;
 mod db;
 mod error;
+mod grpc;
 mod logging;
 mod models;
 mod util;
@@ -44,6 +45,9 @@ pub fn run() -> Result<i32> {
 
 	// Setup database
 	let conn = db::setup(&config)?;
+	
+	// Setup gRPC
+	let grpc_client = grpc::setup(&config)?;
 
 	// Handle command if specified by args & exit if necessary
 	match cli::perform_command(&conn, &matches)? {
@@ -89,6 +93,7 @@ pub fn run() -> Result<i32> {
 			});
 		}))
 		.attach(db::DbConnGuard::fairing())
+		.manage(grpc_client)
 		.manage(active_env)
 		.manage(config)
 		.register(app::error::catchers())

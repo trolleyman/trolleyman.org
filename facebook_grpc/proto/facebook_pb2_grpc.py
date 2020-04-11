@@ -4,7 +4,7 @@ import grpc
 from proto import facebook_pb2 as proto_dot_facebook__pb2
 
 
-class FacebookSrvStub(object):
+class FacebookStub(object):
   # missing associated documentation comment in .proto file
   pass
 
@@ -15,13 +15,18 @@ class FacebookSrvStub(object):
       channel: A grpc.Channel.
     """
     self.login = channel.unary_unary(
-        '/FacebookSrv/login',
+        '/facebook.Facebook/login',
         request_serializer=proto_dot_facebook__pb2.LoginDetails.SerializeToString,
         response_deserializer=proto_dot_facebook__pb2.LoginToken.FromString,
         )
+    self.echo = channel.unary_unary(
+        '/facebook.Facebook/echo',
+        request_serializer=proto_dot_facebook__pb2.Echo.SerializeToString,
+        response_deserializer=proto_dot_facebook__pb2.Echo.FromString,
+        )
 
 
-class FacebookSrvServicer(object):
+class FacebookServicer(object):
   # missing associated documentation comment in .proto file
   pass
 
@@ -32,15 +37,27 @@ class FacebookSrvServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def echo(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
-def add_FacebookSrvServicer_to_server(servicer, server):
+
+def add_FacebookServicer_to_server(servicer, server):
   rpc_method_handlers = {
       'login': grpc.unary_unary_rpc_method_handler(
           servicer.login,
           request_deserializer=proto_dot_facebook__pb2.LoginDetails.FromString,
           response_serializer=proto_dot_facebook__pb2.LoginToken.SerializeToString,
       ),
+      'echo': grpc.unary_unary_rpc_method_handler(
+          servicer.echo,
+          request_deserializer=proto_dot_facebook__pb2.Echo.FromString,
+          response_serializer=proto_dot_facebook__pb2.Echo.SerializeToString,
+      ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
-      'FacebookSrv', rpc_method_handlers)
+      'facebook.Facebook', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))

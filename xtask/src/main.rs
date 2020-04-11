@@ -114,7 +114,7 @@ fn run() -> Result<()> {
 			run_python_grpc_version()?;
 			run_python_grpc_compile()?;
 			run_protoc_version()?;
-			run_protoc_rust_grpc()?;
+			run_tonic_build()?;
 			Ok(())
 		} else {
 			bail!("unknown subcommand");
@@ -264,22 +264,22 @@ fn run_protoc_version() -> Result<()> {
 	.map(|_| ())
 }
 
-fn run_protoc_rust_grpc() -> Result<()> {
-	let pwd = std::env::current_dir().context("Could not get current directory")?;
-	std::env::set_current_dir(project_root()).context("Could not set current dir")?;
-	let out_dir = project_root().join("src").join("grpc").to_string_lossy().to_string().replace('\\', "/");
-	let include_dir = project_root().to_string_lossy().to_string().replace('\\', "/");
-	let proto_file = project_root().join("facebook_grpc").join("proto").join("facebook.proto").to_string_lossy().to_string().replace('\\', "/");
-	println!("{}protoc-rust-grpc ({} -> {}/*.rs)", XTASK_PREFIX, proto_file, out_dir);
-	protoc_rust_grpc::run(protoc_rust_grpc::Args {
-		out_dir: &out_dir,
-		includes: &[&include_dir],
-		input: &[&proto_file],
-		rust_protobuf: true, // also generate protobuf messages, not just services
-		..Default::default()
-	})
-	.context("protoc-rust-grpc errored while compiling the protobuf files")?;
-	std::env::set_current_dir(&pwd).context("Could not set current dir")?;
+fn is_rustfmt_installed() -> bool {
+	run_command("rustfmt", &["--version"], ".", None, false).is_ok()
+}
+
+fn run_tonic_build() -> Result<()> {
+	let is_rustfmt_installed = is_rustfmt_installed();
+	let out_dir = project_root().join("src").join("grpc").join("gen");
+	let name = "facebook";
+	let proto_file = project_root().join("facebook_grpc").join("proto").join(format!("{}.proto", name));
+	println!("{}tonic build ({})", XTASK_PREFIX, format_path_move(&proto_file, out_dir.join(format!("{}.rs", name))));
+	tonic_build::configure()
+		.build_server(false)
+		.format(is_rustfmt_installed)
+		.out_dir(&out_dir)
+		.compile(&[&proto_file], &[&project_root()])
+		.context("tonic build encountered an error")?;
 	Ok(())
 }
 
@@ -337,22 +337,7 @@ fn run_copy_exe(dir: impl AsRef<Path>) -> Result<()> {
 fn run_copy_file(from: impl AsRef<Path>, to: impl AsRef<Path>) -> Result<()> {
 	let from = from.as_ref();
 	let to = to.as_ref();
-
-	if let Some(base) = common_path(from, to) {
-		match (from.strip_prefix(&base), to.strip_prefix(&base)) {
-			(Ok(from_strip), Ok(to_strip)) => println!(
-				"{}copy file {}{}{{{} -> {}}}",
-				XTASK_PREFIX,
-				base.display(),
-				std::path::MAIN_SEPARATOR,
-				from_strip.display(),
-				to_strip.display()
-			),
-			_ => println!("{}copy file {} -> {}", XTASK_PREFIX, from.display(), to.display()),
-		}
-	} else {
-		println!("{}copy file {} -> {}", XTASK_PREFIX, from.display(), to.display());
-	}
+	println!("{}copy file {}", XTASK_PREFIX, format_path_move(from, to));
 
 	fs_extra::file::copy(from, to, &fs_extra::file::CopyOptions {
 		overwrite: true,
@@ -365,22 +350,7 @@ fn run_copy_file(from: impl AsRef<Path>, to: impl AsRef<Path>) -> Result<()> {
 fn run_copy_dir(from: impl AsRef<Path>, to: impl AsRef<Path>) -> Result<()> {
 	let from = from.as_ref();
 	let to = to.as_ref();
-
-	if let Some(base) = common_path(from, to) {
-		match (from.strip_prefix(&base), to.strip_prefix(&base)) {
-			(Ok(from_strip), Ok(to_strip)) => eprintln!(
-				"{}copy directory {}{}{{{} -> {}}}",
-				XTASK_PREFIX,
-				base.display(),
-				std::path::MAIN_SEPARATOR,
-				from_strip.display(),
-				to_strip.display()
-			),
-			_ => println!("{}copy directory {} -> {}", XTASK_PREFIX, from.display(), to.display()),
-		}
-	} else {
-		println!("{}copy directory {} -> {}", XTASK_PREFIX, from.display(), to.display());
-	}
+	println!("{}copy directory {}", XTASK_PREFIX, format_path_move(from, to));
 
 	fs_extra::dir::copy(from, to, &fs_extra::dir::CopyOptions {
 		overwrite: true,
@@ -395,6 +365,25 @@ fn run_rmdir(dir: impl AsRef<Path>) -> Result<()> {
 	let dir = dir.as_ref();
 	println!("{}delete directory {}", XTASK_PREFIX, dir.display());
 	fs_extra::dir::remove(dir).context("failed to delete directory")
+}
+
+fn format_path_move(from: impl AsRef<Path>, to: impl AsRef<Path>) -> String {
+	let from = from.as_ref();
+	let to = to.as_ref();
+	if let Some(base) = common_path(from, to) {
+		match (from.strip_prefix(&base), to.strip_prefix(&base)) {
+			(Ok(from_strip), Ok(to_strip)) => format!(
+				"{}{}{{{} -> {}}}",
+				base.display(),
+				std::path::MAIN_SEPARATOR,
+				from_strip.display(),
+				to_strip.display()
+			),
+			_ => format!("{} -> {}", from.display(), to.display()),
+		}
+	} else {
+		format!("{} -> {}", from.display(), to.display())
+	}
 }
 
 fn cargo_exe() -> String { std::env::var("CARGO").unwrap_or("cargo".into()) }

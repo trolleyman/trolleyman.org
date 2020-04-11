@@ -15,10 +15,10 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='proto/facebook.proto',
-  package='',
+  package='facebook',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x14proto/facebook.proto\"/\n\x0cLoginDetails\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"\x1b\n\nLoginToken\x12\r\n\x05token\x18\x01 \x01(\t22\n\x0b\x46\x61\x63\x65\x62ookSrv\x12#\n\x05login\x12\r.LoginDetails\x1a\x0b.LoginTokenb\x06proto3'
+  serialized_pb=b'\n\x14proto/facebook.proto\x12\x08\x66\x61\x63\x65\x62ook\"/\n\x0cLoginDetails\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"\x1b\n\nLoginToken\x12\r\n\x05token\x18\x01 \x01(\t\"\x17\n\x04\x45\x63ho\x12\x0f\n\x07payload\x18\x01 \x01(\t2i\n\x08\x46\x61\x63\x65\x62ook\x12\x35\n\x05login\x12\x16.facebook.LoginDetails\x1a\x14.facebook.LoginToken\x12&\n\x04\x65\x63ho\x12\x0e.facebook.Echo\x1a\x0e.facebook.Echob\x06proto3'
 )
 
 
@@ -26,20 +26,20 @@ DESCRIPTOR = _descriptor.FileDescriptor(
 
 _LOGINDETAILS = _descriptor.Descriptor(
   name='LoginDetails',
-  full_name='LoginDetails',
+  full_name='facebook.LoginDetails',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='email', full_name='LoginDetails.email', index=0,
+      name='email', full_name='facebook.LoginDetails.email', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='password', full_name='LoginDetails.password', index=1,
+      name='password', full_name='facebook.LoginDetails.password', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -57,20 +57,20 @@ _LOGINDETAILS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=24,
-  serialized_end=71,
+  serialized_start=34,
+  serialized_end=81,
 )
 
 
 _LOGINTOKEN = _descriptor.Descriptor(
   name='LoginToken',
-  full_name='LoginToken',
+  full_name='facebook.LoginToken',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='token', full_name='LoginToken.token', index=0,
+      name='token', full_name='facebook.LoginToken.token', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -88,51 +88,99 @@ _LOGINTOKEN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=73,
-  serialized_end=100,
+  serialized_start=83,
+  serialized_end=110,
+)
+
+
+_ECHO = _descriptor.Descriptor(
+  name='Echo',
+  full_name='facebook.Echo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='payload', full_name='facebook.Echo.payload', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=112,
+  serialized_end=135,
 )
 
 DESCRIPTOR.message_types_by_name['LoginDetails'] = _LOGINDETAILS
 DESCRIPTOR.message_types_by_name['LoginToken'] = _LOGINTOKEN
+DESCRIPTOR.message_types_by_name['Echo'] = _ECHO
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 LoginDetails = _reflection.GeneratedProtocolMessageType('LoginDetails', (_message.Message,), {
   'DESCRIPTOR' : _LOGINDETAILS,
   '__module__' : 'proto.facebook_pb2'
-  # @@protoc_insertion_point(class_scope:LoginDetails)
+  # @@protoc_insertion_point(class_scope:facebook.LoginDetails)
   })
 _sym_db.RegisterMessage(LoginDetails)
 
 LoginToken = _reflection.GeneratedProtocolMessageType('LoginToken', (_message.Message,), {
   'DESCRIPTOR' : _LOGINTOKEN,
   '__module__' : 'proto.facebook_pb2'
-  # @@protoc_insertion_point(class_scope:LoginToken)
+  # @@protoc_insertion_point(class_scope:facebook.LoginToken)
   })
 _sym_db.RegisterMessage(LoginToken)
 
+Echo = _reflection.GeneratedProtocolMessageType('Echo', (_message.Message,), {
+  'DESCRIPTOR' : _ECHO,
+  '__module__' : 'proto.facebook_pb2'
+  # @@protoc_insertion_point(class_scope:facebook.Echo)
+  })
+_sym_db.RegisterMessage(Echo)
 
 
-_FACEBOOKSRV = _descriptor.ServiceDescriptor(
-  name='FacebookSrv',
-  full_name='FacebookSrv',
+
+_FACEBOOK = _descriptor.ServiceDescriptor(
+  name='Facebook',
+  full_name='facebook.Facebook',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=102,
-  serialized_end=152,
+  serialized_start=137,
+  serialized_end=242,
   methods=[
   _descriptor.MethodDescriptor(
     name='login',
-    full_name='FacebookSrv.login',
+    full_name='facebook.Facebook.login',
     index=0,
     containing_service=None,
     input_type=_LOGINDETAILS,
     output_type=_LOGINTOKEN,
     serialized_options=None,
   ),
+  _descriptor.MethodDescriptor(
+    name='echo',
+    full_name='facebook.Facebook.echo',
+    index=1,
+    containing_service=None,
+    input_type=_ECHO,
+    output_type=_ECHO,
+    serialized_options=None,
+  ),
 ])
-_sym_db.RegisterServiceDescriptor(_FACEBOOKSRV)
+_sym_db.RegisterServiceDescriptor(_FACEBOOK)
 
-DESCRIPTOR.services_by_name['FacebookSrv'] = _FACEBOOKSRV
+DESCRIPTOR.services_by_name['Facebook'] = _FACEBOOK
 
 # @@protoc_insertion_point(module_scope)
