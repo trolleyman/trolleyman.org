@@ -113,6 +113,8 @@ fn run() -> Result<()> {
 			run_python_version()?;
 			run_python_grpc_version()?;
 			run_python_grpc_compile()?;
+			run_protoc_version()?;
+			run_protoc_rust_grpc()?;
 			Ok(())
 		} else {
 			bail!("unknown subcommand");
@@ -242,13 +244,43 @@ fn run_python_grpc_compile() -> Result<()> {
 			"--proto_path=facebook_grpc",
 			"--python_out=facebook_grpc",
 			"--grpc_python_out=facebook_grpc",
-			"facebook_grpc/proto/facebook_grpc.proto",
+			"facebook_grpc/proto/facebook.proto",
 		],
 		project_root(),
 		None,
 		false,
 	)
 	.map(|_| ())
+}
+
+fn run_protoc_version() -> Result<()> {
+	run_command(
+		"protoc",
+		&["--version"],
+		".",
+		"`protoc` can not be found. Please install via. https://github.com/protocolbuffers/protobuf#protocol-compiler-installation".into(),
+		false,
+	)
+	.map(|_| ())
+}
+
+fn run_protoc_rust_grpc() -> Result<()> {
+	let pwd = std::env::current_dir().context("Could not get current directory")?;
+	std::env::set_current_dir(project_root()).context("Could not set current dir")?;
+	let out_dir = project_root().join("src").join("grpc").to_string_lossy().to_string().replace('\\', "/");
+	let include_dir = project_root().to_string_lossy().to_string().replace('\\', "/");
+	let proto_file = project_root().join("facebook_grpc").join("proto").join("facebook.proto").to_string_lossy().to_string().replace('\\', "/");
+	println!("{}protoc-rust-grpc ({} -> {}/*.rs)", XTASK_PREFIX, proto_file, out_dir);
+	protoc_rust_grpc::run(protoc_rust_grpc::Args {
+		out_dir: &out_dir,
+		includes: &[&include_dir],
+		input: &[&proto_file],
+		rust_protobuf: true, // also generate protobuf messages, not just services
+		..Default::default()
+	})
+	.context("protoc-rust-grpc errored while compiling the protobuf files")?;
+	std::env::set_current_dir(&pwd).context("Could not set current dir")?;
+	Ok(())
 }
 
 fn run_wasm_pack(release: bool, dir: impl AsRef<Path>) -> Result<()> {

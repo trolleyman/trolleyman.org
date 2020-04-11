@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 message LoginDetails {
-	string username = 1;
+	string email = 1;
 	string password = 2;
 }
 
@@ -10,5 +10,5 @@ message LoginToken {
 }
 
 service FacebookSrv {
-	rpc Login (LoginDetails) returns (LoginToken);
+	rpc login (LoginDetails) returns (LoginToken);
 }

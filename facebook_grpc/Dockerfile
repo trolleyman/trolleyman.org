@@ -6,4 +6,4 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 COPY . ./
 
-ENTRYPOINT [ "python3", "facebook_grpc.py" ]
+ENTRYPOINT [ "python3", "facebook.py" ]
