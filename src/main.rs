@@ -45,15 +45,15 @@ pub fn run() -> Result<i32> {
 
 	// Setup database
 	let conn = db::setup(&config)?;
-	
-	// Setup gRPC
-	let grpc_client = grpc::setup(&config)?;
 
 	// Handle command if specified by args & exit if necessary
 	match cli::perform_command(&conn, &matches)? {
 		Some(code) => return Ok(code),
 		None => {}
 	}
+
+	// Setup gRPC
+	let grpc_client = grpc::setup(&config, &conn)?;
 
 	// Launch Rocket
 	let active_env = rocket_config.environment;

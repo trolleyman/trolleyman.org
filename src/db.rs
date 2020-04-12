@@ -22,8 +22,11 @@ pub fn setup(config: &Config) -> Result<DbConn> {
 			.context(format!("Failed to open database connection ({})", db_url))
 			.map_err(From::from)
 	})?;
+	info!("Connected to database at {}", db_url);
 
 	// Migrate database
+	info!("Running database migrations...");
 	embedded_migrations::run_with_output(&conn, &mut std::io::stdout()).context("Failed to migrate database")?;
+	info!("Completed database migrations");
 	Ok(conn)
 }
