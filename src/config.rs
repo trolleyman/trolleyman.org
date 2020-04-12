@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::BTreeMap, net::SocketAddr, path::PathBuf};
+use std::{borrow::Cow, collections::BTreeMap, path::PathBuf};
 
 use anyhow::{Context, Result};
 use rocket::config::Environment;
@@ -29,9 +29,8 @@ pub struct GitLfsConfig {
 
 #[derive(Clone, Deserialize)]
 pub struct FacebookGrpcConfig {
-	/// Socket address of the gRPC server hosting the Facebook service
-	#[serde(with = "crate::util::serde::socketaddr")]
-	pub host: SocketAddr,
+	/// Address of the gRPC server hosting the Facebook service
+	pub host: String,
 }
 
 #[derive(Clone, Deserialize)]

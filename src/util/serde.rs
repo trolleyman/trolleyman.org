@@ -37,6 +37,7 @@ pub mod socketaddr {
 		serializer.serialize_str(&addr.to_string())
 	}
 
+	#[allow(dead_code)]
 	pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<SocketAddr, D::Error> {
 		let addr: &str = Deserialize::deserialize(deserializer)?;
 		addr.to_socket_addrs().map_err(D::Error::custom)?.next().ok_or(D::Error::custom("no socket addresses returned"))
