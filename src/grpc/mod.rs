@@ -58,14 +58,22 @@ impl FacebookClient {
 	fn cache_all_facebook_account_tokens(&mut self, accounts: Vec<FacebookAccount>) {
 		let client = &mut self.client;
 		let email_token_cache = &mut self.email_token_cache;
-		
+
 		let future = async {
-			let mut stream = client.login_all(tokio::stream::iter(accounts.clone().into_iter().map(|acct| LoginDetails { email: acct.email, password: acct.password }))).await?.into_inner();
+			let mut stream = client
+				.login_all(tokio::stream::iter(
+					accounts
+						.clone()
+						.into_iter()
+						.map(|acct| LoginDetails { email: acct.email, password: acct.password }),
+				))
+				.await?
+				.into_inner();
 			while let Some(message) = stream.message().await? {
 				match FacebookClient::process_login_message(message) {
 					Ok(token) => {
 						email_token_cache.insert(token.email, token.token);
-					},
+					}
 					Err(e) => warn!("{}", e),
 				}
 			}

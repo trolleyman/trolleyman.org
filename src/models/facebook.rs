@@ -40,8 +40,3 @@ impl FacebookAccount {
 		diesel::delete(facebook_account::table.filter(facebook_account::id.eq(self.id))).execute(conn).map(|_| ())
 	}
 }
-
-
-
-
-

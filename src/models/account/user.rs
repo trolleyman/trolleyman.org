@@ -46,6 +46,8 @@ pub struct User {
 	pub admin: bool,
 }
 impl User {
+	pub fn all_order_by_name(conn: &DbConn) -> DbResult<Vec<User>> { user::table.order_by(user::name).get_results(conn) }
+
 	pub fn create(conn: &DbConn, name: &str, email: &str, password: &Password, admin: bool) -> DbResult<User> {
 		let new_user = NewUser { name, email, password, admin };
 		new_user.insert_into(user::table).execute(conn)?;
