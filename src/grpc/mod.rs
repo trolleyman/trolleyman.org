@@ -2,7 +2,7 @@ use crate::{config::Config, db::DbConn, error::Result, models::facebook::Faceboo
 use std::{collections::HashMap, time::Duration};
 
 use anyhow::Context;
-use gen::{Echo, LoginDetails};
+use gen::{Echo, LoginDetails, LoginErrorKind, LoginResult, LoginResultMessage, LoginToken};
 
 mod gen;
 
@@ -55,13 +55,43 @@ impl FacebookClient {
 		FacebookClient { client, rt, email_token_cache: HashMap::new() }
 	}
 
-	fn cache_all_facebook_account_tokens(&mut self, accounts: impl IntoIterator<Item = FacebookAccount>) {
-		for account in accounts {
-			// TODO: Do in parallel
-			match self.login(account.email.clone(), account.password) {
-				Err(e) => warn!("Error encountered while caching facebook account {}: {}", account.email, e),
-				_ => {}
+	fn cache_all_facebook_account_tokens(&mut self, accounts: Vec<FacebookAccount>) {
+		let client = &mut self.client;
+		let email_token_cache = &mut self.email_token_cache;
+		
+		let future = async {
+			let mut stream = client.login_all(tokio::stream::iter(accounts.clone().into_iter().map(|acct| LoginDetails { email: acct.email, password: acct.password }))).await?.into_inner();
+			while let Some(message) = stream.message().await? {
+				match FacebookClient::process_login_message(message) {
+					Ok(token) => {
+						email_token_cache.insert(token.email, token.token);
+					},
+					Err(e) => warn!("{}", e),
+				}
 			}
+			Ok(())
+		};
+		let result: Result<()> = self.rt.block_on(future);
+		if let Err(e) = result {
+			warn!("Error while caching Facebook tokens: {}", e);
+		}
+	}
+
+	fn process_login_message(message: LoginResultMessage) -> Result<LoginToken> {
+		if let Some(result) = message.result {
+			match result {
+				LoginResult::Token(token) => Ok(token),
+				LoginResult::Error(e) => {
+					let kind = match LoginErrorKind::from_i32(e.kind) {
+						Some(LoginErrorKind::LoginErrorFbChat) => "FB_CHAT",
+						Some(LoginErrorKind::LoginErrorUnknown) => "UNKNOWN",
+						None => "UNKNOWN_ERROR",
+					};
+					Err(anyhow!("Login error ({}): {}", kind, e.message).into())
+				}
+			}
+		} else {
+			Err(anyhow!("Login error: None result").into())
 		}
 	}
 
@@ -69,9 +99,11 @@ impl FacebookClient {
 		if self.email_token_cache.contains_key(&email) {
 			Ok(self.email_token_cache[&email].clone())
 		} else {
-			let token = self.rt.block_on(self.client.login(LoginDetails { email: email.clone(), password }))?.into_inner().token;
-			self.email_token_cache.insert(email, token.clone());
-			Ok(token)
+			let token = FacebookClient::process_login_message(
+				self.rt.block_on(self.client.login(LoginDetails { email: email.clone(), password }))?.into_inner(),
+			)?;
+			self.email_token_cache.insert(email, token.token.clone());
+			Ok(token.token)
 		}
 	}
 }

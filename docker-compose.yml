@@ -26,3 +26,5 @@ services:
     build: ./facebook_grpc
     image: facebook_grpc:latest
     restart: always
+    volumes:
+      - "./data:/app/data"

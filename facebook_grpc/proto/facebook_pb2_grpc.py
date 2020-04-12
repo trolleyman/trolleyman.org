@@ -14,21 +14,33 @@ class FacebookStub(object):
     Args:
       channel: A grpc.Channel.
     """
-    self.login = channel.unary_unary(
-        '/facebook.Facebook/login',
-        request_serializer=proto_dot_facebook__pb2.LoginDetails.SerializeToString,
-        response_deserializer=proto_dot_facebook__pb2.LoginToken.FromString,
-        )
     self.echo = channel.unary_unary(
         '/facebook.Facebook/echo',
         request_serializer=proto_dot_facebook__pb2.Echo.SerializeToString,
         response_deserializer=proto_dot_facebook__pb2.Echo.FromString,
+        )
+    self.login = channel.unary_unary(
+        '/facebook.Facebook/login',
+        request_serializer=proto_dot_facebook__pb2.LoginDetails.SerializeToString,
+        response_deserializer=proto_dot_facebook__pb2.LoginResult.FromString,
+        )
+    self.login_all = channel.stream_stream(
+        '/facebook.Facebook/login_all',
+        request_serializer=proto_dot_facebook__pb2.LoginDetails.SerializeToString,
+        response_deserializer=proto_dot_facebook__pb2.LoginResult.FromString,
         )
 
 
 class FacebookServicer(object):
   # missing associated documentation comment in .proto file
   pass
+
+  def echo(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
   def login(self, request, context):
     # missing associated documentation comment in .proto file
@@ -37,7 +49,7 @@ class FacebookServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def echo(self, request, context):
+  def login_all(self, request_iterator, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -47,15 +59,20 @@ class FacebookServicer(object):
 
 def add_FacebookServicer_to_server(servicer, server):
   rpc_method_handlers = {
-      'login': grpc.unary_unary_rpc_method_handler(
-          servicer.login,
-          request_deserializer=proto_dot_facebook__pb2.LoginDetails.FromString,
-          response_serializer=proto_dot_facebook__pb2.LoginToken.SerializeToString,
-      ),
       'echo': grpc.unary_unary_rpc_method_handler(
           servicer.echo,
           request_deserializer=proto_dot_facebook__pb2.Echo.FromString,
           response_serializer=proto_dot_facebook__pb2.Echo.SerializeToString,
+      ),
+      'login': grpc.unary_unary_rpc_method_handler(
+          servicer.login,
+          request_deserializer=proto_dot_facebook__pb2.LoginDetails.FromString,
+          response_serializer=proto_dot_facebook__pb2.LoginResult.SerializeToString,
+      ),
+      'login_all': grpc.stream_stream_rpc_method_handler(
+          servicer.login_all,
+          request_deserializer=proto_dot_facebook__pb2.LoginDetails.FromString,
+          response_serializer=proto_dot_facebook__pb2.LoginResult.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

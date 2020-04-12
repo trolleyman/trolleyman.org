@@ -22,9 +22,7 @@ pub struct FacebookAccount {
 	pub password: String,
 }
 impl FacebookAccount {
-	pub fn all(conn: &DbConn) -> DbResult<Vec<FacebookAccount>> {
-		facebook_account::table.get_results(conn)
-	}
+	pub fn all(conn: &DbConn) -> DbResult<Vec<FacebookAccount>> { facebook_account::table.get_results(conn) }
 
 	pub fn create(conn: &DbConn, user_id: i32, email: &str, password: &str) -> DbResult<FacebookAccount> {
 		let new_facebook_account = NewFacebookAccount { user_id, email, password };
@@ -42,3 +40,8 @@ impl FacebookAccount {
 		diesel::delete(facebook_account::table.filter(facebook_account::id.eq(self.id))).execute(conn).map(|_| ())
 	}
 }
+
+
+
+
+

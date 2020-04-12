@@ -9,6 +9,24 @@ message LoginDetails {
 
 message LoginToken {
 	string token = 1;
+	string email = 2;
+}
+
+enum LoginErrorKind {
+	LOGIN_ERROR_UNKNOWN = 0;
+	LOGIN_ERROR_FB_CHAT = 1;
+}
+
+message LoginError {
+	LoginErrorKind kind = 1;
+	string message = 2;
+}
+
+message LoginResult {
+	oneof result {
+		LoginToken token = 1;
+		LoginError error = 2;
+	}
 }
 
 message Echo {
@@ -16,6 +34,7 @@ message Echo {
 }
 
 service Facebook {
-	rpc login (LoginDetails) returns (LoginToken);
 	rpc echo (Echo) returns (Echo);
+	rpc login (LoginDetails) returns (LoginResult);
+	rpc login_all (stream LoginDetails) returns (stream LoginResult);
 }

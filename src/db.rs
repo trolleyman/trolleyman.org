@@ -17,11 +17,12 @@ embed_migrations!();
 
 pub fn setup(config: &Config) -> Result<DbConn> {
 	let db_url = config.database_path.to_string_lossy().to_string();
-	let conn = util::retry::until_timeout(Duration::from_secs(60), &format!("Failed to open database {}", db_url), || {
-		DbConn::establish(&db_url)
-			.context(format!("Failed to open database connection ({})", db_url))
-			.map_err(From::from)
-	})?;
+	let conn =
+		util::retry::until_timeout(Duration::from_secs(60), &format!("Failed to open database {}", db_url), || {
+			DbConn::establish(&db_url)
+				.context(format!("Failed to open database connection ({})", db_url))
+				.map_err(From::from)
+		})?;
 	info!("Connected to database at {}", db_url);
 
 	// Migrate database

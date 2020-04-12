@@ -42,7 +42,7 @@ impl Responder<'_> for Error {
 					"There was a gRPC error with the underlying transport channel.".into()
 				};
 				error_response(request, Status::InternalServerError, &msg)
-			},
+			}
 			Error::Grpc(inner) => {
 				let msg = if is_dev {
 					format!("There was a gRPC error: {:?}", inner)
@@ -50,7 +50,7 @@ impl Responder<'_> for Error {
 					"There was a gRPC error.".into()
 				};
 				error_response(request, Status::InternalServerError, &msg)
-			},
+			}
 			Error::NotFound(msg) => error_response(request, Status::NotFound, &msg),
 			Error::Io(inner) => {
 				let msg = if is_dev {

@@ -3,7 +3,7 @@ use std::{
 	time::{Duration, Instant},
 };
 
-use crate::error::Result;	
+use crate::error::Result;
 
 pub fn until_timeout<T, F>(timeout: Duration, error_msg: &str, mut f: F) -> Result<T>
 where
