@@ -14,6 +14,5 @@ use_field_init_shorthand = true
 use_small_heuristics = "Max"
 
 ignore = [
-	"src/models/schema.rs",
-	"src/grpc/gen/*"
+	"src/models/schema.rs"
 ]

@@ -11,7 +11,8 @@ use structopt::StructOpt;
 
 const XTASK_PREFIX: &'static str = "\x1B[1m\x1B[92m       xtask\x1B[0m ";
 const ERROR_PREFIX: &'static str = "\x1B[1m\x1B[91merror\x1B[37m:\x1B[0m ";
-const HELP_PREFIX: &'static str = "\x1B[1m\x1B[96mhelp \x1B[37m:\x1B[0m ";
+//const WARN_PREFIX: &'static str = "\x1B[1m\x1B[93mwarn\x1B[37m:\x1B[0m ";
+const HELP_PREFIX: &'static str = "\x1B[1m\x1B[96mhelp\x1B[37m:\x1B[0m ";
 
 fn main() {
 	fn submain() -> i32 {
@@ -264,16 +265,17 @@ fn run_protoc_version() -> Result<()> {
 	.map(|_| ())
 }
 
-fn is_rustfmt_installed() -> bool {
-	run_command("rustfmt", &["--version"], ".", None, false).is_ok()
-}
+fn is_rustfmt_installed() -> bool { run_command("rustfmt", &["--version"], ".", None, false).is_ok() }
 
 fn run_tonic_build() -> Result<()> {
 	let is_rustfmt_installed = is_rustfmt_installed();
+
 	let out_dir = project_root().join("src").join("grpc").join("gen");
 	let name = "facebook";
+	let out_file = out_dir.join(format!("{}.rs", name));
 	let proto_file = project_root().join("facebook_grpc").join("proto").join(format!("{}.proto", name));
-	println!("{}tonic build ({})", XTASK_PREFIX, format_path_move(&proto_file, out_dir.join(format!("{}.rs", name))));
+
+	println!("{}tonic build ({})", XTASK_PREFIX, format_path_move(&proto_file, &out_file));
 	tonic_build::configure()
 		.build_server(false)
 		.format(is_rustfmt_installed)
