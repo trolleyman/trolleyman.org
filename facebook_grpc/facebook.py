@@ -8,6 +8,7 @@ import multiprocessing
 import queue
 import concurrent.futures
 import json
+import threading
 
 import grpc
 import proto.facebook_pb2 as pb
@@ -55,6 +56,7 @@ class RpcTokenState():
 
 class SessionManager():
     def __init__(self):
+        self.save_lock = threading.Lock()
         self.rpc_token_state_by_email = dict()
         self.rpc_token_state_by_token = dict()
         self.bot_queue = multiprocessing.Queue()
@@ -85,14 +87,15 @@ class SessionManager():
         print('Loaded {} user(s)'.format(len(self.rpc_token_state_by_email)))
 
     def _save(self):
-        print('Saving database...')
-        if not os.path.isdir(os.path.dirname(TOKENS_PATH)):
-            os.makedirs(os.path.dirname(TOKENS_PATH))
-        start_time = time.time()
-        with open(TOKENS_PATH, 'w') as f:
-            data = [{'email': email, 'token': token_state.token, 'session_cookies': token_state.client.getSession()} for (email, token_state) in self.rpc_token_state_by_email.items()]
-            json.dump(data, f)
-        print('Saved database ({:.3}s)'.format(time.time() - start_time))
+        with self.save_lock:
+            print('Saving database...')
+            if not os.path.isdir(os.path.dirname(TOKENS_PATH)):
+                os.makedirs(os.path.dirname(TOKENS_PATH))
+            start_time = time.time()
+            with open(TOKENS_PATH, 'w') as f:
+                data = [{'email': email, 'token': token_state.token, 'session_cookies': token_state.client.getSession()} for (email, token_state) in self.rpc_token_state_by_email.items()]
+                json.dump(data, f)
+            print('Saved database ({:.3}s)'.format(time.time() - start_time))
 
     def generate_token(self, email, password):
         try:
@@ -117,7 +120,7 @@ class SessionManager():
 
 def exception_to_login_result(exc):
     message = str(exc)
-    if type(exc) is FBchatException:
+    if isinstance(exc, FBchatException):
         kind = pb.LOGIN_ERROR_FB_CHAT
     else:
         kind = pb.LOGIN_ERROR_UNKNOWN
