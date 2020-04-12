@@ -20,6 +20,7 @@ from fbchat.models import *
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 TOKENS_PATH = os.path.join(DIR, 'data', 'facebook_grpc_tokens.json')
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36'
 
 
 def love_worker(q):
@@ -78,7 +79,7 @@ class SessionManager():
                 token = obj['token']
                 session_cookies = obj['session_cookies']
                 try:
-                    client = Client(email, 'invalidpass', session_cookies=session_cookies, max_tries=2)
+                    client = Client(email, 'invalidpass', session_cookies=session_cookies, max_tries=2, user_agent=USER_AGENT)
                     token_state = RpcTokenState(token, email, client)
                     self.rpc_token_state_by_email[email] = token_state
                     self.rpc_token_state_by_token[token] = token_state
@@ -101,7 +102,7 @@ class SessionManager():
         try:
             token_state = self.rpc_token_state_by_email[email]
         except KeyError:
-            client = Client(email, password)
+            client = Client(email, password, user_agent=USER_AGENT)
             token = ''.join(random.choice("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") for _ in range(25))
             token_state = RpcTokenState(token, email, client)
             self.rpc_token_state_by_email[email] = token_state
