@@ -36,7 +36,7 @@ class LoveBot(Client):
     def onReactionAdded(self, mid, reaction, author_id, thread_id, thread_type, ts, msg, **kwargs):
         if reaction == MessageReaction.HEART and self.uid == author_id:
             self.reactToMessage(mid, MessageReaction.LOVE)
-            print('Changed reaction of message ID {} to heart face'.format(mid))
+            print('info: Changed reaction of message ID {} to heart face'.format(mid))
         super().onReactionAdded(mid, reaction, author_id, thread_id, thread_type, ts, msg, **kwargs)
 
 
@@ -48,27 +48,38 @@ class RpcTokenState():
 
 
 class SessionManager():
-    def __init__():
-        self.rpc_token_state_by_email = []
-        self.rpc_token_state_by_token = []
+    def __init__(self):
+        self.rpc_token_state_by_email = dict()
+        self.rpc_token_state_by_token = dict()
         self.bot_queue = multiprocessing.Queue()
         p = multiprocessing.Process(target=love_worker, args=(self.bot_queue,))
+
+        self._load()
+
         p.start()
+
+    def _load(self):
+        pass  # TODO
+
+    def _save(self):
+        pass  # TODO
 
     def generate_token(self, email, password):
         try:
             token_state = self.rpc_token_state_by_email[email]
         except KeyError:
             client = Client(email, password)
-            token = [random.choice("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") for _ in range(25)]
-            token_state = TokenState(token, email, client)
+            token = ''.join(random.choice("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") for _ in range(25))
+            token_state = RpcTokenState(token, email, client)
             self.rpc_token_state_by_email[email] = token_state
             self.rpc_token_state_by_token[token] = token_state
+            print('New token generated for {}: {}'.format(email, token))
+            self._save()
 
             # Spawn new love bot
             self.bot_queue.put((email, password, client.getSession()))
 
-        return token_state
+        return token_state.token
 
     def get_session_from_rpc_token(self, rpc_token):
         return self.rpc_token_state_by_token[rpc_token]
@@ -89,10 +100,11 @@ class FacebookService(pb_grpc.FacebookServicer):
         token = self.session_manager.generate_token(details.email, details.password)
         return pb.LoginToken(token=token)
 
-    def serve(self, port):
+    @classmethod
+    def serve(cls, port):
         print("Initialising gRPC server...")
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-        pb_grpc.add_FacebookSrvServicer_to_server(FacebookService(), server)
+        pb_grpc.add_FacebookServicer_to_server(FacebookService(), server)
         server.add_insecure_port('[::]:{}'.format(port))
         server.start()
         print("gRPC server started on port {}".format(port))
