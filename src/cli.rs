@@ -55,6 +55,12 @@ pub fn get_matches() -> clap::ArgMatches<'static> {
 						.arg(Arg::with_name("username").required(true)),
 				)
 				.subcommand(
+					SubCommand::with_name("user-list")
+						.setting(AppSettings::ColoredHelp)
+						.setting(AppSettings::DisableHelpSubcommand)
+						.about("List all users"),
+				)
+				.subcommand(
 					SubCommand::with_name("user-create")
 						.setting(AppSettings::ColoredHelp)
 						.setting(AppSettings::DisableHelpSubcommand)
@@ -121,6 +127,13 @@ pub fn perform_command(conn: &DbConn, matches: &clap::ArgMatches<'_>) -> Result<
 					Ok(Some(1))
 				}
 			}
+		} else if let Some(_) = matches.subcommand_matches("user-list") {
+			let users = crate::models::account::User::all_order_by_name(conn)?;
+			info!("== Users ==");
+			for user in users.into_iter() {
+				info!("{} ({})", user.name, user.email);
+			}
+			Ok(Some(0))
 		} else if let Some(_) = matches.subcommand_matches("user-create") {
 			let username = util::prompt_username(conn)?;
 			let email = util::prompt_account_email(conn)?;
