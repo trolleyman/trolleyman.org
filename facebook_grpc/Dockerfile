@@ -7,5 +7,6 @@ RUN pip install -r requirements.txt
 COPY . ./
 
 VOLUME "/app/data"
+VOLUME "/app/logs"
 
-ENTRYPOINT [ "python3", "facebook.py" ]
+ENTRYPOINT [ "./docker_entrypoint.sh", "python3", "facebook.py" ]
