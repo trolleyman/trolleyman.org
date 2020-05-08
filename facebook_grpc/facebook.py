@@ -9,6 +9,7 @@ import queue
 import concurrent.futures
 import json
 import threading
+import traceback
 
 import grpc
 import proto.facebook_pb2 as pb
@@ -29,12 +30,16 @@ def love_worker(q):
         try:
             email, password, session = q.get(False)
             print('Logging in {}...'.format(email))
-            bot = LoveBot(email, password, session_cookies=session)
-            print('Created bot for {}'.format(email))
-            bot.startListening()
-            bot.setActiveStatus(False)
-            bots.append(bot)
-            print('Bot started listening for {}'.format(email))
+            try:
+                bot = LoveBot(email, password, session_cookies=session)
+                print('Created bot for {}'.format(email))
+                bot.startListening()
+                bot.setActiveStatus(False)
+                bots.append(bot)
+                print('Bot started listening for {}'.format(email))
+            except Exception e:
+                print('Exception while logging in {}:'.format(email))
+                print(traceback.format_exc())
         except queue.Empty:
             pass
 
