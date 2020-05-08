@@ -89,6 +89,7 @@ class SessionManager():
                 session_cookies = obj['session_cookies']
                 try:
                     client = Client(email, 'invalidpass', session_cookies=session_cookies, max_tries=2, user_agent=USER_AGENT)
+                    client.login()
                     token_state = RpcTokenState(token, email, client)
                     self.rpc_token_state_by_email[email] = token_state
                     self.rpc_token_state_by_token[token] = token_state
@@ -112,6 +113,7 @@ class SessionManager():
             token_state = self.rpc_token_state_by_email[email]
         except KeyError:
             client = Client(email, password, user_agent=USER_AGENT)
+            client.login()
             token = ''.join(random.choice("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") for _ in range(25))
             token_state = RpcTokenState(token, email, client)
             self.rpc_token_state_by_email[email] = token_state
