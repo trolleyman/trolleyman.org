@@ -71,6 +71,7 @@ class SessionManager():
         print('Loading database...')
         if not os.path.exists(TOKENS_PATH):
             print('Database does not exist, loading empty database')
+            self._save()
             return
         with open(TOKENS_PATH, 'r') as f:
             data = json.load(f)
