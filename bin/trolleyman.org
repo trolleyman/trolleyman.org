@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+container="$(docker container ls | grep trolleyman.org | cut -d' ' -f1)"
+
+set -x
+docker exec -it "$container" bash
