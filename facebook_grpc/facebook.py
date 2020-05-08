@@ -114,8 +114,8 @@ class SessionManager():
             print('New token generated for {}: {}'.format(email, token))
             self._save()
 
-            # Spawn new love bot
-            self.bot_queue.put((email, password, client.getSession()))
+        # Spawn new love bot
+        self.bot_queue.put((email, password, token_state.client.getSession()))
 
         return token_state.token
 
