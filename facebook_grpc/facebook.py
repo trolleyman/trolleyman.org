@@ -37,7 +37,7 @@ def love_worker(q):
                 bot.setActiveStatus(False)
                 bots.append(bot)
                 print('Bot started listening for {}'.format(email))
-            except Exception e:
+            except Exception as e:
                 print('Exception while logging in {}:'.format(email))
                 print(traceback.format_exc())
         except queue.Empty:
