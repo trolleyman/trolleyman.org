@@ -28,10 +28,13 @@ def love_worker(q):
     while True:
         try:
             email, password, session = q.get(False)
+            print('Logging in {}...'.format(email))
             bot = LoveBot(email, password, session_cookies=session)
+            print('Created bot for {}'.format(email))
             bot.startListening()
             bot.setActiveStatus(False)
             bots.append(bot)
+            print('Bot started listening for {}'.format(email))
         except queue.Empty:
             pass
 
@@ -44,7 +47,7 @@ class LoveBot(Client):
     def onReactionAdded(self, mid, reaction, author_id, thread_id, thread_type, ts, msg, **kwargs):
         if reaction == MessageReaction.HEART and self.uid == author_id:
             self.reactToMessage(mid, MessageReaction.LOVE)
-            print('info: Changed reaction of message ID {} to heart face'.format(mid))
+            print('Changed reaction of message ID {} to heart face'.format(mid))
         super().onReactionAdded(mid, reaction, author_id, thread_id, thread_type, ts, msg, **kwargs)
 
 
