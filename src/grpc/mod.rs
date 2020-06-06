@@ -1,36 +1,40 @@
 use crate::{config::Config, db::DbConn, error::Result, models::facebook::FacebookAccount, util};
-use std::{collections::HashMap, time::Duration};
+use std::collections::HashMap;
 
 use anyhow::Context;
 use gen::{Echo, LoginDetails, LoginErrorKind, LoginResult, LoginResultMessage, LoginToken};
 
 mod gen;
 
-pub fn setup(config: &Config, conn: &DbConn) -> Result<FacebookClient> {
-	info!("Connecting to gRPC server at {}...", config.facebook_grpc.host);
-	let mut client = util::retry::until_timeout(
-		Duration::from_secs(60),
-		&format!("Failed to connect to gRPC host {}", config.facebook_grpc.host),
-		|| {
-			let mut rt = tokio::runtime::Builder::new()
-				.basic_scheduler()
-				.enable_all()
-				.build()
-				.context("Tokio's runtime could not start")?;
-			let client = rt.block_on(setup_async(config))?;
-			Ok(FacebookClient::new(client, rt))
-		},
-	)?;
-	info!("Connected to gRPC server at {}", config.facebook_grpc.host);
-	let facebook_accounts = FacebookAccount::all(conn)?;
-	info!("Getting tokens for {} Facebook login credentials...", facebook_accounts.len());
-	client.cache_all_facebook_account_tokens(facebook_accounts);
-	info!("Completed gRPC setup");
-	Ok(client)
+pub fn setup(config: &Config, conn: &DbConn) -> Result<Option<FacebookClient>> {
+	if let Some(facebook_grpc_config) = &config.facebook_grpc {
+		info!("Connecting to gRPC server at {}...", facebook_grpc_config.host);
+		let mut client = util::retry::until_timeout(
+			facebook_grpc_config.timeout,
+			&format!("Failed to connect to gRPC host {}", facebook_grpc_config.host),
+			|| {
+				let mut rt = tokio::runtime::Builder::new()
+					.basic_scheduler()
+					.enable_all()
+					.build()
+					.context("Tokio's runtime could not start")?;
+				let client = rt.block_on(setup_async(&facebook_grpc_config.host))?;
+				Ok(FacebookClient::new(client, rt))
+			},
+		)?;
+		info!("Connected to gRPC server at {}", facebook_grpc_config.host);
+		let facebook_accounts = FacebookAccount::all(conn)?;
+		info!("Getting tokens for {} Facebook login credentials...", facebook_accounts.len());
+		client.cache_all_facebook_account_tokens(facebook_accounts);
+		info!("Completed gRPC setup");
+		Ok(Some(client))
+	} else {
+		Ok(None)
+	}
 }
 
-async fn setup_async(config: &Config) -> Result<gen::FacebookClient<tonic::transport::Channel>> {
-	let endpoint = tonic::transport::Endpoint::from_shared(format!("grpc://{}", config.facebook_grpc.host))
+async fn setup_async(host: &str) -> Result<gen::FacebookClient<tonic::transport::Channel>> {
+	let endpoint = tonic::transport::Endpoint::from_shared(format!("grpc://{}", host))
 		.context("Invalid endpoint")?;
 	let mut client = gen::FacebookClient::connect(endpoint).await?;
 	let req = Echo { payload: util::random_token() };
