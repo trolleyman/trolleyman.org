@@ -28,7 +28,7 @@ fi
 
 # Compile trolleyman.org
 rustup update nightly
-cargo +nightly xtask build
+cargo +nightly xtask dist
 
 # Rebuild docker compose
 docker-compose build
