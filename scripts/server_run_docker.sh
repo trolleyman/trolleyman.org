@@ -16,9 +16,9 @@ docker image prune --filter='until=1460h' -f
 docker run \
     --rm \
     --user "$(id -u)":"$(id -g)" \
-    --mount type=bind,src="$PWD",dst=/usr/src/app \
-    --workdir /usr/src/app \
-    --env CARGO_HOME=/usr/src/app/.cargo \
+    -v "$DIR/..":/trolleyman.org \
+    --workdir /trolleyman.org \
+    --env CARGO_HOME=/trolleyman.org/.cargo \
     rust:latest \
     cargo xtask dist
 
