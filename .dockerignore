@@ -1,3 +1,3 @@
-*
-!target/dist
-!scripts/docker_entrypoint.sh
+**
+!/target/dist
+!/scripts/docker_entrypoint.sh
