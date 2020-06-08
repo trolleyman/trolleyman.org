@@ -1,7 +1,7 @@
 ## Main build
 FROM ubuntu:latest
 RUN apt-get update && apt-get install -y --no-install-recommends\
-    libssl-dev
+    libssl-dev ca-certificates
 
 # Install trolleyman.org
 RUN mkdir -p /trolleyman.org
