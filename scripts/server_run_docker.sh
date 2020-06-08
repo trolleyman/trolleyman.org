@@ -12,14 +12,15 @@ cd "$DIR"
 # Prune images that are older than 2 months
 docker image prune --filter='until=1460h' -f
 
+# Install Rust
+if ! command -v rustup; then
+    curl https://sh.rustup.rs -sSf | sh  -s -- --no-modify-path -y
+    source $HOME/.cargo/env
+fi
+
 # Compile trolleyman.org
-docker run \
-    --rm \
-    -v "$DIR":/usr/src/app \
-    --workdir /usr/src/app \
-    --env CARGO_HOME=/usr/src/app/.cargo \
-    rust:latest \
-    bash -c "cargo xtask dist; chown -R \"$(id -u):$(id -g)\" target .cargo"
+rustup update nightly
+cargo +nightly xtask build
 
 # Rebuild docker compose
 docker-compose build
