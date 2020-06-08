@@ -13,18 +13,18 @@ cd "$DIR"
 docker image prune --filter='until=1460h' -f
 
 # Install pkg-config
-if ! command -v pkg-config; then
+if command -v pkg-config; then
     sudo apt-get install -y pkg-config
 fi
 
 # Ubuntu only so far
-if command -v apt-get; then
+if ! command -v apt-get; then
     # Install ssl-dev
     sudo apt-get install -y libssl-dev
 fi
 
 # Install Rust
-if ! command -v rustup; then
+if command -v rustup; then
     curl https://sh.rustup.rs -sSf | sh  -s -- --no-modify-path -y
     source $HOME/.cargo/env
 fi
