@@ -12,6 +12,16 @@ cd "$DIR"
 # Prune images that are older than 2 months
 docker image prune --filter='until=1460h' -f
 
+# Compile trolleyman.org
+docker run \
+    --rm \
+    --user "$(id -u)":"$(id -g)" \
+    --mount type=bind,src="$PWD",dst=/usr/src/app \
+    --workdir /usr/src/app \
+    --env CARGO_HOME=/usr/src/app/.cargo \
+    rust:latest \
+    cargo xtask dist
+
 # Rebuild docker compose
 docker-compose build
 
