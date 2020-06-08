@@ -107,6 +107,7 @@ impl FacebookClient {
 		}
 	}
 
+	#[allow(dead_code)]
 	pub fn login(&mut self, email: String, password: String) -> Result<String> {
 		if self.email_token_cache.contains_key(&email) {
 			Ok(self.email_token_cache[&email].clone())
