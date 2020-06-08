@@ -41,20 +41,40 @@ impl<'a, 'r> FromRequest<'a, 'r> for ReCaptchaGuard {
 					.insert("remoteip".to_string(), serde_json::Value::String(client_ip.to_string()));
 			}
 
+			// Request from Google's servers
 			let client = reqwest::blocking::Client::new();
-			client
+			let response = client
 				.post(RECAPTCHA_VERIFY_URL)
 				.header(reqwest::header::CONTENT_TYPE, "application/json")
 				.header(reqwest::header::ACCEPT, "application/json")
 				.body(data.to_string())
 				.send()
-				.map(|_| ())
+				.and_then(|res| res.text())
 				.map_err(|e| {
 					(
 						Status::InternalServerError,
 						Error::new(e).context(format!("Failed to request {}", RECAPTCHA_VERIFY_URL)),
 					)
-				})
+				})?;
+
+			// Parse request
+			let success: bool = response
+				.parse::<serde_json::Value>()
+				.map_err(|e| {
+					(
+						Status::InternalServerError,
+						Error::new(e).context(format!("Failed to request {}", RECAPTCHA_VERIFY_URL)),
+					)
+				})?
+				.as_object()
+				.and_then(|o| o.get("success").map(|v| v.as_bool().unwrap_or(false)))
+				.ok_or_else(|| (Status::InternalServerError, anyhow!("Failed to request {}", RECAPTCHA_VERIFY_URL)))?;
+
+			if !success {
+				Err((Status::Unauthorized, anyhow!("Invalid client request (success=false from Google)")))
+			} else {
+				Ok(())
+			}
 		}
 
 		match process(req) {
