@@ -15,12 +15,11 @@ docker image prune --filter='until=1460h' -f
 # Compile trolleyman.org
 docker run \
     --rm \
-    --user "$(id -u)":"$(id -g)" \
     -v "$DIR/..":/trolleyman.org \
     --workdir /trolleyman.org \
     --env CARGO_HOME=/trolleyman.org/.cargo \
     rust:latest \
-    cargo xtask dist
+    bash -c "cargo xtask dist; chown -R \"$(id -u):$(id -g)\" target .cargo"
 
 # Rebuild docker compose
 docker-compose build
