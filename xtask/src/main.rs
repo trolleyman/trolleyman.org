@@ -42,6 +42,8 @@ fn main() {
 }
 
 fn run() -> Result<()> {
+	env_logger::init();
+
 	let authors_string = env!("CARGO_PKG_AUTHORS").split(';').collect::<Vec<_>>().join(", ");
 	let app = App::new(clap::crate_name!())
 		.version(clap::crate_version!())
