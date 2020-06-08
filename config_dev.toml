@@ -1,7 +1,10 @@
 
-database_path = "data/db.sqlite3"
 protocol = "http"
 domain = "localhost:8000"
+
+[database]
+path = "data/db.sqlite3"
+timeout = 1
 
 [recaptcha]
 public_key = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
@@ -10,5 +13,6 @@ private_key = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
 [git-lfs]
 path = "data/git-lfs"
 
-[facebook-grpc]
-host = "localhost:9001"
+#[facebook-grpc]
+#host = "localhost:9001"
+#timeout = 1
