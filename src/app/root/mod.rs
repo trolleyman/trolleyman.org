@@ -4,7 +4,7 @@ use rand::Rng;
 use rocket::{http::Status, response::status, Route, State};
 use rocket_contrib::templates::{self, Template};
 
-pub fn routes() -> Vec<Route> { routes![heartbeat, index, error, contact_details, project] }
+pub fn routes() -> Vec<Route> { routes![heartbeat, index, robots_txt, error, contact_details, project] }
 
 #[get("/heartbeat")]
 fn heartbeat() -> String { "A-ok!".to_string() }
@@ -21,6 +21,11 @@ fn index(config: State<Config>) -> Template {
 			"sitekey": config.recaptcha.public_key.clone(),
 		}),
 	)
+}
+
+#[get("/robots.txt")]
+fn robots_txt() -> &'static [u8] {
+	include_bytes!("../../assets/robots.txt")
 }
 
 #[get("/contact_details")]

@@ -17,8 +17,11 @@ if ! command -v pkg-config; then
     sudo apt-get install -y pkg-config
 fi
 
-# Install ssl-dev
-sudo apt-get install -y libssl-dev
+# Ubuntu only so far
+if command -v apt-get; then
+    # Install ssl-dev
+    sudo apt-get install -y libssl-dev
+fi
 
 # Install Rust
 if ! command -v rustup; then
