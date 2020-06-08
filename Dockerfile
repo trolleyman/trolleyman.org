@@ -1,7 +1,7 @@
 ## Main build
-FROM debian:latest
+FROM ubuntu:latest
 RUN apt-get update && apt-get install -y --no-install-recommends\
-    libssl1.1
+    libssl-dev
 
 # Install trolleyman.org
 RUN mkdir -p /trolleyman.org
