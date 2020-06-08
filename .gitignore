@@ -1,10 +1,11 @@
-/logs/
-/database/
+/logs
+/database
 /data
 /.vscode
-/.caddy/
+/.caddy
+/.cargo
 /target
 *.log
 **/*.rs.bk
-node_modules/
-config_release.toml
+node_modules
+/config_release.toml
