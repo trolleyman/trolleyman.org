@@ -15,7 +15,7 @@ pub struct DbConnGuard(DbConn);
 
 embed_migrations!();
 
-const EMPTY_DATABASE: &'static [u8] = include_bytes!("empty_db.sqlite3");
+const EMPTY_DATABASE: &'static [u8] = include_bytes!("assets/empty_db.sqlite3");
 
 pub fn setup(config: &Config) -> Result<DbConn> {
 	// If it doesn't exist, wait for a bit, then create an empty database
