@@ -28,8 +28,6 @@ pub struct RecaptchaConfig {
 pub struct GithubWebhookConfig {
 	/// GitHub shared secret key
 	pub secret: String,
-	/// File that is created when the server wants to restart. Relative to the config file's location.
-	pub restart_flag_path: PathBuf,
 }
 
 #[derive(Clone, Deserialize)]
@@ -60,6 +58,8 @@ pub struct Config {
 	pub secret_key:     Option<String>,
 	pub database:       DatabaseConfig,
 	pub recaptcha:      RecaptchaConfig,
+	/// File that is created when the server wants to restart. Relative to the config file's location.
+	pub restart_flag_path: PathBuf,
 	pub github_webhook: Option<GithubWebhookConfig>,
 	#[serde(rename = "git-lfs")]
 	pub git_lfs:        GitLfsConfig,
@@ -101,9 +101,7 @@ impl Config {
 		fix_path(&mut config.database.path);
 		fix_path(&mut config.git_lfs.path);
 		fix_path(&mut config.log_path);
-		if let Some(github_webhook_config) = &mut config.github_webhook {
-			fix_path(&mut github_webhook_config.restart_flag_path);
-		}
+		fix_path(&mut config.restart_flag_path);
 
 		Ok(config)
 	}

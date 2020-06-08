@@ -46,14 +46,14 @@ pub fn run() -> Result<i32> {
 	let (config, rocket_config, simplelog_config) = config::get_configs()?;
 	logging::setup(&config, &simplelog_config)?;
 
-	// Setup database
-	let conn = db::setup(&config)?;
-
 	// Handle command if specified by args & exit if necessary
-	match cli::perform_command(&conn, &matches)? {
+	match cli::perform_command(&config, &matches)? {
 		Some(code) => return Ok(code),
 		None => {}
 	}
+
+	// Setup database
+	let conn = db::setup(&config)?;
 
 	// Setup gRPC
 	let grpc_client = grpc::setup(&config, &conn)?;
