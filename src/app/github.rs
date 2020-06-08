@@ -107,21 +107,16 @@ fn push_hook(payload: GithubHookPayload, config: State<Config>) -> Result<String
 			let push_ref = payload.payload.get("ref").and_then(|r| r.as_str());
 			match push_ref {
 				Some("refs/heads/prod") => {
-					// Update server
-					if let Some(github_webhook_config) = &config.github_webhook {
-						// Write restart flag
-						let path = &github_webhook_config.restart_flag_path;
-						if let Some(parent) = path.parent() {
-							std::fs::create_dir_all(parent)
-								.map_err(|_| format!("Failed to create dir of restart flag"))?;
-						}
-						std::fs::write(path, b"please restart\n")
-							.map_err(|_| format!("Failed to write restart flag"))?;
-						info!("GitHub push webhook received. Wrote to restart flag file: {}", path.display());
-						Ok("Thanks, git.".into())
-					} else {
-						Err(format!("Restart flag config item not found"))
+					// Write restart flag
+					let path = &config.restart_flag_path;
+					if let Some(parent) = path.parent() {
+						std::fs::create_dir_all(parent)
+							.map_err(|_| format!("Failed to create dir of restart flag"))?;
 					}
+					std::fs::write(path, b"please restart\n")
+						.map_err(|_| format!("Failed to write restart flag"))?;
+					info!("GitHub push webhook received. Wrote to restart flag file: {}", path.display());
+					Ok("Thanks, git.".into())
 				}
 				Some(_) => Ok("Ignoring ref".into()),
 				_ => Err("Invalid JSON".into()),

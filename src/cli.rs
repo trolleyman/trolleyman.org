@@ -4,11 +4,9 @@ use clap::{App, AppSettings, Arg, SubCommand};
 
 use crate::{
 	config::Config,
-	db::DbConn,
 	error::Result,
 	models::account::{Password, User},
 };
-use diesel::SqliteConnection;
 
 mod util;
 
