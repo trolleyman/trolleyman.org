@@ -15,9 +15,9 @@ docker image prune --filter='until=1460h' -f
 # Compile trolleyman.org
 docker run \
     --rm \
-    -v "$DIR/..":/trolleyman.org \
-    --workdir /trolleyman.org \
-    --env CARGO_HOME=/trolleyman.org/.cargo \
+    -v "$DIR/..":/usr/src/app \
+    --workdir /usr/src/app \
+    --env CARGO_HOME=/usr/src/app/.cargo \
     rust:latest \
     bash -c "cargo xtask dist; chown -R \"$(id -u):$(id -g)\" target .cargo"
 
