@@ -14,8 +14,11 @@ docker image prune --filter='until=1460h' -f
 
 # Install pkg-config
 if ! command -v pkg-config; then
-    sudo apt-get install pkg-config
+    sudo apt-get install -y pkg-config
 fi
+
+# Install ssl-dev
+sudo apt-get install -y libssl-dev
 
 # Install Rust
 if ! command -v rustup; then
