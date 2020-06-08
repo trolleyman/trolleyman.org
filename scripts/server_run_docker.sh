@@ -12,6 +12,11 @@ cd "$DIR"
 # Prune images that are older than 2 months
 docker image prune --filter='until=1460h' -f
 
+# Install pkg-config
+if ! command -v pkg-config; then
+    sudo apt-get install pkg-config
+fi
+
 # Install Rust
 if ! command -v rustup; then
     curl https://sh.rustup.rs -sSf | sh  -s -- --no-modify-path -y
