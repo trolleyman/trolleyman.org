@@ -36,6 +36,9 @@ use error::Result;
 pub fn main() -> Result<()> { std::process::exit(run()?) }
 
 pub fn run() -> Result<i32> {
+	// Find OpenSSL certs properly on Linux
+	openssl_probe::init_ssl_cert_env_vars();
+
 	// Parse command line args
 	let matches = cli::get_matches();
 
