@@ -16,11 +16,6 @@ pub fn start() -> Result<(), JsValue> {
 
 #[wasm_bindgen]
 pub fn main() {
-	main_loop();
-}
-
-#[wasm_bindgen]
-fn main_loop() {
 	let window = web_sys::window().unwrap();
 	let document = window.document().unwrap();
 	let canvas = document.get_element_by_id("canvas").unwrap();
@@ -47,5 +42,5 @@ fn main_loop() {
 
 	context.stroke();
 
-	window.request_animation_frame(main_loop);
+	//window.request_animation_frame(main_loop);
 }
