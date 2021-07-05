@@ -61,7 +61,7 @@ pub fn prompt_password() -> Result<String> {
 	}
 }
 
-pub fn prompt_email() -> Result<String> {
+pub fn _prompt_email() -> Result<String> {
 	prompt_property("Email address", false, true, crate::app::account::validation::get_errors_for_email)
 }
 

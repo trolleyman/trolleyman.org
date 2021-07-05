@@ -52,7 +52,7 @@ pub fn run() -> Result<i32> {
 	}
 
 	// Setup database
-	let conn = db::setup(&config)?;
+	let _ = db::setup(&config)?;
 
 	// Launch Rocket
 	let active_env = rocket_config.environment;
