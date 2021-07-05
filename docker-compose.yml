@@ -21,11 +21,3 @@ services:
       - "443:443"
     environment:
       ACME_AGREE: "true"
-
-  facebook_grpc:
-    build: ./facebook_grpc
-    image: facebook_grpc:latest
-    restart: always
-    volumes:
-      - "./data:/app/data"
-      - "./logs:/app/logs"

@@ -48,20 +48,6 @@ pub fn get_matches() -> clap::ArgMatches<'static> {
 						.arg(Arg::with_name("is_admin")),
 				)
 				.subcommand(
-					SubCommand::with_name("user-facebook-set")
-						.setting(AppSettings::ColoredHelp)
-						.setting(AppSettings::DisableHelpSubcommand)
-						.about("Sets the facebook details for the specified user")
-						.arg(Arg::with_name("username").required(true)),
-				)
-				.subcommand(
-					SubCommand::with_name("user-facebook-remove")
-						.setting(AppSettings::ColoredHelp)
-						.setting(AppSettings::DisableHelpSubcommand)
-						.about("Removes the facebook details for the specified user")
-						.arg(Arg::with_name("username").required(true)),
-				)
-				.subcommand(
 					SubCommand::with_name("user-view")
 						.setting(AppSettings::ColoredHelp)
 						.setting(AppSettings::DisableHelpSubcommand)
@@ -124,34 +110,6 @@ pub fn perform_command(config: &Config, matches: &clap::ArgMatches<'_>) -> Resul
 			user.admin = is_admin;
 			user.save(&conn)?;
 			info!("Admin status updated for {}: {}.", username, is_admin);
-			Ok(Some(0))
-		} else if let Some(submatches) = matches.subcommand_matches("user-facebook-set") {
-			let username = submatches.value_of("username").ok_or(anyhow!("Username/email not specified"))?;
-			let conn = get_conn()?;
-			let user = crate::models::account::User::get_from_name_or_email(&conn, &username)?;
-
-			let facebook_email = util::prompt_email()?;
-			let facebook_password = util::prompt_password()?;
-
-			// Set facebook account
-			if let Some(account) = crate::models::facebook::FacebookAccount::try_get_from_user_id(&conn, user.id())? {
-				account.delete(&conn)?;
-			}
-			crate::models::facebook::FacebookAccount::create(&conn, user.id(), &facebook_email, &facebook_password)?;
-			info!("Facebook account {} registered with user {}", facebook_email, user.name);
-			Ok(Some(0))
-		} else if let Some(submatches) = matches.subcommand_matches("user-facebook-remove") {
-			let username = submatches.value_of("username").ok_or(anyhow!("Username/email not specified"))?;
-			let conn = get_conn()?;
-			let user = crate::models::account::User::get_from_name_or_email(&conn, &username)?;
-
-			// Remove facebook account
-			if let Some(account) = crate::models::facebook::FacebookAccount::try_get_from_user_id(&conn, user.id())? {
-				account.delete(&conn)?;
-				info!("Facebook account removed for user {}", user.name);
-			} else {
-				info!("Facebook account not found for user {}", user.name);
-			}
 			Ok(Some(0))
 		} else if let Some(submatches) = matches.subcommand_matches("user-view") {
 			let username = submatches.value_of("username").ok_or(anyhow!("Username/email not specified"))?;

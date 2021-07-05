@@ -54,14 +54,6 @@ fn run() -> Result<()> {
 		.setting(AppSettings::SubcommandRequiredElseHelp)
 		.setting(AppSettings::VersionlessSubcommands)
 		.subcommand(
-			SubCommand::with_name("generate")
-				.setting(AppSettings::ColoredHelp)
-				.setting(AppSettings::SubcommandRequiredElseHelp)
-				.setting(AppSettings::DisableHelpSubcommand)
-				.about("Generates source files")
-				.subcommand(SubCommand::with_name("grpc").about("Generate Python gRPC bindings")),
-		)
-		.subcommand(
 			SubCommand::with_name("build")
 				.setting(AppSettings::ColoredHelp)
 				.setting(AppSettings::DisableHelpSubcommand)
@@ -110,19 +102,7 @@ fn run() -> Result<()> {
 
 	let matches = app.clone().get_matches();
 
-	if let Some(matches) = matches.subcommand_matches("generate") {
-		if let Some(_) = matches.subcommand_matches("grpc") {
-			println!("{}generate Python gRPC bindings", XTASK_PREFIX);
-			run_python_version()?;
-			run_python_grpc_version()?;
-			run_python_grpc_compile()?;
-			run_protoc_version()?;
-			run_tonic_build()?;
-			Ok(())
-		} else {
-			bail!("unknown subcommand");
-		}
-	} else if let Some(matches) = matches.subcommand_matches("build") {
+	if let Some(matches) = matches.subcommand_matches("build") {
 		println!("{}build", XTASK_PREFIX);
 		run_wasm_pack(matches.is_present("release"), project_root().join("tanks"))?;
 		run_cargo("build", matches.is_present("release"), project_root())
@@ -214,77 +194,6 @@ fn run_command(
 		bail!("{}", ret)
 	}
 	Ok(status)
-}
-
-fn run_python_version() -> Result<()> {
-	run_command(
-		"python",
-		&["--version"],
-		".",
-		"Python may not be installed: install via. https://python.org/downloads".into(),
-		false,
-	)
-	.map(|_| ())
-}
-
-fn run_python_grpc_version() -> Result<()> {
-	run_command(
-		"python",
-		&["-m", "grpc_tools.protoc", "--version"],
-		".",
-		"grpc_tools may not be installed: install with `pip install grpc_tools`".into(),
-		false,
-	)
-	.map(|_| ())
-}
-
-fn run_python_grpc_compile() -> Result<()> {
-	run_command(
-		"python",
-		&[
-			"-m",
-			"grpc_tools.protoc",
-			"--proto_path=facebook_grpc",
-			"--python_out=facebook_grpc",
-			"--grpc_python_out=facebook_grpc",
-			"facebook_grpc/proto/facebook.proto",
-		],
-		project_root(),
-		None,
-		false,
-	)
-	.map(|_| ())
-}
-
-fn run_protoc_version() -> Result<()> {
-	run_command(
-		"protoc",
-		&["--version"],
-		".",
-		"`protoc` can not be found. Please install via. https://github.com/protocolbuffers/protobuf#protocol-compiler-installation".into(),
-		false,
-	)
-	.map(|_| ())
-}
-
-fn is_rustfmt_installed() -> bool { run_command("rustfmt", &["--version"], ".", None, false).is_ok() }
-
-fn run_tonic_build() -> Result<()> {
-	let is_rustfmt_installed = is_rustfmt_installed();
-
-	let out_dir = project_root().join("src").join("grpc").join("gen");
-	let name = "facebook";
-	let out_file = out_dir.join(format!("{}.rs", name));
-	let proto_file = project_root().join("facebook_grpc").join("proto").join(format!("{}.proto", name));
-
-	println!("{}tonic build ({})", XTASK_PREFIX, format_path_move(&proto_file, &out_file));
-	tonic_build::configure()
-		.build_server(false)
-		.format(is_rustfmt_installed)
-		.out_dir(&out_dir)
-		.compile(&[&proto_file], &[&project_root()])
-		.context("tonic build encountered an error")?;
-	Ok(())
 }
 
 fn run_wasm_pack(release: bool, dir: impl AsRef<Path>) -> Result<()> {

@@ -1,6 +1,5 @@
 pub mod account;
 pub mod error;
-pub mod facebook;
 pub mod flappy;
 pub mod git_lfs;
 pub mod github;

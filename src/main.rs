@@ -26,7 +26,6 @@ mod cli;
 mod config;
 mod db;
 mod error;
-mod grpc;
 mod logging;
 mod models;
 mod util;
@@ -54,9 +53,6 @@ pub fn run() -> Result<i32> {
 
 	// Setup database
 	let conn = db::setup(&config)?;
-
-	// Setup gRPC
-	let grpc_client = grpc::setup(&config, &conn)?;
 
 	// Launch Rocket
 	let active_env = rocket_config.environment;
@@ -96,14 +92,12 @@ pub fn run() -> Result<i32> {
 			});
 		}))
 		.attach(db::DbConnGuard::fairing())
-		.manage(grpc_client)
 		.manage(active_env)
 		.manage(config)
 		.register(app::error::catchers())
 		.mount("/static", StaticFiles::from("./static"))
 		.mount("/", app::root::routes())
 		.mount("/account", app::account::routes())
-		.mount("/facebook", app::facebook::routes())
 		.mount("/flappy", app::flappy::routes())
 		.mount("/git_hook", app::github::routes())
 		.mount("/git-lfs", app::git_lfs::routes())

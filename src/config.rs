@@ -37,15 +37,6 @@ pub struct GitLfsConfig {
 }
 
 #[derive(Clone, Deserialize)]
-pub struct FacebookGrpcConfig {
-	/// Address of the gRPC server hosting the Facebook service
-	pub host: String,
-	#[serde(default = "default_timeout")]
-	#[serde(deserialize_with = "crate::util::serde::duration::deserialize")]
-	pub timeout: Duration,
-}
-
-#[derive(Clone, Deserialize)]
 pub struct Config {
 	/// Protocol that the server uses
 	pub protocol:       String,
@@ -63,8 +54,6 @@ pub struct Config {
 	pub github_webhook: Option<GithubWebhookConfig>,
 	#[serde(rename = "git-lfs")]
 	pub git_lfs:        GitLfsConfig,
-	#[serde(rename = "facebook-grpc")]
-	pub facebook_grpc:  Option<FacebookGrpcConfig>,
 }
 impl Config {
 	pub fn load(env: Environment) -> Result<Config> {
