@@ -16,12 +16,18 @@ pub fn start() -> Result<(), JsValue> {
 
 #[wasm_bindgen]
 pub fn main() {
-	let document = web_sys::window().unwrap().document().unwrap();
+	main_loop();
+}
+
+#[wasm_bindgen]
+fn main_loop() {
+	let window = web_sys::window().unwrap();
+	let document = window.document().unwrap();
 	let canvas = document.get_element_by_id("canvas").unwrap();
 	let canvas: web_sys::HtmlCanvasElement = canvas.dyn_into::<web_sys::HtmlCanvasElement>().map_err(|_| ()).unwrap();
 
 	let context = canvas.get_context("2d").unwrap().unwrap().dyn_into::<web_sys::CanvasRenderingContext2d>().unwrap();
-
+	
 	context.begin_path();
 
 	// Draw the outer circle.
@@ -40,4 +46,6 @@ pub fn main() {
 	context.arc(90.0, 65.0, 5.0, 0.0, std::f64::consts::PI * 2.0).unwrap();
 
 	context.stroke();
+
+	window.request_animation_frame(main_loop);
 }
