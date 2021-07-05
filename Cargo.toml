@@ -6,8 +6,8 @@ edition = "2018"
 
 [dependencies]
 # Rocket
-rocket = { git = "https://github.com/SergioBenitez/Rocket" }
-rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket", default-features = false, features = ["serve", "json", "tera_templates", "diesel_sqlite_pool"] }
+rocket = { git = "https://github.com/SergioBenitez/Rocket", rev = "63a4ae048540a6232c3c7c186e9d027081940382" }
+rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket", rev = "63a4ae048540a6232c3c7c186e9d027081940382", default-features = false, features = ["serve", "json", "tera_templates", "diesel_sqlite_pool"] }
 # Note: Update this if Rocket is updated, to match Rocket. Only used for interacting with cookie builder.
 time = "0.2.16"
 
