@@ -6,6 +6,10 @@ import { pathToFileURL, fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const ignorePaths = [
+  ".well-known/appspecific/com.chrome.devtools.json"
+]
+
 export async function generateRoutesJson(outDir: string) {
   globalThis.__reactRouterAppDirectory = path.resolve(outDir, "app");
   const routesPath = path.resolve(globalThis.__reactRouterAppDirectory, "routes.ts");
@@ -14,7 +18,7 @@ export async function generateRoutesJson(outDir: string) {
   if (routes instanceof Promise) {
     routes = await routes;
   }
-  const paths = routes.map((route: { id?: string; path?: string }) => {
+  const paths = routes.filter((route) => route.path === undefined || !ignorePaths.includes(route.path)).map((route: { id?: string; path?: string }) => {
     if (route.id === "index" || route.path === undefined) return "/";
     return route.path.startsWith("/") ? route.path : "/" + route.path;
   });
