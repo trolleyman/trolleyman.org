@@ -1,3 +1,4 @@
+import type { RouteConfig } from "@react-router/dev/routes";
 import * as fs from "fs";
 import * as path from "path";
 import { pathToFileURL, fileURLToPath } from "url";
@@ -6,9 +7,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function generateRoutesJson(outDir: string) {
-  const routesPath = path.resolve(outDir, "app/routes.ts");
+  globalThis.__reactRouterAppDirectory = path.resolve(outDir, "app");
+  const routesPath = path.resolve(globalThis.__reactRouterAppDirectory, "routes.ts");
   const routesModule = await import(pathToFileURL(routesPath).href);
-  const routes = routesModule.default;
+  var routes: RouteConfig = routesModule.default;
+  if (routes instanceof Promise) {
+    routes = await routes;
+  }
   const paths = routes.map((route: { id?: string; path?: string }) => {
     if (route.id === "index" || route.path === undefined) return "/";
     return route.path.startsWith("/") ? route.path : "/" + route.path;
