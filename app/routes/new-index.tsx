@@ -131,28 +131,28 @@ const projects = [
 ];
 
 export default function HomePage() {
-    const { theme, setTheme } = useTheme();
+    const { theme, setTheme, resolvedTheme } = useTheme();
 
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+        <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 font-body">
             {/* Header */}
             <header className="bg-white dark:bg-gray-800 shadow">
                 <div className="max-w-4xl mx-auto py-6 px-4 flex justify-between items-center">
-                    <Link to="/" className="text-3xl font-bold hover:text-blue-400">Callum Tolley</Link>
-                    <nav className="flex items-center space-x-6">
-                        <ul className="flex space-x-6">
+                    <Link to="/" className="text-3xl font-bold hover:text-blue-400 font-title">Callum Tolley</Link>
+                    <nav className="flex items-center space-x-3">
+                        <ul className="flex space-x-8 mr-8">
                             <li><Link to="#about" className="hover:text-blue-400">About</Link></li>
                             <li><Link to="#projects" className="hover:text-blue-400">Projects</Link></li>
                             <li><Link to="#contact" className="hover:text-blue-400">Contact</Link></li>
                         </ul>
-                        <Link to="https://github.com/trolleyman" target="_blank" rel="noopener noreferrer" className="ml-4 text-xl hover:text-blue-400" aria-label="GitHub"><FontAwesomeIcon icon={faGithub} /></Link>
-                        <Link to="mailto:your@email.com" className="ml-2 text-xl hover:text-blue-400" aria-label="Email"><FontAwesomeIcon icon={faEnvelope} /></Link>
-                        <Link to="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="ml-2 text-xl hover:text-blue-400" aria-label="LinkedIn"><FontAwesomeIcon icon={faLinkedin} /></Link>
+                        <Link to="https://github.com/trolleyman" target="_blank" rel="noopener noreferrer" className="text-xl hover:text-blue-400" aria-label="GitHub"><FontAwesomeIcon icon={faGithub} /></Link>
+                        <Link to="mailto:your@email.com" className="text-xl hover:text-blue-400" aria-label="Email"><FontAwesomeIcon icon={faEnvelope} /></Link>
+                        <Link to="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="text-xl hover:text-blue-400" aria-label="LinkedIn"><FontAwesomeIcon icon={faLinkedin} /></Link>
                         <button
                             onClick={() => setTheme(theme === "system" ? "dark" : theme === "dark" ? "light" : "system")}
-                            className="ml-4 text-xl focus:outline-none hover:text-blue-400 cursor-pointer"
+                            className="text-xl focus:outline-none hover:text-blue-400 cursor-pointer"
                             aria-label="Toggle dark mode"
-                            title="Toggle dark mode"
+                            title={theme == "system" ? `System theme (${resolvedTheme === "dark" ? "dark" : "light"})` : theme == "dark" ? "Dark theme" : "Light theme"}
                         >
                             <FontAwesomeIcon icon={theme === "system" ? faDesktop : theme === "dark" ? faMoon : faSun} />
                         </button>
@@ -162,13 +162,13 @@ export default function HomePage() {
 
             {/* About Section */}
             <section id="about" className="max-w-4xl mx-auto py-12 px-4">
-                <h2 className="text-2xl font-semibold mb-4">About Me</h2>
+                <h2 className="text-2xl font-semibold font-title mb-4">About Me</h2>
                 <p className="text-lg">I'm a software developer passionate about building impactful projects. Welcome to my personal website!</p>
             </section>
 
             {/* Projects Section */}
             <section id="projects" className="max-w-4xl mx-auto py-12 px-4">
-                <h2 className="text-2xl font-semibold mb-4">Projects</h2>
+                <h2 className="text-2xl font-semibold font-title mb-4">Projects</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {projects.map(project => (
                         <div key={project.id} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
@@ -199,7 +199,7 @@ export default function HomePage() {
 
             {/* Contact Section */}
             <section id="contact" className="max-w-4xl mx-auto py-12 px-4">
-                <h2 className="text-2xl font-semibold mb-4">Contact</h2>
+                <h2 className="text-2xl font-semibold font-title mb-4">Contact</h2>
                 <div className="flex items-center space-x-4 mb-6">
                     <a href="https://github.com/trolleyman" target="_blank" rel="noopener noreferrer" className="text-2xl hover:text-blue-400" aria-label="GitHub"><FontAwesomeIcon icon={faGithub} /></a>
                     <a href="mailto:your@email.com" className="text-2xl hover:text-blue-400" aria-label="Email"><FontAwesomeIcon icon={faEnvelope} /></a>
