@@ -1,8 +1,9 @@
 import type { Config } from "@react-router/dev/config";
+import prerenderRoutes from "./prerender-routes.json";
 
 export default {
   ssr: true,
   async prerender() {
-    return ["/"];
+    return prerenderRoutes;
   }
 } satisfies Config;
