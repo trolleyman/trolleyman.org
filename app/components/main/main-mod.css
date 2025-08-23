@@ -1,4 +1,3 @@
-
 /* Header */
 #header ul {
 	list-style: none;
@@ -69,9 +68,11 @@
 	padding-left: 0;
 	display: inline-block;
 }
+
 .wrapper.spotlight:nth-child(2n) .inner ul li:not(:first-child) {
 	margin-left: 1.3em;
 }
+
 .wrapper.spotlight:nth-child(2n - 1) .inner ul li:not(:last-child) {
 	margin-right: 1.3em;
 }
@@ -89,15 +90,19 @@
 	content: "";
 }
 
+a.special:not(.button):not(.custom-logo):before {
+	content: '>';
+}
+
 /* Inner fade in animations */
 body.is-loading .wrapper.spotlight .inner {
 	opacity: 0;
-	
+
 	-moz-transform: translateX(0.25em);
 	-webkit-transform: translateX(0.25em);
 	-ms-transform: translateX(0.25em);
 	transform: translateX(0.25em);
-	
+
 	-moz-filter: blur(5px);
 	-webkit-filter: blur(5px);
 	-ms-filter: blur(5px);
@@ -109,22 +114,22 @@ body.is-loading .wrapper.spotlight .inner {
 	-webkit-transition: opacity 0.5s ease, -webkit-transform 0.5s ease, -webkit-filter 0.25s ease;
 	-ms-transition: opacity 0.5s ease, -ms-transform 0.5s ease, -ms-filter 0.25s ease;
 	transition: opacity 0.5s ease, transform 0.5s ease, filter 0.25s ease;
-	
+
 	-moz-transform: translateX(0);
 	-webkit-transform: translateX(0);
 	-ms-transform: translateX(0);
 	transform: translateX(0);
-	
+
 	-moz-transition-delay: 0.9s;
 	-webkit-transition-delay: 0.9s;
 	-ms-transition-delay: 0.9s;
 	transition-delay: 0.9s;
-	
+
 	-moz-filter: blur(0);
 	-webkit-filter: blur(0);
 	-ms-filter: blur(0);
 	filter: blur(0);
-	
+
 	opacity: 1;
 }
 
@@ -136,12 +141,14 @@ body.is-loading .wrapper.spotlight .inner {
 	transition: height 0.5s;
 }
 
-#captcha, #contact-details {
+#captcha,
+#contact-details {
 	opacity: 1;
 	transition: opacity 0.5s;
 }
 
-#captcha.hide, #contact-details.hide {
+#captcha.hide,
+#contact-details.hide {
 	position: absolute;
 	opacity: 0;
 	display: relative;
@@ -182,42 +189,66 @@ body.is-loading .wrapper.spotlight .inner {
 	line-height: 1.5 !important;
 	margin-bottom: 1em;
 }
+
 #banner p.summary {
 	text-align: justify;
 	text-transform: none;
 }
 
 /* Font size */
-body, input, select, textarea {
+body,
+input,
+select,
+textarea {
 	font-size: 14pt;
 }
 
 @media screen and (max-width: 1680px) {
-	body, input, select, textarea {
+
+	body,
+	input,
+	select,
+	textarea {
 		font-size: 13pt;
 	}
 }
 
 @media screen and (max-width: 1280px) {
-	body, input, select, textarea {
+
+	body,
+	input,
+	select,
+	textarea {
 		font-size: 12pt;
 	}
 }
 
 @media screen and (max-width: 980px) {
-	body, input, select, textarea {
+
+	body,
+	input,
+	select,
+	textarea {
 		font-size: 12pt;
 	}
 }
 
 @media screen and (max-width: 736px) {
-	body, input, select, textarea {
+
+	body,
+	input,
+	select,
+	textarea {
 		font-size: 12pt;
 	}
 }
 
 @media screen and (max-width: 640px) {
-	body, input, select, textarea {
+
+	body,
+	input,
+	select,
+	textarea {
 		font-size: 12pt;
 	}
 }
@@ -233,7 +264,7 @@ body, input, select, textarea {
 }
 
 .image.drop-shadow {
-	-webkit-filter: drop-shadow(8px 8px 20px rgba(0,0,0,0.5));
+	-webkit-filter: drop-shadow(8px 8px 20px rgba(0, 0, 0, 0.5));
 	-ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=8, OffY=8, Color='#88000000')";
 	filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=8, OffY=8, Color='#88000000')";
 }
