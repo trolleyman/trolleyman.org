@@ -1,4 +1,4 @@
-import { generateRoutesJson } from "./generateRoutesJsonPlugin";
+import { generateRoutesJson } from "./generateRoutesJsonPlugin.ts";
 import { fileURLToPath } from "url";
 import * as path from "path";
 
