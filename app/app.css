@@ -1,11 +1,6 @@
 @import "tailwindcss";
 
-html,
-body {
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
-}
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 .clearfix:after {
   content: " ";
