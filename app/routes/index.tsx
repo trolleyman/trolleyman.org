@@ -2,6 +2,9 @@ import path from 'path';
 import fs from 'fs/promises';
 import { useState } from 'react';
 import { Link, useLoaderData } from 'react-router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCode, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons'
 
 import type { Route } from './+types';
 import MainLayout from '~/components/main/MainLayout';
@@ -31,15 +34,15 @@ export default function Index() {
   </>
 
   const bannerChildren = <>
-    <div className="logo"><span className="icon fa-code"></span></div>
+    <div className="logo"><div className='icon'><FontAwesomeIcon icon={faCode} /></div></div>
     <h2 className="clearfix">Callum&nbsp;Tolley
       <a className="heading-left" target="_blank" href="/static/files/CV.pdf">
         CV
       </a>
       <span className="heading-right">
-        <a href="https://github.com/trolleyman"><FontAwesomeIcon icon="github"/></a>
-        <a href="https://www.linkedin.com/in/callum-tolley/"><span className="fa fa-linkedin"></span></a>
-        <a href="#contact"><span className="fa fa-envelope"></span></a>
+        <a href="https://github.com/trolleyman"><FontAwesomeIcon icon={faGithub} /></a>
+        <a href="https://www.linkedin.com/in/callum-tolley/"><FontAwesomeIcon icon={faLinkedin} /></a>
+        <a href="#contact"><FontAwesomeIcon icon={faEnvelope} /></a>
       </span>
     </h2>
     {/* <p>Software Developer<span className="spacer"></span>Student</p> */}
@@ -54,7 +57,8 @@ export default function Index() {
       <p>If you have any queries relating to jobs, my details are below.</p>
       <div id="contact-inner">
         <ul className="contact">
-          <li className="fa-envelope">
+          <li>
+            <FontAwesomeIcon icon={faEnvelope} />
             <a href="mailto:callumgtolley@gmail.com">callumgtolley@gmail.com</a>
           </li>
         </ul>
