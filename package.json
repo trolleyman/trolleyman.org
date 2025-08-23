@@ -3,10 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate-routes-json": "ts-node scripts/generate-routes-json.ts",
-    "prebuild": "npm run generate-routes-json",
     "build": "react-router build",
-    "dev": "npm run generate-routes-json && react-router dev",
+    "postbuild": "ts-node scripts/post-build.ts",
+    "preview": "npm run build && npx http-server ./build/client -p 8080",
+    "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
   },
