@@ -3,8 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "generate-routes-json": "ts-node scripts/generate-routes-json.ts",
+    "prebuild": "npm run generate-routes-json",
     "build": "react-router build",
-    "dev": "react-router dev",
+    "dev": "npm run generate-routes-json && react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
   },
@@ -23,6 +25,7 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "tailwindcss": "^4.1.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "vite": "^6.3.3",
     "vite-tsconfig-paths": "^5.1.4"
