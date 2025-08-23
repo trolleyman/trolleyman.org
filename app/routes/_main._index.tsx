@@ -1,8 +1,9 @@
-import type { Route } from "./+types/home";
+import type { Route } from "./+types/_main._index";
+import { fullName } from "~/data/info";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Home" },
+    // { title: `${fullName}` },
     { name: "description", content: "Welcome to the home page!" },
   ];
 }
