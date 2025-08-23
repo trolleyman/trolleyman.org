@@ -2,7 +2,6 @@ import Banner, { type BannerProps } from "../Banner";
 
 import './main.css'
 import './main-mod.css'
-import { dotMinIfDebug } from "~/utils";
 
 export type MainLayoutProps = React.PropsWithChildren<{
     preHeader?: React.ReactNode;

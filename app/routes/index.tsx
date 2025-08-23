@@ -7,7 +7,6 @@ import type { Route } from './+types';
 import MainLayout from '~/components/main/MainLayout';
 
 import './index.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export async function loader({ }: Route.LoaderArgs) {
   const subDir = 'static/img/bg'
