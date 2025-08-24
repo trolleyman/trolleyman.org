@@ -5,8 +5,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-title: "Abril Fatface", serif;
-  --font-body: "Raleway", sans-serif;
+  --font-abril-fatface: "Abril Fatface", serif;
+  --font-raleway: "Raleway", sans-serif;
 }
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
@@ -17,8 +17,4 @@
   display: block;
   height: 0;
   clear: both;
-}
-
-* {
-  transition: color 0.01s, background-color 0.2s;
 }

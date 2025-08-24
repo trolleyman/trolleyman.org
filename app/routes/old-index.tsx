@@ -9,7 +9,7 @@ import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons'
 import type { Route } from './+types';
 import MainLayout from '~/components/main/MainLayout';
 
-import './index.css'
+import './old-index.css'
 
 export async function loader({ }: Route.LoaderArgs) {
   const subDir = 'static/img/bg'
