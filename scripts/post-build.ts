@@ -1,3 +1,5 @@
+// TODO: This currently doesn't work (references break when root/dir/index.html files are renamed to root/dir)
+/*
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -61,3 +63,4 @@ async function createCleanUrls(directory: string) {
 console.log('Running postbuild script to create clean URLs...');
 await createCleanUrls(buildDir);
 console.log('Postbuild script finished.');
+*/
