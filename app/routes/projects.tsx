@@ -1,18 +1,25 @@
 import { Link } from 'react-router';
+import type * as CSS from 'csstype';
+import clsx from 'clsx';
 
 type ProjectProps = React.PropsWithChildren<{
-    id: string;
-    title: string;
-    date: string;
-    image: string;
-    imageAlt: string;
-    languages?: string[];
-    frameworks?: string[];
+    id: string
+    title: string
+    date: string
+    image: string | {
+        url: string
+        alt?: string
+        rendering?: CSS.Properties['imageRendering']
+        translucent?: boolean,
+        rounded?: boolean
+    }
+    languages?: string[]
+    frameworks?: string[]
     links?: Array<{
-        text: string;
-        to: string;
-        external?: boolean;
-    }>;
+        text: string
+        to: string
+        external?: boolean
+    }>
 }>
 
 function Project({
@@ -21,7 +28,6 @@ function Project({
     date,
     children,
     image,
-    imageAlt,
     languages,
     frameworks,
     links
@@ -29,6 +35,22 @@ function Project({
     languages ??= []
     frameworks ??= []
     links ??= []
+
+    let imageUrl: string
+    let imageAltText = ""
+    let imageRendering: CSS.Properties['imageRendering'] = undefined
+    let imageTranslucent = false
+    let imageRounded = true
+
+    if (typeof image === "object" && image !== null) {
+        imageUrl = image.url
+        imageAltText = image.alt ?? ""
+        imageRendering = image.rendering ?? imageRendering
+        imageTranslucent = !!(image.translucent ?? imageTranslucent)
+        imageRounded = image.rounded ?? imageRounded
+    } else {
+        imageUrl = image
+    }
 
     const content = (
         <div className="flex-1 space-y-4">
@@ -78,9 +100,14 @@ function Project({
         <div className="flex-1 flex justify-center">
             <div className="w-full max-w-md">
                 <img
-                    src={image}
-                    alt={imageAlt}
-                    className="w-full h-auto rounded-lg shadow-lg object-cover"
+                    src={imageUrl}
+                    alt={imageAltText}
+                    style={{ imageRendering }}
+                    className={clsx(
+                        "w-full h-auto object-cover",
+                        !imageTranslucent && imageRounded && "rounded-lg",
+                        imageTranslucent ? "drop-shadow-xl" : "shadow-lg",
+                    )}
                 />
             </div>
         </div>
@@ -101,12 +128,10 @@ function Project({
 export default function Projects() {
     return <>
         {/* Header */}
-        <div className="pt-20 pb-16">{/* bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 TODO */}
-            <div className="max-w-6xl mx-auto px-6 text-center">
-                <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                    Projects
-                </h1>
-            </div>
+        <div className="max-w-6xl text-center">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                Projects
+            </h1>
         </div>
 
         {/* Projects List */}
@@ -115,8 +140,7 @@ export default function Projects() {
                 id="proj_dissertation"
                 title="Dissertation"
                 date="2018-19"
-                image="/static/img/projects/dissertation/breakout.png"
-                imageAlt="Breakout game screenshot"
+                image={{ url: "/static/img/projects/dissertation/breakout.png", alt: "Breakout game screenshot", rendering: 'pixelated' }}
                 languages={["Python"]}
                 frameworks={["TensorFlow", "PyTorch"]}
                 links={[
@@ -135,8 +159,7 @@ export default function Projects() {
                 id="proj_website"
                 title="trolleyman.org"
                 date="2018"
-                image="/static/img/projects/website/screenshot.png"
-                imageAlt="Website screenshot"
+                image={{ url: "/static/img/projects/website/screenshot.png", alt: "Website screenshot" }}
                 languages={["Rust", "WASM", "JavaScript", "CSS", "SQL"]}
                 frameworks={["Rocket"]}
                 links={[
@@ -155,8 +178,7 @@ export default function Projects() {
                 id="proj_linc"
                 title="LINC"
                 date="Jun. 2017"
-                image="/static/img/projects/linc/logo.min.png"
-                imageAlt="LINC logo"
+                image={{ url: "/static/img/projects/linc/logo.min.png", alt: "LINC logo", translucent: true }}
                 languages={["HTML", "JavaScript", "CSS", "SQL", "Python"]}
                 frameworks={["Three.js", "D3.js", "Django"]}
                 links={[
@@ -176,8 +198,7 @@ export default function Projects() {
                 id="proj_flappy"
                 title="Flappy Clone"
                 date="Dec. 2016 - Jul. 2017"
-                image="/static/img/projects/flappy/logo.png"
-                imageAlt="Flappy game logo"
+                image={{ url: "/static/img/projects/flappy/logo.png", alt: "Flappy game logo", rendering: 'pixelated', translucent: true }}
                 languages={["HTML", "JavaScript", "CSS", "SQL", "Python"]}
                 frameworks={["HTML5 Canvas API", "Django"]}
                 links={[
@@ -196,8 +217,7 @@ export default function Projects() {
                 id="proj_zucchini"
                 title="Zucchini"
                 date="Jul. 2017"
-                image="/static/img/projects/zucchini/logo.min.gif"
-                imageAlt="Zucchini game logo"
+                image={{ url: "/static/img/projects/zucchini/logo.min.gif", alt: "Zucchini game logo", rendering: 'crisp-edges', translucent: true }}
                 languages={["Java"]}
                 frameworks={["LWJGL", "OpenGL", "OpenAL"]}
                 links={[
@@ -216,8 +236,7 @@ export default function Projects() {
                 id="robot"
                 title="Robot Warehouse"
                 date="Apr. 2016"
-                image="/static/img/projects/robot/casterbot.min.jpg"
-                imageAlt="Robot warehouse system"
+                image={{ url: "/static/img/projects/robot/casterbot.min.jpg", alt: "Robot warehouse system" }}
                 languages={["Java"]}
                 frameworks={["LeJOS", "Swing"]}
                 links={[
@@ -236,8 +255,7 @@ export default function Projects() {
                 id="portal"
                 title="Portal 2"
                 date="Nov. 2016"
-                image="/static/img/projects/portal/screenshot.min.jpg"
-                imageAlt="Portal 2 game screenshot"
+                image={{ url: "/static/img/projects/portal/screenshot.min.jpg", alt: "Portal 2 game screenshot" }}
                 languages={["Rust"]}
                 frameworks={["OpenGL"]}
                 links={[
@@ -255,8 +273,7 @@ export default function Projects() {
                 id="k-means"
                 title="k-means"
                 date="Sep. 2016"
-                image="/static/img/projects/k-means/alabama-hills-ca.min.jpg"
-                imageAlt="K-means clustering visualization"
+                image={{ url: "/static/img/projects/k-means/alabama-hills-ca.min.jpg", alt: "K-means clustering visualization" }}
                 languages={["Rust"]}
                 links={[
                     { text: "Github", to: "https://github.com/trolleyman/kmeans", external: true }
@@ -273,8 +290,7 @@ export default function Projects() {
                 id="equator"
                 title="Equator"
                 date="Dec. 2016"
-                image="/static/img/projects/equator/screenshot.jpg"
-                imageAlt="Equator expression editor"
+                image={{ url: "/static/img/projects/equator/screenshot.jpg", alt: "Equator expression editor", rounded: false }}
                 languages={["Rust"]}
                 frameworks={["GTK+"]}
                 links={[
