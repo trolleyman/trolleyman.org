@@ -54,15 +54,18 @@ function Project({
 
     const content = (
         <div className="w-full lg:w-3/4 space-y-4">
-            <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h2>
-                <div className="text-sm text-gray-500 dark:text-gray-400">{date}</div>
+            <div className='space-y-1'>
+                <div className="flex justify-between items-end">
+                    <h2 className="order-1 group-odd/row:order-2 text-2xl font-bold text-gray-900 dark:text-white">{title}</h2>
+                    <div className="order-2 group-odd/row:order-1 text-sm text-gray-500 dark:text-gray-400">{date}</div>
+                </div>
+                <hr className="text-gray-500" />
             </div>
 
             <div className="text-gray-700 dark:text-gray-300 leading-relaxed">{children}</div>
 
             {(languages.length > 0 || frameworks.length > 0) && (
-                <div className="space-y-2">
+                <div className="space-y-1">
                     {languages.length > 0 && (
                         <div className="text-sm">
                             <span className="font-medium text-gray-900 dark:text-white">Languages:</span>{' '}
@@ -102,7 +105,7 @@ function Project({
             alt={imageAltText}
             style={{ imageRendering }}
             className={clsx(
-                "w-64 h-auto object-contain",
+                "max-w-32 max-h-32 sm:max-w-48 sm:max-h-48 md:max-w-54 md:max-h-54 lg:max-w-64 lg:max-h-64 object-contain self-start max-sm:group-odd/row:self-end sm:self-center",
                 !imageTranslucent && imageRounded && "rounded-lg",
                 imageTranslucent ? "drop-shadow-xl" : "shadow-lg",
             )}
@@ -110,7 +113,7 @@ function Project({
     );
 
     return (
-        <section id={id} className="my-20 max-w-5xl mx-auto flex flex-col gap-12 items-center sm:flex-row odd:sm:flex-row-reverse odd:text-right">
+        <section id={id} className="group/row flex flex-col gap-12 items-center sm:flex-row odd:sm:flex-row-reverse odd:text-right">
             {imageElement}
             {content}
         </section>
@@ -120,19 +123,17 @@ function Project({
 export default function Projects() {
     return <>
         {/* Header */}
-        <div className="max-w-6xl text-center">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                Projects
-            </h1>
-        </div>
+        <h1 className="text-center text-5xl font-bold text-gray-900 dark:text-white mb-6 font-serif">
+            Projects
+        </h1>
 
         {/* Projects List */}
-        <div>
+        <div className="flex flex-col gap-12 max-w-5xl mx-auto px-4">
             <Project
                 id="proj_dissertation"
                 title="Dissertation"
                 date="2018-19"
-                image={{ url: "/static/img/projects/dissertation/breakout.png", alt: "Breakout game screenshot", rendering: 'pixelated' }}
+                image={{ url: "/static/img/projects/dissertation/breakout.png", alt: "Breakout game screenshot", rendering: 'pixelated', rounded: false }}
                 languages={["Python"]}
                 frameworks={["TensorFlow", "PyTorch"]}
                 links={[
