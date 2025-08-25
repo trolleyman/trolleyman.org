@@ -6,7 +6,7 @@ type ProjectProps = React.PropsWithChildren<{
     id: string
     title: string
     date: string
-    image: string | {
+    image?: string | {
         url: string
         alt?: string
         rendering?: CSS.Properties['imageRendering']
@@ -36,7 +36,7 @@ function Project({
     frameworks ??= []
     links ??= []
 
-    let imageUrl: string
+    let imageUrl: string | undefined
     let imageAltText = ""
     let imageRendering: CSS.Properties['imageRendering'] = undefined
     let imageTranslucent = false
@@ -53,7 +53,7 @@ function Project({
     }
 
     const content = (
-        <div className="flex-1 space-y-4">
+        <div className="w-full lg:w-3/4 space-y-4">
             <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h2>
                 <div className="text-sm text-gray-500 dark:text-gray-400">{date}</div>
@@ -96,31 +96,23 @@ function Project({
         </div>
     );
 
-    const imageElement = (
-        <div className="flex-1 flex justify-center">
-            <div className="w-full max-w-md">
-                <img
-                    src={imageUrl}
-                    alt={imageAltText}
-                    style={{ imageRendering }}
-                    className={clsx(
-                        "w-full h-auto object-cover",
-                        !imageTranslucent && imageRounded && "rounded-lg",
-                        imageTranslucent ? "drop-shadow-xl" : "shadow-lg",
-                    )}
-                />
-            </div>
-        </div>
+    const imageElement = imageUrl && (
+        <img
+            src={imageUrl}
+            alt={imageAltText}
+            style={{ imageRendering }}
+            className={clsx(
+                "w-64 h-auto object-contain",
+                !imageTranslucent && imageRounded && "rounded-lg",
+                imageTranslucent ? "drop-shadow-xl" : "shadow-lg",
+            )}
+        />
     );
 
     return (
-        <section id={id} className="py-16">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="flex flex-col lg:flex-row gap-12 items-center even:lg:flex-row-reverse">
-                    {imageElement}
-                    {content}
-                </div>
-            </div>
+        <section id={id} className="my-20 max-w-5xl mx-auto flex flex-col gap-12 items-center sm:flex-row odd:sm:flex-row-reverse odd:text-right">
+            {imageElement}
+            {content}
         </section>
     );
 }
@@ -151,10 +143,6 @@ export default function Projects() {
                 Final year project exploring Google DeepMind's research into developing general AI for Atari 2600 games using deep learning. Achieved a 1st class mark for this project.
             </Project>
 
-            <div className="max-w-6xl mx-auto px-6">
-                <hr className="border-gray-200 dark:border-gray-700" />
-            </div>
-
             <Project
                 id="proj_website"
                 title="trolleyman.org"
@@ -169,10 +157,6 @@ export default function Projects() {
             >
                 Created this website to keep track of the projects I've been working on.
             </Project>
-
-            <div className="max-w-6xl mx-auto px-6">
-                <hr className="border-gray-200 dark:border-gray-700" />
-            </div>
 
             <Project
                 id="proj_linc"
@@ -190,10 +174,6 @@ export default function Projects() {
                 A versatile social network visualization tool, developed with Millennium Point.
             </Project>
 
-            <div className="max-w-6xl mx-auto px-6">
-                <hr className="border-gray-200 dark:border-gray-700" />
-            </div>
-
             <Project
                 id="proj_flappy"
                 title="Flappy Clone"
@@ -208,10 +188,6 @@ export default function Projects() {
             >
                 Yet another Flappy Bird clone.
             </Project>
-
-            <div className="max-w-6xl mx-auto px-6">
-                <hr className="border-gray-200 dark:border-gray-700" />
-            </div>
 
             <Project
                 id="proj_zucchini"
@@ -228,10 +204,6 @@ export default function Projects() {
                 Atmospheric fast-paced top down shooter. Developed with 5 other students.
             </Project>
 
-            <div className="max-w-6xl mx-auto px-6">
-                <hr className="border-gray-200 dark:border-gray-700" />
-            </div>
-
             <Project
                 id="robot"
                 title="Robot Warehouse"
@@ -247,10 +219,6 @@ export default function Projects() {
                 Robot warehouse management system. Developed with 9 other students.
             </Project>
 
-            <div className="max-w-6xl mx-auto px-6">
-                <hr className="border-gray-200 dark:border-gray-700" />
-            </div>
-
             <Project
                 id="portal"
                 title="Portal 2"
@@ -265,10 +233,6 @@ export default function Projects() {
                 edo.
             </Project>
 
-            <div className="max-w-6xl mx-auto px-6">
-                <hr className="border-gray-200 dark:border-gray-700" />
-            </div>
-
             <Project
                 id="k-means"
                 title="k-means"
@@ -281,10 +245,6 @@ export default function Projects() {
             >
                 Using the k-means algorithm to create pretty pictures.
             </Project>
-
-            <div className="max-w-6xl mx-auto px-6">
-                <hr className="border-gray-200 dark:border-gray-700" />
-            </div>
 
             <Project
                 id="equator"

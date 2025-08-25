@@ -22,7 +22,7 @@ export default function MainLayout() {
         <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-raleway">
             {/* Navigation Header */}
             <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
-                <nav className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                <nav className="mx-auto px-6 py-4 flex justify-between items-center">
                     <Link to="/" className="text-xl font-mono font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 ">
                         @trolleyman
                     </Link>
@@ -44,7 +44,7 @@ export default function MainLayout() {
 
             {/* Footer */}
             <footer className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700">
-                <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                <div className="mx-auto px-6 py-4 flex justify-between items-center">
                     <p className="text-gray-600 dark:text-gray-400">
                         ©2025 Callum Tolley
                     </p>
