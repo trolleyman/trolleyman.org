@@ -19,7 +19,7 @@ export default function MainLayout() {
     const themeTitle = theme === 'dark' ? `Dark` : theme === 'light' ? 'Light' : `System (${resolvedTheme === 'dark' ? "Dark" : "Light"})`
 
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-raleway">
+        <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-raleway">
             {/* Navigation Header */}
             <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
                 <nav className="mx-auto px-6 py-4 flex justify-between items-baseline">
@@ -54,13 +54,13 @@ export default function MainLayout() {
             </header>
 
             {/* Main Content */}
-            <main className="flex flex-col items-center justify-center min-h-screen px-6 pt-24 pb-24">{/* pt and pb here assume a certain height for header and footer */}
+            <main className="flex-1 w-full flex flex-col items-center justify-center px-6 pt-24 pb-6">{/* pt accounts for fixed header height */}
                 <Outlet />
             </main>
 
             {/* Footer */}
-            <footer className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700">
-                <div className="mx-auto px-6 py-4 flex justify-between items-center">
+            <footer className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700">
+                <div className="mx-auto px-6 py-4 flex justify-end items-center">
                     <p className="text-gray-600 dark:text-gray-400">©2025 Callum Tolley</p>
                 </div>
             </footer>
