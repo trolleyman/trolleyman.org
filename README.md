@@ -1,6 +1,10 @@
-# Welcome to React Router!
+# [`trolleyman.org`](https://trolleyman.org)
+React Router v7 (formerly Remix) implementation of my website!
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Also hosting on Netlify at [trolleyman.netlify.app](https://trolleyman.netlify.app).
+
+## TODO
+- Fix links (prod links don't work)
 
 ## Getting Started
 
