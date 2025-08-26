@@ -9,7 +9,4 @@ export default defineConfig({
     reactRouter(),
     tsconfigPaths(),
   ],
-  ssr: {
-    noExternal: ["@fortawesome/react-fontawesome"], // TODO: Remove when https://github.com/FortAwesome/react-fontawesome/issues/589 is fixed
-  },
 });

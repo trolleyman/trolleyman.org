@@ -1,17 +1,19 @@
 import type { Config } from "@react-router/dev/config";
 
-type RouteJson = {
-  id: string;
-  path?: string;
-  file: string;
-  children?: RouteJson[];
+type NestedPath = {
+  index?: boolean
+  path?: string
+  children?: NestedPath[]
 };
 
-function* getAllPaths(routes: RouteJson[], prefix: string = "/"): Generator<string> {
+function* getAllPaths(routes: NestedPath[], prefix: string = ""): Generator<string> {
   for (const route of routes) {
     if (route.path !== undefined)
     {
       yield prefix + route.path;
+    }
+    else if (route.index) {
+      yield "/"
     }
     if (route.children) {
       if (route.path) {
@@ -25,14 +27,16 @@ function* getAllPaths(routes: RouteJson[], prefix: string = "/"): Generator<stri
 export default {
   ssr: true,
   async prerender(): Promise<string[]> {
-    // Use npx react-router routes --json to get the routes
-    const { exec } = await import("child_process");
-    const { promisify } = await import("util");
-    const execAsync = promisify(exec);
-    const { stdout } = await execAsync("npx react-router routes --json");
-    var json: RouteJson[] = JSON.parse(stdout);
-    // console.log("Prerendering with routes:", JSON.stringify(json, null, 2));
-    var paths = Array.from(getAllPaths(json)).filter((path) => path !== "/.well-known/appspecific/com.chrome.devtools.json");
+     // TODO: For some reason in app/routes, importing SSR is false, but here it is true when running npm build
+     //       This means that we miss the 404 route, so unfortunately it has to be manually added
+    // console.log('importing app/routes', import.meta.env)
+    let routeConfig = (await import("app/routes")).default
+    if (routeConfig instanceof Promise) {
+      routeConfig = await routeConfig
+    }
+    var paths = Array.from(getAllPaths(routeConfig))
+    paths.push('404')
+    paths = paths.filter((path) => !path.endsWith(".well-known/appspecific/com.chrome.devtools.json"));
     // console.log("Paths:", paths);
     return paths;
   }

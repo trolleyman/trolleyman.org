@@ -60,10 +60,11 @@ export const staticRoutesList = [
         index("./routes/index.tsx"),
         route("blog", "./routes/blog.tsx"),
         route("projects", "./routes/projects.tsx"),
-        route("404", "./routes/error_404.tsx"),
+        route(import.meta.env.SSR ? "404" : undefined, "./routes/error_404_template.tsx"),
     ]),
     route(".well-known/appspecific/com.chrome.devtools.json", "./routes/.well-known.appspecific.com.chrome.devtools.json.tsx"),
 ] as const satisfies RouteConfigEntry[]
+// console.log('imported app/routes', import.meta.env)
 // console.log(JSON.stringify(staticRoutesList, null, '  '))
 
 // type X = ExpandRecursively<typeof staticRoutesList>
