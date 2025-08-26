@@ -83,7 +83,7 @@ export default function Projects() {
         <PageTitle>Projects</PageTitle>
 
         {/* Projects List */}
-        <div className="flex flex-col gap-12 max-w-5xl mx-auto px-4 mt-10">
+        <div className="flex flex-col gap-12 max-w-5xl mx-auto px-4 mt-6">
             <Project
                 id="proj_dissertation"
                 title="Dissertation"
@@ -107,7 +107,7 @@ export default function Projects() {
                 languages={["Rust", "WASM", "JavaScript", "CSS", "SQL"]}
                 frameworks={["Rocket"]}
                 links={[
-                    { text: "Github", to: "https://github.com/trolleyman/trolleyman.org", external: true },
+                    { text: "GitHub", to: "https://github.com/trolleyman/trolleyman.org", external: true },
                     { text: "More details", to: "/projects/website" }
                 ]}
             >
@@ -153,7 +153,7 @@ export default function Projects() {
                 languages={["Java"]}
                 frameworks={["LWJGL", "OpenGL", "OpenAL"]}
                 links={[
-                    { text: "Github", to: "https://github.com/trolleyman/Zucchini", external: true },
+                    { text: "GitHub", to: "https://github.com/trolleyman/Zucchini", external: true },
                     { text: "More details", to: "/projects/zucchini" }
                 ]}
             >
@@ -168,7 +168,7 @@ export default function Projects() {
                 languages={["Java"]}
                 frameworks={["LeJOS", "Swing"]}
                 links={[
-                    { text: "Github", to: "https://github.com/trolleyman/rp-warehouse", external: true },
+                    { text: "GitHub", to: "https://github.com/trolleyman/rp-warehouse", external: true },
                     { text: "More details", to: "/projects/robot" }
                 ]}
             >
@@ -183,7 +183,8 @@ export default function Projects() {
                 languages={["Rust"]}
                 frameworks={["OpenGL"]}
                 links={[
-                    { text: "Github", to: "https://github.com/trolleyman/Portal2", external: true }
+                    { text: "GitHub", to: "https://github.com/trolleyman/Portal2", external: true },
+                    { text: "More details", to: "/projects/portal" }
                 ]}
             >A redo of my first Portal project, a shameless attempt to copy my favourite video game at the time, Portal. Guess that makes this a redo of a r
                 edo.
@@ -196,7 +197,8 @@ export default function Projects() {
                 image={{ src: "/static/img/projects/k-means/alabama-hills-ca.min.jpg", alt: "K-means clustering visualization" }}
                 languages={["Rust"]}
                 links={[
-                    { text: "Github", to: "https://github.com/trolleyman/kmeans", external: true }
+                    { text: "GitHub", to: "https://github.com/trolleyman/kmeans", external: true },
+                    { text: "More details", to: "/projects/k-means" }
                 ]}
             >
                 Using the k-means algorithm to create pretty pictures.
@@ -210,7 +212,7 @@ export default function Projects() {
                 languages={["Rust"]}
                 frameworks={["GTK+"]}
                 links={[
-                    { text: "Github", to: "https://github.com/trolleyman/Equator", external: true }
+                    { text: "GitHub", to: "https://github.com/trolleyman/Equator", external: true }
                 ]}
             >
                 An expression editor and evaluator that allows easy visualization and processing of mathematical expressions.
