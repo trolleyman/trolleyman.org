@@ -27,10 +27,10 @@ export default function MainLayout() {
                         @trolleyman
                     </Link>
                     <div className="flex items-center gap-4">
-                        <Link to="/blog/" prefetch='viewport' className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                        <Link to="/blog" prefetch='viewport' className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                             Blog
                         </Link>
-                        <Link to="/projects/" prefetch='viewport' className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                        <Link to="/projects" prefetch='viewport' className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                             Projects
                         </Link>
                         <Link
