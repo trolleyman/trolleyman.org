@@ -1,25 +1,17 @@
-import { Link } from 'react-router';
-import type * as CSS from 'csstype';
-import clsx from 'clsx';
+import PageTitle from '~/components/PageTitle';
+import Img, { type ImgProps } from '~/components/Img';
+import { cn } from '~/utils';
+import type { FancyLinksArray } from '~/components/FancyLinks';
+import FancyLinks from '~/components/FancyLinks';
 
 type ProjectProps = React.PropsWithChildren<{
     id: string
     title: string
     date: string
-    image?: string | {
-        url: string
-        alt?: string
-        rendering?: CSS.Properties['imageRendering']
-        translucent?: boolean,
-        rounded?: boolean
-    }
+    image?: string | Omit<ImgProps, 'className'>
     languages?: string[]
     frameworks?: string[]
-    links?: Array<{
-        text: string
-        to: string
-        external?: boolean
-    }>
+    links?: FancyLinksArray
 }>
 
 function Project({
@@ -34,23 +26,6 @@ function Project({
 }: ProjectProps) {
     languages ??= []
     frameworks ??= []
-    links ??= []
-
-    let imageUrl: string | undefined
-    let imageAltText = ""
-    let imageRendering: CSS.Properties['imageRendering'] = undefined
-    let imageTranslucent = false
-    let imageRounded = true
-
-    if (typeof image === "object" && image !== null) {
-        imageUrl = image.url
-        imageAltText = image.alt ?? ""
-        imageRendering = image.rendering ?? imageRendering
-        imageTranslucent = !!(image.translucent ?? imageTranslucent)
-        imageRounded = image.rounded ?? imageRounded
-    } else {
-        imageUrl = image
-    }
 
     const content = (
         <div className="w-full lg:w-3/4 space-y-4">
@@ -81,34 +56,17 @@ function Project({
                 </div>
             )}
 
-            {links.length > 0 && (
-                <div className="-m-1">
-                    {links.map((link, index) => (
-                        <Link
-                            key={index}
-                            to={link.to}
-                            target={link.external ? "_blank" : undefined}
-                            rel={link.external ? "noopener noreferrer" : undefined}
-                            className="m-1 inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200"
-                        >
-                            {link.text}
-                        </Link>
-                    ))}
-                </div>
-            )}
+            <FancyLinks links={links}></FancyLinks>
         </div>
     );
 
-    const imageElement = imageUrl && (
-        <img
-            src={imageUrl}
-            alt={imageAltText}
-            style={{ imageRendering }}
-            className={clsx(
-                "max-w-32 max-h-32 sm:max-w-48 sm:max-h-48 md:max-w-54 md:max-h-54 object-contain self-start max-sm:group-odd/row:self-end sm:self-center",
-                !imageTranslucent && imageRounded && "rounded-lg",
-                imageTranslucent ? "drop-shadow-xl" : "shadow-lg",
+    const imageProps = typeof image === "string" ? { src: image } : image
+    const imageElement = imageProps && (
+        <Img
+            className={cn(
+                "max-w-32 max-h-32 sm:max-w-48 sm:max-h-48 md:max-w-54 md:max-h-54 self-start max-sm:group-odd/row:self-end sm:self-center",
             )}
+            {...imageProps}
         />
     );
 
@@ -122,23 +80,19 @@ function Project({
 
 export default function Projects() {
     return <>
-        {/* Header */}
-        <h1 className="text-center text-5xl font-bold text-gray-900 dark:text-white mb-4 font-serif">
-            Projects
-        </h1>
-        <hr className="text-gray-500 w-full mb-10" />
+        <PageTitle>Projects</PageTitle>
 
         {/* Projects List */}
-        <div className="flex flex-col gap-12 max-w-5xl mx-auto px-4">
+        <div className="flex flex-col gap-12 max-w-5xl mx-auto px-4 mt-10">
             <Project
                 id="proj_dissertation"
                 title="Dissertation"
                 date="2018-19"
-                image={{ url: "/static/img/projects/dissertation/breakout.png", alt: "Breakout game screenshot", rendering: 'pixelated', rounded: false }}
+                image={{ src: "/static/img/projects/dissertation/breakout.png", alt: "Breakout game screenshot", rendering: 'pixelated', rounded: false }}
                 languages={["Python"]}
                 frameworks={["TensorFlow", "PyTorch"]}
                 links={[
-                    { text: "Paper PDF", to: "/static/files/Dissertation.pdf", external: true },
+                    { text: "Paper", to: "/static/files/Dissertation.pdf", external: true },
                     { text: "More details", to: "/projects/dissertation" }
                 ]}
             >
@@ -149,7 +103,7 @@ export default function Projects() {
                 id="proj_website"
                 title="trolleyman.org"
                 date="2018"
-                image={{ url: "/static/img/projects/website/screenshot.png", alt: "Website screenshot" }}
+                image={{ src: "/static/img/projects/website/screenshot.png", alt: "Website screenshot" }}
                 languages={["Rust", "WASM", "JavaScript", "CSS", "SQL"]}
                 frameworks={["Rocket"]}
                 links={[
@@ -164,7 +118,7 @@ export default function Projects() {
                 id="proj_linc"
                 title="LINC"
                 date="Jun. 2017"
-                image={{ url: "/static/img/projects/linc/logo.min.png", alt: "LINC logo", translucent: true }}
+                image={{ src: "/static/img/projects/linc/logo.min.png", alt: "LINC logo", translucent: true }}
                 languages={["HTML", "JavaScript", "CSS", "SQL", "Python"]}
                 frameworks={["Three.js", "D3.js", "Django"]}
                 links={[
@@ -180,7 +134,7 @@ export default function Projects() {
                 id="proj_flappy"
                 title="Flappy Clone"
                 date="Dec. 2016 - Jul. 2017"
-                image={{ url: "/static/img/projects/flappy/logo.png", alt: "Flappy game logo", rendering: 'pixelated', translucent: true }}
+                image={{ src: "/static/img/projects/flappy/logo.png", alt: "Flappy game logo", rendering: 'pixelated', translucent: true }}
                 languages={["HTML", "JavaScript", "CSS", "SQL", "Python"]}
                 frameworks={["HTML5 Canvas API", "Django"]}
                 links={[
@@ -195,7 +149,7 @@ export default function Projects() {
                 id="proj_zucchini"
                 title="Zucchini"
                 date="Jul. 2017"
-                image={{ url: "/static/img/projects/zucchini/logo.min.gif", alt: "Zucchini game logo", rendering: 'crisp-edges', translucent: true }}
+                image={{ src: "/static/img/projects/zucchini/logo.min.gif", alt: "Zucchini game logo", rendering: 'crisp-edges', translucent: true }}
                 languages={["Java"]}
                 frameworks={["LWJGL", "OpenGL", "OpenAL"]}
                 links={[
@@ -210,7 +164,7 @@ export default function Projects() {
                 id="robot"
                 title="Robot Warehouse"
                 date="Apr. 2016"
-                image={{ url: "/static/img/projects/robot/casterbot.min.jpg", alt: "Robot warehouse system" }}
+                image={{ src: "/static/img/projects/robot/casterbot.min.jpg", alt: "Robot warehouse system" }}
                 languages={["Java"]}
                 frameworks={["LeJOS", "Swing"]}
                 links={[
@@ -225,7 +179,7 @@ export default function Projects() {
                 id="portal"
                 title="Portal 2"
                 date="Nov. 2016"
-                image={{ url: "/static/img/projects/portal/screenshot.min.jpg", alt: "Portal 2 game screenshot" }}
+                image={{ src: "/static/img/projects/portal/screenshot.min.jpg", alt: "Portal 2 game screenshot" }}
                 languages={["Rust"]}
                 frameworks={["OpenGL"]}
                 links={[
@@ -239,7 +193,7 @@ export default function Projects() {
                 id="k-means"
                 title="k-means"
                 date="Sep. 2016"
-                image={{ url: "/static/img/projects/k-means/alabama-hills-ca.min.jpg", alt: "K-means clustering visualization" }}
+                image={{ src: "/static/img/projects/k-means/alabama-hills-ca.min.jpg", alt: "K-means clustering visualization" }}
                 languages={["Rust"]}
                 links={[
                     { text: "Github", to: "https://github.com/trolleyman/kmeans", external: true }
@@ -252,7 +206,7 @@ export default function Projects() {
                 id="equator"
                 title="Equator"
                 date="Dec. 2016"
-                image={{ url: "/static/img/projects/equator/screenshot.jpg", alt: "Equator expression editor", rounded: false }}
+                image={{ src: "/static/img/projects/equator/screenshot.jpg", alt: "Equator expression editor", rounded: false }}
                 languages={["Rust"]}
                 frameworks={["GTK+"]}
                 links={[
