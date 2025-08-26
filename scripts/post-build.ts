@@ -1,5 +1,3 @@
-// TODO: This currently doesn't work (references break when root/dir/index.html files are renamed to root/dir)
-/*
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -8,59 +6,51 @@ const buildDir = path.resolve('build/client');
 async function pathExists(filePath: string): Promise<boolean> {
     try {
         await fs.stat(filePath);
-        return true; // Path exists (it's a file or directory)
+        return true;
     } catch (error) {
-        if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'ENOENT') {
-            return false; // Path does not exist
+        if (typeof error === 'object' && error !== null && 'code' in error && (error as any).code === 'ENOENT') {
+            return false;
         }
-        throw error; // Other errors (e.g., permissions) should be thrown
+        throw error;
     }
 }
 
-async function createCleanUrls(directory: string) {
+async function ensureRemoved(filePath: string): Promise<void> {
+    if (await pathExists(filePath)) {
+        await fs.rm(filePath, { recursive: true, force: true });
+    }
+}
+
+async function moveIndexFiles(directory: string): Promise<void> {
     const entries = await fs.readdir(directory, { withFileTypes: true });
 
     for (const entry of entries) {
-        const fullPath = path.join(directory, entry.name);
+        if (!entry.isDirectory()) continue;
 
-        if (!entry.isDirectory())
-            continue; // Skip files, only process directories
+        const childDir = path.join(directory, entry.name);
+        // Recurse first so we handle deeper trees before collapsing current level
+        await moveIndexFiles(childDir);
 
-        // Recurse into subdirectories first
-        await createCleanUrls(fullPath);
+        const indexPath = path.join(childDir, 'index.html');
+        const targetPath = path.join(directory, `${entry.name}.html`);
 
-        const indexPath = path.join(fullPath, 'index.html');
-        if (!await pathExists(indexPath))
-            continue;
+        if (!(await pathExists(indexPath))) continue;
 
-        // If there are no other files in the directory, we can bump it up to the parent directory
-        if ((await fs.readdir(fullPath)).length !== 1)
-            continue;
+        // If target exists, remove it so rename won't fail
+        await ensureRemoved(targetPath);
 
-        // First move to temp file, then remove the directory, then rename it back to the directory name
-        var tmpDir = await fs.mkdtemp("trolleyman-");
-        try
-        {
-            var tmpFile = path.join(tmpDir, 'index.html');
-            await fs.rename(indexPath, tmpFile);
-            await fs.rmdir(fullPath);
-            await fs.rename(tmpFile, fullPath);
-            console.log(`Moved ${indexPath} to ${fullPath}`);
-        }
-        finally
-        {
-            try
-            {
-                await fs.rm(tmpDir, { recursive: true });
-            }
-            catch
-            {
-            }
+        await fs.rename(indexPath, targetPath);
+        console.log(`Moved ${indexPath} -> ${targetPath}`);
+
+        // After moving, remove directory if now empty
+        const remaining = await fs.readdir(childDir);
+        if (remaining.length === 0) {
+            await fs.rmdir(childDir);
+            console.log(`Removed empty directory ${childDir}`);
         }
     }
 }
 
-console.log('Running postbuild script to create clean URLs...');
-await createCleanUrls(buildDir);
+console.log('Running postbuild script: flatten index.html to sibling .html files...');
+await moveIndexFiles(buildDir);
 console.log('Postbuild script finished.');
-*/
