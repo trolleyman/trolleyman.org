@@ -10,9 +10,8 @@ export default function Dissertation() {
 
         <Img
             src="/static/img/projects/dissertation/bg.png"
-            rounded={false}
             rendering="pixelated"
-            className="my-6 w-screen max-w-none mx-[calc(50%-50vw)]"
+            className="my-6 w-full"
         />
 
         <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
