@@ -62,6 +62,13 @@ export const staticRoutesList = [
         route("blog", "./routes/blog.tsx"),
         route("projects", "./routes/projects.tsx"),
         route("projects/dissertation", "./routes/projects/dissertation.tsx"),
+        route("projects/website", "./routes/projects/website.tsx"),
+        route("projects/linc", "./routes/projects/linc.tsx"),
+        route("projects/flappy", "./routes/projects/flappy.tsx"),
+        route("projects/zucchini", "./routes/projects/zucchini.tsx"),
+        route("projects/robot", "./routes/projects/robot.tsx"),
+        route("projects/k-means", "./routes/projects/k-means.tsx"),
+        route("projects/portal", "./routes/projects/portal.tsx"),
     ]),
     route(".well-known/appspecific/com.chrome.devtools.json", "./routes/.well-known.appspecific.com.chrome.devtools.json.tsx"),
 ] as const satisfies RouteConfigEntry[]
