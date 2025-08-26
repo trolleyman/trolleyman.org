@@ -16,5 +16,10 @@ export default defineConfig(({ isSsrBuild }) => {
       ? {
         input: ['virtual:react-router/server-build', './workers/app.ts'],
       } : undefined,
-  }
+    ssr: {
+      resolve: {
+        conditions: ['workerd', 'browser', 'node']
+      },
+    },
+  };
 });
