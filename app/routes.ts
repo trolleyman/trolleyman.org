@@ -58,9 +58,10 @@ function route<Path extends string | null | undefined, Children extends RouteCon
 export const staticRoutesList = [
     layout('./layouts/MainLayout.tsx', [
         index("./routes/index.tsx"),
+        route(import.meta.env.SSR ? "404" : undefined, "./routes/error_404_template.tsx"),
         route("blog", "./routes/blog.tsx"),
         route("projects", "./routes/projects.tsx"),
-        route(import.meta.env.SSR ? "404" : undefined, "./routes/error_404_template.tsx"),
+        route("projects/dissertation", "./routes/projects/dissertation.tsx"),
     ]),
     route(".well-known/appspecific/com.chrome.devtools.json", "./routes/.well-known.appspecific.com.chrome.devtools.json.tsx"),
 ] as const satisfies RouteConfigEntry[]
