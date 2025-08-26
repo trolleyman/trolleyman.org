@@ -105,7 +105,7 @@ function Project({
             alt={imageAltText}
             style={{ imageRendering }}
             className={clsx(
-                "max-w-32 max-h-32 sm:max-w-48 sm:max-h-48 md:max-w-54 md:max-h-54 lg:max-w-64 lg:max-h-64 object-contain self-start max-sm:group-odd/row:self-end sm:self-center",
+                "max-w-32 max-h-32 sm:max-w-48 sm:max-h-48 md:max-w-54 md:max-h-54 object-contain self-start max-sm:group-odd/row:self-end sm:self-center",
                 !imageTranslucent && imageRounded && "rounded-lg",
                 imageTranslucent ? "drop-shadow-xl" : "shadow-lg",
             )}
@@ -113,7 +113,7 @@ function Project({
     );
 
     return (
-        <section id={id} className="group/row flex flex-col gap-12 items-center sm:flex-row odd:sm:flex-row-reverse odd:text-right">
+        <section id={id} className="group/row flex flex-col gap-4 sm:gap-12 items-center sm:flex-row odd:sm:flex-row-reverse odd:text-right">
             {imageElement}
             {content}
         </section>
@@ -123,9 +123,10 @@ function Project({
 export default function Projects() {
     return <>
         {/* Header */}
-        <h1 className="text-center text-5xl font-bold text-gray-900 dark:text-white mb-6 font-serif">
+        <h1 className="text-center text-5xl font-bold text-gray-900 dark:text-white mb-4 font-serif">
             Projects
         </h1>
+        <hr className="text-gray-500 w-full mb-10" />
 
         {/* Projects List */}
         <div className="flex flex-col gap-12 max-w-5xl mx-auto px-4">

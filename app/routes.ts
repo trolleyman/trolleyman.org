@@ -55,14 +55,15 @@ function route<Path extends string | null | undefined, Children extends RouteCon
     }
 }
 
-const staticRoutesList = [
+export const staticRoutesList = [
     layout('./layouts/MainLayout.tsx', [
         index("./routes/index.tsx"),
         route("blog", "./routes/blog.tsx"),
         route("projects", "./routes/projects.tsx"),
+        route("404", "./routes/error_404.tsx"),
     ]),
     route(".well-known/appspecific/com.chrome.devtools.json", "./routes/.well-known.appspecific.com.chrome.devtools.json.tsx"),
-] as const satisfies RouteConfig
+] as const satisfies RouteConfigEntry[]
 // console.log(JSON.stringify(staticRoutesList, null, '  '))
 
 // type X = ExpandRecursively<typeof staticRoutesList>
