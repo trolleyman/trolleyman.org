@@ -1,3 +1,4 @@
+import { vercelPreset } from '@vercel/react-router/vite';
 import type { Config } from "@react-router/dev/config";
 
 type NestedPath = {
@@ -25,6 +26,7 @@ function* getAllPaths(routes: NestedPath[], prefix: string = ""): Generator<stri
 
 export default {
   ssr: true,
+  presets: [vercelPreset()],
   routeDiscovery: import.meta.env.PROD ? { mode: "initial" } : undefined,
   async prerender(): Promise<string[]> {
     // TODO: For some reason in app/routes, importing SSR is false, but here it is true when running npm build
