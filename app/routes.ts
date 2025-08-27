@@ -61,7 +61,7 @@ export const staticRoutesList = [
         route(import.meta.env.SSR ? "404" : undefined, "./routes/error_404_template.tsx"),
         route("blog", "./routes/blog.tsx"),
         route("projects", "./routes/projects.tsx"),
-        route("projects/dissertation", "./routes/projects/dissertation.tsx"),
+        route("projects/dissertation", "./routes/projects/dissertation/dissertation.tsx"),
         route("projects/website", "./routes/projects/website.tsx"),
         route("projects/linc", "./routes/projects/linc.tsx"),
         route("projects/flappy", "./routes/projects/flappy.tsx"),

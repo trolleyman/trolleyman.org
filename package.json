@@ -5,7 +5,7 @@
   "scripts": {
     "build": "react-router build",
     "postbuild": "ts-node scripts/post-build.ts",
-    "serve-build": "npx http-server ./build/client -p 5174 -c-1 -a 127.0.0.1 -d -i -e html # TODO: This needs changing, as it does not work",
+    "build-start": "npm run build && npm run start",
     "preview": "npm run build && npm run serve-build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
@@ -32,10 +32,12 @@
     "@types/node": "^20",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "imagetools-core": "^8.0.0",
     "tailwindcss": "^4.1.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "vite": "^6.3.3",
+    "vite-imagetools": "^8.0.0",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
