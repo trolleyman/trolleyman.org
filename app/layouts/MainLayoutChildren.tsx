@@ -1,26 +1,10 @@
-import { useTheme } from '~/components/ThemeProvider';
 import { Link, useNavigation } from 'react-router';
-import { CgDarkMode } from "react-icons/cg";
-import { FaSun, FaMoon } from 'react-icons/fa6';
 import type React from 'react';
+import ThemeToggle from '~/components/ThemeToggle';
 
 export default function MainLayoutChildren({ children }: React.PropsWithChildren) {
     const navigation = useNavigation();
     const isNavigating = Boolean(navigation.location);
-
-    const { theme, setTheme, resolvedTheme } = useTheme();
-
-    const cycleTheme = () => {
-        if (theme === 'light') {
-            setTheme('dark');
-        } else if (theme === 'dark') {
-            setTheme('system');
-        } else {
-            setTheme('light');
-        }
-    };
-
-    const themeTitle = theme === 'dark' ? `Dark` : theme === 'light' ? 'Light' : `System (${resolvedTheme === 'dark' ? "Dark" : "Light"})`
 
     return (
         <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-raleway">
@@ -58,21 +42,7 @@ export default function MainLayoutChildren({ children }: React.PropsWithChildren
                 <div className="px-6 py-4 flex justify-between items-center">
                     <div className="text-gray-600 dark:text-gray-400">©2025 Callum Tolley</div>
                     <div>
-                        <span
-                            onClick={(e) => {
-                                e.preventDefault();
-                                cycleTheme();
-                            }}
-                            className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer select-none"
-                            aria-label="Cycle theme"
-                            title={themeTitle}
-                        >
-                            {theme === 'system'
-                                ? <CgDarkMode className="text-lg" />
-                                : theme === 'dark'
-                                    ? <FaMoon className="text-lg" />
-                                    : <FaSun className="text-lg" />}
-                        </span>
+                        <ThemeToggle />
                     </div>
                 </div>
             </footer>
