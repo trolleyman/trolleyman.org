@@ -44,13 +44,12 @@ export default function MainLayoutChildren({ children }: React.PropsWithChildren
                         <Link to="/projects" prefetch='viewport' className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                             Projects
                         </Link>
-                        <Link
-                            to="#"
+                        <span
                             onClick={(e) => {
                                 e.preventDefault();
                                 cycleTheme();
                             }}
-                            className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-600 dark:hover:text-blue-400"
+                            className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer select-none"
                             aria-label="Cycle theme"
                             title={themeTitle}
                         >
@@ -59,7 +58,7 @@ export default function MainLayoutChildren({ children }: React.PropsWithChildren
                                 : theme === 'dark'
                                     ? <FaMoon className="text-lg" />
                                     : <FaSun className="text-lg" />}
-                        </Link>
+                        </span>
                     </div>
                 </nav>
             </header>
