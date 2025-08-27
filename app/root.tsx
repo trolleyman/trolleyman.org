@@ -5,10 +5,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import ThemeProvider from "./components/ThemeProvider";
+import ThemeProvider, { isTheme, cookie as themeCookie, type Theme } from "./components/ThemeProvider";
 
 import "./app.css";
 import MainLayoutErrorPage from "./components/MainLayoutErrorPage";
@@ -20,17 +21,44 @@ export const links: Route.LinksFunction = () => [
   // { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" },
 ];
 
+export async function loader({ request }: Route.LoaderArgs) {
+  const cookieHeader = request.headers.get("Cookie");
+  let cookieTheme: Theme | undefined = undefined
+  try {
+    const cookieFromHeader = await themeCookie.parse(cookieHeader)
+    if (isTheme(cookieFromHeader)) {
+      cookieTheme = cookieFromHeader
+    }
+  } catch {
+  }
+
+  return {
+    cookieTheme
+  }
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { cookieTheme } = useLoaderData<typeof loader>()
+
   return (
-    <html lang="en" suppressHydrationWarning={true /* Needed for dark mode */}>
+    <html lang="en" suppressHydrationWarning={true /* Needed for dark mode */} {...(cookieTheme === "dark" ? { "data-theme": "dark" } : {})}>
       <head>
+        <script>{`(function() {
+            var stored = localStorage.getItem("theme")${isTheme(cookieTheme) ? `|| "${cookieTheme}"` : ""};
+            var html = document.documentElement;
+            if (stored === "dark") {
+              html.setAttribute("data-theme", "dark");
+            } else if (stored === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+              html.setAttribute("data-theme", "dark");
+            }
+        })()`}</script>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
       <body>
-        <ThemeProvider>
+        <ThemeProvider cookieTheme={cookieTheme}>
           {children}
         </ThemeProvider>
         <ScrollRestoration />
