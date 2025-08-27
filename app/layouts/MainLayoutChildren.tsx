@@ -26,7 +26,7 @@ export default function MainLayoutChildren({ children }: React.PropsWithChildren
         <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-raleway">
             {/* Navigation Header */}
             <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
-                <nav className="mx-auto px-6 py-4 flex justify-between items-center">
+                <nav className="px-6 py-4 flex justify-between items-center">
                     <Link to="/" className="text-xl font-mono font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 ">
                         @trolleyman
                     </Link>
@@ -44,6 +44,20 @@ export default function MainLayoutChildren({ children }: React.PropsWithChildren
                         <Link to="/projects" prefetch='viewport' className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                             Projects
                         </Link>
+                    </div>
+                </nav>
+            </header>
+
+            {/* Main Content */}
+            <main className="flex-1 w-full flex flex-col items-center justify-center px-6 pt-24 pb-6">{/* pt accounts for fixed header height */}
+                {children}
+            </main>
+
+            {/* Footer */}
+            <footer className="w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700">
+                <div className="px-6 py-4 flex justify-between items-center">
+                    <div className="text-gray-600 dark:text-gray-400">©2025 Callum Tolley</div>
+                    <div>
                         <span
                             onClick={(e) => {
                                 e.preventDefault();
@@ -60,18 +74,6 @@ export default function MainLayoutChildren({ children }: React.PropsWithChildren
                                     : <FaSun className="text-lg" />}
                         </span>
                     </div>
-                </nav>
-            </header>
-
-            {/* Main Content */}
-            <main className="flex-1 w-full flex flex-col items-center justify-center px-6 pt-24 pb-6">{/* pt accounts for fixed header height */}
-                {children}
-            </main>
-
-            {/* Footer */}
-            <footer className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700">
-                <div className="mx-auto px-6 py-4 flex justify-end items-center">
-                    <p className="text-gray-600 dark:text-gray-400">©2025 Callum Tolley</p>
                 </div>
             </footer>
         </div>
