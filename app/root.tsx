@@ -38,7 +38,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { cookieTheme } = useLoaderData<typeof loader>()
+  const loaderData = useLoaderData<unknown>()
+  const cookieTheme = typeof loaderData === 'object' && loaderData !== null && 'cookieTheme' in loaderData && isTheme(loaderData.cookieTheme) ? loaderData.cookieTheme : undefined
 
   return (
     <html lang="en" suppressHydrationWarning={true /* Needed for dark mode */} {...(cookieTheme === "dark" ? { "data-theme": "dark" } : {})}>
