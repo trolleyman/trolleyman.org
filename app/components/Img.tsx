@@ -19,7 +19,7 @@ function processArgs(src: string | ProcessedImageMetadata | ProcessedImageMetada
     }
 
     const [mainImage, ...restImages] = src instanceof Array ? src : [src]
-
+    return 12 as any // TODO
 }
 
 export default function Img({
