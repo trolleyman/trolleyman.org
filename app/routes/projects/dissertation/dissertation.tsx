@@ -3,13 +3,19 @@ import Figure from "~/components/Figure";
 import { Link } from "react-router";
 import Img from "~/components/Img";
 import FancyLinks from "~/components/FancyLinks";
+import type { ImageMetadata } from "vite-imagetools";
+
+const bg: ImageMetadata[] = (await import('./bg.png?format=webp;avif;jpg&as=metadata')).default
+console.log('aaaa', bg)
+
+import bgUrl from './bg.png'
 
 export default function Dissertation() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">Artificial Intelligence in Atari 2600 Games using Deep Q-Learning</PageTitle>
 
         <Img
-            src="/static/img/projects/dissertation/bg.png"
+            img={bg}
             rendering="pixelated"
             className="mb-6 mt-4 w-full"
         />
