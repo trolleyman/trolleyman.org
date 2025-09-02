@@ -2,6 +2,48 @@ import fs from 'fs/promises';
 import path from 'path';
 
 const buildDir = path.resolve('build/client');
+const projectRoot = process.cwd();
+
+// Check if output is going to a terminal
+const isTerminal = process.stdout.isTTY;
+
+// ANSI color codes
+const colors = {
+    reset: '\x1b[0m',
+    bright: '\x1b[1m',
+    dim: '\x1b[2m',
+    red: '\x1b[31m',
+    green: '\x1b[32m',
+    yellow: '\x1b[33m',
+    blue: '\x1b[34m',
+    magenta: '\x1b[35m',
+    cyan: '\x1b[36m',
+    white: '\x1b[37m',
+};
+
+function colorize(text: string, color: keyof typeof colors): string {
+    return isTerminal ? `${colors[color]}${text}${colors.reset}` : text;
+}
+
+function getRelativePath(absolutePath: string): string {
+    return path.relative(projectRoot, absolutePath);
+}
+
+function formatPath(path: string): string {
+    return colorize(path, 'cyan');
+}
+
+function formatAction(action: string): string {
+    return colorize(action, 'green');
+}
+
+function formatSuccess(message: string): string {
+    return colorize(`✓ ${message}`, 'green');
+}
+
+function formatInfo(message: string): string {
+    return colorize(`ℹ ${message}`, 'blue');
+}
 
 async function pathExists(filePath: string): Promise<boolean> {
     try {
@@ -21,15 +63,19 @@ async function ensureRemoved(filePath: string): Promise<void> {
     }
 }
 
-async function moveIndexFiles(directory: string): Promise<void> {
+async function moveIndexFiles(directory: string): Promise<{ moved: number; removed: number }> {
     const entries = await fs.readdir(directory, { withFileTypes: true });
+    let moved = 0;
+    let removed = 0;
 
     for (const entry of entries) {
         if (!entry.isDirectory()) continue;
 
         const childDir = path.join(directory, entry.name);
         // Recurse first so we handle deeper trees before collapsing current level
-        await moveIndexFiles(childDir);
+        const childStats = await moveIndexFiles(childDir);
+        moved += childStats.moved;
+        removed += childStats.removed;
 
         const indexPath = path.join(childDir, 'index.html');
         const targetPath = path.join(directory, `${entry.name}.html`);
@@ -40,17 +86,38 @@ async function moveIndexFiles(directory: string): Promise<void> {
         await ensureRemoved(targetPath);
 
         await fs.rename(indexPath, targetPath);
-        console.log(`Moved ${indexPath} -> ${targetPath}`);
+        const relativeFrom = formatPath(getRelativePath(indexPath));
+        const relativeTo = formatPath(getRelativePath(targetPath));
+        console.log(`  ${formatAction('Moved')} ${relativeFrom} → ${relativeTo}`);
+        moved++;
 
         // After moving, remove directory if now empty
         const remaining = await fs.readdir(childDir);
         if (remaining.length === 0) {
             await fs.rmdir(childDir);
-            console.log(`Removed empty directory ${childDir}`);
+            const relativeDir = formatPath(getRelativePath(childDir));
+            console.log(`  ${formatAction('Removed')} empty directory ${relativeDir}`);
+            removed++;
         }
     }
+
+    return { moved, removed };
 }
 
-console.log('Running postbuild script: flatten index.html to sibling .html files...');
-await moveIndexFiles(buildDir);
-console.log('Postbuild script finished.');
+// Main execution
+console.log();
+console.log(colorize('┌─ Post-build Script', 'bright'));
+console.log(colorize('│', 'bright') + ' Flattening index.html files to sibling .html files...');
+console.log(colorize('└─', 'bright'));
+
+const startTime = Date.now();
+const stats = await moveIndexFiles(buildDir);
+const duration = Date.now() - startTime;
+
+console.log();
+console.log(colorize('┌─ Summary', 'bright'));
+console.log(`│  ${formatSuccess(`Moved ${stats.moved} file${stats.moved !== 1 ? 's' : ''}`)}`);
+console.log(`│  ${formatSuccess(`Removed ${stats.removed} empty director${stats.removed !== 1 ? 'ies' : 'y'}`)}`);
+console.log(`│  ${formatInfo(`Completed in ${duration}ms`)}`);
+console.log(colorize('└─', 'bright'));
+console.log();
