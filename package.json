@@ -5,8 +5,7 @@
   "scripts": {
     "build": "react-router build",
     "postbuild": "ts-node scripts/post-build.ts",
-    "build-start": "npm run build && npm run start",
-    "preview": "npm run build && npm run serve-build",
+    "preview": "npm run build && npm run start",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
