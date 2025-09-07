@@ -4,13 +4,16 @@ import { Link } from "react-router";
 import BodyLink from "~/components/BodyLink";
 import FancyLinks from "~/components/FancyLinks";
 
+import demo1Img from './demo1.jpg'
+import demo2Img from './demo2.jpg'
+
 export default function FlappyProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">Flappy Clone</PageTitle>
 
         <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
             <Figure
-                src="/static/img/projects/flappy/demo1.jpg"
+                src={demo1Img}
                 alt="Flappy game demo 1"
                 caption="Gameplay screenshot"
                 className="float-right w-full xs:max-w-xs sm:max-w-sm ml-4 mb-2 max-h-48"
@@ -21,7 +24,7 @@ export default function FlappyProject() {
             </p>
 
             <Figure
-                src="/static/img/projects/flappy/demo2.jpg"
+                src={demo2Img}
                 alt="Flappy game demo 2"
                 caption="Another gameplay view"
                 className="float-left w-full xs:max-w-xs sm:max-w-sm mr-4 mb-2 max-h-48"

@@ -3,13 +3,16 @@ import Figure from "~/components/Figure";
 import BodyLink from "~/components/BodyLink";
 import FancyLinks from "~/components/FancyLinks";
 
+import connectLaunchImg from './connect_launch.min.jpg'
+import graphImg from './connect_launch.min.jpg'
+
 export default function LincProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">LINC</PageTitle>
 
         <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
             <Figure
-                src="/static/img/projects/linc/connect_launch.min.jpg"
+                src={connectLaunchImg}
                 alt="CONNECT launch event"
                 caption="CONNECT launch event"
                 className="float-right w-full xs:max-w-xs sm:max-w-sm ml-4 mb-2"
@@ -24,7 +27,7 @@ export default function LincProject() {
             </p>
 
             <Figure
-                src="/static/img/projects/linc/graph_white.min.jpg"
+                src={graphImg}
                 alt="LINC graph visualization"
                 caption="Social network graph visualization"
                 className="float-left w-full xs:max-w-xs sm:max-w-sm mr-4 mb-2"

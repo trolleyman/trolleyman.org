@@ -4,15 +4,16 @@ import { cn } from '~/utils';
 import type { FancyLinksArray } from '~/components/FancyLinks';
 import FancyLinks from '~/components/FancyLinks';
 
-import breakoutImg from './projects/dissertation/breakout.png';
-import websiteImg from './projects/website/screenshot.png';
-import lincImg from './projects/linc/logo.min.png';
-import flappyImg from './projects/flappy/logo.png';
-import zucchiniImg from './projects/zucchini/logo.min.gif';
-import robotImg from './projects/robot/casterbot.min.jpg';
-import portalImg from './projects/portal/screenshot.min.jpg';
-import kmeansImg from './projects/k-means/alabama-hills-ca.min.jpg';
-import equatorImg from './projects/equator/screenshot.jpg';
+import breakoutImg from './dissertation/breakout.png';
+import dissertationPdfUrl from './dissertation/Dissertation.pdf'
+import websiteImg from './website/screenshot.png';
+import lincImg from './linc/logo.min.png';
+import flappyImg from './flappy/logo.png';
+import zucchiniImg from './zucchini/logo.min.gif';
+import robotImg from './robot/casterbot.min.jpg';
+import portalImg from './portal/screenshot.min.jpg';
+import kmeansImg from './k-means/alabama-hills-ca.min.jpg';
+import equatorImg from './equator/screenshot.jpg';
 
 type ProjectProps = React.PropsWithChildren<{
     id: string
@@ -102,7 +103,7 @@ export default function Projects() {
                 languages={["Python"]}
                 frameworks={["TensorFlow", "PyTorch"]}
                 links={[
-                    { text: "Paper", to: "/static/files/Dissertation.pdf", external: true },
+                    { text: "Paper", to: dissertationPdfUrl, external: true },
                     { text: "More details", to: "/projects/dissertation" }
                 ]}
             >

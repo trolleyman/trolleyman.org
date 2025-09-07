@@ -7,6 +7,7 @@ import BodyLink from "~/components/BodyLink";
 // TODO: Use ?w=500;900;1200&format=avif;webp;jpg&as=picture (see vite-imagetools)
 import games from './games.png'
 import breakoutGraph from './bg.png'
+import dissertationPdfUrl from './dissertation/Dissertation.pdf'
 
 export default function Dissertation() {
     return <>
@@ -29,7 +30,7 @@ export default function Dissertation() {
                 className="float-right w-full xs:max-w-xs sm:max-w-sm ml-4 mb-2"
             />
             <p>
-                The method is explained more fully in my <BodyLink to="/static/files/Dissertation.pdf">dissertation paper</BodyLink>, but it essentially combines the traditional technique of Q-learning with neural networks. The aim of the disseration was twofold. Firstly, to try to actually reproduce these results, and potentially improve upon them. Secondly, to develop a visualization tool to try and understand what was going on "behind the scenes". Neural networks are famously opaque, so the aim was to try and understand why each agent took the actions it did.
+                The method is explained more fully in my <BodyLink to={dissertationPdfUrl}>dissertation paper</BodyLink>, but it essentially combines the traditional technique of Q-learning with neural networks. The aim of the disseration was twofold. Firstly, to try to actually reproduce these results, and potentially improve upon them. Secondly, to develop a visualization tool to try and understand what was going on "behind the scenes". Neural networks are famously opaque, so the aim was to try and understand why each agent took the actions it did.
             </p>
             <p>
                 Since the method requires a large amount of computation, I wrote a program that distributed the workload over 150 lab computers in the computer science building at the university. I also used <BodyLink to="https://cloud.google.com/storage/" external>Google Cloud Storage</BodyLink> to store the results.
@@ -39,7 +40,7 @@ export default function Dissertation() {
             </p>
 
             <FancyLinks className="text-right" links={[
-                { text: "Paper", to: "/static/files/Dissertation.pdf", external: true },
+                { text: "Paper", to: dissertationPdfUrl, external: true },
             ]} />
 
             <div className="clear-both" />

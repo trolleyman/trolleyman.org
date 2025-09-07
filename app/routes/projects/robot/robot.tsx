@@ -2,13 +2,16 @@ import PageTitle from "~/components/PageTitle";
 import Figure from "~/components/Figure";
 import FancyLinks from "~/components/FancyLinks";
 
+import guiImg from './gui.png'
+import selfieImg from './selfie.png'
+
 export default function RobotProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">Robot Warehouse</PageTitle>
 
         <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
             <Figure
-                src="/static/img/projects/robot/gui.png"
+                src={guiImg}
                 alt="Robot warehouse GUI"
                 caption="Warehouse management interface"
                 className="float-right w-full xs:max-w-xs sm:max-w-sm ml-4 mb-2"
@@ -23,7 +26,7 @@ export default function RobotProject() {
             </p>
 
             <Figure
-                src="/static/img/projects/robot/selfie.jpg"
+                src={selfieImg}
                 alt="Robot project selfie"
                 caption="Late night debugging session"
                 className="float-left w-full xs:max-w-xs sm:max-w-sm mr-4 mb-2"

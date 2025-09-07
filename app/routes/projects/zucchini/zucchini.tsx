@@ -2,13 +2,17 @@ import PageTitle from "~/components/PageTitle";
 import Figure from "~/components/Figure";
 import FancyLinks from "~/components/FancyLinks";
 
+import shootingImg from './shooting.png'
+import victoryImg from './victory.png'
+import laserImg from './laser.png'
+
 export default function ZucchiniProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">Zucchini</PageTitle>
 
         <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
             <Figure
-                src="/static/img/projects/zucchini/shooting.png"
+                src={shootingImg}
                 alt="Zucchini shooting gameplay"
                 caption="Combat gameplay"
                 className="float-right w-full xs:max-w-xs sm:max-w-sm ml-4 mb-2"
@@ -23,7 +27,7 @@ export default function ZucchiniProject() {
             </p>
 
             <Figure
-                src="/static/img/projects/zucchini/victory.png"
+                src={victoryImg}
                 alt="Zucchini victory screen"
                 caption="Victory celebration"
                 className="float-left w-full xs:max-w-xs sm:max-w-sm mr-4 mb-2"
@@ -34,7 +38,7 @@ export default function ZucchiniProject() {
             </p>
 
             <Figure
-                src="/static/img/projects/zucchini/laser.png"
+                src={laserImg}
                 alt="Zucchini laser effects"
                 caption="Laser weapon effects"
                 className="float-right w-full xs:max-w-xs sm:max-w-sm ml-4 mb-2"
