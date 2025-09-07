@@ -1,7 +1,6 @@
 import PageTitle from "~/components/PageTitle";
 import Figure from "~/components/Figure";
-import { Link } from "react-router";
-import Img from "~/components/Img";
+import BodyLink from "~/components/BodyLink";
 import FancyLinks from "~/components/FancyLinks";
 
 export default function LincProject() {
@@ -17,7 +16,7 @@ export default function LincProject() {
             />
 
             <p>
-                I developed LINC alongside <Link to="http://peran.co" target="_blank" rel="noopener noreferrer">Peran Truscott</Link> and <Link to="http://tomg.io" target="_blank" rel="noopener noreferrer">Tom Goodman</Link> over the 2017 summer holidays. The project was funded by the wonderful <Link to="https://www.millenniumpoint.org.uk/" target="_blank" rel="noopener noreferrer">Millennium Point</Link>, in order to advertise their new CONNECT space opening. We had two and a half short weeks, but we managed to generate a digital artpiece that captured the attention of the many people there.
+                I developed LINC alongside <BodyLink to="http://peran.co" external>Peran Truscott</BodyLink> and <BodyLink to="http://tomg.io" external>Tom Goodman</BodyLink> over the 2017 summer holidays. The project was funded by the wonderful <BodyLink to="https://www.millenniumpoint.org.uk/" external>Millennium Point</BodyLink>, in order to advertise their new CONNECT space opening. We had two and a half short weeks, but we managed to generate a digital artpiece that captured the attention of the many people there.
             </p>
 
             <p>
@@ -32,7 +31,7 @@ export default function LincProject() {
             />
 
             <p>
-                For the visualisation front end we used <Link to="https://threejs.org/" target="_blank" rel="noopener noreferrer">THREE.js</Link> to render the graph, and <Link to="https://www.npmjs.com/package/d3-force-3d" target="_blank" rel="noopener noreferrer">d3-force-3d</Link> to simulate the forces between the nodes in the graph. The back end was developed using Python, with <Link to="https://www.djangoproject.com/" target="_blank" rel="noopener noreferrer">Django</Link> to manage the database and project. We also built a small landing page, with templates from <Link to="http://html5up.net" target="_blank" rel="noopener noreferrer">HTML5 UP</Link>.
+                For the visualisation front end we used <BodyLink to="https://threejs.org/" external>THREE.js</BodyLink> to render the graph, and <BodyLink to="https://www.npmjs.com/package/d3-force-3d" external>d3-force-3d</BodyLink> to simulate the forces between the nodes in the graph. The back end was developed using Python, with <BodyLink to="https://www.djangoproject.com/" external>Django</BodyLink> to manage the database and project. We also built a small landing page, with templates from <BodyLink to="http://html5up.net" external>HTML5 UP</BodyLink>.
             </p>
 
             <p>

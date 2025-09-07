@@ -1,7 +1,5 @@
 import PageTitle from "~/components/PageTitle";
 import Figure from "~/components/Figure";
-import { Link } from "react-router";
-import Img from "~/components/Img";
 import FancyLinks from "~/components/FancyLinks";
 
 export default function RobotProject() {

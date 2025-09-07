@@ -9,20 +9,6 @@ export default defineConfig({
     tailwindcss(),
     reactRouter(),
     tsconfigPaths(),
-    imagetools({
-      resolveConfigs: (entries, outputFormats) => {
-        const trolleyman_config = entries.find(([key]) => key === "trolleyman")
-        console.log('entries', entries)
-        console.log('outputFormats', outputFormats)
-        if (trolleyman_config) {
-          var resolved = resolveConfigs([['w', ['500', '900', '1200']], ['format', ['avif', 'webp', 'jpg']], ['as', ['meta']]], outputFormats)
-          console.log('resolvedb', resolved)
-          return resolved
-        }
-        var resolved = resolveConfigs(entries, outputFormats)
-        console.log('resolveda', resolved)
-        return resolved
-      }
-    }),
+    imagetools(),
   ],
 });

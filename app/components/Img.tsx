@@ -1,9 +1,9 @@
 import type * as CSS from 'csstype';
-import type { ProcessedImageMetadata } from 'imagetools-core';
+import type { Picture } from 'imagetools-core';
 import { cn } from '~/utils';
 
 export type ImgProps = {
-    src: string | ProcessedImageMetadata | ProcessedImageMetadata[]
+    src: string | Picture
     width?: number
     height?: number
     alt?: string
@@ -11,15 +11,6 @@ export type ImgProps = {
     translucent?: boolean
     rounded?: boolean
     className?: string
-}
-
-function processArgs(src: string | ProcessedImageMetadata | ProcessedImageMetadata[]): { src: string, width?: number, height?: number } {
-    if (typeof src === "string") {
-        return { src }
-    }
-
-    const [mainImage, ...restImages] = src instanceof Array ? src : [src]
-    return 12 as any // TODO
 }
 
 export default function Img({
@@ -32,20 +23,31 @@ export default function Img({
     rounded = true,
     className,
 }: ImgProps) {
+    width ??= typeof src === "object" ? src.img.w : undefined;
+    height ??= typeof src === "object" ? src.img.h : undefined;
 
-    return (
-        <img
-            src={src}
-            width={width}
-            height={height}
-            alt={alt ?? ''}
-            style={{ imageRendering: rendering }}
-            className={cn(
-                "object-contain",
-                !translucent && rounded && "rounded-lg",
-                translucent ? "drop-shadow-xl" : "shadow-lg",
-                className,
-            )}
-        />
-    );
+    const imageElement = <img
+        src={typeof src === "string" ? src : src.img.src}
+        width={width}
+        height={height}
+        alt={alt ?? ''}
+        style={{ imageRendering: rendering }}
+        className={cn(
+            "object-contain",
+            !translucent && rounded && "rounded-lg",
+            translucent ? "drop-shadow-xl" : "shadow-lg",
+            className,
+        )}
+    />
+
+    return typeof src === "string" ? imageElement : <picture>
+        {Object.entries(src.sources).map(([format, srcset]) => (
+            <source
+                key={format}
+                srcSet={srcset}
+                type={`image/${format}`}
+            />
+        ))}
+        {imageElement}
+    </picture>;
 }

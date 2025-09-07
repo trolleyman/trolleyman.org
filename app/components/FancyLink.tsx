@@ -1,11 +1,9 @@
 import { Link, type To } from 'react-router';
-import type { ReactNode } from 'react';
 
-export type FancyLinkProps = {
-    children?: string | ReactNode
+export type FancyLinkProps = React.PropsWithChildren<{
     to: To
     external?: boolean
-}
+}>
 
 export default function FancyLink({ children, to, external }: FancyLinkProps) {
     return <Link

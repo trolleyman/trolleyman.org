@@ -1,7 +1,7 @@
 import PageTitle from "~/components/PageTitle";
 import Figure from "~/components/Figure";
 import { Link } from "react-router";
-import Img from "~/components/Img";
+import BodyLink from "~/components/BodyLink";
 import FancyLinks from "~/components/FancyLinks";
 
 export default function FlappyProject() {
@@ -36,7 +36,7 @@ export default function FlappyProject() {
             </p>
 
             <p>
-                For the front end I used the HTML5 Canvas API. For the back end I used the wonderful framework <Link to="https://www.djangoproject.com/" target="_blank" rel="noopener noreferrer">Django</Link> to interface with the database.
+                For the front end I used the HTML5 Canvas API. For the back end I used the wonderful framework <BodyLink to="https://www.djangoproject.com/" external>Django</BodyLink> to interface with the database.
             </p>
 
             <FancyLinks className="text-left" links={[
