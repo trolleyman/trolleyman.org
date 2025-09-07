@@ -4,7 +4,7 @@ import BodyLink from "~/components/BodyLink";
 import FancyLinks from "~/components/FancyLinks";
 
 import connectLaunchImg from './connect_launch.min.jpg'
-import graphImg from './connect_launch.min.jpg'
+import graphImg from './graph_white.min.jpg'
 
 export default function LincProject() {
     return <>

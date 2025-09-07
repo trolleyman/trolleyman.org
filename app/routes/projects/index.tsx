@@ -21,7 +21,7 @@ type ProjectProps = React.PropsWithChildren<{
     date: string
     image?: string | Omit<ImgProps, 'className'>
     languages?: string[]
-    frameworks?: string[]
+    libraries?: string[]
     links?: FancyLinksArray
 }>
 
@@ -32,11 +32,11 @@ function Project({
     children,
     image,
     languages,
-    frameworks,
+    libraries,
     links
 }: ProjectProps) {
     languages ??= []
-    frameworks ??= []
+    libraries ??= []
 
     const content = (
         <div className="w-full lg:w-3/4 space-y-4">
@@ -50,7 +50,7 @@ function Project({
 
             <div className="text-gray-700 dark:text-gray-300 leading-relaxed">{children}</div>
 
-            {(languages.length > 0 || frameworks.length > 0) && (
+            {(languages.length > 0 || libraries.length > 0) && (
                 <div className="space-y-1">
                     {languages.length > 0 && (
                         <div className="text-sm">
@@ -58,10 +58,10 @@ function Project({
                             <span className="text-gray-600 dark:text-gray-400">{languages.join(', ')}</span>
                         </div>
                     )}
-                    {frameworks.length > 0 && (
+                    {libraries.length > 0 && (
                         <div className="text-sm">
-                            <span className="font-medium text-gray-900 dark:text-white">Frameworks:</span>{' '}
-                            <span className="text-gray-600 dark:text-gray-400">{frameworks.join(', ')}</span>
+                            <span className="font-medium text-gray-900 dark:text-white">Libraries:</span>{' '}
+                            <span className="text-gray-600 dark:text-gray-400">{libraries.join(', ')}</span>
                         </div>
                     )}
                 </div>
@@ -101,7 +101,7 @@ export default function Projects() {
                 date="2018-19"
                 image={{ src: breakoutImg, alt: "Breakout game screenshot", rendering: 'pixelated', rounded: false }}
                 languages={["Python"]}
-                frameworks={["TensorFlow", "PyTorch"]}
+                libraries={["TensorFlow", "PyTorch"]}
                 links={[
                     { text: "Paper", to: dissertationPdfUrl, external: true },
                     { text: "More details", to: "/projects/dissertation" }
@@ -116,7 +116,7 @@ export default function Projects() {
                 date="2018"
                 image={{ src: websiteImg, alt: "Website screenshot" }}
                 languages={["Rust", "WASM", "JavaScript", "CSS", "SQL"]}
-                frameworks={["Rocket"]}
+                libraries={["Rocket"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/trolleyman.org", external: true },
                     { text: "More details", to: "/projects/website" }
@@ -131,7 +131,7 @@ export default function Projects() {
                 date="Jun. 2017"
                 image={{ src: lincImg, alt: "LINC logo", translucent: true }}
                 languages={["HTML", "JavaScript", "CSS", "SQL", "Python"]}
-                frameworks={["Three.js", "D3.js", "Django"]}
+                libraries={["Three.js", "D3.js", "Django"]}
                 links={[
                     { text: "Website", to: "/linc" },
                     { text: "Demo", to: "/linc/demo" },
@@ -147,7 +147,7 @@ export default function Projects() {
                 date="Dec. 2016 - Jul. 2017"
                 image={{ src: flappyImg, alt: "Flappy game logo", rendering: 'pixelated', translucent: true }}
                 languages={["HTML", "JavaScript", "CSS", "SQL", "Python"]}
-                frameworks={["HTML5 Canvas API", "Django"]}
+                libraries={["HTML5 Canvas API", "Django"]}
                 links={[
                     { text: "Demo", to: "/flappy" },
                     { text: "More details", to: "/projects/flappy" }
@@ -162,7 +162,7 @@ export default function Projects() {
                 date="Jul. 2017"
                 image={{ src: zucchiniImg, alt: "Zucchini game logo", rendering: 'crisp-edges', translucent: true }}
                 languages={["Java"]}
-                frameworks={["LWJGL", "OpenGL", "OpenAL"]}
+                libraries={["LWJGL", "OpenGL", "OpenAL"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/Zucchini", external: true },
                     { text: "More details", to: "/projects/zucchini" }
@@ -177,7 +177,7 @@ export default function Projects() {
                 date="Apr. 2016"
                 image={{ src: robotImg, alt: "Robot warehouse system" }}
                 languages={["Java"]}
-                frameworks={["LeJOS", "Swing"]}
+                libraries={["LeJOS", "Swing"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/rp-warehouse", external: true },
                     { text: "More details", to: "/projects/robot" }
@@ -192,7 +192,7 @@ export default function Projects() {
                 date="Nov. 2016"
                 image={{ src: portalImg, alt: "Portal 2 game screenshot" }}
                 languages={["Rust"]}
-                frameworks={["OpenGL"]}
+                libraries={["OpenGL"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/Portal2", external: true },
                     { text: "More details", to: "/projects/portal" }
@@ -221,7 +221,7 @@ export default function Projects() {
                 date="Dec. 2016"
                 image={{ src: equatorImg, alt: "Equator expression editor", rounded: false }}
                 languages={["Rust"]}
-                frameworks={["GTK+"]}
+                libraries={["GTK+"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/Equator", external: true }
                 ]}
