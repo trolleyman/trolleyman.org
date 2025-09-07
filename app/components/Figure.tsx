@@ -3,6 +3,7 @@ import Img, { type ImgProps } from './Img';
 export type FigureProps = {
     caption?: string
     className?: string
+    imgClassName?: string
 } & ImgProps
 
 export default function Figure({
@@ -13,6 +14,7 @@ export default function Figure({
     rounded,
     caption,
     className,
+    imgClassName,
 }: FigureProps) {
     return (
         <figure className={className}>
@@ -22,7 +24,7 @@ export default function Figure({
                 rendering={rendering}
                 translucent={translucent}
                 rounded={rounded}
-                className={"w-full h-auto"}
+                className={imgClassName}
             />
             {caption && (
                 <figcaption className="mt-2 text-sm text-gray-600 dark:text-gray-400 text-center">
