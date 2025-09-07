@@ -4,6 +4,16 @@ import { cn } from '~/utils';
 import type { FancyLinksArray } from '~/components/FancyLinks';
 import FancyLinks from '~/components/FancyLinks';
 
+import breakoutImg from './projects/dissertation/breakout.png';
+import websiteImg from './projects/website/screenshot.png';
+import lincImg from './projects/linc/logo.min.png';
+import flappyImg from './projects/flappy/logo.png';
+import zucchiniImg from './projects/zucchini/logo.min.gif';
+import robotImg from './projects/robot/casterbot.min.jpg';
+import portalImg from './projects/portal/screenshot.min.jpg';
+import kmeansImg from './projects/k-means/alabama-hills-ca.min.jpg';
+import equatorImg from './projects/equator/screenshot.jpg';
+
 type ProjectProps = React.PropsWithChildren<{
     id: string
     title: string
@@ -88,7 +98,7 @@ export default function Projects() {
                 id="proj_dissertation"
                 title="Dissertation"
                 date="2018-19"
-                image={{ src: "/static/img/projects/dissertation/breakout.png", alt: "Breakout game screenshot", rendering: 'pixelated', rounded: false }}
+                image={{ src: breakoutImg, alt: "Breakout game screenshot", rendering: 'pixelated', rounded: false }}
                 languages={["Python"]}
                 frameworks={["TensorFlow", "PyTorch"]}
                 links={[
@@ -103,7 +113,7 @@ export default function Projects() {
                 id="proj_website"
                 title="trolleyman.org"
                 date="2018"
-                image={{ src: "/static/img/projects/website/screenshot.png", alt: "Website screenshot" }}
+                image={{ src: websiteImg, alt: "Website screenshot" }}
                 languages={["Rust", "WASM", "JavaScript", "CSS", "SQL"]}
                 frameworks={["Rocket"]}
                 links={[
@@ -118,7 +128,7 @@ export default function Projects() {
                 id="proj_linc"
                 title="LINC"
                 date="Jun. 2017"
-                image={{ src: "/static/img/projects/linc/logo.min.png", alt: "LINC logo", translucent: true }}
+                image={{ src: lincImg, alt: "LINC logo", translucent: true }}
                 languages={["HTML", "JavaScript", "CSS", "SQL", "Python"]}
                 frameworks={["Three.js", "D3.js", "Django"]}
                 links={[
@@ -134,7 +144,7 @@ export default function Projects() {
                 id="proj_flappy"
                 title="Flappy Clone"
                 date="Dec. 2016 - Jul. 2017"
-                image={{ src: "/static/img/projects/flappy/logo.png", alt: "Flappy game logo", rendering: 'pixelated', translucent: true }}
+                image={{ src: flappyImg, alt: "Flappy game logo", rendering: 'pixelated', translucent: true }}
                 languages={["HTML", "JavaScript", "CSS", "SQL", "Python"]}
                 frameworks={["HTML5 Canvas API", "Django"]}
                 links={[
@@ -149,7 +159,7 @@ export default function Projects() {
                 id="proj_zucchini"
                 title="Zucchini"
                 date="Jul. 2017"
-                image={{ src: "/static/img/projects/zucchini/logo.min.gif", alt: "Zucchini game logo", rendering: 'crisp-edges', translucent: true }}
+                image={{ src: zucchiniImg, alt: "Zucchini game logo", rendering: 'crisp-edges', translucent: true }}
                 languages={["Java"]}
                 frameworks={["LWJGL", "OpenGL", "OpenAL"]}
                 links={[
@@ -164,7 +174,7 @@ export default function Projects() {
                 id="robot"
                 title="Robot Warehouse"
                 date="Apr. 2016"
-                image={{ src: "/static/img/projects/robot/casterbot.min.jpg", alt: "Robot warehouse system" }}
+                image={{ src: robotImg, alt: "Robot warehouse system" }}
                 languages={["Java"]}
                 frameworks={["LeJOS", "Swing"]}
                 links={[
@@ -179,7 +189,7 @@ export default function Projects() {
                 id="portal"
                 title="Portal 2"
                 date="Nov. 2016"
-                image={{ src: "/static/img/projects/portal/screenshot.min.jpg", alt: "Portal 2 game screenshot" }}
+                image={{ src: portalImg, alt: "Portal 2 game screenshot" }}
                 languages={["Rust"]}
                 frameworks={["OpenGL"]}
                 links={[
@@ -194,7 +204,7 @@ export default function Projects() {
                 id="k-means"
                 title="k-means"
                 date="Sep. 2016"
-                image={{ src: "/static/img/projects/k-means/alabama-hills-ca.min.jpg", alt: "K-means clustering visualization" }}
+                image={{ src: kmeansImg, alt: "K-means clustering visualization" }}
                 languages={["Rust"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/kmeans", external: true },
@@ -208,7 +218,7 @@ export default function Projects() {
                 id="equator"
                 title="Equator"
                 date="Dec. 2016"
-                image={{ src: "/static/img/projects/equator/screenshot.jpg", alt: "Equator expression editor", rounded: false }}
+                image={{ src: equatorImg, alt: "Equator expression editor", rounded: false }}
                 languages={["Rust"]}
                 frameworks={["GTK+"]}
                 links={[
