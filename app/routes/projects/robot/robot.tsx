@@ -3,7 +3,7 @@ import Figure from "~/components/Figure";
 import FancyLinks from "~/components/FancyLinks";
 
 import guiImg from './gui.png'
-import selfieImg from './selfie.png'
+import selfieImg from './selfie.jpg'
 
 export default function RobotProject() {
     return <>

@@ -6,8 +6,8 @@ import BodyLink from "~/components/BodyLink";
 
 // TODO: Use ?w=500;900;1200&format=avif;webp;jpg&as=picture (see vite-imagetools)
 import games from './games.png'
-import breakoutGraph from './bg.png'
-import dissertationPdfUrl from './dissertation/Dissertation.pdf'
+import breakoutGraph from './breakout_graph.png'
+import dissertationPdfUrl from './Dissertation.pdf'
 
 export default function Dissertation() {
     return <>
