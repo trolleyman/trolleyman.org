@@ -10,7 +10,7 @@ export class Pipe {
     x: number;
     y: number;
     spacing: number;
-    passed: boolean = false;
+    passed: boolean;
     upperCache: Rect;
     lowerCache: Rect;
 
@@ -18,6 +18,7 @@ export class Pipe {
         this.x = x
         this.y = y 
         this.spacing = spacing ?? getPipeSpacing()
+        this.passed = false;
         this.upperCache = new Rect(0, 0, 0, 0, 0)
         this.lowerCache = new Rect(0, 0, 0, 0, 0)
     }
@@ -26,6 +27,7 @@ export class Pipe {
         this.x = x
         this.y = y
         this.spacing = spacing ?? getPipeSpacing()
+        this.passed = false;
         this.upperCache = new Rect(0, 0, 0, 0, 0)
         this.lowerCache = new Rect(0, 0, 0, 0, 0)
     }
