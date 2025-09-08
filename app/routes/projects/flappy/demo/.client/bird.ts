@@ -2,37 +2,37 @@ import { Rect } from "./rect";
 import { getBirdStartY } from "./sizing";
 
 export function calculateAngle(x: number, y: number): number {
-	return Math.atan(-y / x);
+    return Math.atan(-y / x);
 }
 
 export class Bird {
-	posX: number;
-	posY: number;
-	velX: number;
-	velY: number;
-	ang: number;
-	prevAng: number;
-	flapButtonDownPrev: boolean;
-	t: number;
-	dead: boolean;
+    posX: number;
+    posY: number;
+    velX: number;
+    velY: number;
+    ang: number;
+    prevAng: number;
+    flapButtonDownPrev: boolean;
+    t: number;
+    dead: boolean;
 
-	constructor() {
-		this.posX = 0;
-		this.posY = getBirdStartY();
-		
-		this.velX = 150;
-		this.velY = 20;
-		
-		this.ang = calculateAngle(this.velX, this.velY);
-		this.prevAng = this.ang;
-		
-		this.flapButtonDownPrev = false;
-		this.t = 0;
-		
-		this.dead = false;
-	}
+    constructor() {
+        this.posX = 0;
+        this.posY = getBirdStartY();
+        
+        this.velX = 150;
+        this.velY = 20;
+        
+        this.ang = calculateAngle(this.velX, this.velY);
+        this.prevAng = this.ang;
+        
+        this.flapButtonDownPrev = false;
+        this.t = 0;
+        
+        this.dead = false;
+    }
 
-	getBB(w: number, h: number) {
-		return new Rect(this.posX, this.posY, w, h, this.ang);
-	}
+    getBB(w: number, h: number) {
+        return new Rect(this.posX, this.posY, w, h, this.ang);
+    }
 }

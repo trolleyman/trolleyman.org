@@ -17,6 +17,7 @@
         "react-icons": "^5.5.0",
         "react-router": "^7.8.2",
         "tailwind-merge": "^3.3.1",
+        "webfontloader": "^1.6.28",
       },
       "devDependencies": {
         "@react-router/dev": "^7.8.2",
@@ -24,6 +25,7 @@
         "@types/node": "^20.19.11",
         "@types/react": "^19.1.12",
         "@types/react-dom": "^19.1.9",
+        "@types/webfontloader": "^1.6.38",
         "imagetools-core": "^8.0.0",
         "tailwindcss": "^4.1.12",
         "ts-node": "^10.9.2",
@@ -324,6 +326,8 @@
     "@types/react": ["@types/react@19.1.12", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-cMoR+FoAf/Jyq6+Df2/Z41jISvGZZ2eTlnsaJRptmZ76Caldwy1odD4xTr/gNV9VLj0AWgg/nmkevIyUfIIq5w=="],
 
     "@types/react-dom": ["@types/react-dom@19.1.9", "", { "peerDependencies": { "@types/react": "^19.0.0" } }, "sha512-qXRuZaOsAdXKFyOhRBg6Lqqc0yay13vN7KrIg4L7N4aaHN68ma9OK3NE1BoDFgFOTfM7zg+3/8+2n8rLUH3OKQ=="],
+
+    "@types/webfontloader": ["@types/webfontloader@1.6.38", "", {}, "sha512-kUaF72Fv202suFx6yBrwXqeVRMx7hGtJTesyESZgn9sEPCUeDXm2p0SiyS1MTqW74nQP4p7JyrOCwZ7pNFns4w=="],
 
     "@vercel/react-router": ["@vercel/react-router@1.2.3", "", { "dependencies": { "@vercel/static-config": "3.1.2", "ts-morph": "12.0.0" }, "peerDependencies": { "@react-router/dev": "7", "@react-router/node": "7", "isbot": "5", "react": ">=18", "react-dom": ">=18" } }, "sha512-trNTWQfjEdqY7+n1dJnvDxjMLSk423iARWe6x8N/eA/Y2w4n6/GsIaXx9rQrbiv/iqOA0wEO7kd66l6th5ytvA=="],
 
@@ -816,6 +820,8 @@
     "vite-tsconfig-paths": ["vite-tsconfig-paths@5.1.4", "", { "dependencies": { "debug": "^4.1.1", "globrex": "^0.1.2", "tsconfck": "^3.0.3" }, "peerDependencies": { "vite": "*" } }, "sha512-cYj0LRuLV2c2sMqhqhGpaO3LretdtMn/BVX4cPLanIZuwwrkVl+lK84E/miEXkCHWXuq65rhNN4rXsBcOB3S4w=="],
 
     "vitefu": ["vitefu@1.1.1", "", { "peerDependencies": { "vite": "^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0-beta.0" } }, "sha512-B/Fegf3i8zh0yFbpzZ21amWzHmuNlLlmJT6n7bu5e+pCHUKQIfXSYokrqOBGEMMe9UG2sostKQF9mml/vYaWJQ=="],
+
+    "webfontloader": ["webfontloader@1.6.28", "", {}, "sha512-Egb0oFEga6f+nSgasH3E0M405Pzn6y3/9tOVanv/DLfa1YBIgcv90L18YyWnvXkRbIM17v5Kv6IT2N6g1x5tvQ=="],
 
     "which": ["which@3.0.1", "", { "dependencies": { "isexe": "^2.0.0" }, "bin": { "node-which": "bin/which.js" } }, "sha512-XA1b62dzQzLfaEOSQFTCOd5KFf/1VSzZo7/7TUjnya6u0vGGKzU96UQBZTAThCb2j4/xjBAyii1OhRLJEivHvg=="],
 

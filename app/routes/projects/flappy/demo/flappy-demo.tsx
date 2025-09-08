@@ -1,7 +1,9 @@
+import { useEffect, useRef } from 'react'
+
+import { Game } from './.client/game.ts'
 
 import './game.css'
 
-import './.client/game.ts'
 import appleTouchIcon from './favicon/apple-touch-icon.png'
 import favicon32 from './favicon/favicon-32x32.png'
 import favicon16 from './favicon/favicon-16x16.png'
@@ -9,6 +11,19 @@ import favicon16 from './favicon/favicon-16x16.png'
 import safariPinnedTab from './favicon/safari-pinned-tab.svg'
 
 export default function FlappyDemo() {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const statsContainerRef = useRef<HTMLDivElement>(null);
+    const statsRef = useRef<HTMLDivElement>(null);
+    const usernameEntryRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (canvasRef.current && statsContainerRef.current && statsRef.current && usernameEntryRef.current) {
+            const game = new Game(canvasRef.current, statsContainerRef.current, statsRef.current, usernameEntryRef.current);
+            window.requestAnimationFrame(game.mainLoop.bind(game));
+            return game.dispose.bind(game);
+        }
+    }, [])
+
     return <>
         <title>Flappy Clone - trolleyman.org</title>
         {/* Icon stuff. Generated using http://realfavicongenerator.net */}
@@ -31,14 +46,16 @@ export default function FlappyDemo() {
             </>
         )}
 
-        <div id="header">
-            <a id="header-logo" href="..">trolleyman.org</a>
-        </div>
-        <div id="content">
-            <div id="game-container">
-                <div id="stats-container" style={{ visibility: 'hidden' }}><div id="stats"></div></div>
-                <input id="username-entry" style={{ visibility: 'hidden' }} type="text" />
-                <canvas id="canvas" width="500" height="800"></canvas>
+        <div className="h-screen w-screen">
+            <div id="header">
+                <a id="header-logo" href="..">trolleyman.org</a>
+            </div>
+            <div id="content">
+                <div id="game-container">
+                    <div id="stats-container" style={{ visibility: 'hidden' }} ref={statsContainerRef}><div ref={statsRef}></div></div>
+                    <input id="username-entry" style={{ visibility: 'hidden' }} type="text" ref={usernameEntryRef} />
+                    <canvas id="canvas" className='w-full h-full' width="500" height="800" ref={canvasRef}></canvas>
+                </div>
             </div>
         </div>
     </>
