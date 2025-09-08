@@ -187,15 +187,29 @@ export class Game {
         this.onmousedown = (e: MouseEvent): void => {
             e.preventDefault();
 
-            console.log("mouse pressed @ " + e.offsetX + ", " + e.offsetY);
+            // Scale mouse coordinates to match actual canvas dimensions
+            const rect = this.canvas.getBoundingClientRect();
+            const scaleX = this.canvas.width / rect.width;
+            const scaleY = this.canvas.height / rect.height;
+            const x = e.offsetX * scaleX;
+            const y = e.offsetY * scaleY;
+
+            console.log("mouse pressed @ " + x + ", " + y);
             this.flap();
-            this.press(e.offsetX, e.offsetY);
+            this.press(x, y);
         }
 
         this.onmouseup = (e: MouseEvent): void => { }
 
         this.onmousemove = (e: MouseEvent): void => {
-            this.mousePos = { x: e.offsetX, y: e.offsetY };
+            // Scale mouse coordinates to match actual canvas dimensions
+            const rect = this.canvas.getBoundingClientRect();
+            const scaleX = this.canvas.width / rect.width;
+            const scaleY = this.canvas.height / rect.height;
+            this.mousePos = {
+                x: e.offsetX * scaleX,
+                y: e.offsetY * scaleY
+            };
         }
 
         this.canvas.addEventListener("mousedown", this.onmousedown);
@@ -931,6 +945,8 @@ export class Game {
             this.canvas.width = MAX_CANVAS_WIDTH;
         else
             this.canvas.width = targetWidth;
+        if (this.canvas.getAttribute("width") !== targetWidth.toString())
+            this.canvas.setAttribute("width", targetWidth.toString());
 
         // resize canvas height
         const targetHeight = this.canvas.clientHeight;
@@ -940,6 +956,8 @@ export class Game {
             this.canvas.height = MAX_CANVAS_HEIGHT;
         else
             this.canvas.height = targetHeight;
+        if (this.canvas.getAttribute("height") !== targetHeight.toString())
+            this.canvas.setAttribute("height", targetHeight.toString());
 
         // get context
         const c = this.canvas.getContext("2d")!;

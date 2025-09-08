@@ -46,30 +46,28 @@ export default function FlappyDemo() {
 
             {/* Content */}
             <div className="flex-1">
-                <div className="relative w-full h-full">
-                    {/* Stats Container */}
-                    <div className="absolute z-[1] m-[7px] right-0" style={{ visibility: 'hidden' }} ref={statsContainerRef}>
-                        <div ref={statsRef} className="font-[arial] leading-[1.2] bg-black/70 text-white p-[7px] min-w-[120px]"></div>
-                    </div>
-
-                    {/* Username Entry */}
-                    <input
-                        className="absolute z-[2] m-0 p-[2px] text-right size-7 font-flappy border-[1.5px] border-black bg-transparent text-gold caret-black focus:border-gold text-shadow-[2px_2px_0px_black,-2px_2px_0px_black,2px_-2px_0px_black,-2px_-2px_0px_black]"
-                        style={{
-                            visibility: 'hidden'
-                        }}
-                        type="text"
-                        ref={usernameEntryRef}
-                    />
-
-                    {/* Canvas */}
-                    <canvas
-                        className="w-full h-full"
-                        width="500"
-                        height="800"
-                        ref={canvasRef}
-                    ></canvas>
+                {/* Stats Container */}
+                <div className="absolute z-[1] m-[7px] right-0" style={{ visibility: 'hidden' }} ref={statsContainerRef}>
+                    <div ref={statsRef} className="font-[arial] leading-[1.2] bg-black/70 text-white p-[7px] min-w-[120px]"></div>
                 </div>
+
+                {/* Username Entry */}
+                <input
+                    className="absolute z-[2] m-0 p-[2px] text-right size-7 font-flappy border-[1.5px] border-black bg-transparent text-gold caret-black focus:border-gold text-shadow-[2px_2px_0px_black,-2px_2px_0px_black,2px_-2px_0px_black,-2px_-2px_0px_black]"
+                    style={{
+                        visibility: 'hidden'
+                    }}
+                    type="text"
+                    ref={usernameEntryRef}
+                />
+
+                {/* Canvas */}
+                <canvas
+                    className="w-full h-full"
+                    width="500"
+                    height="800"
+                    ref={canvasRef}
+                ></canvas>
             </div>
         </div>
     </>
