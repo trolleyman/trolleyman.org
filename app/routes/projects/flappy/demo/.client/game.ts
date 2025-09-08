@@ -937,27 +937,9 @@ export class Game {
     }
 
     draw(): void {
-        // resize canvas width
-        const targetWidth = this.canvas.clientWidth;
-        if (targetWidth < MIN_CANVAS_WIDTH)
-            this.canvas.width = MIN_CANVAS_WIDTH;
-        else if (targetWidth > MAX_CANVAS_WIDTH)
-            this.canvas.width = MAX_CANVAS_WIDTH;
-        else
-            this.canvas.width = targetWidth;
-        if (this.canvas.getAttribute("width") !== targetWidth.toString())
-            this.canvas.setAttribute("width", targetWidth.toString());
-
-        // resize canvas height
-        const targetHeight = this.canvas.clientHeight;
-        if (targetHeight < MIN_CANVAS_HEIGHT)
-            this.canvas.height = MIN_CANVAS_HEIGHT;
-        else if (targetHeight > MAX_CANVAS_HEIGHT)
-            this.canvas.height = MAX_CANVAS_HEIGHT;
-        else
-            this.canvas.height = targetHeight;
-        if (this.canvas.getAttribute("height") !== targetHeight.toString())
-            this.canvas.setAttribute("height", targetHeight.toString());
+        // resize canvas
+        this.canvas.width = this.canvas.clientWidth;
+        this.canvas.height = this.canvas.clientHeight;
 
         // get context
         const c = this.canvas.getContext("2d")!;
