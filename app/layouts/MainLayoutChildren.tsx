@@ -7,7 +7,7 @@ export default function MainLayoutChildren({ children }: React.PropsWithChildren
     const isNavigating = Boolean(navigation.location);
 
     return (
-        <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-raleway">
+        <div className="min-h-svh flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-raleway">
             {/* Navigation Header */}
             <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
                 <nav className="px-6 py-4 flex justify-between items-center">
