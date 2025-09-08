@@ -646,7 +646,7 @@ export class Game {
                     if (pos !== -1) {
                         this.leaderboardPos = pos;
                         leaderboard.splice(pos, 0, { user: true, name: "", score: this.bestScore });
-                        this.beginTextEntryMode(MAX_NAME_LENGTH, isValidNameChar, this.buttonSubmit.f);
+                        this.beginTextEntryMode(MAX_NAME_LENGTH, isValidNameChar, this.buttonSubmit.activate.bind(this.buttonSubmit));
                     }
                 }
             };

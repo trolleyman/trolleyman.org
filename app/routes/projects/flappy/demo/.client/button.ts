@@ -4,13 +4,13 @@ abstract class BaseButton {
     protected _x: number | (() => number);
     protected _y: number | (() => number);
     protected img: HTMLImageElement;
-    protected f: () => void;
+    public activate: () => void;
 
-    constructor(x: number | (() => number), y: number | (() => number), img: HTMLImageElement, f: () => void) {
+    constructor(x: number | (() => number), y: number | (() => number), img: HTMLImageElement, activate: () => void) {
         this._x = x;
         this._y = y;
         this.img = img;
-        this.f = f;
+        this.activate = activate;
     }
 
     get x(): number {
@@ -69,7 +69,7 @@ export class Button extends BaseButton {
 
     handleClick(x: number, y: number): boolean {
         if (this.intersects(x, y)) {
-            this.f();
+            this.activate();
             return true;
         }
         return false;
@@ -101,7 +101,7 @@ export class DisableButton extends BaseButton {
             return false; // disabled
         }
         if (this.intersects(x, y)) {
-            this.f();
+            this.activate();
             return true;
         }
         return false;
