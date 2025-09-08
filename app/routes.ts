@@ -57,7 +57,8 @@ export const staticRoutesList = [
         route("projects/k-means", "./routes/projects/k-means/k-means.tsx"),
         route("projects/portal", "./routes/projects/portal/portal.tsx"),
     ]),
-    route("projects/flappy/demo", "./routes/projects/flappy/demo/flappy_demo.tsx"),
+    route("projects/flappy/demo", "./routes/projects/flappy/demo/flappy-demo.tsx"),
+    route("projects/flappy/demo/api/leaderboard", "./routes/projects/flappy/demo/api/leaderboard.tsx"),
     route(".well-known/appspecific/com.chrome.devtools.json", "./routes/.well-known.appspecific.com.chrome.devtools.json.tsx"),
 ] as const satisfies RouteConfigEntry[]
 // console.log('imported app/routes', import.meta.env)

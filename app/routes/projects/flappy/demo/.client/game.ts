@@ -3,9 +3,7 @@
 import { Bird, calculateAngle } from './bird';
 import { Button, DisableButton } from './button';
 import { drawImage, drawImageTiled, drawFlappyText } from './draw';
-import { intersectsRects } from './intersection';
 import { Pipe, PIPE_START_X, NUM_PIPES } from './pipe';
-import { Rect } from './rect';
 import { getBestScore, setBestScore, getLeaderboard, submitBestScore, NUM_LEADERBOARD_ENTRIES, type LeaderboardEntry } from './score';
 import * as Sizing from './sizing';
 
