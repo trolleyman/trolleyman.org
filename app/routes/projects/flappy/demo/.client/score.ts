@@ -26,10 +26,17 @@ export function getBestScore(): number {
     return bestScore;
 }
 
+function getUrl(path: string): string {
+    const pathname = window.location.pathname.endsWith('/')
+        ? window.location.pathname.slice(0, -1)
+        : window.location.pathname;
+    return new URL(path, `${window.location.protocol}//${window.location.host}${pathname}/`).href;
+}
+
 // Returns a Promise that resolves with the leaderboard data
 export async function getLeaderboard(): Promise<LeaderboardEntry[]> {
     try {
-        const response = await fetch(LEADERBOARD_API_PATH);
+        const response = await fetch(getUrl(LEADERBOARD_API_PATH));
 
         if (!response.ok) {
             throw new Error(`${response.status} ${response.statusText}: ${await response.text()}`);
@@ -58,7 +65,7 @@ export async function submitBestScore(name: string, score: number): Promise<void
             score: score.toString()
         });
 
-        const response = await fetch(SUBMIT_API_PATH, {
+        const response = await fetch(getUrl(SUBMIT_API_PATH), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

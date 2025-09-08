@@ -1,6 +1,6 @@
 
 import { Rect } from './rect';
-import { getPipeSpacing, getPipeY } from './sizing';
+import { getPipeSpacing } from './sizing';
 
 export const PIPE_START_X = -2000;
 export const NUM_PIPES = 20;
@@ -14,17 +14,17 @@ export class Pipe {
     upperCache: Rect;
     lowerCache: Rect;
 
-    constructor(x: number, y?: number, spacing?: number) {
+    constructor(x: number, y: number, spacing?: number) {
         this.x = x
-        this.y = y ?? getPipeY()
+        this.y = y 
         this.spacing = spacing ?? getPipeSpacing()
         this.upperCache = new Rect(0, 0, 0, 0, 0)
         this.lowerCache = new Rect(0, 0, 0, 0, 0)
     }
 
-    reuse(x: number, y?: number, spacing?: number): void {
+    reuse(x: number, y: number, spacing?: number): void {
         this.x = x
-        this.y = y ?? getPipeY()
+        this.y = y
         this.spacing = spacing ?? getPipeSpacing()
         this.upperCache = new Rect(0, 0, 0, 0, 0)
         this.lowerCache = new Rect(0, 0, 0, 0, 0)

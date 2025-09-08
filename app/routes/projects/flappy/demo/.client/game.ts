@@ -1,4 +1,3 @@
-"use strict";
 
 import WebFontLoader from 'webfontloader';
 
@@ -7,7 +6,6 @@ import { Button, DisableButton } from './button';
 import { drawImage, drawImageTiled, drawFlappyText } from './draw';
 import { Pipe, PIPE_START_X, NUM_PIPES } from './pipe';
 import { getBestScore, setBestScore, getLeaderboard, submitBestScore, NUM_LEADERBOARD_ENTRIES, type LeaderboardEntry } from './score';
-import * as Sizing from './sizing';
 
 // Image imports
 import bgImage from '../img/background.png';
@@ -33,36 +31,8 @@ import deadFlappy1Image from '../img/deadFlappy1.png';
 import deadFlappy2Image from '../img/deadFlappy2.png';
 import deadFlappy3Image from '../img/deadFlappy3.png';
 
-const {
-    MIN_CANVAS_WIDTH,
-    MAX_CANVAS_WIDTH,
-    MIN_CANVAS_HEIGHT,
-    MAX_CANVAS_HEIGHT,
-    getPauseButtonOffset,
-    getGameOverButtonsY,
-    getLeaderboardButtonsY,
-    getScoreOffsetX,
-    getScoreOffsetY,
-    getTapInfoOffsetX,
-    getBirdStartY,
-    getTitleStartY,
-    getGameOverY,
-    getGameOverY2,
-    getGameOverTop,
-    getGameOverBottom,
-    isGameOverMultiline,
-    getLeaderboardHeaderFontSize,
-    getLeaderboardFontSize,
-    getLeaderboardHeaderFontOutline,
-    getLeaderboardFontOutline,
-    getLeaderboardHeaderY,
-    getLeaderboardY,
-    getLeaderboardLeftOffset,
-    getLeaderboardRightOffset,
-    getLeaderboardEntrySpacing,
-    MAX_LEADERBOARD_WIDTH
-} = Sizing;
 import { isValidName, isValidNameChar, MAX_NAME_LENGTH } from './validation';
+import { lerpFloor, lerp, MAX_CANVAS_HEIGHT, MAX_CANVAS_WIDTH_SIZING, MIN_CANVAS_HEIGHT, MIN_CANVAS_WIDTH, LEADERBOARD_THRESHOLD_WIDTH, LEADERBOARD_THRESHOLD_HEIGHT, MAX_LEADERBOARD_WIDTH, MAX_CANVAS_WIDTH } from './sizing';
 
 interface GameImages {
     // Single images
@@ -157,6 +127,8 @@ export class Game {
 
     pipes: Pipe[];
 
+    handleVisibilityChange: () => void;
+
     debugAllowed: boolean;
     debugView: boolean;
 
@@ -171,7 +143,7 @@ export class Game {
 
     buttons: (Button | DisableButton)[] = [];
 
-    bird: Bird = new Bird();
+    bird: Bird;
     flappyi: number = 0;
     regenPipes: boolean = false;
     flappyVisible: boolean = false;
@@ -207,6 +179,8 @@ export class Game {
         this.statsContainer = statsContainer;
         this.stats = stats;
         this.usernameEntry = usernameEntry;
+
+        this.bird = new Bird(this);
 
         this.onmousedown = (e: MouseEvent): void => {
             e.preventDefault();
@@ -339,10 +313,10 @@ export class Game {
         const setState = (s: number) => { this.state = s; };
         const spacing = 20;
         const px = 50, py = 50;
-        const f = getPauseButtonOffset;
+        const f = this.getPauseButtonOffset.bind(this);
         this.buttonPlay = new Button(f, f, this.imgs.buttonPlay, () => setState(STATE_PLAYING));
         this.buttonPause = new Button(f, f, this.imgs.buttonPause, () => setState(STATE_PAUSED));
-        const dy = getGameOverButtonsY;
+        const dy = this.getGameOverButtonsY.bind(this);
         const getX = () => {
             const w = spacing + this.imgs.buttonRestart.width + this.imgs.buttonLeaderboard.width;
             const x = this.canvas.width / 2 - w / 2;
@@ -356,7 +330,7 @@ export class Game {
             () => getX() + spacing + this.imgs.buttonRestart.width, dy,
             this.imgs.buttonLeaderboard,
             () => setState(STATE_LEADERBOARD));
-        const ly = getLeaderboardButtonsY;
+        const ly = this.getLeaderboardButtonsY.bind(this);
         this.buttonRestartLeaderboard = new Button(
             () => this.canvas.width / 2 - this.imgs.buttonRestart.width - spacing / 2, ly,
             this.imgs.buttonRestart,
@@ -414,27 +388,19 @@ export class Game {
         // Setup pipes
         this.pipes = [];
         for (let i = 0; i < NUM_PIPES; i++) {
-            this.pipes[i] = new Pipe(PIPE_START_X);
+            this.pipes[i] = new Pipe(PIPE_START_X, this.getPipeY());
         }
 
         // Setup handling focus events. see https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API
-        let hidden: string = "hidden";
-        let visibilityChange: string = "visibilitychange";
-        if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
-            hidden = "hidden";
-            visibilityChange = "visibilitychange";
-        } else if (typeof (document as any).msHidden !== "undefined") {
-            hidden = "msHidden";
-            visibilityChange = "msvisibilitychange";
-        } else if (typeof (document as any).webkitHidden !== "undefined") {
-            hidden = "webkitHidden";
-            visibilityChange = "webkitvisibilitychange";
-        }
 
         // If the page is hidden, pause the game
         // If the page is hidden, unpause the game, unless it is in the STATE_PAUSED state
-        const handleVisibilityChange = () => {
-            if ((document as any)[hidden]) {
+        this.handleVisibilityChange = () => {
+            if (typeof document.hidden === "undefined") {
+                console.log("Error: Page Visibility API not supported.");
+                return;
+            }
+            if (document.hidden) {
                 console.log("Page hidden: paused.");
                 this.pause();
                 if (this.state === STATE_PLAYING)
@@ -448,18 +414,18 @@ export class Game {
         };
 
         // Warn if the browser doesn't support addEventListener or the Page Visibility API
-        if (typeof document.addEventListener === "undefined" || typeof (document as any)[hidden] === "undefined") {
+        if (typeof document.hidden === "undefined") {
             console.log("Error: Page Visibility API not supported.");
         } else {
             // Handle page visibility change   
-            document.addEventListener(visibilityChange, handleVisibilityChange, false); // TODO: Unsub in .end()
+            document.addEventListener("visibilitychange", this.handleVisibilityChange, false);
         }
 
         // Setup stats
         this.stats = stats;
 
         // Setup vars
-        this.debugAllowed = document.head.querySelector("meta[name=debug]") !== null; // is debugging allowed?
+        this.debugAllowed = import.meta.env.DEV; // is debugging allowed?
         this.debugView = false;
         this.cameraUpdate = true; // update the camera to be locked onto the bird?
         this.flappyDt = 0.08; // seconds per flappy frame
@@ -485,6 +451,8 @@ export class Game {
 
         window.removeEventListener("keyup", this.onkeyup);
         window.removeEventListener("keydown", this.onkeydown);
+
+        document.removeEventListener("visibilitychange", this.handleVisibilityChange);
     }
 
     loadImage(name: string, f?: () => void): HTMLImageElement {
@@ -558,7 +526,7 @@ export class Game {
         this.endTextEntryMode();
         if (this.state === STATE_LOADING) {
             this.buttons = [];
-            this.bird = new Bird();
+            this.bird = new Bird(this);
             this.paused = true; // no updates
             this.flappyi = 0;
             this.regenPipes = false;
@@ -574,7 +542,7 @@ export class Game {
             this.prevTime = NaN; // clear prevTime
             this.score = 0;
             this.paused = false;
-            this.bird = new Bird();
+            this.bird = new Bird(this);
             this.flappyi = 0;
             this.oscillate = true;
             this.regenPipes = false;
@@ -583,7 +551,7 @@ export class Game {
             this.flappyVisible = true;
             this.groundVisible = true;
             for (var i = 0; i < this.pipes.length; i++) {
-                this.pipes[i] = new Pipe(PIPE_START_X);
+                this.pipes[i] = new Pipe(PIPE_START_X, this.getPipeY());
             }
 
         } else if (this.state === STATE_PLAYING) {
@@ -851,7 +819,7 @@ export class Game {
                 }
                 if (pipe.x + this.imgs.pipeHead.width < this.cameraX) {
                     // not valid pipe, reuse.
-                    pipe.reuse(this.pipeMax);
+                    pipe.reuse(this.pipeMax, this.getPipeY());
                     this.pipeMax += PIPE_SPACING_X;
                 }
             }
@@ -948,7 +916,7 @@ export class Game {
 
     draw(): void {
         // resize canvas width
-        const targetWidth = window.innerWidth;
+        const targetWidth = this.canvas.clientWidth;
         if (targetWidth < MIN_CANVAS_WIDTH)
             this.canvas.width = MIN_CANVAS_WIDTH;
         else if (targetWidth > MAX_CANVAS_WIDTH)
@@ -957,7 +925,7 @@ export class Game {
             this.canvas.width = targetWidth;
 
         // resize canvas height
-        const targetHeight = document.getElementById("game-container")!.clientHeight;
+        const targetHeight = this.canvas.clientHeight;
         if (targetHeight < MIN_CANVAS_HEIGHT)
             this.canvas.height = MIN_CANVAS_HEIGHT;
         else if (targetHeight > MAX_CANVAS_HEIGHT)
@@ -988,7 +956,7 @@ export class Game {
             drawImageTiled(c, this.imgs.bgBlank);
             // draw textured background
             const offsetBg = -this.imgs.bg.width - ((this.cameraX / 2) % this.imgs.bg.width);
-            drawImageTiled(c, this.imgs.bg, offsetBg, c.canvas.height - this.imgs.bg.height, undefined, 1);
+            drawImageTiled(c, this.imgs.bg, offsetBg, this.canvas.height - this.imgs.bg.height, undefined, 1);
 
             // draw pipes
             for (let i = 0; i < this.pipes.length; i++) {
@@ -997,7 +965,7 @@ export class Game {
 
             // draw ground
             const offsetGround = -this.imgs.ground.width - (this.cameraX % this.imgs.ground.width);
-            drawImageTiled(c, this.imgs.ground, offsetGround, c.canvas.height - this.imgs.ground.height, undefined, 1);
+            drawImageTiled(c, this.imgs.ground, offsetGround, this.canvas.height - this.imgs.ground.height, undefined, 1);
         }
 
         // draw flappy bird
@@ -1054,22 +1022,22 @@ export class Game {
         c.textAlign = "left";
         c.textBaseline = "top";
         c.font = "30px FlappyFont, sans-serif";
-        drawFlappyText(c, this.score.toString(), getScoreOffsetX(), getScoreOffsetY(), "white", 2);
+        drawFlappyText(c, this.score.toString(), this.getScoreOffsetX(), this.getScoreOffsetY(), "white", 2);
     }
 
     drawStartUI(c: CanvasRenderingContext2D): void {
         drawImage(c, this.imgs.tapInfo,
-            getTapInfoOffsetX() + this.bird.posX - this.cameraX,
+            this.getTapInfoOffsetX() + this.bird.posX - this.cameraX,
             //200 + this.canvas.width / 20.0 - this.imgs.tapInfo.width/2,
-            (c.canvas.height - getBirdStartY()) - this.imgs.tapInfo.height / 2);
+            (this.canvas.height - this.getBirdStartY()) - this.imgs.tapInfo.height / 2);
 
         c.textAlign = "center";
         c.textBaseline = "top";
         c.font = "60px FlappyFont, sans-serif";
-        const x = Math.floor(c.canvas.width / 2);
+        const x = Math.floor(this.canvas.width / 2);
         const col = "gold";//"#30e830";
-        drawFlappyText(c, "Flappy", x, getTitleStartY(), col);
-        drawFlappyText(c, "Clone", x, getTitleStartY() + 60 + 20, col);
+        drawFlappyText(c, "Flappy", x, this.getTitleStartY(), col);
+        drawFlappyText(c, "Clone", x, this.getTitleStartY() + 60 + 20, col);
     }
 
     drawDeathUI(c: CanvasRenderingContext2D): void {
@@ -1077,19 +1045,19 @@ export class Game {
         c.textBaseline = "top";
         c.font = "60px FlappyFont, sans-serif";
         const titleCol = "gold";
-        if (!isGameOverMultiline()) {
-            drawFlappyText(c, "Game Over", Math.floor(c.canvas.width / 2), getGameOverY(), titleCol);
+        if (!this.isGameOverMultiline()) {
+            drawFlappyText(c, "Game Over", Math.floor(c.canvas.width / 2), this.getGameOverY(), titleCol);
         } else {
-            drawFlappyText(c, "Game", Math.floor(c.canvas.width / 2), getGameOverY(), titleCol);
-            drawFlappyText(c, "Over", Math.floor(c.canvas.width / 2), getGameOverY2(), titleCol);
+            drawFlappyText(c, "Game", Math.floor(c.canvas.width / 2), this.getGameOverY(), titleCol);
+            drawFlappyText(c, "Over", Math.floor(c.canvas.width / 2), this.getGameOverY2(), titleCol);
         }
 
         c.font = "30px FlappyFont, sans-serif";
         const diff = 70;
         const l = Math.floor(c.canvas.width / 2 - diff);
         const r = Math.floor(c.canvas.width / 2 + diff);
-        const t = getGameOverTop();
-        const b = getGameOverBottom();
+        const t = this.getGameOverTop();
+        const b = this.getGameOverBottom();
         const outline = 3;
         drawFlappyText(c, "Score", l, t, "white", outline);
         drawFlappyText(c, "Best", r, t, "white", outline);
@@ -1158,26 +1126,26 @@ export class Game {
     drawLeaderboardHeader(c: CanvasRenderingContext2D): void {
         c.textAlign = "center";
         c.textBaseline = "top";
-        c.font = getLeaderboardHeaderFontSize() + "px FlappyFont, sans-serif";
+        c.font = this.getLeaderboardHeaderFontSize() + "px FlappyFont, sans-serif";
         const titleCol = "gold";
-        drawFlappyText(c, "Leaderboard", Math.floor(c.canvas.width / 2), getLeaderboardHeaderY(), titleCol, getLeaderboardHeaderFontOutline());
+        drawFlappyText(c, "Leaderboard", Math.floor(c.canvas.width / 2), this.getLeaderboardHeaderY(), titleCol, this.getLeaderboardHeaderFontOutline());
     }
 
     drawLeaderboard(c: CanvasRenderingContext2D): void {
         c.textBaseline = "top";
-        c.font = getLeaderboardFontSize() + "px FlappyFont, sans-serif";
+        c.font = this.getLeaderboardFontSize() + "px FlappyFont, sans-serif";
 
         const totalW = Math.min(c.canvas.width, MAX_LEADERBOARD_WIDTH);
 
         const left = c.canvas.width / 2 - totalW / 2;
         const right = c.canvas.width - left;
-        const outline = getLeaderboardFontOutline();
+        const outline = this.getLeaderboardFontOutline();
         const scoreW = c.measureText("SCORE").width;
 
-        const numX = left + getLeaderboardLeftOffset();
+        const numX = left + this.getLeaderboardLeftOffset();
         const spacing = 8;
-        const x = right - getLeaderboardRightOffset();
-        let y = getLeaderboardY();
+        const x = right - this.getLeaderboardRightOffset();
+        let y = this.getLeaderboardY();
         const titleCol = "gold";
 
         c.textAlign = "right";
@@ -1202,7 +1170,7 @@ export class Game {
                 col = "gold";
             }
 
-            y += getLeaderboardEntrySpacing();
+            y += this.getLeaderboardEntrySpacing();
             c.textAlign = "right";
             const space = x - 2 * spacing - numX;
             if (this.submitting && e.user) {
@@ -1216,7 +1184,7 @@ export class Game {
                 drawFlappyText(c, "ERROR", x - spacing, y, col, outline);
             } else if (e.user && !this.submitted) {
                 if (this.usernameEntry.style.visibility === "visible") {
-                    this.usernameEntry.style.fontSize = getLeaderboardFontSize() + "px";
+                    this.usernameEntry.style.fontSize = this.getLeaderboardFontSize() + "px";
                     this.usernameEntry.style.width = space + "px";
                     this.usernameEntry.style.left = (x - spacing - space) + "px";
                     this.usernameEntry.style.right = (x - spacing) + "px";
@@ -1354,5 +1322,134 @@ export class Game {
             c.strokeStyle = "gold";
             c.stroke();
         }
+    }
+
+    getCanvasHeight(): number {
+        return this.canvas.height;
+    }
+
+    getCanvasWidth(): number {
+        return this.canvas.width;
+    }
+
+    getHeightRatio(): number {
+        return (this.getCanvasHeight() - MIN_CANVAS_HEIGHT) / (MAX_CANVAS_HEIGHT - MIN_CANVAS_HEIGHT);
+    }
+
+    getWidthRatio(): number {
+        return (this.getCanvasWidth() - MIN_CANVAS_WIDTH) / (MAX_CANVAS_WIDTH_SIZING - MIN_CANVAS_WIDTH);
+    }
+
+    getAverageRatio(): number {
+        return (this.getWidthRatio() + this.getHeightRatio()) / 2;
+    }
+
+    getPipeY(): number {
+        const rand = Math.random();
+        const min = rand * 150 + 120;
+        const max = rand * 300 + 200;
+
+        return lerp(min, max, this.getHeightRatio());
+    }
+
+    getBirdStartY(): number {
+        return lerp(170, 350, this.getHeightRatio());
+    }
+
+    getTapInfoOffsetX(): number {
+        return lerpFloor(80, 120, this.getWidthRatio());
+    }
+
+    getTitleStartY(): number {
+        return lerpFloor(60, 150, this.getHeightRatio());
+    }
+
+    getPauseButtonOffset(): number {
+        return lerpFloor(20, 50, this.getAverageRatio());
+    }
+
+    getScoreOffsetX(): number {
+        return this.getPauseButtonOffset() + 45;
+    }
+
+    getScoreOffsetY(): number {
+        return this.getPauseButtonOffset();
+    }
+
+    isGameOverMultiline(): boolean {
+        return this.getCanvasWidth() < 350;
+    }
+
+    getGameOverY(): number {
+        return lerpFloor(50, 200, this.getHeightRatio());
+    }
+
+    getGameOverY2(): number {
+        return this.getGameOverY() + 60 + 20;
+    }
+
+    getGameOverTop(): number {
+        return lerpFloor(240, 290, this.getHeightRatio());
+    }
+
+    getGameOverBottom(): number {
+        return this.getGameOverTop() + 50;
+    }
+
+    getGameOverButtonsY(): number {
+        return lerpFloor(365, 400, this.getHeightRatio());
+    }
+
+    leaderboardHelper(min: number, max: number): number {
+        if (this.getCanvasWidth() >= LEADERBOARD_THRESHOLD_WIDTH &&
+            this.getCanvasHeight() >= LEADERBOARD_THRESHOLD_HEIGHT) {
+            return max;
+        } else {
+            return min;
+        }
+    }
+
+    getLeaderboardHeaderFontSize(): number {
+        return this.leaderboardHelper(45, 60);
+    }
+
+    getLeaderboardFontSize(): number {
+        return this.leaderboardHelper(20, 30);
+    }
+
+    getLeaderboardHeaderFontOutline(): number {
+        return this.leaderboardHelper(4, 5);
+    }
+
+    getLeaderboardFontOutline(): number {
+        return this.leaderboardHelper(2, 3);
+    }
+
+    getLeaderboardHeaderY(): number {
+        return lerpFloor(20, 110, this.getHeightRatio());
+    }
+
+    getLeaderboardButtonsY(): number {
+        const y = this.getLeaderboardHeaderY();
+        return y + this.leaderboardHelper(420, 540);
+    }
+
+    getLeaderboardY(): number {
+        return this.getLeaderboardHeaderY()
+            + this.getLeaderboardHeaderFontSize()
+            + this.getLeaderboardHeaderFontOutline() * 2
+            + 10;
+    }
+
+    getLeaderboardLeftOffset(): number {
+        return this.leaderboardHelper(40, 60);
+    }
+
+    getLeaderboardRightOffset(): number {
+        return this.leaderboardHelper(80, 130);
+    }
+
+    getLeaderboardEntrySpacing(): number {
+        return this.leaderboardHelper(30, 40);
     }
 }

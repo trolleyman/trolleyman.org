@@ -28,7 +28,7 @@ export default function FlappyProject() {
             </div>
 
             <p>
-                Developed over the Christmas holidays 2016, sitting by the fire. Learnt a lot about Canvas, JS, spritesheets, and more! Fully responsive, can be played on a desktop and mobile. Leaderboard was modifiable at one point in time (<BodyLink to="https://www.djangoproject.com/" external>Django</BodyLink>), but as this is a static site, this has been disabled, forever cementing 'egg' as the high scorer 🥚
+                Developed over the Christmas holidays 2016, sitting by the fire. Learnt a lot about Canvas, JS, spritesheets, and more! Fully responsive, can be played on a desktop and mobile. Leaderboard was modifiable at one point in time (<BodyLink to="https://www.djangoproject.com/" external>Django</BodyLink>), but as this is a static site, this has been disabled, forever cementing 'egg2' as the high scorer 🥚
             </p>
 
             <FancyLinks className="text-right" links={[

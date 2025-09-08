@@ -1,5 +1,5 @@
+import type { Game } from "./game";
 import { Rect } from "./rect";
-import { getBirdStartY } from "./sizing";
 
 export function calculateAngle(x: number, y: number): number {
     return Math.atan(-y / x);
@@ -16,9 +16,9 @@ export class Bird {
     t: number;
     dead: boolean;
 
-    constructor() {
+    constructor(game: Game) {
         this.posX = 0;
-        this.posY = getBirdStartY();
+        this.posY = game.getBirdStartY();
         
         this.velX = 150;
         this.velY = 20;
