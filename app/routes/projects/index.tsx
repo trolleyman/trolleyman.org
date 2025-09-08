@@ -8,7 +8,7 @@ import breakoutImg from './dissertation/breakout.png';
 import dissertationPdfUrl from './dissertation/Dissertation.pdf'
 import websiteImg from './website/screenshot.png';
 import lincImg from './linc/logo.min.png';
-import flappyImg from './flappy/logo.png';
+import flappyImg from './flappy/img/logo.png';
 import zucchiniImg from './zucchini/logo.min.gif';
 import robotImg from './robot/casterbot.min.jpg';
 import portalImg from './portal/screenshot.min.jpg';
@@ -149,7 +149,7 @@ export default function Projects() {
                 languages={["HTML", "JavaScript", "CSS", "SQL", "Python"]}
                 libraries={["HTML5 Canvas API", "Django"]}
                 links={[
-                    { text: "Demo", to: "/flappy" },
+                    { text: "Demo", to: "/projects/flappy/demo" },
                     { text: "More details", to: "/projects/flappy" }
                 ]}
             >

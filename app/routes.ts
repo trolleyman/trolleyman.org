@@ -51,12 +51,13 @@ export const staticRoutesList = [
         route("projects/dissertation", "./routes/projects/dissertation/dissertation.tsx"),
         route("projects/website", "./routes/projects/website/website.tsx"),
         route("projects/linc", "./routes/projects/linc/linc.tsx"),
-        route("projects/flappy", "./routes/projects/flappy/flappy.tsx"),
+        route("projects/flappy", "./routes/projects/flappy/index.tsx"),
         route("projects/zucchini", "./routes/projects/zucchini/zucchini.tsx"),
         route("projects/robot", "./routes/projects/robot/robot.tsx"),
         route("projects/k-means", "./routes/projects/k-means/k-means.tsx"),
         route("projects/portal", "./routes/projects/portal/portal.tsx"),
     ]),
+    route("projects/flappy/demo", "./routes/projects/flappy/demo/flappy_demo.tsx"),
     route(".well-known/appspecific/com.chrome.devtools.json", "./routes/.well-known.appspecific.com.chrome.devtools.json.tsx"),
 ] as const satisfies RouteConfigEntry[]
 // console.log('imported app/routes', import.meta.env)
