@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "recommendations": [
+        "bradlc.vscode-tailwindcss"
+    ]
+}
