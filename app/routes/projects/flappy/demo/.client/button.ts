@@ -25,12 +25,37 @@ export class Button {
     }
     set y(y: number | (() => number)) { this._y = y; }
 
-    draw(c: CanvasRenderingContext2D): void {
+    intersects(x: number, y: number): boolean {
+        return x >= this.x && x < this.x + this.img.width && y >= this.y && y < this.y + this.img.height;
+    }
+
+    draw(c: CanvasRenderingContext2D, debug?: boolean, mousePos?: { x: number, y: number }): void {
         drawImage(c, this.img, this.x, this.y);
+        if (debug) {
+            const isIntersecting = mousePos ? this.intersects(mousePos.x, mousePos.y) : false;
+            
+            // Draw button border - green if intersecting, red otherwise
+            c.strokeStyle = isIntersecting ? "green" : "red";
+            c.strokeRect(this.x, this.y, this.img.width, this.img.height);
+            
+            // Draw mouse position as blue cross
+            if (mousePos) {
+                c.strokeStyle = "blue";
+                c.lineWidth = 2;
+                const crossSize = 10;
+                c.beginPath();
+                c.moveTo(mousePos.x - crossSize, mousePos.y);
+                c.lineTo(mousePos.x + crossSize, mousePos.y);
+                c.moveTo(mousePos.x, mousePos.y - crossSize);
+                c.lineTo(mousePos.x, mousePos.y + crossSize);
+                c.stroke();
+                c.lineWidth = 1; // Reset line width
+            }
+        }
     }
 
     handleClick(x: number, y: number): boolean {
-        if (x >= this.x && x < this.x + this.img.width && y >= this.y && y < this.y + this.img.height) {
+        if (this.intersects(x, y)) {
             this.f();
             return true;
         }
@@ -67,18 +92,43 @@ export class DisableButton {
     }
     set y(y: number | (() => number)) { this._y = y; }
 
-    draw(c: CanvasRenderingContext2D): void {
+    intersects(x: number, y: number): boolean {
+        return x >= this.x && x < this.x + this.img.width && y >= this.y && y < this.y + this.img.height;
+    }
+
+    draw(c: CanvasRenderingContext2D, debug?: boolean, mousePos?: { x: number, y: number }): void {
         if (this.isDisabled())
             drawImage(c, this.imgDisabled, this.x, this.y);
         else
             drawImage(c, this.img, this.x, this.y);
+        if (debug) {
+            const isIntersecting = mousePos ? this.intersects(mousePos.x, mousePos.y) : false;
+            
+            // Draw button border - green if intersecting, red otherwise
+            c.strokeStyle = isIntersecting ? "green" : "red";
+            c.strokeRect(this.x, this.y, this.img.width, this.img.height);
+            
+            // Draw mouse position as blue cross
+            if (mousePos) {
+                c.strokeStyle = "blue";
+                c.lineWidth = 2;
+                const crossSize = 10;
+                c.beginPath();
+                c.moveTo(mousePos.x - crossSize, mousePos.y);
+                c.lineTo(mousePos.x + crossSize, mousePos.y);
+                c.moveTo(mousePos.x, mousePos.y - crossSize);
+                c.lineTo(mousePos.x, mousePos.y + crossSize);
+                c.stroke();
+                c.lineWidth = 1; // Reset line width
+            }
+        }
     }
 
     handleClick(x: number, y: number): boolean {
         if (this.isDisabled()) {
             return false; // disabled
         }
-        if (x >= this.x && x < this.x + this.img.width && y >= this.y && y < this.y + this.img.height) {
+        if (this.intersects(x, y)) {
             this.f();
             return true;
         }

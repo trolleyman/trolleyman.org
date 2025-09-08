@@ -95,6 +95,8 @@ export class Game {
 
     onmousedown: (e: MouseEvent) => void;
     onmouseup: (e: MouseEvent) => void;
+    onmousemove: (e: MouseEvent) => void;
+    mousePos: { x: number, y: number } | null = null;
 
     ontouchstart: (e: TouchEvent) => void;
     ontouchend: (e: TouchEvent) => void;
@@ -192,8 +194,13 @@ export class Game {
 
         this.onmouseup = (e: MouseEvent): void => { }
 
+        this.onmousemove = (e: MouseEvent): void => {
+            this.mousePos = { x: e.offsetX, y: e.offsetY };
+        }
+
         this.canvas.addEventListener("mousedown", this.onmousedown);
         this.canvas.addEventListener("mouseup", this.onmouseup);
+        this.canvas.addEventListener("mousemove", this.onmousemove);
 
         this.ontouchstart = (e: TouchEvent): void => {
             e.preventDefault();
@@ -444,6 +451,7 @@ export class Game {
 
         this.canvas.removeEventListener("mousedown", this.onmousedown);
         this.canvas.removeEventListener("mouseup", this.onmouseup);
+        this.canvas.removeEventListener("mousemove", this.onmousemove);
         this.canvas.removeEventListener("touchstart", this.ontouchstart);
         this.canvas.removeEventListener("touchend", this.ontouchend);
         this.canvas.removeEventListener("touchcancel", this.ontouchcancel);
@@ -1007,7 +1015,7 @@ export class Game {
         const bs = this.buttons;
         for (let i = 0; i < bs.length; i++) {
             const btn = bs[i];
-            btn.draw(c);
+            btn.draw(c, this.debugView, this.mousePos || undefined);
         }
     }
 
