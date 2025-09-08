@@ -38,14 +38,14 @@ export default function FlappyDemo() {
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
         <meta name="HandheldFriendly" content="true" />
 
-        <div className="h-screen w-screen flex flex-col">
+        <div className="h-svh w-svw flex flex-col">
             {/* Header */}
             <div className="w-full bg-black text-gold font-flappy text-2xl p-1 text-shadow-[2px_2px_0px_black,-2px_2px_0px_black,2px_-2px_0px_black,-2px_-2px_0px_black]">
                 <Link to="/">trolleyman.org</Link>
             </div>
 
             {/* Content */}
-            <div className="flex-1">
+            <div className="flex-1 relative">
                 {/* Stats Container */}
                 <div className="absolute z-[1] m-[7px] right-0" style={{ visibility: 'hidden' }} ref={statsContainerRef}>
                     <div ref={statsRef} className="font-[arial] leading-[1.2] bg-black/70 text-white p-[7px] min-w-[120px]"></div>
@@ -62,12 +62,7 @@ export default function FlappyDemo() {
                 />
 
                 {/* Canvas */}
-                <canvas
-                    className="w-full h-full"
-                    width="500"
-                    height="800"
-                    ref={canvasRef}
-                ></canvas>
+                <canvas className='w-full!!!! h-full!!!! w-full!!! h-full!!! w-full!! h-full!! w-full! h-full!' ref={canvasRef}></canvas>
             </div>
         </div>
     </>
