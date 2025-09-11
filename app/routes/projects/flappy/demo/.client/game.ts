@@ -22,6 +22,7 @@ import buttonLeaderboardImage from '../img/buttonLeaderboard.png';
 import buttonSubmitImage from '../img/buttonSubmit.png';
 import buttonSubmitDisabledImage from '../img/buttonSubmitDisabled.png';
 import buttonRetryImage from '../img/buttonRetry.png';
+import buttonTrolleymanOrgImage from '../img/buttonTrolleymanOrg.png';
 import flappy0Image from '../img/flappy0.png';
 import flappy1Image from '../img/flappy1.png';
 import flappy2Image from '../img/flappy2.png';
@@ -32,7 +33,7 @@ import deadFlappy2Image from '../img/deadFlappy2.png';
 import deadFlappy3Image from '../img/deadFlappy3.png';
 
 import { isValidName, isValidNameChar, MAX_NAME_LENGTH } from './validation';
-import { lerpFloor, lerp, MAX_CANVAS_HEIGHT, MAX_CANVAS_WIDTH_SIZING, MIN_CANVAS_HEIGHT, MIN_CANVAS_WIDTH, LEADERBOARD_THRESHOLD_WIDTH, LEADERBOARD_THRESHOLD_HEIGHT, MAX_LEADERBOARD_WIDTH, MAX_CANVAS_WIDTH } from './sizing';
+import { lerpFloor, lerp, LEADERBOARD_THRESHOLD_WIDTH, LEADERBOARD_THRESHOLD_HEIGHT, MAX_LEADERBOARD_WIDTH, LEADERBOARD_SMALLER_THRESHOLD_HEIGHT } from './sizing';
 
 interface GameImages {
     // Single images
@@ -50,6 +51,7 @@ interface GameImages {
     buttonSubmit: HTMLImageElement;
     buttonSubmitDisabled: HTMLImageElement;
     buttonRetry: HTMLImageElement;
+    buttonTrolleymanOrg: HTMLImageElement;
     // Image arrays
     flappy: HTMLImageElement[];
     deadFlappy: HTMLImageElement[];
@@ -126,6 +128,7 @@ export class Game {
     buttonSubmit: DisableButton;
     buttonRestartLeaderboardError: Button;
     buttonRetry: Button;
+    buttonTrolleymanOrg: Button;
 
     pipes: Pipe[];
 
@@ -325,6 +328,7 @@ export class Game {
             buttonSubmit: this.loadImage(buttonSubmitImage),
             buttonSubmitDisabled: this.loadImage(buttonSubmitDisabledImage),
             buttonRetry: this.loadImage(buttonRetryImage),
+            buttonTrolleymanOrg: this.loadImage(buttonTrolleymanOrgImage),
             // Image arrays
             flappy: flappyImages,
             deadFlappy: deadFlappyImages
@@ -333,10 +337,10 @@ export class Game {
         // Setup buttons
         const setState = (s: number) => { this.state = s; };
         const spacing = 20;
-        const px = 50, py = 50;
-        const f = this.getPauseButtonOffset.bind(this);
-        this.buttonPlay = new Button(f, f, this.imgs.buttonPlay, () => setState(STATE_PLAYING));
-        this.buttonPause = new Button(f, f, this.imgs.buttonPause, () => setState(STATE_PAUSED));
+        const fx = this.getPauseButtonOffsetX.bind(this);
+        const fy = this.getPauseButtonOffsetY.bind(this);
+        this.buttonPlay = new Button(fx, fy, this.imgs.buttonPlay, () => setState(STATE_PLAYING));
+        this.buttonPause = new Button(fx, fy, this.imgs.buttonPause, () => setState(STATE_PAUSED));
         const dy = this.getGameOverButtonsY.bind(this);
         const getX = () => {
             const w = spacing + this.imgs.buttonRestart.width + this.imgs.buttonLeaderboard.width;
@@ -392,9 +396,8 @@ export class Game {
                 return true;
             return false;
         };
-
         this.buttonSubmit = new DisableButton(
-            () => this.canvas.width / 2 + spacing / 2, dy,
+            () => this.canvas.width / 2 + spacing / 2, ly,
             this.imgs.buttonSubmit, this.imgs.buttonSubmitDisabled, submitFunction, disableFunction);
 
         const dy2 = 400;
@@ -405,6 +408,13 @@ export class Game {
         this.buttonRetry = new Button(
             () => this.canvas.width / 2 + spacing / 2, dy2,
             this.imgs.buttonRetry, () => setState(STATE_LEADERBOARD));
+
+        this.buttonTrolleymanOrg = new Button(
+            () => this.getTopLeftButtonOffset(),
+            () => this.getTopLeftButtonOffset(),
+            this.imgs.buttonTrolleymanOrg,
+            () => window.location.href = `${window.location.href}/..`
+        );
 
         // Setup pipes
         this.pipes = [];
@@ -577,7 +587,7 @@ export class Game {
             }
 
         } else if (this.state === STATE_PLAYING) {
-            this.buttons = [this.buttonPause];
+            this.buttons = [this.buttonTrolleymanOrg, this.buttonPause];
             this.deadFlappyImage = false;
             this.gravity = GRAVITY;
             this.oscillate = false;
@@ -599,7 +609,7 @@ export class Game {
             }
 
         } else if (this.state === STATE_PAUSED) {
-            this.buttons = [this.buttonPlay];
+            this.buttons = [this.buttonTrolleymanOrg, this.buttonPlay];
             this.deadFlappyImage = false;
             this.gravity = GRAVITY;
             this.oscillate = false;
@@ -610,7 +620,7 @@ export class Game {
             this.groundVisible = true;
 
         } else if (this.state === STATE_DEATH) {
-            this.buttons = [this.buttonRestartDeath, this.buttonLeaderboard];
+            this.buttons = [this.buttonTrolleymanOrg, this.buttonRestartDeath, this.buttonLeaderboard];
             this.deadFlappyImage = true;
             this.gravity = GRAVITY;
             this.oscillate = false;
@@ -630,7 +640,7 @@ export class Game {
             this.bird.velY = 300;
 
         } else if (this.state === STATE_LEADERBOARD) {
-            this.buttons = [this.buttonRestartLeaderboard, this.buttonSubmit];
+            this.buttons = [this.buttonTrolleymanOrg, this.buttonRestartLeaderboard, this.buttonSubmit];
             this.deadFlappyImage = true;
             this.gravity = GRAVITY;
             this.oscillate = false;
@@ -672,7 +682,7 @@ export class Game {
             getLeaderboard().then(successFunction).catch(errorFunction);
 
         } else if (this.state === STATE_LEADERBOARD_ERROR) {
-            this.buttons = [this.buttonRestartLeaderboardError, this.buttonRetry];
+            this.buttons = [this.buttonTrolleymanOrg, this.buttonRestartLeaderboardError, this.buttonRetry];
             this.deadFlappyImage = true;
             this.gravity = GRAVITY;
             this.oscillate = false;
@@ -682,7 +692,7 @@ export class Game {
             this.groundVisible = true;
 
         } else if (this.state === STATE_ERROR) {
-            this.buttons = [];
+            this.buttons = [this.buttonTrolleymanOrg];
             this.paused = true; // no updates
             this.flappyi = 0;
             this.regenPipes = false;
@@ -691,7 +701,7 @@ export class Game {
             this.groundVisible = false;
 
         } else if (this.state === STATE_FINISHED) {
-            this.buttons = [];
+            this.buttons = [this.buttonTrolleymanOrg];
             this.paused = true; // no updates
             this.flappyi = 0;
             this.regenPipes = false;
@@ -940,6 +950,15 @@ export class Game {
         // resize canvas
         this.canvas.width = this.canvas.clientWidth;
         this.canvas.height = this.canvas.clientHeight;
+
+        const width = this.canvas.clientWidth;
+        const height = this.canvas.clientHeight;
+
+        // If it's resolution does not match change it
+        if (this.canvas.width !== width || this.canvas.height !== height) {
+            this.canvas.width = width;
+            this.canvas.height = height;
+        }
 
         // get context
         const c = this.canvas.getContext("2d")!;
@@ -1341,11 +1360,15 @@ export class Game {
     }
 
     getHeightRatio(): number {
-        return (this.getCanvasHeight() - MIN_CANVAS_HEIGHT) / (MAX_CANVAS_HEIGHT - MIN_CANVAS_HEIGHT);
+        const minCanvasHeight = 480;
+        const maxCanvasHeight = 915;
+        return (Math.min(Math.max(this.getCanvasHeight(), minCanvasHeight), maxCanvasHeight) - minCanvasHeight) / (maxCanvasHeight - minCanvasHeight);
     }
 
     getWidthRatio(): number {
-        return (this.getCanvasWidth() - MIN_CANVAS_WIDTH) / (MAX_CANVAS_WIDTH_SIZING - MIN_CANVAS_WIDTH);
+        const minCanvasWidth = 320;
+        const maxCanvasWidth = 1440;
+        return (Math.min(Math.max(this.getCanvasWidth(), minCanvasWidth), maxCanvasWidth) - minCanvasWidth) / (maxCanvasWidth - minCanvasWidth);
     }
 
     getAverageRatio(): number {
@@ -1372,16 +1395,40 @@ export class Game {
         return lerpFloor(60, 150, this.getHeightRatio());
     }
 
-    getPauseButtonOffset(): number {
+    getPaddingOffset() : number {
         return lerpFloor(20, 50, this.getAverageRatio());
     }
 
+    getTopButtonOffset(): number {
+        return this.getPaddingOffset();
+    }
+
+    getLeftButtonOffset(): number {
+        return this.getPaddingOffset();
+    }
+
+    getTopLeftButtonOffset(): number {
+        return this.getPaddingOffset();
+    }
+
+    getRightButtonOffset(): number {
+        return this.getCanvasWidth() - this.getPaddingOffset()
+    }
+
+    getPauseButtonOffsetX(): number {
+        return this.getRightButtonOffset() - this.imgs.buttonPause.width;
+    }
+
+    getPauseButtonOffsetY(): number {
+        return this.getTopButtonOffset();
+    }
+
     getScoreOffsetX(): number {
-        return this.getPauseButtonOffset() + 45;
+        return this.getPauseButtonOffsetX() - 30;
     }
 
     getScoreOffsetY(): number {
-        return this.getPauseButtonOffset();
+        return this.getTopButtonOffset();
     }
 
     isGameOverMultiline(): boolean {
@@ -1408,9 +1455,10 @@ export class Game {
         return lerpFloor(365, 400, this.getHeightRatio());
     }
 
-    leaderboardHelper(min: number, max: number): number {
-        if (this.getCanvasWidth() >= LEADERBOARD_THRESHOLD_WIDTH &&
-            this.getCanvasHeight() >= LEADERBOARD_THRESHOLD_HEIGHT) {
+    leaderboardHelper(smaller: number, min: number, max: number): number {
+        if (this.getCanvasHeight() < LEADERBOARD_SMALLER_THRESHOLD_HEIGHT) {
+            return smaller;
+        } else if (this.getCanvasWidth() >= LEADERBOARD_THRESHOLD_WIDTH && this.getCanvasHeight() >= LEADERBOARD_THRESHOLD_HEIGHT) {
             return max;
         } else {
             return min;
@@ -1418,19 +1466,19 @@ export class Game {
     }
 
     getLeaderboardHeaderFontSize(): number {
-        return this.leaderboardHelper(45, 60);
+        return this.leaderboardHelper(35, 45, 60);
     }
 
     getLeaderboardFontSize(): number {
-        return this.leaderboardHelper(20, 30);
+        return this.leaderboardHelper(15, 20, 30);
     }
 
     getLeaderboardHeaderFontOutline(): number {
-        return this.leaderboardHelper(4, 5);
+        return this.leaderboardHelper(3, 4, 5);
     }
 
     getLeaderboardFontOutline(): number {
-        return this.leaderboardHelper(2, 3);
+        return this.leaderboardHelper(1, 2, 3);
     }
 
     getLeaderboardHeaderY(): number {
@@ -1439,7 +1487,7 @@ export class Game {
 
     getLeaderboardButtonsY(): number {
         const y = this.getLeaderboardHeaderY();
-        return y + this.leaderboardHelper(420, 540);
+        return y + this.leaderboardHelper(320, 420, 540);
     }
 
     getLeaderboardY(): number {
@@ -1450,14 +1498,14 @@ export class Game {
     }
 
     getLeaderboardLeftOffset(): number {
-        return this.leaderboardHelper(40, 60);
+        return this.leaderboardHelper(30, 40, 60);
     }
 
     getLeaderboardRightOffset(): number {
-        return this.leaderboardHelper(80, 130);
+        return this.leaderboardHelper(60, 80, 130);
     }
 
     getLeaderboardEntrySpacing(): number {
-        return this.leaderboardHelper(30, 40);
+        return this.leaderboardHelper(20, 30, 40);
     }
 }
