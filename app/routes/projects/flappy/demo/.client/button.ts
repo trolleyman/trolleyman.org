@@ -31,11 +31,11 @@ abstract class BaseButton {
 
     protected drawDebug(c: CanvasRenderingContext2D, mousePos?: { x: number, y: number }): void {
         const isIntersecting = mousePos ? this.intersects(mousePos.x, mousePos.y) : false;
-        
+
         // Draw button border - green if intersecting, red otherwise
         c.strokeStyle = isIntersecting ? "green" : "red";
         c.strokeRect(this.x, this.y, this.img.width, this.img.height);
-        
+
         // Draw mouse position as blue cross
         if (mousePos) {
             c.strokeStyle = "blue";

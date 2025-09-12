@@ -1,4 +1,5 @@
 import { intersectsRects } from './intersection';
+import { getDPR } from './sizing';
 
 export class Rect {
     x: number;
@@ -27,8 +28,8 @@ export class Rect {
         // center x & y
         const offsetX = -this.w / 2;
         const offsetY = -this.h / 2;
-        const y = c.canvas.height - this.y;
-        
+        const y = c.canvas.height / getDPR() - this.y;
+
         c.translate(this.x, y);
         c.rotate(this.rot);
         c.translate(offsetX, offsetY);

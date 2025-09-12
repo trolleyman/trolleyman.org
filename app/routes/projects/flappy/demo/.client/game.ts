@@ -33,7 +33,7 @@ import deadFlappy2Image from '../img/deadFlappy2.png';
 import deadFlappy3Image from '../img/deadFlappy3.png';
 
 import { isValidName, isValidNameChar, MAX_NAME_LENGTH } from './validation';
-import { lerpFloor, lerp, LEADERBOARD_THRESHOLD_WIDTH, LEADERBOARD_THRESHOLD_HEIGHT, MAX_LEADERBOARD_WIDTH, LEADERBOARD_SMALLER_THRESHOLD_HEIGHT } from './sizing';
+import { lerpFloor, lerp, LEADERBOARD_THRESHOLD_WIDTH, LEADERBOARD_THRESHOLD_HEIGHT, MAX_LEADERBOARD_WIDTH, LEADERBOARD_SMALLER_THRESHOLD_HEIGHT, getDPR } from './sizing';
 
 interface GameImages {
     // Single images
@@ -190,10 +190,10 @@ export class Game {
         this.onmousedown = (e: MouseEvent): void => {
             e.preventDefault();
 
-            // Scale mouse coordinates to match actual canvas dimensions
+            // Scale mouse coordinates to match canvas dimensions
             const rect = this.canvas.getBoundingClientRect();
-            const scaleX = this.canvas.width / rect.width;
-            const scaleY = this.canvas.height / rect.height;
+            const scaleX = this.canvasWidth / rect.width;
+            const scaleY = this.canvasHeight / rect.height;
             const x = e.offsetX * scaleX;
             const y = e.offsetY * scaleY;
 
@@ -205,10 +205,10 @@ export class Game {
         this.onmouseup = (e: MouseEvent): void => { }
 
         this.onmousemove = (e: MouseEvent): void => {
-            // Scale mouse coordinates to match actual canvas dimensions
+            // Scale mouse coordinates to match canvas dimensions
             const rect = this.canvas.getBoundingClientRect();
-            const scaleX = this.canvas.width / rect.width;
-            const scaleY = this.canvas.height / rect.height;
+            const scaleX = this.canvasWidth / rect.width;
+            const scaleY = this.canvasHeight / rect.height;
             this.mousePos = {
                 x: e.offsetX * scaleX,
                 y: e.offsetY * scaleY
@@ -344,7 +344,7 @@ export class Game {
         const dy = this.getGameOverButtonsY.bind(this);
         const getX = () => {
             const w = spacing + this.imgs.buttonRestart.width + this.imgs.buttonLeaderboard.width;
-            const x = this.canvas.width / 2 - w / 2;
+            const x = this.canvasWidth / 2 - w / 2;
             return x;
         }
         this.buttonRestartDeath = new Button(
@@ -357,7 +357,7 @@ export class Game {
             () => setState(STATE_LEADERBOARD));
         const ly = this.getLeaderboardButtonsY.bind(this);
         this.buttonRestartLeaderboard = new Button(
-            () => this.canvas.width / 2 - this.imgs.buttonRestart.width - spacing / 2, ly,
+            () => this.canvasWidth / 2 - this.imgs.buttonRestart.width - spacing / 2, ly,
             this.imgs.buttonRestart,
             () => setState(STATE_START));
 
@@ -397,16 +397,16 @@ export class Game {
             return false;
         };
         this.buttonSubmit = new DisableButton(
-            () => this.canvas.width / 2 + spacing / 2, ly,
+            () => this.canvasWidth / 2 + spacing / 2, ly,
             this.imgs.buttonSubmit, this.imgs.buttonSubmitDisabled, submitFunction, disableFunction);
 
         const dy2 = 400;
         this.buttonRestartLeaderboardError = new Button(
-            () => this.canvas.width / 2 - this.imgs.buttonRestart.width - spacing / 2, dy2,
+            () => this.canvasWidth / 2 - this.imgs.buttonRestart.width - spacing / 2, dy2,
             this.imgs.buttonRestart,
             () => setState(STATE_START));
         this.buttonRetry = new Button(
-            () => this.canvas.width / 2 + spacing / 2, dy2,
+            () => this.canvasWidth / 2 + spacing / 2, dy2,
             this.imgs.buttonRetry, () => setState(STATE_LEADERBOARD));
 
         this.buttonTrolleymanOrg = new Button(
@@ -448,7 +448,7 @@ export class Game {
         if (typeof document.hidden === "undefined") {
             console.log("Error: Page Visibility API not supported.");
         } else {
-            // Handle page visibility change   
+            // Handle page visibility change
             document.addEventListener("visibilitychange", this.handleVisibilityChange, false);
         }
 
@@ -605,7 +605,7 @@ export class Game {
                     this.pipes[i].passed = true;
                     this.pipes[i].x = -200;
                 }
-                this.pipeMax = this.bird.posX + Math.max(800, this.canvas.width);
+                this.pipeMax = this.bird.posX + Math.max(800, this.canvasWidth);
             }
 
         } else if (this.state === STATE_PAUSED) {
@@ -888,7 +888,7 @@ export class Game {
                 this.state = STATE_DEATH;
         }
         // if at the top of the screen
-        const ch = this.canvas.height;
+        const ch = this.canvasHeight;
         const t = this.flappyCurrent.height / 2;
         if (bird.posY + t > ch) {
             bird.posY = ch - t;
@@ -946,30 +946,51 @@ export class Game {
         }
     }
 
-    draw(): void {
-        // resize canvas
-        this.canvas.width = this.canvas.clientWidth;
-        this.canvas.height = this.canvas.clientHeight;
+    get canvasWidthActual(): number {
+        return this.canvas.width / getDPR();
+    }
 
-        const width = this.canvas.clientWidth;
-        const height = this.canvas.clientHeight;
+    get canvasHeightActual(): number {
+        return this.canvas.height;
+    }
+
+    get canvasWidth(): number {
+        return this.canvas.width / getDPR();
+    }
+
+    get canvasHeight(): number {
+        return this.canvas.height / getDPR();
+    }
+
+    draw(): void {
+        const dpr = getDPR();
+
+        // resize canvas
+        const width = this.canvas.clientWidth * dpr;
+        const height = this.canvas.clientHeight * dpr;
 
         // If it's resolution does not match change it
-        if (this.canvas.width !== width || this.canvas.height !== height) {
+        if (this.canvas.width !== width) {
             this.canvas.width = width;
+        }
+        if (this.canvas.height !== height) {
             this.canvas.height = height;
         }
 
         // get context
         const c = this.canvas.getContext("2d")!;
+
+        // Scale the context to match DPR
+        c.scale(dpr, dpr);
+
         // clear canvas - don't technically need this, but it's nice
-        c.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        c.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         // we want that pixel-y feel!
         c.imageSmoothingEnabled = false;
 
         // the camera is always at the bird pos.
         if (this.cameraUpdate)
-            this.cameraX = this.bird.posX - 60 - this.canvas.width / 20.0;
+            this.cameraX = this.bird.posX - 60 - this.canvasWidth / 20.0;
 
         // if debugging is off, hide the stats panel
         if (this.debugView) {
@@ -983,7 +1004,7 @@ export class Game {
             drawImageTiled(c, this.imgs.bgBlank);
             // draw textured background
             const offsetBg = -this.imgs.bg.width - ((this.cameraX / 2) % this.imgs.bg.width);
-            drawImageTiled(c, this.imgs.bg, offsetBg, this.canvas.height - this.imgs.bg.height, undefined, 1);
+            drawImageTiled(c, this.imgs.bg, offsetBg, this.canvasHeight - this.imgs.bg.height, undefined, 1);
 
             // draw pipes
             for (let i = 0; i < this.pipes.length; i++) {
@@ -992,7 +1013,7 @@ export class Game {
 
             // draw ground
             const offsetGround = -this.imgs.ground.width - (this.cameraX % this.imgs.ground.width);
-            drawImageTiled(c, this.imgs.ground, offsetGround, this.canvas.height - this.imgs.ground.height, undefined, 1);
+            drawImageTiled(c, this.imgs.ground, offsetGround, this.canvasHeight - this.imgs.ground.height, undefined, 1);
         }
 
         // draw flappy bird
@@ -1001,6 +1022,8 @@ export class Game {
 
         // draw score
         this.drawUI(c);
+
+        c.scale(1/dpr, 1/dpr);
     }
 
     drawUI(c: CanvasRenderingContext2D): void {
@@ -1039,8 +1062,8 @@ export class Game {
     }
 
     drawLoadingUI(c: CanvasRenderingContext2D): void {
-        const x = c.canvas.width / 2;
-        const y = c.canvas.height / 2;
+        const x = this.canvasWidth / 2;
+        const y = this.canvasHeight / 2;
         if (this.flappysLoaded)
             this.drawLoadingAnimation(c, this.stateChangeDt, x, y, false);
     }
@@ -1055,13 +1078,13 @@ export class Game {
     drawStartUI(c: CanvasRenderingContext2D): void {
         drawImage(c, this.imgs.tapInfo,
             this.getTapInfoOffsetX() + this.bird.posX - this.cameraX,
-            //200 + this.canvas.width / 20.0 - this.imgs.tapInfo.width/2,
-            (this.canvas.height - this.getBirdStartY()) - this.imgs.tapInfo.height / 2);
+            //200 + this.canvasWidth / 20.0 - this.imgs.tapInfo.width/2,
+            (this.canvasHeight - this.getBirdStartY()) - this.imgs.tapInfo.height / 2);
 
         c.textAlign = "center";
         c.textBaseline = "top";
         c.font = "60px FlappyFont, sans-serif";
-        const x = Math.floor(this.canvas.width / 2);
+        const x = Math.floor(this.canvasWidth / 2);
         const col = "gold";//"#30e830";
         drawFlappyText(c, "Flappy", x, this.getTitleStartY(), col);
         drawFlappyText(c, "Clone", x, this.getTitleStartY() + 60 + 20, col);
@@ -1073,16 +1096,16 @@ export class Game {
         c.font = "60px FlappyFont, sans-serif";
         const titleCol = "gold";
         if (!this.isGameOverMultiline()) {
-            drawFlappyText(c, "Game Over", Math.floor(c.canvas.width / 2), this.getGameOverY(), titleCol);
+            drawFlappyText(c, "Game Over", Math.floor(this.canvasWidth / 2), this.getGameOverY(), titleCol);
         } else {
-            drawFlappyText(c, "Game", Math.floor(c.canvas.width / 2), this.getGameOverY(), titleCol);
-            drawFlappyText(c, "Over", Math.floor(c.canvas.width / 2), this.getGameOverY2(), titleCol);
+            drawFlappyText(c, "Game", Math.floor(this.canvasWidth / 2), this.getGameOverY(), titleCol);
+            drawFlappyText(c, "Over", Math.floor(this.canvasWidth / 2), this.getGameOverY2(), titleCol);
         }
 
         c.font = "30px FlappyFont, sans-serif";
         const diff = 70;
-        const l = Math.floor(c.canvas.width / 2 - diff);
-        const r = Math.floor(c.canvas.width / 2 + diff);
+        const l = Math.floor(this.canvasWidth / 2 - diff);
+        const r = Math.floor(this.canvasWidth / 2 + diff);
         const t = this.getGameOverTop();
         const b = this.getGameOverBottom();
         const outline = 3;
@@ -1098,8 +1121,8 @@ export class Game {
     drawLeaderboardUI(c: CanvasRenderingContext2D): void {
         this.drawLeaderboardHeader(c);
         if (this.leaderboardLoading) {
-            var x = c.canvas.width / 2;
-            var y = c.canvas.height / 2;
+            var x = this.canvasWidth / 2;
+            var y = this.canvasHeight / 2;
             this.drawLoadingAnimation(c, this.stateChangeDt, x, y, true);
         } else {
             this.drawLeaderboard(c);
@@ -1110,7 +1133,7 @@ export class Game {
         const img = this.imgs.deadFlappy[2];
         const offsetX = -img.width / 2;
         const offsetY = -img.height / 2;
-        const x = c.canvas.width / 2;
+        const x = this.canvasWidth / 2;
         const y = 345;
 
         c.translate(x, y);
@@ -1133,7 +1156,7 @@ export class Game {
         const img = this.imgs.deadFlappy[2];
         const offsetX = -img.width / 2;
         const offsetY = -img.height / 2;
-        const x = c.canvas.width / 2;
+        const x = this.canvasWidth / 2;
         const y = 275;
 
         c.translate(x, y);
@@ -1155,17 +1178,17 @@ export class Game {
         c.textBaseline = "top";
         c.font = this.getLeaderboardHeaderFontSize() + "px FlappyFont, sans-serif";
         const titleCol = "gold";
-        drawFlappyText(c, "Leaderboard", Math.floor(c.canvas.width / 2), this.getLeaderboardHeaderY(), titleCol, this.getLeaderboardHeaderFontOutline());
+        drawFlappyText(c, "Leaderboard", Math.floor(this.canvasWidth / 2), this.getLeaderboardHeaderY(), titleCol, this.getLeaderboardHeaderFontOutline());
     }
 
     drawLeaderboard(c: CanvasRenderingContext2D): void {
         c.textBaseline = "top";
         c.font = this.getLeaderboardFontSize() + "px FlappyFont, sans-serif";
 
-        const totalW = Math.min(c.canvas.width, MAX_LEADERBOARD_WIDTH);
+        const totalW = Math.min(this.canvasWidth, MAX_LEADERBOARD_WIDTH);
 
-        const left = c.canvas.width / 2 - totalW / 2;
-        const right = c.canvas.width - left;
+        const left = this.canvasWidth / 2 - totalW / 2;
+        const right = this.canvasWidth - left;
         const outline = this.getLeaderboardFontOutline();
         const scoreW = c.measureText("SCORE").width;
 
@@ -1273,7 +1296,7 @@ export class Game {
     drawFlappy(c: CanvasRenderingContext2D): void {
         // draw flappy bird
         const x = this.bird.posX - this.cameraX;
-        const y = c.canvas.height - this.bird.posY;
+        const y = this.canvasHeight - this.bird.posY;
         const ang = this.bird.ang;
 
         if (this.debugView) {
@@ -1322,7 +1345,7 @@ export class Game {
 
     drawPipe(c: CanvasRenderingContext2D, pipe: Pipe): void {
         const x = pipe.x - this.cameraX;
-        const ly = c.canvas.height - pipe.y;
+        const ly = this.canvasHeight - pipe.y;
         const uy = ly - pipe.spacing;
 
         // draw upper pipe
@@ -1351,24 +1374,16 @@ export class Game {
         }
     }
 
-    getCanvasHeight(): number {
-        return this.canvas.height;
-    }
-
-    getCanvasWidth(): number {
-        return this.canvas.width;
-    }
-
     getHeightRatio(): number {
         const minCanvasHeight = 480;
         const maxCanvasHeight = 915;
-        return (Math.min(Math.max(this.getCanvasHeight(), minCanvasHeight), maxCanvasHeight) - minCanvasHeight) / (maxCanvasHeight - minCanvasHeight);
+        return (Math.min(Math.max(this.canvasHeight, minCanvasHeight), maxCanvasHeight) - minCanvasHeight) / (maxCanvasHeight - minCanvasHeight);
     }
 
     getWidthRatio(): number {
         const minCanvasWidth = 320;
         const maxCanvasWidth = 1440;
-        return (Math.min(Math.max(this.getCanvasWidth(), minCanvasWidth), maxCanvasWidth) - minCanvasWidth) / (maxCanvasWidth - minCanvasWidth);
+        return (Math.min(Math.max(this.canvasWidth, minCanvasWidth), maxCanvasWidth) - minCanvasWidth) / (maxCanvasWidth - minCanvasWidth);
     }
 
     getAverageRatio(): number {
@@ -1412,7 +1427,7 @@ export class Game {
     }
 
     getRightButtonOffset(): number {
-        return this.getCanvasWidth() - this.getPaddingOffset()
+        return this.canvasWidth - this.getPaddingOffset()
     }
 
     getPauseButtonOffsetX(): number {
@@ -1432,7 +1447,7 @@ export class Game {
     }
 
     isGameOverMultiline(): boolean {
-        return this.getCanvasWidth() < 350;
+        return this.canvasWidth < 350;
     }
 
     getGameOverY(): number {
@@ -1456,9 +1471,9 @@ export class Game {
     }
 
     leaderboardHelper(smaller: number, min: number, max: number): number {
-        if (this.getCanvasHeight() < LEADERBOARD_SMALLER_THRESHOLD_HEIGHT) {
+        if (this.canvasHeight < LEADERBOARD_SMALLER_THRESHOLD_HEIGHT) {
             return smaller;
-        } else if (this.getCanvasWidth() >= LEADERBOARD_THRESHOLD_WIDTH && this.getCanvasHeight() >= LEADERBOARD_THRESHOLD_HEIGHT) {
+        } else if (this.canvasWidth >= LEADERBOARD_THRESHOLD_WIDTH && this.canvasHeight >= LEADERBOARD_THRESHOLD_HEIGHT) {
             return max;
         } else {
             return min;
