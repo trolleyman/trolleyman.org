@@ -7,6 +7,7 @@ import FancyLinks from '~/components/FancyLinks';
 import breakoutImg from './dissertation/breakout.png';
 import dissertationPdfUrl from './dissertation/Dissertation.pdf'
 import websiteImg from './website/screenshot.png';
+import websiteRemixImg from './website-remix/screenshot.png';
 import lincImg from './linc/logo.min.png';
 import flappyImg from './flappy/img/logo.png';
 import zucchiniImg from './zucchini/logo.min.gif';
@@ -24,6 +25,7 @@ type ProjectProps = React.PropsWithChildren<{
     image?: string | Omit<ImgProps, 'className'>
     languages?: string[]
     libraries?: string[]
+    tools?: string[]
     links?: FancyLinksArray
 }>
 
@@ -35,11 +37,12 @@ function Project({
     image,
     languages,
     libraries,
+    tools,
     links
 }: ProjectProps) {
     languages ??= []
     libraries ??= []
-
+    tools ??= []
     const content = (
         <div className="w-full lg:w-3/4 space-y-4">
             <div className='space-y-1'>
@@ -52,7 +55,7 @@ function Project({
 
             <div className="text-gray-700 dark:text-gray-300 leading-relaxed">{children}</div>
 
-            {(languages.length > 0 || libraries.length > 0) && (
+            {(languages.length > 0 || libraries.length > 0 || tools.length > 0) && (
                 <div className="space-y-1">
                     {languages.length > 0 && (
                         <div className="text-sm">
@@ -64,6 +67,12 @@ function Project({
                         <div className="text-sm">
                             <span className="font-medium text-gray-900 dark:text-white">Libraries:</span>{' '}
                             <span className="text-gray-600 dark:text-gray-400">{libraries.join(', ')}</span>
+                        </div>
+                    )}
+                    {tools.length > 0 && (
+                        <div className="text-sm">
+                            <span className="font-medium text-gray-900 dark:text-white">Tools:</span>{' '}
+                            <span className="text-gray-600 dark:text-gray-400">{tools.join(', ')}</span>
                         </div>
                     )}
                 </div>
@@ -122,7 +131,7 @@ export default function Projects() {
                 libraries={["TensorFlow", "PyTorch"]}
                 links={[
                     { text: "Paper", to: dissertationPdfUrl, external: true },
-                    { text: "More details", to: "/projects/dissertation" }
+                    { text: "Details", to: "/projects/dissertation" }
                 ]}
             >
                 Final year project exploring Google DeepMind's research into developing general AI for Atari 2600 games using deep learning. Achieved a 1st class mark for this project.
@@ -137,10 +146,10 @@ export default function Projects() {
                 libraries={["Rocket"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/trolleyman.org", external: true },
-                    { text: "More details", to: "/projects/website" }
+                    { text: "Details", to: "/projects/website" }
                 ]}
             >
-                Created this website to keep track of the projects I've been working on.
+                Created a website to keep track of the projects I've been working on. This was my first website, built with Rust and Rocket.
             </Project>
 
             <Project
@@ -153,7 +162,7 @@ export default function Projects() {
                 links={[
                     { text: "Website", to: "/linc" },
                     { text: "Demo", to: "/linc/demo" },
-                    { text: "More details", to: "/projects/linc" }
+                    { text: "Details", to: "/projects/linc" }
                 ]}
             >
                 A versatile social network visualization tool, developed with Millennium Point.
@@ -168,7 +177,7 @@ export default function Projects() {
                 libraries={["HTML5 Canvas API", "Django"]}
                 links={[
                     { text: "Demo", to: "/projects/flappy/demo" },
-                    { text: "More details", to: "/projects/flappy" }
+                    { text: "Details", to: "/projects/flappy" }
                 ]}
             >
                 Yet another Flappy Bird clone.
@@ -183,7 +192,7 @@ export default function Projects() {
                 libraries={["LWJGL", "OpenGL", "OpenAL"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/Zucchini", external: true },
-                    { text: "More details", to: "/projects/zucchini" }
+                    { text: "Details", to: "/projects/zucchini" }
                 ]}
             >
                 Atmospheric fast-paced top down shooter. Developed with 5 other students.
@@ -198,7 +207,7 @@ export default function Projects() {
                 libraries={["LeJOS", "Swing"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/rp-warehouse", external: true },
-                    { text: "More details", to: "/projects/robot" }
+                    { text: "Details", to: "/projects/robot" }
                 ]}
             >
                 Robot warehouse management system. Developed with 9 other students.
@@ -213,7 +222,7 @@ export default function Projects() {
                 libraries={["OpenGL"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/Portal2", external: true },
-                    { text: "More details", to: "/projects/portal" }
+                    { text: "Details", to: "/projects/portal" }
                 ]}
             >A redo of my first Portal project, a shameless attempt to copy my favourite video game at the time, Portal. Guess that makes this a redo of a r
                 edo.
@@ -227,7 +236,7 @@ export default function Projects() {
                 languages={["Rust"]}
                 links={[
                     { text: "GitHub", to: "https://github.com/trolleyman/kmeans", external: true },
-                    { text: "More details", to: "/projects/k-means" }
+                    { text: "Details", to: "/projects/k-means" }
                 ]}
             >
                 Using the k-means algorithm to create pretty pictures.
