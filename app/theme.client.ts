@@ -1,4 +1,4 @@
-import { isTheme, cookie as themeCookie } from "~/theme";
+import { isTheme, resolvedThemeCookie, themeCookie as themeCookie } from "~/theme";
 import type { ResolvedTheme, Theme } from "~/theme";
 
 export function setThemeDocumentCookie(theme: Theme) {
@@ -6,6 +6,14 @@ export function setThemeDocumentCookie(theme: Theme) {
         document.cookie = c
     }).catch(e => {
         console.log('Error setting theme cookie', e)
+    })
+}
+
+export function setResolvedThemeDocumentCookie(resolvedTheme: ResolvedTheme) {
+    resolvedThemeCookie.serialize(resolvedTheme).then(c => {
+        document.cookie = c
+    }).catch(e => {
+        console.log('Error setting resolved theme cookie', e)
     })
 }
 

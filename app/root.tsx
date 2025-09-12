@@ -10,7 +10,7 @@ import {
 
 import type { Route } from "./+types/root";
 import ThemeProvider from "./components/ThemeProvider";
-import { isTheme, cookie as themeCookie, type Theme } from "./theme";
+import { isTheme, themeCookie, resolvedThemeCookie, type Theme, type ResolvedTheme, isResolvedTheme } from "./theme";
 
 import "./app.css";
 import MainLayoutErrorPage from "./components/MainLayoutErrorPage";
@@ -34,8 +34,18 @@ export async function loader({ request }: Route.LoaderArgs) {
   } catch {
   }
 
+  let cookieResolvedTheme: ResolvedTheme | undefined = undefined
+  try {
+    const cookieFromHeader = await resolvedThemeCookie.parse(cookieHeader)
+    if (isResolvedTheme(cookieFromHeader)) {
+      cookieResolvedTheme = cookieFromHeader
+    }
+  } catch {
+  }
+
   return {
-    cookieTheme
+    cookieTheme,
+    cookieResolvedTheme,
   }
 }
 
@@ -43,9 +53,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const htmlRef = useRef<HTMLHtmlElement>(null)
   const loaderData = useLoaderData<typeof loader | null | undefined>()
   const cookieTheme = typeof loaderData === 'object' && loaderData !== null ? loaderData.cookieTheme : undefined
+  const cookieResolvedTheme = typeof loaderData === 'object' && loaderData !== null ? loaderData.cookieResolvedTheme : undefined
 
   return (
-    <html lang="en" ref={htmlRef} {...(cookieTheme === "dark" ? { "data-theme": "dark" } : {})}>
+    <html lang="en" ref={htmlRef} className="scroll-smooth" {...(cookieResolvedTheme === "dark" || cookieTheme === "dark" ? { "data-theme": "dark" } : {})}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

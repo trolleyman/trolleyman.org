@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ResolvedTheme, Theme } from "~/theme";
-import { getLocalStorageTheme, getSystemDarkMediaQuery, resolveTheme, setThemeDocumentCookie, setLocalStorageTheme } from "~/theme.client";
+import { getLocalStorageTheme, getSystemDarkMediaQuery, resolveTheme, setThemeDocumentCookie, setLocalStorageTheme, setResolvedThemeDocumentCookie } from "~/theme.client";
 
 // Theme context for global theme management
 const ThemeContext = createContext({
@@ -38,18 +38,19 @@ export default function ThemeProvider({ children, cookieTheme, htmlRef }: { chil
     useEffect(() => {
         setLocalStorageTheme(theme);
         setThemeDocumentCookie(theme);
+        setResolvedTheme(resolveTheme(theme));
+    }, [theme]);
 
-        const effectiveTheme = resolveTheme(theme);
-        setResolvedTheme(effectiveTheme);
-
+    useEffect(() => {
+        setResolvedThemeDocumentCookie(resolvedTheme);
         if (htmlRef.current) {
-            if (effectiveTheme === "dark") {
+            if (resolvedTheme === "dark") {
                 htmlRef.current.setAttribute("data-theme", "dark");
             } else {
                 htmlRef.current.removeAttribute("data-theme");
             }
         }
-    }, [theme]);
+    }, [resolvedTheme]);
 
     return (
         <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>

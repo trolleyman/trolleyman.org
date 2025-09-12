@@ -11,7 +11,15 @@ export function isResolvedTheme(theme: any): theme is ResolvedTheme {
     return (theme === 'dark' || theme === 'light')
 }
 
-export const cookie = createCookie("theme", {
+export const themeCookie = createCookie("theme", {
+    path: '/',
+    sameSite: 'lax',
+    httpOnly: false,
+    secure: false,
+    maxAge: 60 * 60 * 24 * 365,
+});
+
+export const resolvedThemeCookie = createCookie("resolvedTheme", {
     path: '/',
     sameSite: 'lax',
     httpOnly: false,
