@@ -98,6 +98,22 @@ export default function Projects() {
         {/* Projects List */}
         <div className={cn("flex flex-col gap-12 mt-6", CONTENT_WIDTH_CLASSES)}>
             <Project
+                id="proj_website_remix"
+                title="trolleyman.org (Remix)"
+                date="2025"
+                image={{ src: websiteRemixImg, alt: "Website screenshot" }}
+                languages={["TypeScript", "CSS", "HTML"]}
+                libraries={["React Router", "Vite", "Tailwind CSS"]}
+                tools={["Vercel"]}
+                links={[
+                    { text: "GitHub", to: "https://github.com/trolleyman/trolleyman.org-remix", external: true },
+                    { text: "Details", to: "/projects/website-remix" }
+                ]}
+            >
+                Rewrite of the original website using React Router v7 (formerly Remix).
+            </Project>
+
+            <Project
                 id="proj_dissertation"
                 title="Dissertation"
                 date="2018-19"
