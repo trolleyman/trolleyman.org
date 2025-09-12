@@ -56,7 +56,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const cookieResolvedTheme = typeof loaderData === 'object' && loaderData !== null ? loaderData.cookieResolvedTheme : undefined
 
   return (
-    <html lang="en" ref={htmlRef} className="scroll-smooth" {...(cookieResolvedTheme === "dark" || cookieTheme === "dark" ? { "data-theme": "dark" } : {})}>
+    <html lang="en" ref={htmlRef} {...(cookieResolvedTheme === "dark" || cookieTheme === "dark" ? { "data-theme": "dark" } : {})}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
