@@ -15,6 +15,8 @@ import portalImg from './portal/screenshot.min.jpg';
 import kmeansImg from './k-means/alabama-hills-ca.min.jpg';
 import equatorImg from './equator/screenshot.jpg';
 
+export const CONTENT_WIDTH_CLASSES: string = "max-w-5xl mx-auto px-4"
+
 type ProjectProps = React.PropsWithChildren<{
     id: string
     title: string
@@ -94,7 +96,7 @@ export default function Projects() {
         <PageTitle>Projects</PageTitle>
 
         {/* Projects List */}
-        <div className="flex flex-col gap-12 max-w-5xl mx-auto px-4 mt-6">
+        <div className={cn("flex flex-col gap-12 mt-6", CONTENT_WIDTH_CLASSES)}>
             <Project
                 id="proj_dissertation"
                 title="Dissertation"

@@ -2,6 +2,8 @@ import PageTitle from "~/components/PageTitle";
 import BodyLink from "~/components/BodyLink";
 import FancyLinks from "~/components/FancyLinks";
 import Img from "~/components/Img";
+import { cn } from "~/utils";
+import { CONTENT_WIDTH_CLASSES } from "..";
 
 import demo1Img from './img/demo1.jpg'
 import demo2Img from './img/demo2.jpg'
@@ -11,20 +13,23 @@ export default function FlappyProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">Flappy Clone</PageTitle>
 
-        <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
-            <div className="flex justify-center gap-4 md:gap-8 md:mt-4 md:mb-6 lg:gap-12">
-                <Img
-                    src={demo1Img}
-                    className="max-h-64 sm:max-h-70"
-                />
-                <Img
-                    src={demo2Img}
-                    className="max-h-64 sm:max-h-70"
-                />
-                <Img
-                    src={demo3Img}
-                    className="max-h-64 sm:max-h-70"
-                />
+        <div className={cn("space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed", CONTENT_WIDTH_CLASSES)}>
+
+            <div className="w-screen ml-[calc(50%-50vw)] overflow-x-auto">
+                <div className="grid grid-cols-3 grid-rows-1 w-fit mx-auto mb-6 mt-4 gap-4 md:gap-8 lg:gap-12 min-w-max">
+                    <Img
+                        src={demo1Img}
+                        className="max-h-64 sm:max-h-70"
+                    />
+                    <Img
+                        src={demo2Img}
+                        className="max-h-64 sm:max-h-70"
+                    />
+                    <Img
+                        src={demo3Img}
+                        className="max-h-64 sm:max-h-70"
+                    />
+                </div>
             </div>
 
             <p>

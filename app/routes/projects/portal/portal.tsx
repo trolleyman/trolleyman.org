@@ -1,11 +1,13 @@
 import PageTitle from "~/components/PageTitle";
 import FancyLinks from "~/components/FancyLinks";
+import { cn } from "~/utils";
+import { CONTENT_WIDTH_CLASSES } from "..";
 
 export default function PortalProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">Portal 2</PageTitle>
 
-        <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+        <div className={cn("space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed", CONTENT_WIDTH_CLASSES)}>
             <p>
                 A redo of my first Portal project, a shameless attempt to copy my favourite video game at the time, Portal. This project was developed in Rust using OpenGL for graphics rendering, focusing on implementing the core portal mechanics that made the original game so innovative.
             </p>

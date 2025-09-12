@@ -5,12 +5,14 @@ import FancyLinks from "~/components/FancyLinks";
 import shootingImg from './shooting.png'
 import victoryImg from './victory.png'
 import laserImg from './laser.png'
+import { cn } from "~/utils";
+import { CONTENT_WIDTH_CLASSES } from "..";
 
 export default function ZucchiniProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">Zucchini</PageTitle>
 
-        <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+        <div className={cn("space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed", CONTENT_WIDTH_CLASSES)}>
             <Figure
                 src={shootingImg}
                 alt="Zucchini shooting gameplay"

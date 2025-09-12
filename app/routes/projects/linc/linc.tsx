@@ -2,6 +2,8 @@ import PageTitle from "~/components/PageTitle";
 import Figure from "~/components/Figure";
 import BodyLink from "~/components/BodyLink";
 import FancyLinks from "~/components/FancyLinks";
+import { cn } from "~/utils";
+import { CONTENT_WIDTH_CLASSES } from "..";
 
 import connectLaunchImg from './connect_launch.min.jpg'
 import graphImg from './graph_white.min.jpg'
@@ -10,7 +12,7 @@ export default function LincProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">LINC</PageTitle>
 
-        <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+        <div className={cn("space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed", CONTENT_WIDTH_CLASSES)}>
             <Figure
                 src={connectLaunchImg}
                 alt="CONNECT launch event"

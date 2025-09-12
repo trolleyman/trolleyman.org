@@ -1,11 +1,13 @@
 import PageTitle from "~/components/PageTitle";
 import FancyLinks from "~/components/FancyLinks";
+import { cn } from "~/utils";
+import { CONTENT_WIDTH_CLASSES } from "..";
 
 export default function KMeansProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">k-means</PageTitle>
 
-        <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+        <div className={cn("space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed", CONTENT_WIDTH_CLASSES)}>
             <p>
                 Using the k-means algorithm to create pretty pictures. This project implements the classic k-means clustering algorithm in Rust, applying it to image processing and data visualization tasks.
             </p>

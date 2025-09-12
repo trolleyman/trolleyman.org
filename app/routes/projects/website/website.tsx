@@ -1,11 +1,13 @@
 import PageTitle from "~/components/PageTitle";
 import FancyLinks from "~/components/FancyLinks";
+import { cn } from "~/utils";
+import { CONTENT_WIDTH_CLASSES } from "..";
 
 export default function WebsiteProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">trolleyman.org</PageTitle>
 
-        <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+        <div className={cn("space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed", CONTENT_WIDTH_CLASSES)}>
             <p>
                 Created this website to keep track of the projects I've been working on. Built with modern web technologies including React Router, Tailwind CSS, and TypeScript for a responsive and maintainable codebase.
             </p>

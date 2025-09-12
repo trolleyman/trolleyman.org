@@ -3,6 +3,8 @@ import Figure from "~/components/Figure";
 import Img from "~/components/Img";
 import FancyLinks from "~/components/FancyLinks";
 import BodyLink from "~/components/BodyLink";
+import { cn } from "~/utils";
+import { CONTENT_WIDTH_CLASSES } from "..";
 
 // TODO: Use ?w=500;900;1200&format=avif;webp;jpg&as=picture (see vite-imagetools)
 import games from './games.png'
@@ -19,7 +21,7 @@ export default function Dissertation() {
             className="mb-6 mt-4 w-full"
         />
 
-        <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+        <div className={cn("space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed", CONTENT_WIDTH_CLASSES)}>
             <p>
                 For my dissertation project I chose to explore the topic of game AI. <BodyLink to="https://deepmind.com/" external>Google DeepMind</BodyLink> had recently released a <BodyLink to="https://deepmind.com/research/dqn/" external>paper</BodyLink> about a novel technique of creating general game AIs using machine learning. They then demonstrated the efficacy of their method on a variety of Atari 2600 games (Breakout, Space Invaders, Pacman, etc.).
             </p>

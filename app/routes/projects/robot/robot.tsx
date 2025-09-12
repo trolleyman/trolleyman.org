@@ -1,6 +1,8 @@
 import PageTitle from "~/components/PageTitle";
 import Figure from "~/components/Figure";
 import FancyLinks from "~/components/FancyLinks";
+import { cn } from "~/utils";
+import { CONTENT_WIDTH_CLASSES } from "..";
 
 import guiImg from './gui.png'
 import selfieImg from './selfie.jpg'
@@ -9,7 +11,7 @@ export default function RobotProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">Robot Warehouse</PageTitle>
 
-        <div className="max-w-5xl mx-auto px-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+        <div className={cn("space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed", CONTENT_WIDTH_CLASSES)}>
             <Figure
                 src={guiImg}
                 alt="Robot warehouse GUI"
