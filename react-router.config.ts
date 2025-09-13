@@ -38,8 +38,10 @@ export default {
     }
     var paths = Array.from(getAllPaths(routeConfig))
     paths.push('404')
-    paths = paths.filter((path) => !path.endsWith(".well-known/appspecific/com.chrome.devtools.json"));
-    // console.log("Paths:", paths);
+    paths = paths.filter((path) =>
+      !path.endsWith(".well-known/appspecific/com.chrome.devtools.json") &&
+      path !== '*');
+    console.log("Paths:", paths);
     return paths;
   }
 } satisfies Config;
