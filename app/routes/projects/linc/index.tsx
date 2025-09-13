@@ -5,8 +5,8 @@ import FancyLinks from "~/components/FancyLinks";
 import { cn } from "~/utils";
 import { CONTENT_WIDTH_CLASSES } from "..";
 
-import connectLaunchImg from './connect_launch.min.jpg'
-import graphImg from './graph_white.min.jpg'
+import connectLaunchImg from './img/connect_launch.min.jpg'
+import graphImg from './img/graph_white.min.jpg'
 
 export default function LincProject() {
     return <>
@@ -44,8 +44,8 @@ export default function LincProject() {
             </p>
 
             <FancyLinks className="text-left" links={[
-                { text: "Website", to: "/linc" },
-                { text: "Demo", to: "/linc/demo" },
+                { text: "Website", to: "/projects/linc/mainpage" },
+                { text: "Demo", to: "/projects/linc/demo" },
             ]} />
 
             <div className="clear-both" />

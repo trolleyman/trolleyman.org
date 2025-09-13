@@ -8,7 +8,7 @@ import breakoutImg from './dissertation/breakout.png';
 import dissertationPdfUrl from './dissertation/Dissertation.pdf'
 import websiteImg from './website/screenshot.png';
 import websiteRemixImg from './website-remix/screenshot.png';
-import lincImg from './linc/logo.min.png';
+import lincImg from './linc/img/logo.min.png';
 import flappyImg from './flappy/img/logo.png';
 import zucchiniImg from './zucchini/logo.min.gif';
 import robotImg from './robot/casterbot.min.jpg';
@@ -160,8 +160,8 @@ export default function Projects() {
                 languages={["HTML", "JavaScript", "CSS", "SQL", "Python"]}
                 libraries={["Three.js", "D3.js", "Django"]}
                 links={[
-                    { text: "Website", to: "/linc" },
-                    { text: "Demo", to: "/linc/demo" },
+                    { text: "Website", to: "/projects/linc/mainpage" },
+                    { text: "Demo", to: "/projects/linc/demo" },
                     { text: "Details", to: "/projects/linc" }
                 ]}
             >
