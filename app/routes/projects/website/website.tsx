@@ -18,11 +18,11 @@ export default function WebsiteProject() {
                 className="mb-4 mx-auto max-h-48 sm:mr-0 sm:float-right sm:ml-4 md:max-h-64"
             />
 
-            <p className="text-center sm:text-right">
+            <p className="sm:text-right">
                 Created a website to keep track of the projects I've been working on. Built with Rust and Rocket. Caddy used for HTTPS and serving static files. Used a HTML5 UP template for the index page.
             </p>
 
-            <p>
+            <p  className="sm:text-right">
                 Things got fairly out of hand quite quickly. I used Docker compose to run the website and the backend, and implemented a route that would restart the server if GitHub was updated, using push webhooks.
             </p>
 
