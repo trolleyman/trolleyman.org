@@ -1053,12 +1053,21 @@ export class Game {
         if (this.state === STATE_ERROR)
             this.drawErrorUI(c);
 
-        // draw buttons
+        // draw buttons and update cursor
         const bs = this.buttons;
+        let hoveringButton = false;
         for (let i = 0; i < bs.length; i++) {
             const btn = bs[i];
             btn.draw(c, this.debugView, this.mousePos || undefined);
+
+            // Check if mouse is hovering over this button
+            if (this.mousePos && btn.intersects(this.mousePos.x, this.mousePos.y)) {
+                hoveringButton = true;
+            }
         }
+
+        // Update canvas cursor style
+        this.canvas.style.cursor = hoveringButton ? 'pointer' : 'default';
     }
 
     drawLoadingUI(c: CanvasRenderingContext2D): void {
