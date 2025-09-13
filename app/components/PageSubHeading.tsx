@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { cn, useStaticAutoId } from "~/utils";
 
 export type PageSubHeadingProps = React.PropsWithChildren<{
@@ -10,7 +11,9 @@ export default function PageSubHeading({ id, className, children }: PageSubHeadi
     id ??= autoId;
     return <>
         <h3 id={id} className={cn("text-md font-semibold text-gray-900 dark:text-gray-100", className)}>
-            {children}
+            <Link to={{ hash: `#${id}` }}>
+                {children}
+            </Link>
         </h3>
     </>
 }
