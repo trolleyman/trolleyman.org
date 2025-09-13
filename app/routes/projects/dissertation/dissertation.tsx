@@ -6,9 +6,10 @@ import BodyLink from "~/components/BodyLink";
 import { cn } from "~/utils";
 import { CONTENT_WIDTH_CLASSES } from "..";
 
-// TODO: Use ?w=500;900;1200&format=avif;webp;jpg&as=picture (see vite-imagetools)
-import games from './games.png'
-import breakoutGraph from './breakout_graph.png'
+// @ts-ignore
+import games from './games.png' with { type: 'png', as: 'picture', format: 'webp;avif;png', width: '300;500;700;1000;' };
+// @ts-ignore
+import breakoutGraph from './breakout_graph.png' with { type: 'png', as: 'picture', format: 'webp;avif;png', width: '300;500;700;1000;' };
 import dissertationPdfUrl from './Dissertation.pdf'
 
 export default function Dissertation() {
