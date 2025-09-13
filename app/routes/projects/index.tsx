@@ -4,17 +4,27 @@ import { cn } from '~/utils';
 import type { FancyLinksArray } from '~/components/FancyLinks';
 import FancyLinks from '~/components/FancyLinks';
 
-import breakoutImg from './dissertation/breakout.png';
 import dissertationPdfUrl from './dissertation/Dissertation.pdf'
-import websiteImg from './website/screenshot.png';
-import websiteRemixImg from './website-remix/screenshot.png';
-import lincImg from './linc/img/logo.min.png';
-import flappyImg from './flappy/img/logo.png';
-import zucchiniImg from './zucchini/logo.min.gif';
-import robotImg from './robot/casterbot.min.jpg';
-import portalImg from './portal/screenshot.min.jpg';
-import kmeansImg from './k-means/repo/examples/alabama-hills-ca/alabama-hills-ca-2.png';
-import equatorImg from './equator/screenshot.jpg';
+// @ts-ignore
+import breakoutImg from './dissertation/breakout.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+// @ts-ignore
+import websiteImg from './website/screenshot.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+// @ts-ignore
+import websiteRemixImg from './website-remix/screenshot.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+// @ts-ignore
+import lincImg from './linc/img/logo.min.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+// @ts-ignore
+import flappyImg from './flappy/img/logo.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+// @ts-ignore
+import zucchiniImg from './zucchini/logo.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+// @ts-ignore
+import robotImg from './robot/casterbot.jpg?w=300;500;700;1000;&format=webp;avif;jpg&as=picture';
+// @ts-ignore
+import portalImg from './portal/screenshot.jpg?w=300;500;700;1000;&format=webp;avif;jpg&as=picture';
+// @ts-ignore
+import kmeansImg from './k-means/repo/examples/alabama-hills-ca/alabama-hills-ca-2.png?w=300;500;700;1000;&format=webp;avif;jpg&as=picture';
+// @ts-ignore
+import equatorImg from './equator/screenshot.jpg?w=300;500;700;1000;&format=webp;avif;jpg&as=picture';
 
 export const CONTENT_WIDTH_CLASSES: string = "max-w-5xl mx-auto px-4"
 
