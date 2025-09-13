@@ -1,10 +1,9 @@
 import Img from "~/components/Img";
 
-// TODO: Use this for all other images
 // @ts-ignore
-import largeTestImage from './test_large.png' with { type: 'png', as: 'picture', format: 'webp;avif;jpg', width: '300;500;700;1000;' };
+import largeTestImage from './test_large.png?w=300;500;700;1000;&format=webp;avif;jpg&as=picture'
 // @ts-ignore
-import smallTestImage from './test_small.png' with { type: 'png', as: 'picture', format: 'webp;avif;jpg', width: '300;500;700;1000;' };
+import smallTestImage from './test_small.png?w=300;500;700;1000;&format=webp;avif;jpg&as=picture'
 
 export default function ImageTestPage() {
     return <>
