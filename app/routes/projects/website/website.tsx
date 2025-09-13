@@ -22,6 +22,10 @@ export default function WebsiteProject() {
                 Created a website to keep track of the projects I've been working on. Built with Rust and Rocket. Caddy used for HTTPS and serving static files. Used a HTML5 UP template for the index page.
             </p>
 
+            <p>
+                Things got fairly out of hand quite quickly. I used Docker compose to run the website and the backend, and implemented a route that would restart the server if GitHub was updated, using push webhooks.
+            </p>
+
             <FancyLinks className="text-right" links={[
                 { text: "GitHub", to: "https://github.com/trolleyman/trolleyman.org", external: true },
             ]} />
