@@ -1,7 +1,7 @@
 import Img, { type ImgProps } from './Img';
 
 export type FigureProps = {
-    caption?: string
+    caption?: string | React.ReactNode
     className?: string
     imgClassName?: string
 } & ImgProps

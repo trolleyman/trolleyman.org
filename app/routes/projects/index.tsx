@@ -13,7 +13,7 @@ import flappyImg from './flappy/img/logo.png';
 import zucchiniImg from './zucchini/logo.min.gif';
 import robotImg from './robot/casterbot.min.jpg';
 import portalImg from './portal/screenshot.min.jpg';
-import kmeansImg from './k-means/alabama-hills-ca.min.jpg';
+import kmeansImg from './k-means/repo/examples/alabama-hills-ca/alabama-hills-ca-2.png';
 import equatorImg from './equator/screenshot.jpg';
 
 export const CONTENT_WIDTH_CLASSES: string = "max-w-5xl mx-auto px-4"

@@ -1,26 +1,34 @@
 import PageTitle from "~/components/PageTitle";
 import FancyLinks from "~/components/FancyLinks";
+import BodyLink from "~/components/BodyLink";
 import { cn } from "~/utils";
 import { CONTENT_WIDTH_CLASSES } from "..";
+
+import Figure from "~/components/Figure";
+
+import portalImg from './screenshot.min.jpg';
 
 export default function PortalProject() {
     return <>
         <PageTitle className="text-3xl md:text-3xl lg:text-4xl">Portal 2</PageTitle>
 
         <div className={cn("space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed", CONTENT_WIDTH_CLASSES)}>
-            <p>
+            <Figure
+                src={portalImg}
+                alt="Portal 2"
+                caption="Portal 2"
+                className="float-right w-full sm:max-w-sm ml-4 mb-2"
+            />
+
+            <p className="sm:text-right">
                 A redo of my first Portal project, a shameless attempt to copy my favourite video game at the time, Portal. This project was developed in Rust using OpenGL for graphics rendering, focusing on implementing the core portal mechanics that made the original game so innovative.
             </p>
 
-            <p>
-                The goal was to recreate the fundamental portal system where players can create linked portals between surfaces, allowing for complex spatial reasoning puzzles and creative problem-solving approaches. This involved implementing 3D graphics, collision detection, and the mathematical calculations needed for portal rendering and physics.
+            <p className="sm:text-right">
+                I mainly followed <BodyLink to="https://en.wikibooks.org/wiki/OpenGL_Programming/Mini-Portal" external>this tutorial</BodyLink>, but in Rust.
             </p>
 
-            <p>
-                While not a complete game, this project demonstrated my ability to work with low-level graphics programming, understand complex game mechanics, and implement them in a systems programming language like Rust.
-            </p>
-
-            <FancyLinks className="text-left" links={[
+            <FancyLinks className="text-right" links={[
                 { text: "GitHub", to: "https://github.com/trolleyman/Portal2", external: true },
             ]} />
         </div>

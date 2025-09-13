@@ -16,22 +16,24 @@ export default function RobotProject() {
                 src={guiImg}
                 alt="Robot warehouse GUI"
                 caption="Warehouse management interface"
-                className="float-right w-full xs:max-w-xs sm:max-w-sm ml-4 mb-2"
+                className="float-right w-full sm:max-w-sm ml-4 mb-2"
             />
 
-            <p>
+            <p className="sm:text-right">
                 Our task sounded simple for this project - get a set of robots to pick up and drop off items in a warehouse. It turned into the most frustrating yet rewarding project I've worked on. I was working with a large group of 9 other students as this was a module for my first year computer science degree at uni. Each person was assigned a role, and then we were told to just go out and do it.
             </p>
 
-            <p>
+            <p className="sm:text-right">
                 I was assigned GUI, but my role transformed into general bugfixer and integrator. I remember the final week was spent frantically trying to get the robots to route around eachother rather than bumping into eachother. Eventually I stayed up one night determined to get it working, and in the early hours of the morning, when the sun was rising, I finally made it. I stayed there for another 20 minutes, amazed that it worked finally. Then I packed up, and got a few hours sleep before the project final at 9am.
             </p>
+
+            <div className="clear-both" />
 
             <Figure
                 src={selfieImg}
                 alt="Robot project selfie"
                 caption="Late night debugging session"
-                className="float-left w-full xs:max-w-xs sm:max-w-sm mr-4 mb-2"
+                className="float-left w-full sm:max-w-sm mr-4 mb-2"
             />
 
             <p>
