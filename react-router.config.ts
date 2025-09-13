@@ -41,7 +41,7 @@ export default {
     paths = paths.filter((path) =>
       !path.endsWith(".well-known/appspecific/com.chrome.devtools.json") &&
       path !== '*');
-    console.log("Paths:", paths);
+    //console.log("Paths:", paths);
     return paths;
   }
 } satisfies Config;

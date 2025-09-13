@@ -55,6 +55,7 @@ export const staticRoutesList = [
         layout('./layouts/ErrorContentLayout.tsx', [
             route(import.meta.env.SSR ? "404" : undefined, "./routes/error_404_template.tsx"),
             index("./routes/index.tsx"),
+            route(import.meta.env.DEV ? "img-test" : undefined, "./routes/img-test/index.tsx"),
             route("blog", "./routes/blog.tsx"),
             route("projects", "./routes/projects/index.tsx"),
             route("projects/website-remix", "./routes/projects/website-remix/website-remix.tsx"),
