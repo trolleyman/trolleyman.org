@@ -5,7 +5,6 @@ import {
   type RouteConfig,
   type RouteConfigEntry,
 } from '@react-router/dev/routes';
-import { getPostsManifest } from './routes/blog/blog.server';
 
 // import { index as routerIndex, layout as routerLayout, route as routerRoute, prefix as routerPrefix, type RouteConfig, type RouteConfigEntry } from "@react-router/dev/routes";
 
@@ -138,6 +137,7 @@ export async function getPrerenderRoutes(): Promise<string[]> {
       continue;
     }
     if (path == 'blog/:postId') {
+      const { getPostsManifest } = await import('./routes/blog/blog.server');
       for (const postId of (await getPostsManifest()).keys()) {
         paths.push(`blog/${postId}`);
       }

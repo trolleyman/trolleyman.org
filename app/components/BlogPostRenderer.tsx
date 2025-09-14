@@ -14,7 +14,7 @@ import BlogPostStyle1 from '~/components/BlogPostStyle1';
 import BlogPostStyle2 from '~/components/BlogPostStyle2';
 import BlogPostStyle3 from '~/components/BlogPostStyle3';
 import { cn } from '~/utils';
-import type { Post } from '~/routes/blog/blog.server';
+import type { Post } from '~/routes/blog/types';
 
 export interface BlogPostRendererProps {
   post: Post;

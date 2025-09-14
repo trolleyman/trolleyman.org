@@ -3,6 +3,7 @@ import { join, resolve, relative } from 'path';
 import matter from 'gray-matter';
 import { DateTime } from 'luxon';
 import { parseDateOrThrow } from '~/date';
+import type { Post } from './types.d';
 
 // Constants
 export const POSTS_DIRECTORY = join(process.cwd(), 'posts');
@@ -52,18 +53,6 @@ export class MissingSlugError extends Error {
     );
     this.name = 'MissingSlugError';
   }
-}
-
-export interface Post {
-  filename: string;
-  slug: string;
-  title: string;
-  description: string;
-  author: string;
-  date: DateTime;
-  draft: boolean;
-  tags: string[];
-  content: string;
 }
 
 export async function getPosts(): Promise<Post[]> {

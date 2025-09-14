@@ -3,7 +3,7 @@ import PageTitle from './PageTitle';
 import PageDate from './PageDate';
 import PageAuthor from './PageAuthor';
 import PageTags from './PageTags';
-import type { Post } from '~/routes/blog/blog.server';
+import type { Post } from '~/routes/blog/types';
 
 export interface BlogPostStyle3Props {
   post: Post;
