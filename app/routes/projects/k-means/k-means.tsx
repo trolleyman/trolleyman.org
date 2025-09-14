@@ -75,6 +75,7 @@ export function K() {
 }
 
 export function KEq(props: { k: number }) {
+  const x = 1 + 2;
   return (
     <>
       <K />={props.k}
