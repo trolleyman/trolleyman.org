@@ -1,5 +1,6 @@
 import { CgDarkMode } from 'react-icons/cg';
 import { FaSun, FaMoon } from 'react-icons/fa6';
+
 import { useTheme } from '~/components/ThemeProvider';
 import { cn } from '~/utils';
 

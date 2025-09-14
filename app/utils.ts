@@ -1,9 +1,10 @@
 import clsx, { type ClassValue } from 'clsx';
 import { useState, useMemo } from 'react';
-import { twMerge } from 'tailwind-merge';
-import slugify from 'slugify';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import slugify from 'slugify';
+import { twMerge } from 'tailwind-merge';
+
 export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
 
 export const dotMinIfDebug = import.meta.env.DEV ? '.min' : '';

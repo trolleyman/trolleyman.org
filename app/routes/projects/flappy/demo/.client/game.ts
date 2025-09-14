@@ -12,33 +12,6 @@ import {
   NUM_LEADERBOARD_ENTRIES,
   type LeaderboardEntry,
 } from './score';
-
-// Image imports
-import bgImage from '../img/background.png';
-import bgBlankImage from '../img/backgroundBlank.png';
-import pipeImage from '../img/pipe.png';
-import pipeHeadImage from '../img/pipeHead.png';
-import groundImage from '../img/ground.png';
-import tapInfoImage from '../img/tapInfo.png';
-import newImage from '../img/new.png';
-import buttonPlayImage from '../img/buttonPlay.png';
-import buttonPauseImage from '../img/buttonPause.png';
-import buttonRestartImage from '../img/buttonRestart.png';
-import buttonLeaderboardImage from '../img/buttonLeaderboard.png';
-import buttonSubmitImage from '../img/buttonSubmit.png';
-import buttonSubmitDisabledImage from '../img/buttonSubmitDisabled.png';
-import buttonRetryImage from '../img/buttonRetry.png';
-import buttonTrolleymanOrgImage from '../img/buttonTrolleymanOrg.png';
-import flappy0Image from '../img/flappy0.png';
-import flappy1Image from '../img/flappy1.png';
-import flappy2Image from '../img/flappy2.png';
-import flappy3Image from '../img/flappy3.png';
-import deadFlappy0Image from '../img/deadFlappy0.png';
-import deadFlappy1Image from '../img/deadFlappy1.png';
-import deadFlappy2Image from '../img/deadFlappy2.png';
-import deadFlappy3Image from '../img/deadFlappy3.png';
-
-import { isValidName, isValidNameChar, MAX_NAME_LENGTH } from './validation';
 import {
   lerpFloor,
   lerp,
@@ -48,6 +21,31 @@ import {
   LEADERBOARD_SMALLER_THRESHOLD_HEIGHT,
   getDPR,
 } from './sizing';
+import { isValidName, isValidNameChar, MAX_NAME_LENGTH } from './validation';
+
+import bgImage from '../img/background.png';
+import bgBlankImage from '../img/backgroundBlank.png';
+import buttonLeaderboardImage from '../img/buttonLeaderboard.png';
+import buttonPauseImage from '../img/buttonPause.png';
+import buttonPlayImage from '../img/buttonPlay.png';
+import buttonRestartImage from '../img/buttonRestart.png';
+import buttonRetryImage from '../img/buttonRetry.png';
+import buttonSubmitImage from '../img/buttonSubmit.png';
+import buttonSubmitDisabledImage from '../img/buttonSubmitDisabled.png';
+import buttonTrolleymanOrgImage from '../img/buttonTrolleymanOrg.png';
+import deadFlappy0Image from '../img/deadFlappy0.png';
+import deadFlappy1Image from '../img/deadFlappy1.png';
+import deadFlappy2Image from '../img/deadFlappy2.png';
+import deadFlappy3Image from '../img/deadFlappy3.png';
+import flappy0Image from '../img/flappy0.png';
+import flappy1Image from '../img/flappy1.png';
+import flappy2Image from '../img/flappy2.png';
+import flappy3Image from '../img/flappy3.png';
+import groundImage from '../img/ground.png';
+import newImage from '../img/new.png';
+import pipeImage from '../img/pipe.png';
+import pipeHeadImage from '../img/pipeHead.png';
+import tapInfoImage from '../img/tapInfo.png';
 
 interface GameImages {
   // Single images

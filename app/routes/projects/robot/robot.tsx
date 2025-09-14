@@ -1,8 +1,8 @@
-import PageTitle from '~/components/PageTitle';
-import Figure from '~/components/Figure';
-import FancyLinks from '~/components/FancyLinks';
-import { cn } from '~/utils';
 import { CONTENT_WIDTH_CLASSES } from '..';
+import FancyLinks from '~/components/FancyLinks';
+import Figure from '~/components/Figure';
+import PageTitle from '~/components/PageTitle';
+import { cn } from '~/utils';
 
 // @ts-ignore
 import guiImg from './gui.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';

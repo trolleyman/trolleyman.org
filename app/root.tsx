@@ -1,4 +1,7 @@
+import type { Route } from './+types/root';
+
 import type React from 'react';
+import { useRef } from 'react';
 import {
   Links,
   Meta,
@@ -8,7 +11,7 @@ import {
   useLoaderData,
 } from 'react-router';
 
-import type { Route } from './+types/root';
+import MainLayoutErrorPage from './components/MainLayoutErrorPage';
 import ThemeProvider from './components/ThemeProvider';
 import {
   isTheme,
@@ -20,8 +23,6 @@ import {
 } from './theme';
 
 import './app.css';
-import MainLayoutErrorPage from './components/MainLayoutErrorPage';
-import { useRef } from 'react';
 
 export const links: Route.LinksFunction = () => [
   // e.g:

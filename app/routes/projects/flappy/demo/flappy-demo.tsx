@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react';
 
 import { Game } from './.client/game.ts';
+
 import './game.css';
 
 import appleTouchIcon from './favicon/apple-touch-icon.png';
-import favicon32 from './favicon/favicon-32x32.png';
 import favicon16 from './favicon/favicon-16x16.png';
-// import manifest from './favicon/manifest.json'
+import favicon32 from './favicon/favicon-32x32.png';
 import safariPinnedTab from './favicon/safari-pinned-tab.svg';
-import { Link } from 'react-router';
+
+// import manifest from './favicon/manifest.json'
 
 export default function FlappyDemo() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

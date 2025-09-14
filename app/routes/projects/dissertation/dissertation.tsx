@@ -1,16 +1,17 @@
-import PageTitle from '~/components/PageTitle';
+import { CONTENT_WIDTH_CLASSES } from '..';
+import BodyLink from '~/components/BodyLink';
+import FancyLinks from '~/components/FancyLinks';
 import Figure from '~/components/Figure';
 import Img from '~/components/Img';
-import FancyLinks from '~/components/FancyLinks';
-import BodyLink from '~/components/BodyLink';
+import PageTitle from '~/components/PageTitle';
 import { cn } from '~/utils';
-import { CONTENT_WIDTH_CLASSES } from '..';
+
+import dissertationPdfUrl from './Dissertation.pdf';
 
 // @ts-ignore
-import games from './games.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
-// @ts-ignore
 import breakoutGraph from './breakout_graph.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
-import dissertationPdfUrl from './Dissertation.pdf';
+// @ts-ignore
+import games from './games.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 
 export default function Dissertation() {
   return (

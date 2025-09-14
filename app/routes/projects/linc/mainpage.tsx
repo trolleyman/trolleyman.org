@@ -1,14 +1,15 @@
 import { Link } from 'react-router';
+
 import BodyLink from '~/components/BodyLink';
 
 import './css/base.css';
-import './css/mainpage/main.css';
 import './css/mainpage/main-mod.css';
+import './css/mainpage/main.css';
 
 import lincLogo from './img/demo/linc_logo.png';
+import connectBlackImg from './img/demo/mainpage/CONNECT_BLACK.jpg';
 import connectLaunchImg from './img/demo/mainpage/CONNECT_LAUNCH_031.jpg';
 import connectWhiteImg from './img/demo/mainpage/CONNECT_WHITE.jpg';
-import connectBlackImg from './img/demo/mainpage/CONNECT_BLACK.jpg';
 import faviconUrl from './img/demo/mainpage/favicon.ico';
 
 export default function LincMainPage() {

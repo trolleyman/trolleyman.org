@@ -1,9 +1,8 @@
-import PageTitle from '~/components/PageTitle';
+import { CONTENT_WIDTH_CLASSES } from '..';
 import FancyLinks from '~/components/FancyLinks';
 import Img from '~/components/Img';
-
+import PageTitle from '~/components/PageTitle';
 import { cn } from '~/utils';
-import { CONTENT_WIDTH_CLASSES } from '..';
 
 // @ts-ignore
 import screenshot from './screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';

@@ -1,4 +1,5 @@
 import { type To } from 'react-router';
+
 import FancyLink from '~/components/FancyLink';
 import { cn } from '~/utils';
 

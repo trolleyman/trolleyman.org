@@ -1,5 +1,7 @@
 import type { Route } from './+types/MainLayout';
+
 import { Outlet } from 'react-router';
+
 import MainLayoutErrorPage from '~/components/MainLayoutErrorPage';
 import MainLayoutChildren from '~/layouts/MainLayoutChildren';
 

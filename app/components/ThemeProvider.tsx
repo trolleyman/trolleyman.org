@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+
 import type { ResolvedTheme, Theme } from '~/theme';
 import {
   getLocalStorageTheme,

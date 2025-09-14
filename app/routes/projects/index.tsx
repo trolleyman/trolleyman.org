@@ -1,30 +1,31 @@
-import PageTitle from '~/components/PageTitle';
-import Img, { type ImgProps } from '~/components/Img';
-import { cn } from '~/utils';
 import type { FancyLinksArray } from '~/components/FancyLinks';
 import FancyLinks from '~/components/FancyLinks';
+import Img, { type ImgProps } from '~/components/Img';
+import PageTitle from '~/components/PageTitle';
+import { cn } from '~/utils';
 
 import dissertationPdfUrl from './dissertation/Dissertation.pdf';
+
 // @ts-ignore
 import breakoutImg from './dissertation/breakout.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
-import websiteImg from './website/screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
-// @ts-ignore
-import websiteRemixImg from './website-remix/screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
-// @ts-ignore
-import lincImg from './linc/img/logo.min.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+import equatorImg from './equator/screenshot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 // @ts-ignore
 import flappyImg from './flappy/img/logo.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
-import zucchiniImg from './zucchini/logo.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+import kmeansImg from './k-means/repo/examples/alabama-hills-ca/alabama-hills-ca-2.png?as=picture&format=webp;avif;jpg&w=300;500;700;1000;2000;3000;';
 // @ts-ignore
-import robotImg from './robot/casterbot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+import lincImg from './linc/img/logo.min.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
 import portalImg from './portal/screenshot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 // @ts-ignore
-import kmeansImg from './k-means/repo/examples/alabama-hills-ca/alabama-hills-ca-2.png?as=picture&format=webp;avif;jpg&w=300;500;700;1000;2000;3000;';
+import robotImg from './robot/casterbot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 // @ts-ignore
-import equatorImg from './equator/screenshot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+import websiteRemixImg from './website-remix/screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import websiteImg from './website/screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import zucchiniImg from './zucchini/logo.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 
 export const CONTENT_WIDTH_CLASSES: string = 'max-w-5xl mx-auto px-4';
 

@@ -1,3 +1,11 @@
+import {
+  layout,
+  route,
+  index,
+  type RouteConfigEntry,
+  type RouteConfig,
+} from '@react-router/dev/routes';
+
 // import { index as routerIndex, layout as routerLayout, route as routerRoute, prefix as routerPrefix, type RouteConfig, type RouteConfigEntry } from "@react-router/dev/routes";
 
 // type WithPropertyType<T extends object, K extends keyof any, PropertyType> = Omit<T, K> & { [Key in K]: PropertyType }
@@ -41,14 +49,6 @@
 //         return routerRoute(path, file, childrenOrOptions, children) as any
 //     }
 // }
-
-import {
-  layout,
-  route,
-  index,
-  type RouteConfigEntry,
-  type RouteConfig,
-} from '@react-router/dev/routes';
 
 export const staticRoutesList = [
   route(

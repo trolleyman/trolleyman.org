@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+
 import { cn, useStaticAutoId } from '~/utils';
 
 export type PageHeadingProps = React.PropsWithChildren<{

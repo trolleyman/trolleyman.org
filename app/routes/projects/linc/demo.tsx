@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
 
+import { initLinc } from './.client/init';
+
 // Import CSS files
 import './css/base.css';
 import './css/display.css';
+
 import logoUrl from './img/demo/linc_logo_transparent.png';
-import { initLinc } from './.client/init';
 
 export default function LincDemo() {
   const containerRef = useRef<HTMLDivElement>(null);

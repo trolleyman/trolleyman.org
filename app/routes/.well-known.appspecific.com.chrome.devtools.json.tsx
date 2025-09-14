@@ -1,5 +1,6 @@
-import type { Route } from './+types';
 import path from 'path';
+
+import type { Route } from './+types';
 
 export const loader = async ({}: Route.LoaderArgs) => {
   const projectRoot = path.resolve();

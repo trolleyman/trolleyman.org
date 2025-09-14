@@ -1,8 +1,4 @@
-import {
-  isTheme,
-  resolvedThemeCookie,
-  themeCookie as themeCookie,
-} from '~/theme';
+import { isTheme, resolvedThemeCookie, themeCookie } from '~/theme';
 import type { ResolvedTheme, Theme } from '~/theme';
 
 export function setThemeDocumentCookie(theme: Theme) {

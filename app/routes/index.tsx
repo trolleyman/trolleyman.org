@@ -1,9 +1,10 @@
 import { FaGithub, FaLinkedin, FaEnvelope, FaXTwitter } from 'react-icons/fa6';
 import { Link } from 'react-router';
 
+import Img from '~/components/Img';
+
 // @ts-ignore
 import headshotImg from './headshot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
-import Img from '~/components/Img';
 
 export default function Index() {
   return (

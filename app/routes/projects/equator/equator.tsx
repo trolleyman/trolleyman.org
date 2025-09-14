@@ -1,7 +1,7 @@
-import PageTitle from '~/components/PageTitle';
-import FancyLinks from '~/components/FancyLinks';
-import { cn } from '~/utils';
 import { CONTENT_WIDTH_CLASSES } from '..';
+import FancyLinks from '~/components/FancyLinks';
+import PageTitle from '~/components/PageTitle';
+import { cn } from '~/utils';
 
 export default function EquatorProject() {
   return (

@@ -1,4 +1,5 @@
 import { Link, type To } from 'react-router';
+
 import { cn } from '~/utils';
 
 export type BodyLinkProps = React.PropsWithChildren<{

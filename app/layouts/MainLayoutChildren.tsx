@@ -1,5 +1,6 @@
-import { Link, useNavigation } from 'react-router';
 import type React from 'react';
+import { Link, useNavigation } from 'react-router';
+
 import ThemeToggle from '~/components/ThemeToggle';
 
 export default function MainLayoutChildren({

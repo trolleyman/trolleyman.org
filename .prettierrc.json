@@ -2,5 +2,16 @@
   "tabWidth": 2,
   "semi": true,
   "singleQuote": true,
-  "_TODO": { "plugins": ["prettier-plugin-organize-imports"] }
+  "importOrder": [
+    "^\\./\\+types/",
+    "<THIRD_PARTY_MODULES>",
+    "^[./~](?!.*\\.(css|scss|sass|less|json|pdf|png|jpg|jpeg|gif|svg|webp|avif|ico)(\\?.*)?$).*$",
+    "^[./~].*\\.(css|scss|sass|less)$",
+    "^[./~].*\\.(json)$",
+    "^[./~].*\\.(pdf)$",
+    "^[./~].*\\.(png|jpg|jpeg|gif|svg|webp|avif|ico)(\\?.*)?$",
+    "^[./~]"
+  ],
+  "importOrderSeparation": true,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }

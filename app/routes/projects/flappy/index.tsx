@@ -1,9 +1,9 @@
-import PageTitle from '~/components/PageTitle';
+import { CONTENT_WIDTH_CLASSES } from '..';
 import BodyLink from '~/components/BodyLink';
 import FancyLinks from '~/components/FancyLinks';
 import Img from '~/components/Img';
+import PageTitle from '~/components/PageTitle';
 import { cn } from '~/utils';
-import { CONTENT_WIDTH_CLASSES } from '..';
 
 // @ts-ignore
 import demo1Img from './img/demo1.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';

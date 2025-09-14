@@ -1,15 +1,15 @@
-import PageTitle from '~/components/PageTitle';
-import Figure from '~/components/Figure';
+import { CONTENT_WIDTH_CLASSES } from '..';
 import FancyLinks from '~/components/FancyLinks';
+import Figure from '~/components/Figure';
+import PageTitle from '~/components/PageTitle';
+import { cn } from '~/utils';
 
+// @ts-ignore
+import laserImg from './laser.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
 import shootingImg from './shooting.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
 import victoryImg from './victory.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
-// @ts-ignore
-import laserImg from './laser.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
-import { cn } from '~/utils';
-import { CONTENT_WIDTH_CLASSES } from '..';
 
 export default function ZucchiniProject() {
   return (

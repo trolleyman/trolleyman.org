@@ -1,5 +1,7 @@
 import type { Route } from './+types/MainLayout';
+
 import { Outlet } from 'react-router';
+
 import ErrorContent from '~/components/ErrorContent';
 
 export default function MainErrorLayout() {

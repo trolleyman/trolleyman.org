@@ -1,7 +1,8 @@
+import logoPngUrl from '../img/demo/logo.png';
+import logoFadePngUrl from '../img/demo/logo_fade.png';
+import logoOrangePngUrl from '../img/demo/logo_orange.png';
+
 import sphereJsonUrl from './models/Sphere.json?url';
-import logoPngUrl from '../img/demo/logo.png?url';
-import logoOrangePngUrl from '../img/demo/logo_orange.png?url';
-import logoFadePngUrl from '../img/demo/logo_fade.png?url';
 
 function loadScript(src: string): Promise<void> {
   return new Promise((resolve, reject) => {

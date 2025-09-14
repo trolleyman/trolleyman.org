@@ -1,9 +1,9 @@
-import PageTitle from '~/components/PageTitle';
-import Figure from '~/components/Figure';
+import { CONTENT_WIDTH_CLASSES } from '..';
 import BodyLink from '~/components/BodyLink';
 import FancyLinks from '~/components/FancyLinks';
+import Figure from '~/components/Figure';
+import PageTitle from '~/components/PageTitle';
 import { cn } from '~/utils';
-import { CONTENT_WIDTH_CLASSES } from '..';
 
 // @ts-ignore
 import connectLaunchImg from './img/connect_launch.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
