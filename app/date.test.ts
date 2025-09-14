@@ -137,6 +137,58 @@ describe('parseDate', () => {
   it('should throw error for empty string', () => {
     expect(() => parseDate('')).toThrow('Invalid date: ""');
   });
+
+  it('should parse with IANA time zone [Europe/London] (winter)', () => {
+    const result = parseDate('2024-01-15T10:30:00+00:00[Europe/London]');
+    expect(result).toBeInstanceOf(DateTime);
+    expect(result.isValid).toBe(true);
+    expect(result.zone.name).toBe('Europe/London');
+    expect(result.zoneName).toBe('Europe/London');
+    expect(result.offset).toBe(0); // +00:00 in minutes
+    expect(result.hour).toBe(10);
+    expect(result.minute).toBe(30);
+  });
+
+  it('should parse with just an offset', () => {
+    const result = parseDate('2024-01-15T10:30:00+02:00');
+    expect(result).toBeInstanceOf(DateTime);
+    expect(result.isValid).toBe(true);
+    expect(result.zone.type).toBe('fixed');
+    expect(result.offset).toBe(120);
+    expect(result.zoneName).toBe('UTC+2');
+  });
+
+  it('should parse with both offset and time zone (matching)', () => {
+    // 2024-01-15 in Europe/London is UTC+1 (not DST, but let's check)
+    const result = parseDate('2024-07-15T10:30:00+01:00[Europe/London]');
+    expect(result).toBeInstanceOf(DateTime);
+    expect(result.isValid).toBe(true);
+    expect(result.zoneName).toBe('Europe/London');
+    expect(result.offset).toBe(60); // +01:00 in minutes
+    expect(result.hour).toBe(10);
+    expect(result.minute).toBe(30);
+  });
+
+  it('should throw if offset and time zone do not match (Europe/London, winter)', () => {
+    // In January, Europe/London is UTC+0, so +01:00 offset is a mismatch
+    expect(() => parseDate('2024-01-15T10:30:00+01:00[Europe/London]')).toThrow(
+      /Timezone offset mismatch/,
+    );
+  });
+
+  it('should throw if offset and time zone do not match (Europe/London, summer)', () => {
+    // In July, Europe/London is UTC+1, so +00:00 offset is a mismatch
+    expect(() => parseDate('2024-07-15T10:30:00+00:00[Europe/London]')).toThrow(
+      /Timezone offset mismatch/,
+    );
+  });
+
+  it('should throw if offset and time zone do not match (negative offset)', () => {
+    // In July, Europe/London is UTC+1, so -01:00 offset is a mismatch
+    expect(() => parseDate('2024-07-15T10:30:00-01:00[Europe/London]')).toThrow(
+      /Timezone offset mismatch/,
+    );
+  });
 });
 
 describe('parseDateOrNull', () => {

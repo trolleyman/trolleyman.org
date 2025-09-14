@@ -56,89 +56,85 @@ export function parseDate(dateString: string): DateTime<true> {
     timezoneName,
   } = match.groups || {};
 
-  try {
-    // Build the DateTime object
-    const dateTimeObj: any = {
-      year: parseInt(year),
-      month: parseInt(month),
-      day: parseInt(day),
-    };
+  // Build the DateTime object
+  const dateTimeObj: any = {
+    year: parseInt(year),
+    month: parseInt(month),
+    day: parseInt(day),
+  };
 
-    // Add time components if present
-    if (hour && minute) {
-      dateTimeObj.hour = parseInt(hour);
-      dateTimeObj.minute = parseInt(minute);
+  // Add time components if present
+  if (hour && minute) {
+    dateTimeObj.hour = parseInt(hour);
+    dateTimeObj.minute = parseInt(minute);
 
-      if (seconds) {
-        dateTimeObj.second = parseInt(seconds);
-        if (milliseconds) {
-          // Convert milliseconds to proper format (0-999)
-          dateTimeObj.millisecond = parseInt(milliseconds.padEnd(3, '0'));
-        }
+    if (seconds) {
+      dateTimeObj.second = parseInt(seconds);
+      if (milliseconds) {
+        // Convert milliseconds to proper format (0-999)
+        dateTimeObj.millisecond = parseInt(milliseconds.padEnd(3, '0'));
       }
     }
-
-    // Determine the zone
-    let ianaZone: IANAZone | null = null;
-    let fixedOffset: number | null = null;
-    if (timezoneName) {
-      // Check if IANA zone is valid
-      if (!IANAZone.isValidZone(timezoneName)) {
-        throw new Error(`Invalid timezone name: "${timezoneName}"`);
-      }
-      ianaZone = IANAZone.create(timezoneName);
-    }
-    if (offsetSign) {
-      if (offsetSign === 'Z') {
-        fixedOffset = 0;
-      } else if (offsetHours) {
-        // Calculate offset in minutes
-        const offsetH = parseInt(offsetHours);
-        const offsetM = offsetMinutes ? parseInt(offsetMinutes) : 0;
-        const totalMinutes = offsetH * 60 + offsetM;
-        const offsetMinutesTotal =
-          offsetSign === '+' ? totalMinutes : -totalMinutes;
-        fixedOffset = offsetMinutesTotal;
-      }
-    }
-    const fixedOffsetZone =
-      fixedOffset === null
-        ? null
-        : fixedOffset === 0
-          ? FixedOffsetZone.utcInstance
-          : FixedOffsetZone.instance(fixedOffset);
-    const zone: Zone =
-      ianaZone || fixedOffsetZone || FixedOffsetZone.utcInstance; // Default to UTC
-
-    // Create DateTime from object
-    // console.log('dateString', dateString);
-    // console.log('dateTimeObj', dateTimeObj);
-    // console.log('zone', zone);
-    const parsed = DateTime.fromObject(dateTimeObj, { zone });
-    // console.log('parsed', parsed);
-
-    if (parsed.isValid) {
-      // If we have both IANA zone and fixed offset, verify they match
-      if (
-        ianaZone !== null &&
-        fixedOffset !== null &&
-        parsed.offset !== fixedOffset
-      ) {
-        throw new Error(
-          `Timezone offset mismatch: "${ianaZone.name}" ${parsed.offset}m !== ${fixedOffset}m (at ${formatDate(parsed)})`,
-        );
-      }
-      return parsed;
-    }
-    throw new Error(`Invalid date: "${dateString}"`);
-  } catch (error) {
-    // Fallback to ISO parsing
-    const isoParsed = DateTime.fromISO(dateString, { zone: 'utc' });
-    if (isoParsed.isValid) {
-      return isoParsed;
-    }
-    throw error;
   }
+
+  // Determine the zone
+  let ianaZone: IANAZone | null = null;
+  let fixedOffset: number | null = null;
+  if (timezoneName) {
+    // Check if IANA zone is valid
+    if (!IANAZone.isValidZone(timezoneName)) {
+      throw new Error(`Invalid timezone name: "${timezoneName}"`);
+    }
+    ianaZone = IANAZone.create(timezoneName);
+  }
+  if (offsetSign) {
+    if (offsetSign === 'Z') {
+      fixedOffset = 0;
+    } else if (offsetHours) {
+      // Calculate offset in minutes
+      const offsetH = parseInt(offsetHours);
+      const offsetM = offsetMinutes ? parseInt(offsetMinutes) : 0;
+      const totalMinutes = offsetH * 60 + offsetM;
+      const offsetMinutesTotal =
+        offsetSign === '+' ? totalMinutes : -totalMinutes;
+      fixedOffset = offsetMinutesTotal;
+    }
+  }
+  const fixedOffsetZone =
+    fixedOffset === null
+      ? null
+      : fixedOffset === 0
+        ? FixedOffsetZone.utcInstance
+        : FixedOffsetZone.instance(fixedOffset);
+  const zone: Zone = ianaZone || fixedOffsetZone || FixedOffsetZone.utcInstance; // Default to UTC
+
+  // Create DateTime from object
+  console.log('dateString', dateString);
+  console.log('dateTimeObj', dateTimeObj);
+  console.log('zone', zone);
+  const parsed = DateTime.fromObject(dateTimeObj, { zone });
+  console.log('parsed', parsed);
+  console.log('parsed.isValid', parsed.isValid);
+  console.log('parsed.zoneName', parsed.zoneName);
+  console.log('parsed.zone.name', parsed.zone.name);
+  console.log('parsed.offset', parsed.offset);
+
+  if (parsed.isValid) {
+    // If we have both IANA zone and fixed offset, verify they match
+    if (
+      ianaZone !== null &&
+      fixedOffset !== null &&
+      parsed.offset !== fixedOffset
+    ) {
+      console.log('throwing time zone mismatch error');
+      throw new Error(
+        `Timezone offset mismatch: "${ianaZone.name}" ${parsed.offset}m !== ${fixedOffset}m (at ${formatDate(parsed)})`,
+      );
+    }
+    console.log('returning!', parsed);
+    return parsed;
+  }
+  throw new Error(`Invalid date: "${dateString}"`);
 }
 
 /**

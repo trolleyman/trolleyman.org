@@ -48,7 +48,7 @@ describe('deserializePost', () => {
       title: 'Test Post',
       description: 'A test post',
       author: 'Test Author',
-      date: '2024-01-15T10:30:00.123+01:00[Europe/London]',
+      date: '2024-01-15T10:30:00.123+00:00[Europe/London]',
       draft: false,
       tags: ['test', 'example'],
       content: '# Test\n\nThis is a test post.',
@@ -72,7 +72,7 @@ describe('deserializePost', () => {
 
 describe('customSerializer', () => {
   it('should serialize DateTime objects', () => {
-    const date = DateTime.fromISO('2024-01-15T10:30:00.123+01:00', {
+    const date = DateTime.fromISO('2024-01-15T10:30:00.123+00:00', {
       zone: 'Europe/London',
     });
     const result = customSerializer('date', date);
@@ -90,7 +90,7 @@ describe('customSerializer', () => {
 
 describe('customDeserializer', () => {
   it('should deserialize date strings', () => {
-    const dateString = '2024-01-15T10:30:00.123+01:00[Europe/London]';
+    const dateString = '2024-01-15T10:30:00.123+00:00[Europe/London]';
     const result = customDeserializer('date', dateString);
 
     expect(result).toBeInstanceOf(DateTime);
@@ -112,7 +112,7 @@ describe('Serialization round-trip', () => {
       title: 'Test Post',
       description: 'A test post',
       author: 'Test Author',
-      date: DateTime.fromISO('2024-01-15T10:30:00.123+01:00', {
+      date: DateTime.fromISO('2024-01-15T10:30:00.123+00:00', {
         zone: 'Europe/London',
       }),
       draft: false,
