@@ -67,6 +67,7 @@ export function Article({
 
   return (
     <article className="prose dark:prose-invert">
+      {/* TODO: Make author a bit smaller, move date to the right, (/left???), or maybe just make the title larger and with less padding, basically just need to make the author and date less prominent */}
       {/* Main Title */}
       <h1>{title}</h1>
 

@@ -3,19 +3,9 @@ import type { Route } from './+types/post';
 import { Link, useLoaderData } from 'react-router';
 import ReactMarkdown from 'react-markdown';
 import { Article } from '~/components/Article';
-import PageHeading from '~/components/PageHeading';
-import PageSubHeading from '~/components/PageSubHeading';
-import PageSubSubHeading from '~/components/PageSubSubHeading';
-import PageUnorderedList from '~/components/PageUnorderedList';
-import PageOrderedList from '~/components/PageOrderedList';
-import PageListItem from '~/components/PageListItem';
-import PageCodeBlock from '~/components/PageCodeBlock';
-import PageCode from '~/components/PageCode';
-import MarkdownLink from '~/components/MarkdownLink';
 import { getPost } from './blog.server';
 import { serializePost, deserializePost } from '~/serialization';
-import type { DateTime } from 'luxon';
-import BodyLink from '~/components/BodyLink';
+import remarkGfm from 'remark-gfm';
 
 export async function loader({ params: { postId } }: Route.LoaderArgs) {
   const post = await getPost(postId);
@@ -61,7 +51,10 @@ export default function Post() {
       date={post.date}
       tags={post.tags.concat(post.draft ? ['draft'] : [])}
     >
-      <ReactMarkdown components={markdownComponents}>
+      <ReactMarkdown
+        components={markdownComponents}
+        remarkPlugins={[remarkGfm]}
+      >
         {post.content}
       </ReactMarkdown>
     </Article>
