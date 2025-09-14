@@ -32,11 +32,12 @@ export default {
     if (routeConfig instanceof Promise) {
       routeConfig = await routeConfig;
     }
-    var paths = [];
+    var paths: string[] = [];
     for (const [path, route] of getAllPaths(routeConfig)) {
       if (route.path === '*') {
-        paths.push(path);
+        continue;
       }
+      paths.push(path);
     }
     return paths;
   },
