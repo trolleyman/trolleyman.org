@@ -5,3 +5,5 @@
 /.react-router/
 /build/
 /_old
+
+.vercel/react-router-build-result.json
