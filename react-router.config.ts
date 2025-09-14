@@ -1,21 +1,16 @@
 import type { Config } from '@react-router/dev/config';
+import type { RouteConfigEntry } from '@react-router/dev/routes';
 import { vercelPreset } from '@vercel/react-router/vite';
 
-type NestedPath = {
-  index?: boolean;
-  path?: string;
-  children?: NestedPath[];
-};
-
 function* getAllPaths(
-  routes: NestedPath[],
+  routes: RouteConfigEntry[],
   prefix: string = '',
-): Generator<string> {
+): Generator<[string, RouteConfigEntry]> {
   for (const route of routes) {
     if (route.path !== undefined) {
-      yield prefix + route.path;
+      yield [prefix + route.path, route];
     } else if (route.index) {
-      yield '/';
+      yield ['/', route];
     }
     if (route.children) {
       if (route.path) {
@@ -31,21 +26,18 @@ export default {
   presets: [vercelPreset()],
   routeDiscovery: import.meta.env.PROD ? { mode: 'initial' } : undefined,
   async prerender(): Promise<string[]> {
-    // TODO: For some reason in app/routes, importing SSR is false, but here it is true when running npm build
-    //       This means that we miss the 404 route, so unfortunately it has to be manually added
-    // console.log('importing app/routes', import.meta.env)
-    let routeConfig = (await import('app/routes')).default;
+    const getRouteConfig = (await import('app/routes')).getRouteConfig;
+    // We have to pass ssr: true here because when importing app/routes, import.meta.env.SSR is false, even though it is true here
+    let routeConfig = getRouteConfig({ ssr: true });
     if (routeConfig instanceof Promise) {
       routeConfig = await routeConfig;
     }
-    var paths = Array.from(getAllPaths(routeConfig));
-    paths.push('404');
-    paths = paths.filter(
-      (path) =>
-        !path.endsWith('.well-known/appspecific/com.chrome.devtools.json') &&
-        path !== '*',
-    );
-    //console.log("Paths:", paths);
+    var paths = [];
+    for (const [path, route] of getAllPaths(routeConfig)) {
+      if (route.path === '*') {
+        paths.push(path);
+      }
+    }
     return paths;
   },
 } satisfies Config;

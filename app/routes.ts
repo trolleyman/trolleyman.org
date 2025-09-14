@@ -50,57 +50,57 @@ import {
 //     }
 // }
 
-export const staticRoutesList = [
-  route(
-    '.well-known/appspecific/com.chrome.devtools.json',
-    './routes/.well-known.appspecific.com.chrome.devtools.json.tsx',
-  ),
-  route(
-    'projects/flappy/demo',
-    './routes/projects/flappy/demo/flappy-demo.tsx',
-  ),
-  route(
-    'projects/flappy/demo/api/leaderboard',
-    './routes/projects/flappy/demo/api/leaderboard.tsx',
-  ),
-  route('projects/linc/demo', './routes/projects/linc/demo.tsx'),
-  route('projects/linc/api/graph', './routes/projects/linc/api/graph.tsx'),
-  route('projects/linc/mainpage', './routes/projects/linc/mainpage.tsx'),
-  layout('./layouts/MainLayout.tsx', [
-    layout('./layouts/ErrorContentLayout.tsx', [
-      route(
-        import.meta.env.SSR ? '404' : undefined,
-        './routes/error_404_template.tsx',
-      ),
-      index('./routes/index.tsx'),
-      route(
-        import.meta.env.DEV ? 'img-test' : undefined,
-        './routes/img-test/index.tsx',
-      ),
-      route('blog', './routes/blog.tsx'),
-      route('projects', './routes/projects/index.tsx'),
-      route(
-        'projects/website-remix',
-        './routes/projects/website-remix/website-remix.tsx',
-      ),
-      route(
-        'projects/dissertation',
-        './routes/projects/dissertation/dissertation.tsx',
-      ),
-      route('projects/website', './routes/projects/website/website.tsx'),
-      route('projects/linc', './routes/projects/linc/index.tsx'),
-      route('projects/flappy', './routes/projects/flappy/index.tsx'),
-      route('projects/zucchini', './routes/projects/zucchini/zucchini.tsx'),
-      route('projects/robot', './routes/projects/robot/robot.tsx'),
-      route('projects/k-means', './routes/projects/k-means/k-means.tsx'),
-      route('projects/portal', './routes/projects/portal/portal.tsx'),
-      route('*', './routes/catch-all.tsx'),
+type GetRouteConfigOptions = {
+  ssr?: boolean;
+  dev?: boolean;
+};
+
+export function getRouteConfig(options?: GetRouteConfigOptions): RouteConfig {
+  let { ssr, dev } = options ?? {};
+  ssr = ssr ?? import.meta.env.SSR;
+  dev = dev ?? import.meta.env.DEV;
+  return [
+    route(
+      '.well-known/appspecific/com.chrome.devtools.json',
+      './routes/.well-known.appspecific.com.chrome.devtools.json.tsx',
+    ),
+    route(
+      'projects/flappy/demo',
+      './routes/projects/flappy/demo/flappy-demo.tsx',
+    ),
+    route(
+      'projects/flappy/demo/api/leaderboard',
+      './routes/projects/flappy/demo/api/leaderboard.tsx',
+    ),
+    route('projects/linc/demo', './routes/projects/linc/demo.tsx'),
+    route('projects/linc/api/graph', './routes/projects/linc/api/graph.tsx'),
+    route('projects/linc/mainpage', './routes/projects/linc/mainpage.tsx'),
+    layout('./layouts/MainLayout.tsx', [
+      layout('./layouts/ErrorContentLayout.tsx', [
+        route(ssr ? '404' : undefined, './routes/error_404_template.tsx'),
+        index('./routes/index.tsx'),
+        route(dev ? 'img-test' : undefined, './routes/img-test/index.tsx'),
+        route('blog', './routes/blog.tsx'),
+        route('projects', './routes/projects/index.tsx'),
+        route(
+          'projects/website-remix',
+          './routes/projects/website-remix/website-remix.tsx',
+        ),
+        route(
+          'projects/dissertation',
+          './routes/projects/dissertation/dissertation.tsx',
+        ),
+        route('projects/website', './routes/projects/website/website.tsx'),
+        route('projects/linc', './routes/projects/linc/index.tsx'),
+        route('projects/flappy', './routes/projects/flappy/index.tsx'),
+        route('projects/zucchini', './routes/projects/zucchini/zucchini.tsx'),
+        route('projects/robot', './routes/projects/robot/robot.tsx'),
+        route('projects/k-means', './routes/projects/k-means/k-means.tsx'),
+        route('projects/portal', './routes/projects/portal/portal.tsx'),
+        route('*', './routes/catch-all.tsx'),
+      ]),
     ]),
-  ]),
-] as const satisfies RouteConfigEntry[];
-// console.log('imported app/routes', import.meta.env)
-// console.log(JSON.stringify(staticRoutesList, null, '  '))
+  ];
+}
 
-// type X = ExpandRecursively<typeof staticRoutesList>
-
-export default staticRoutesList satisfies RouteConfig;
+export default getRouteConfig() satisfies RouteConfig;
