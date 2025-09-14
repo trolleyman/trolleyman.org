@@ -11,12 +11,12 @@ body {
   height: 100%;
   color: #000;
   min-width: 400px;
-  background-color: hsla(0, 0%, 95%, 1);;
+  background-color: hsla(0, 0%, 95%, 1);
   font-family: 'SciFly-Sans';
 }
 
 #topbar {
-  top: 0; 
+  top: 0;
   left: 0;
   background-color: #cc5d29;
   max-height: 20%;
@@ -37,4 +37,3 @@ body {
 input {
   font-family: 'SciFly-Sans';
 }
-

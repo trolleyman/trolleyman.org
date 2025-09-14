@@ -1,4 +1,4 @@
-import type React from "react";
+import type React from 'react';
 import {
   Links,
   Meta,
@@ -6,15 +6,22 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-} from "react-router";
+} from 'react-router';
 
-import type { Route } from "./+types/root";
-import ThemeProvider from "./components/ThemeProvider";
-import { isTheme, themeCookie, resolvedThemeCookie, type Theme, type ResolvedTheme, isResolvedTheme } from "./theme";
+import type { Route } from './+types/root';
+import ThemeProvider from './components/ThemeProvider';
+import {
+  isTheme,
+  themeCookie,
+  resolvedThemeCookie,
+  type Theme,
+  type ResolvedTheme,
+  isResolvedTheme,
+} from './theme';
 
-import "./app.css";
-import MainLayoutErrorPage from "./components/MainLayoutErrorPage";
-import { useRef } from "react";
+import './app.css';
+import MainLayoutErrorPage from './components/MainLayoutErrorPage';
+import { useRef } from 'react';
 
 export const links: Route.LinksFunction = () => [
   // e.g:
@@ -24,39 +31,49 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const cookieHeader = request.headers.get("Cookie");
-  let cookieTheme: Theme | undefined = undefined
+  const cookieHeader = request.headers.get('Cookie');
+  let cookieTheme: Theme | undefined = undefined;
   try {
-    const cookieFromHeader = await themeCookie.parse(cookieHeader)
+    const cookieFromHeader = await themeCookie.parse(cookieHeader);
     if (isTheme(cookieFromHeader)) {
-      cookieTheme = cookieFromHeader
+      cookieTheme = cookieFromHeader;
     }
-  } catch {
-  }
+  } catch {}
 
-  let cookieResolvedTheme: ResolvedTheme | undefined = undefined
+  let cookieResolvedTheme: ResolvedTheme | undefined = undefined;
   try {
-    const cookieFromHeader = await resolvedThemeCookie.parse(cookieHeader)
+    const cookieFromHeader = await resolvedThemeCookie.parse(cookieHeader);
     if (isResolvedTheme(cookieFromHeader)) {
-      cookieResolvedTheme = cookieFromHeader
+      cookieResolvedTheme = cookieFromHeader;
     }
-  } catch {
-  }
+  } catch {}
 
   return {
     cookieTheme,
     cookieResolvedTheme,
-  }
+  };
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const htmlRef = useRef<HTMLHtmlElement>(null)
-  const loaderData = useLoaderData<typeof loader | null | undefined>()
-  const cookieTheme = typeof loaderData === 'object' && loaderData !== null ? loaderData.cookieTheme : undefined
-  const cookieResolvedTheme = typeof loaderData === 'object' && loaderData !== null ? loaderData.cookieResolvedTheme : undefined
+  const htmlRef = useRef<HTMLHtmlElement>(null);
+  const loaderData = useLoaderData<typeof loader | null | undefined>();
+  const cookieTheme =
+    typeof loaderData === 'object' && loaderData !== null
+      ? loaderData.cookieTheme
+      : undefined;
+  const cookieResolvedTheme =
+    typeof loaderData === 'object' && loaderData !== null
+      ? loaderData.cookieResolvedTheme
+      : undefined;
 
   return (
-    <html lang="en" ref={htmlRef} {...(cookieResolvedTheme === "dark" || cookieTheme === "dark" ? { "data-theme": "dark" } : {})}>
+    <html
+      lang="en"
+      ref={htmlRef}
+      {...(cookieResolvedTheme === 'dark' || cookieTheme === 'dark'
+        ? { 'data-theme': 'dark' }
+        : {})}
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -79,5 +96,5 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  return <MainLayoutErrorPage error={error} />
+  return <MainLayoutErrorPage error={error} />;
 }

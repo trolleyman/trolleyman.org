@@ -2,12 +2,12 @@
 
 /* @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap'); */
 
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --font-raleway: "Raleway", sans-serif;
+  --font-raleway: 'Raleway', sans-serif;
   /* --font-abril-fatface: "Abril Fatface", serif; */
-  --font-flappy: "FlappyFont", sans-serif;
+  --font-flappy: 'FlappyFont', sans-serif;
   --color-gold: #ffd700;
 }
 

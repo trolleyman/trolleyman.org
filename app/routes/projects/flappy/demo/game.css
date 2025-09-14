@@ -1,12 +1,12 @@
-
 @font-face {
-    font-family: 'FlappyFont';
-    src: url('./font/flappy.eot');
-    src: url('./font/flappy.eot?#iefix') format('embedded-opentype'),
-         url('./font/flappy.woff2') format('woff2'),
-         url('./font/flappy.woff') format('woff'),
-         url('./font/flappy.ttf') format('truetype'),
-         url('./font/flappy.svg#04b_19regular') format('svg');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'FlappyFont';
+  src: url('./font/flappy.eot');
+  src:
+    url('./font/flappy.eot?#iefix') format('embedded-opentype'),
+    url('./font/flappy.woff2') format('woff2'),
+    url('./font/flappy.woff') format('woff'),
+    url('./font/flappy.ttf') format('truetype'),
+    url('./font/flappy.svg#04b_19regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
