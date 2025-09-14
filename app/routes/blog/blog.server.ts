@@ -1,7 +1,6 @@
 import { readdir, readFile, access } from 'fs/promises';
 import { join, resolve, relative } from 'path';
 import matter from 'gray-matter';
-import slugify from 'slugify';
 
 // Constants
 export const POSTS_DIRECTORY = join(process.cwd(), 'posts');
@@ -41,6 +40,15 @@ export class DuplicateSlugError extends Error {
       `Duplicate slug "${slug}" found in posts "${filename1}" and "${filename2}". Each post must have a unique slug.`,
     );
     this.name = 'DuplicateSlugError';
+  }
+}
+
+export class MissingSlugError extends Error {
+  constructor(filename: string) {
+    super(
+      `Post "${filename}" is missing a required slug in front matter. Please add a slug field.`,
+    );
+    this.name = 'MissingSlugError';
   }
 }
 
@@ -115,12 +123,11 @@ export async function getPostByFilename(filename: string): Promise<Post> {
   const { data, content } = matter(fileContents);
 
   // Parse and validate front matter data (same logic as getPosts)
-  const slug = data.slug
-    ? String(data.slug)
-    : slugify(normalizedFilename.replace('.md', ''), {
-        lower: true,
-        strict: true,
-      });
+  if (!data.slug) {
+    throw new MissingSlugError(normalizedFilename);
+  }
+
+  const slug = String(data.slug);
   const title = data.title ? String(data.title) : 'Untitled';
   const description = data.description ? String(data.description) : '';
   const author = data.author ? String(data.author) : 'Unknown';

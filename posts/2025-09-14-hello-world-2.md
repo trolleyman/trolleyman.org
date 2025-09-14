@@ -1,11 +1,10 @@
 ---
 title: 'Hello World!'
 slug: 'hello-world'
-description: 'A demo article to test out the blog posting functionality and showcase the front matter system.'
 author: 'Callum Tolley'
-date: '2024-01-15'
+date: '2025-09-14 16:03:07.332'
 draft: true
-tags: ['demo', 'blog', 'hello-world', 'testing']
+tags: ['hello-world']
 ---
 
 # Hi there!
@@ -67,11 +66,18 @@ console.log(greet('World'));
 </html>
 ```
 
-### Links and Images
+### Links
 
 - [External link](https://example.com)
 - [Internal link](/projects)
-- ![Alt text for image](https://dummyimage.com/300x200)
+
+## Images
+
+![Alt text for image](https://dummyimage.com/300x200)
+
+![Alt text for image](https://dummyimage.com/150x150)
+
+![Alt text for image](https://dummyimage.com/500x100)
 
 ### Blockquotes
 
@@ -112,5 +118,5 @@ Other test
 - [ ] Write real content
 
 ```
-
+code
 ```

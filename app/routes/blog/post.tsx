@@ -5,6 +5,13 @@ import { useLoaderData } from 'react-router';
 
 import { CONTENT_WIDTH_CLASSES } from '../projects';
 import PageTitle from '~/components/PageTitle';
+import PageHeading from '~/components/PageHeading';
+import PageSubHeading from '~/components/PageSubHeading';
+import PageSubSubHeading from '~/components/PageSubSubHeading';
+import PageUnorderedList from '~/components/PageUnorderedList';
+import PageOrderedList from '~/components/PageOrderedList';
+import PageListItem from '~/components/PageListItem';
+import MarkdownLink from '~/components/MarkdownLink';
 import { cn } from '~/utils';
 import { getPost } from './blog.server';
 
@@ -33,7 +40,35 @@ export default function Post() {
           CONTENT_WIDTH_CLASSES,
         )}
       >
-        <ReactMarkdown>{post.content}</ReactMarkdown>
+        <ReactMarkdown
+          components={{
+            h1: ({ children, ...props }) => (
+              <PageHeading {...props}>{children}</PageHeading>
+            ),
+            h2: ({ children, ...props }) => (
+              <PageSubHeading {...props}>{children}</PageSubHeading>
+            ),
+            h3: ({ children, ...props }) => (
+              <PageSubSubHeading {...props}>{children}</PageSubSubHeading>
+            ),
+            ul: ({ children, ...props }) => (
+              <PageUnorderedList {...props}>{children}</PageUnorderedList>
+            ),
+            ol: ({ children, ...props }) => (
+              <PageOrderedList {...props}>{children}</PageOrderedList>
+            ),
+            li: ({ children, ...props }) => (
+              <PageListItem {...props}>{children}</PageListItem>
+            ),
+            a: ({ href, children, ...props }) => (
+              <MarkdownLink href={href} {...props}>
+                {children}
+              </MarkdownLink>
+            ),
+          }}
+        >
+          {post.content}
+        </ReactMarkdown>
 
         {/* <FancyLinks
           className="text-right"

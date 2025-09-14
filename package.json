@@ -10,7 +10,8 @@
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "prepare": "husky",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "new-post": "ts-node scripts/new-post.ts"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
