@@ -2,7 +2,6 @@ import {
   layout,
   route,
   index,
-  type RouteConfigEntry,
   type RouteConfig,
 } from '@react-router/dev/routes';
 
@@ -61,7 +60,7 @@ export function getRouteConfig(options?: GetRouteConfigOptions): RouteConfig {
   dev = dev ?? import.meta.env.DEV;
   return [
     route(
-      '.well-known/appspecific/com.chrome.devtools.json',
+      dev ? '.well-known/appspecific/com.chrome.devtools.json' : undefined,
       './routes/.well-known.appspecific.com.chrome.devtools.json.tsx',
     ),
     route(
