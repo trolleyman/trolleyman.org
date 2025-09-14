@@ -50,7 +50,6 @@ function Project({
   tools,
   links,
 }: ProjectProps) {
-  const x = 1 + 2;
   languages ??= [];
   libraries ??= [];
   tools ??= [];
