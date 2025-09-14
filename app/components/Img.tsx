@@ -33,7 +33,7 @@ export default function Img({
         alt={alt ?? ''}
         style={{ imageRendering: rendering }}
         className={cn(
-            "object-contain",
+            "object-contain w-auto",
             !translucent && rounded && "rounded-lg",
             translucent ? "drop-shadow-xl" : "shadow-lg",
             className,
