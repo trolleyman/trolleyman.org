@@ -3,7 +3,9 @@ import {
   route,
   index,
   type RouteConfig,
+  type RouteConfigEntry,
 } from '@react-router/dev/routes';
+import { getPostsManifest } from './routes/blog/blog.server';
 
 // import { index as routerIndex, layout as routerLayout, route as routerRoute, prefix as routerPrefix, type RouteConfig, type RouteConfigEntry } from "@react-router/dev/routes";
 
@@ -79,7 +81,8 @@ export function getRouteConfig(options?: GetRouteConfigOptions): RouteConfig {
         route(ssr ? '404' : undefined, './routes/error_404_template.tsx'),
         index('./routes/index.tsx'),
         route(dev ? 'img-test' : undefined, './routes/img-test/index.tsx'),
-        route('blog', './routes/blog.tsx'),
+        route('blog', './routes/blog/blog.tsx'),
+        route('blog/:postId', './routes/blog/post.tsx'),
         route('projects', './routes/projects/index.tsx'),
         route(
           'projects/website-remix',
@@ -100,6 +103,49 @@ export function getRouteConfig(options?: GetRouteConfigOptions): RouteConfig {
       ]),
     ]),
   ];
+}
+
+function* getAllPaths(
+  routes: RouteConfigEntry[],
+  prefix: string = '',
+): Generator<[string, RouteConfigEntry]> {
+  for (const route of routes) {
+    if (route.path !== undefined) {
+      yield [prefix + route.path, route];
+    } else if (route.index) {
+      yield ['/', route];
+    }
+    if (route.children) {
+      if (route.path) {
+        prefix += route.path + '/';
+      }
+      yield* getAllPaths(route.children, prefix);
+    }
+  }
+}
+
+export async function getPrerenderRoutes(): Promise<string[]> {
+  // We have to pass ssr: true here because when importing app/routes, import.meta.env.SSR is false, even though it is true here
+  let routeConfig = getRouteConfig({ ssr: true });
+  if (routeConfig instanceof Promise) {
+    routeConfig = await routeConfig;
+  }
+  var paths: string[] = [];
+  // console.log(routeConfig);
+  for (const [path, route] of getAllPaths(routeConfig)) {
+    // console.log(path, route);
+    if (path === '*') {
+      continue;
+    }
+    if (path == 'blog/:postId') {
+      for (const postId of (await getPostsManifest()).keys()) {
+        paths.push(`blog/${postId}`);
+      }
+      continue;
+    }
+    paths.push(path);
+  }
+  return paths;
 }
 
 export default getRouteConfig() satisfies RouteConfig;
