@@ -2,15 +2,18 @@ import type { Route } from './+types/blog';
 
 import { Link, useLoaderData } from 'react-router';
 import { getPosts } from './blog.server';
+import { serializePost, deserializePost } from '~/serialization';
 
 export async function loader({}: Route.LoaderArgs) {
+  const posts = await getPosts();
   return {
-    posts: await getPosts(),
+    posts: posts.map(serializePost),
   };
 }
 
 export default function Blog() {
-  const { posts } = useLoaderData<typeof loader>();
+  const { posts: serializedPosts } = useLoaderData<typeof loader>();
+  const posts = serializedPosts.map(deserializePost);
 
   return (
     <>

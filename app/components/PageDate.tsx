@@ -3,19 +3,29 @@ import { useState } from 'react';
 import { cn } from '~/utils';
 
 export interface PageDateProps {
-  date: DateTime;
+  date: DateTime | string;
   className?: string;
 }
 
 export default function PageDate({ date, className }: PageDateProps) {
   const [showAbsolute, setShowAbsolute] = useState(false);
 
-  const relativeTime = date.toRelative();
-  const absoluteTime = date.toFormat("MMMM d, yyyy 'at' h:mm a ZZZZ");
+  // Ensure date is a Luxon DateTime object
+  const luxonDate = DateTime.isDateTime(date)
+    ? date
+    : DateTime.fromISO(date as any);
+
+  if (!luxonDate.isValid) {
+    console.error('Invalid date passed to PageDate:', date);
+    return <span className={className}>Invalid date</span>;
+  }
+
+  const relativeTime = luxonDate.toRelative();
+  const absoluteTime = luxonDate.toFormat("MMMM d, yyyy 'at' h:mm a ZZZZ");
 
   return (
     <time
-      dateTime={date.toISO() || undefined}
+      dateTime={luxonDate.toISO() || undefined}
       className={cn(
         'text-sm text-gray-600 dark:text-gray-400 cursor-help transition-colors',
         'hover:text-gray-800 dark:hover:text-gray-200',

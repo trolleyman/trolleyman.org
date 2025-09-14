@@ -2,8 +2,9 @@ import { readdir, readFile, access } from 'fs/promises';
 import { join, resolve, relative } from 'path';
 import matter from 'gray-matter';
 import { DateTime } from 'luxon';
-import { parseDateOrThrow } from '~/date';
-import type { Post } from './types.d';
+import { parseDateOrThrow } from '../../date';
+import { serializePost } from '../../serialization';
+import type { Post } from './types';
 
 // Constants
 export const POSTS_DIRECTORY = join(process.cwd(), 'posts');

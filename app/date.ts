@@ -1,113 +1,175 @@
-import { DateTime } from 'luxon';
+import { DateTime, IANAZone, FixedOffsetZone, Zone } from 'luxon';
+
+const WHITESPACE = '\\s+';
+const WHITESPACE_OR_EMPTY = '\\s*';
+const YEAR = '(?<year>\\d{4})';
+const MONTH = '(?<month>\\d{1,2})';
+const DAY = '(?<day>\\d{1,2})';
+const TIME_SEPARATOR = `(T|${WHITESPACE})`;
+const HOUR = '(?<hour>\\d{1,2})';
+const MINUTE = '(?<minute>\\d{1,2})';
+const SECONDS = '(?<seconds>\\d{1,2})';
+const MILLISECONDS = '\\.(?<milliseconds>\\d{1,6})';
+const SECONDS_PART = `:${SECONDS}(${MILLISECONDS})?`;
+const OFFSET_SIGN = '(?<offsetSign>[+-])';
+const OFFSET_HOURS = '(?<offsetHours>\\d{1,2})';
+const OFFSET_MINUTES = '(?<offsetMinutes>\\d{2})';
+const OFFSET_PART = `(${OFFSET_SIGN}${OFFSET_HOURS}:?${OFFSET_MINUTES}?|Z)`;
+const TIMEZONE_NAME = '(?<timezoneName>[a-zA-Z_/]+)';
+const TIMEZONE_PART = `\\[${TIMEZONE_NAME}\\]`;
+
+const DATE_REGEX = new RegExp(
+  `^${WHITESPACE_OR_EMPTY}${YEAR}-${MONTH}-${DAY}${TIME_SEPARATOR}${HOUR}:${MINUTE}(${SECONDS_PART})?${WHITESPACE_OR_EMPTY}(${OFFSET_PART})?${WHITESPACE_OR_EMPTY}(${TIMEZONE_PART})?${WHITESPACE_OR_EMPTY}$`,
+);
 
 /**
- * Parse a date string using multiple supported formats
+ * Parse a date string using regex pattern matching
  * @param dateString - The date string to parse
  * @returns A valid DateTime object or null if parsing fails
  */
-export function parseDate(dateString: string): DateTime | null {
-  if (!dateString) {
-    return null;
+export function parseDate(dateString: string): DateTime<true> {
+  if (!dateString || typeof dateString !== 'string') {
+    throw new Error(`Invalid date: "${dateString}"`);
   }
 
-  // Try parsing as RFC 9557 format first (ISO + timezone identifier in brackets)
-  let parsedDate = DateTime.fromISO(dateString);
-
-  // If that fails, try parsing as "YYYY-MM-DDTHH:mm:ss.sss+HH:mm[Timezone]" format
-  if (!parsedDate.isValid) {
-    const rfc9557Match = dateString.match(/^(.+)\[([^\]]+)\]$/);
-    if (rfc9557Match) {
-      const [, isoPart, timezoneId] = rfc9557Match;
-      parsedDate = DateTime.fromISO(isoPart, { zone: timezoneId });
+  const match = dateString.match(DATE_REGEX);
+  if (!match) {
+    // Fallback to ISO parsing
+    const isoParsed = DateTime.fromISO(dateString, { zone: 'utc' });
+    if (isoParsed.isValid) {
+      return isoParsed;
     }
+    throw new Error(`Invalid date: "${dateString}"`);
   }
 
-  // If ISO parsing fails, try parsing as "YYYY-MM-DD HH:mm:ss.SSS Europe/London" format
-  if (!parsedDate.isValid) {
-    parsedDate = DateTime.fromFormat(dateString, 'yyyy-MM-dd HH:mm:ss.SSS z', {
-      zone: 'local',
-    });
-  }
+  const {
+    year,
+    month,
+    day,
+    hour,
+    minute,
+    seconds,
+    milliseconds,
+    offsetSign,
+    offsetHours,
+    offsetMinutes,
+    timezoneName,
+  } = match.groups || {};
 
-  // If that fails, try "YYYY-MM-DD HH:mm:ss Europe/London" format
-  if (!parsedDate.isValid) {
-    parsedDate = DateTime.fromFormat(dateString, 'yyyy-MM-dd HH:mm:ss z', {
-      zone: 'local',
-    });
-  }
+  try {
+    // Build the DateTime object
+    const dateTimeObj: any = {
+      year: parseInt(year),
+      month: parseInt(month),
+      day: parseInt(day),
+    };
 
-  // If that fails, try "YYYY-MM-DD HH:mm:ss.SSS" format (without timezone)
-  if (!parsedDate.isValid) {
-    parsedDate = DateTime.fromFormat(dateString, 'yyyy-MM-dd HH:mm:ss.SSS', {
-      zone: 'local',
-    });
-  }
+    // Add time components if present
+    if (hour && minute) {
+      dateTimeObj.hour = parseInt(hour);
+      dateTimeObj.minute = parseInt(minute);
 
-  // If that fails, try "YYYY-MM-DD HH:mm:ss" format (without timezone)
-  if (!parsedDate.isValid) {
-    parsedDate = DateTime.fromFormat(dateString, 'yyyy-MM-dd HH:mm:ss', {
-      zone: 'local',
-    });
-  }
+      if (seconds) {
+        dateTimeObj.second = parseInt(seconds);
+        if (milliseconds) {
+          // Convert milliseconds to proper format (0-999)
+          dateTimeObj.millisecond = parseInt(milliseconds.padEnd(3, '0'));
+        }
+      }
+    }
 
-  // If that fails, try "YYYY-MM-DD" format
-  if (!parsedDate.isValid) {
-    parsedDate = DateTime.fromFormat(dateString, 'yyyy-MM-dd', {
-      zone: 'local',
-    });
-  }
+    // Determine the zone
+    let ianaZone: IANAZone | null = null;
+    let fixedOffset: number | null = null;
+    if (timezoneName) {
+      // Check if IANA zone is valid
+      if (!IANAZone.isValidZone(timezoneName)) {
+        throw new Error(`Invalid timezone name: "${timezoneName}"`);
+      }
+      ianaZone = IANAZone.create(timezoneName);
+    }
+    if (offsetSign) {
+      if (offsetSign === 'Z') {
+        fixedOffset = 0;
+      } else if (offsetHours) {
+        // Calculate offset in minutes
+        const offsetH = parseInt(offsetHours);
+        const offsetM = offsetMinutes ? parseInt(offsetMinutes) : 0;
+        const totalMinutes = offsetH * 60 + offsetM;
+        const offsetMinutesTotal =
+          offsetSign === '+' ? totalMinutes : -totalMinutes;
+        fixedOffset = offsetMinutesTotal;
+      }
+    }
+    const fixedOffsetZone =
+      fixedOffset === null
+        ? null
+        : fixedOffset === 0
+          ? FixedOffsetZone.utcInstance
+          : FixedOffsetZone.instance(fixedOffset);
+    const zone: Zone =
+      ianaZone || fixedOffsetZone || FixedOffsetZone.utcInstance; // Default to UTC
 
-  return parsedDate.isValid ? parsedDate : null;
+    // Create DateTime from object
+    // console.log('dateString', dateString);
+    // console.log('dateTimeObj', dateTimeObj);
+    // console.log('zone', zone);
+    const parsed = DateTime.fromObject(dateTimeObj, { zone });
+    // console.log('parsed', parsed);
+
+    if (parsed.isValid) {
+      // If we have both IANA zone and fixed offset, verify they match
+      if (
+        ianaZone !== null &&
+        fixedOffset !== null &&
+        parsed.offset !== fixedOffset
+      ) {
+        throw new Error(
+          `Timezone offset mismatch: "${ianaZone.name}" ${parsed.offset}m !== ${fixedOffset}m (at ${formatDate(parsed)})`,
+        );
+      }
+      return parsed;
+    }
+    throw new Error(`Invalid date: "${dateString}"`);
+  } catch (error) {
+    // Fallback to ISO parsing
+    const isoParsed = DateTime.fromISO(dateString, { zone: 'utc' });
+    if (isoParsed.isValid) {
+      return isoParsed;
+    }
+    throw error;
+  }
 }
 
 /**
  * Parse a date string and throw an error if invalid
  * @param dateString - The date string to parse
- * @param context - Context for error messages (e.g., filename)
  * @returns A valid DateTime object
  * @throws Error if the date string is invalid
  */
-export function parseDateOrThrow(
-  dateString: string,
-  context?: string,
-): DateTime {
-  const parsedDate = parseDate(dateString);
-
-  if (!parsedDate) {
-    const contextStr = context ? ` in ${context}` : '';
-    throw new Error(
-      `Invalid date "${dateString}"${contextStr}. Please use a valid date format (e.g., "2024-01-15T10:30:00.123+01:00[America/New_York]", "2024-01-15 10:30:00.123 America/New_York", or "2024-01-15").`,
-    );
-  }
-
-  return parsedDate;
+export function parseDateOrNull(dateString: string): DateTime<true> | null {
+  return parseDate(dateString);
 }
 
 /**
- * Generate a current date in RFC 9557 format with local timezone
- * @returns Date string in format "YYYY-MM-DDTHH:mm:ss.sss+HH:mm[Timezone]"
+ * Generate current date in RFC 9557 format with local timezone
+ * @returns Current date as RFC 9557 formatted string
  */
 export function generateCurrentDate(): string {
-  const now = DateTime.now(); // Use local timezone
-  const isoFormat = now.toISO({
-    includeOffset: true,
-    suppressMilliseconds: false,
-  });
-  const timezoneId = now.zoneName; // Local timezone
-  return `${isoFormat}[${timezoneId}]`;
+  return formatDate(DateTime.now());
 }
 
 /**
- * Generate a date prefix for filenames (YYYY-MM-DD format)
- * @returns Date string in format "YYYY-MM-DD"
+ * Generate date prefix for filenames (YYYY-MM-DD format)
+ * @returns Current date in YYYY-MM-DD format
  */
 export function generateDatePrefix(): string {
   return DateTime.now().toISODate()!;
 }
 
 /**
- * Check if a date string is in RFC 9557 format
- * @param dateString - The date string to check
+ * Check if a string matches RFC 9557 format
+ * @param dateString - The string to check
  * @returns True if the string matches RFC 9557 format
  */
 export function isRFC9557Format(dateString: string): boolean {
@@ -124,4 +186,17 @@ export function isRFC9557Format(dateString: string): boolean {
 export function extractTimezoneId(dateString: string): string | null {
   const match = dateString.match(/^(.+)\[([^\]]+)\]$/);
   return match ? match[2] : null;
+}
+
+/**
+ * Format a DateTime using the standard format with timezone
+ * @param date - The DateTime object to format
+ * @returns Formatted date string
+ */
+export function formatDate(date: DateTime): string {
+  if (!date.isValid) {
+    throw new Error('Invalid DateTime: cannot format invalid date');
+  }
+
+  return date.toFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ[z]");
 }
