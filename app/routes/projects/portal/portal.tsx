@@ -6,7 +6,8 @@ import { CONTENT_WIDTH_CLASSES } from "..";
 
 import Figure from "~/components/Figure";
 
-import portalImg from './screenshot.min.jpg';
+// @ts-ignore
+import portalImg from './screenshot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 
 export default function PortalProject() {
     return <>

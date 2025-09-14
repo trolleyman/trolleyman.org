@@ -7,9 +7,9 @@ import { cn } from "~/utils";
 import { CONTENT_WIDTH_CLASSES } from "..";
 
 // @ts-ignore
-import games from './games.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+import games from './games.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
-import breakoutGraph from './breakout_graph.png?w=300;500;700;1000;&format=webp;avif;png&as=picture'
+import breakoutGraph from './breakout_graph.png?as=picture&format=webp;avif;png&w=300;500;700;1000;'
 import dissertationPdfUrl from './Dissertation.pdf'
 
 export default function Dissertation() {

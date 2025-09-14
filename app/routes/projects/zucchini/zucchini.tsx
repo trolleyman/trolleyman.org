@@ -2,9 +2,12 @@ import PageTitle from "~/components/PageTitle";
 import Figure from "~/components/Figure";
 import FancyLinks from "~/components/FancyLinks";
 
-import shootingImg from './shooting.png'
-import victoryImg from './victory.png'
-import laserImg from './laser.png'
+// @ts-ignore
+import shootingImg from './shooting.png?as=picture&format=webp;avif;png&w=300;500;700;1000;'
+// @ts-ignore
+import victoryImg from './victory.png?as=picture&format=webp;avif;png&w=300;500;700;1000;'
+// @ts-ignore
+import laserImg from './laser.png?as=picture&format=webp;avif;png&w=300;500;700;1000;'
 import { cn } from "~/utils";
 import { CONTENT_WIDTH_CLASSES } from "..";
 

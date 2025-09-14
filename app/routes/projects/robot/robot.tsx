@@ -4,8 +4,10 @@ import FancyLinks from "~/components/FancyLinks";
 import { cn } from "~/utils";
 import { CONTENT_WIDTH_CLASSES } from "..";
 
-import guiImg from './gui.png'
-import selfieImg from './selfie.jpg'
+// @ts-ignore
+import guiImg from './gui.png?as=picture&format=webp;avif;png&w=300;500;700;1000;'
+// @ts-ignore
+import selfieImg from './selfie.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;'
 
 export default function RobotProject() {
     return <>

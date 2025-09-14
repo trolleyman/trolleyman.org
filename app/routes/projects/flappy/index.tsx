@@ -5,9 +5,12 @@ import Img from "~/components/Img";
 import { cn } from "~/utils";
 import { CONTENT_WIDTH_CLASSES } from "..";
 
-import demo1Img from './img/demo1.jpg'
-import demo2Img from './img/demo2.jpg'
-import demo3Img from './img/demo3.jpg'
+// @ts-ignore
+import demo1Img from './img/demo1.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;'
+// @ts-ignore
+import demo2Img from './img/demo2.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;'
+// @ts-ignore
+import demo3Img from './img/demo3.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;'
 
 export default function FlappyProject() {
     return <>

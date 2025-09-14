@@ -5,7 +5,8 @@ import Img from "~/components/Img";
 import { cn } from "~/utils";
 import { CONTENT_WIDTH_CLASSES } from "..";
 
-import screenshot from './screenshot.png'
+// @ts-ignore
+import screenshot from './screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;'
 
 export default function WebsiteProject() {
     return <>

@@ -5,8 +5,10 @@ import FancyLinks from "~/components/FancyLinks";
 import { cn } from "~/utils";
 import { CONTENT_WIDTH_CLASSES } from "..";
 
-import connectLaunchImg from './img/connect_launch.min.jpg'
-import graphImg from './img/graph_white.min.jpg'
+// @ts-ignore
+import connectLaunchImg from './img/connect_launch.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;'
+// @ts-ignore
+import graphImg from './img/graph_white.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;'
 
 export default function LincProject() {
     return <>

@@ -4,40 +4,68 @@ import { cn } from "~/utils";
 import { CONTENT_WIDTH_CLASSES } from "..";
 import Figure from "~/components/Figure";
 
-import alabamaOriginal from './repo/examples/alabama-hills-ca/alabama-hills-ca.png';
-import alabamaK2 from './repo/examples/alabama-hills-ca/alabama-hills-ca-2.png';
-import exampleData from './repo/matlab/kmeans_example_data.png';
-import exampleClusters1 from './repo/matlab/kmeans_example_clusters_1.png';
+// @ts-ignore
+import alabamaOriginal from './repo/examples/alabama-hills-ca/alabama-hills-ca.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import alabamaK2 from './repo/examples/alabama-hills-ca/alabama-hills-ca-2.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import exampleData from './repo/matlab/kmeans_example_data.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import exampleClusters1 from './repo/matlab/kmeans_example_clusters_1.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 
-import yellowstoneBefore from './repo/examples/yellowstone/yellowstone.jpg';
-import yellowstoneK2 from './repo/examples/yellowstone/yellowstone-2.jpg';
-import yellowstoneK4 from './repo/examples/yellowstone/yellowstone-4.jpg';
-import yellowstoneK16 from './repo/examples/yellowstone/yellowstone-16.jpg';
+// @ts-ignore
+import yellowstoneBefore from './repo/examples/yellowstone/yellowstone.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+// @ts-ignore
+import yellowstoneK2 from './repo/examples/yellowstone/yellowstone-2.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+// @ts-ignore
+import yellowstoneK4 from './repo/examples/yellowstone/yellowstone-4.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+// @ts-ignore
+import yellowstoneK16 from './repo/examples/yellowstone/yellowstone-16.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 
-import blueMountainsBefore from './repo/examples/blue mountains 1/blue mountains 1.png';
-import blueMountainsK3 from './repo/examples/blue mountains 1/blue mountains 1-3.png';
-import blueMountainsK5 from './repo/examples/blue mountains 1/blue mountains 1-5.png';
-import blueMountainsK8 from './repo/examples/blue mountains 1/blue mountains 1-8.png';
+// @ts-ignore
+import blueMountainsBefore from './repo/examples/blue mountains 1/blue mountains 1.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import blueMountainsK3 from './repo/examples/blue mountains 1/blue mountains 1-3.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import blueMountainsK5 from './repo/examples/blue mountains 1/blue mountains 1-5.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import blueMountainsK8 from './repo/examples/blue mountains 1/blue mountains 1-8.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 
-import blueMountains2Before from './repo/examples/blue mountains 2/blue mountains 2.png';
-import blueMountains2K2 from './repo/examples/blue mountains 2/blue mountains 2-2.png';
-import blueMountains2K3 from './repo/examples/blue mountains 2/blue mountains 2-3.png';
-import blueMountains2K7 from './repo/examples/blue mountains 2/blue mountains 2-7.png';
+// @ts-ignore
+import blueMountains2Before from './repo/examples/blue mountains 2/blue mountains 2.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import blueMountains2K2 from './repo/examples/blue mountains 2/blue mountains 2-2.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import blueMountains2K3 from './repo/examples/blue mountains 2/blue mountains 2-3.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import blueMountains2K7 from './repo/examples/blue mountains 2/blue mountains 2-7.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 
-import blueMountains3Before from './repo/examples/blue mountains 3/blue mountains 3.png';
-import blueMountains3K2 from './repo/examples/blue mountains 3/blue mountains 3-2.png';
-import blueMountains3K6 from './repo/examples/blue mountains 3/blue mountains 3-6.png';
-import blueMountains3K8 from './repo/examples/blue mountains 3/blue mountains 3-8.png';
+// @ts-ignore
+import blueMountains3Before from './repo/examples/blue mountains 3/blue mountains 3.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import blueMountains3K2 from './repo/examples/blue mountains 3/blue mountains 3-2.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import blueMountains3K6 from './repo/examples/blue mountains 3/blue mountains 3-6.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import blueMountains3K8 from './repo/examples/blue mountains 3/blue mountains 3-8.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 
-import fjadrargljufurBefore from './repo/examples/fjadrargljufur/fjadrargljufur.jpg';
-import fjadrargljufurK2 from './repo/examples/fjadrargljufur/fjadrargljufur-2.jpg';
-import fjadrargljufurK3 from './repo/examples/fjadrargljufur/fjadrargljufur-3.jpg';
-import fjadrargljufurK12 from './repo/examples/fjadrargljufur/fjadrargljufur-12.jpg';
+// @ts-ignore
+import fjadrargljufurBefore from './repo/examples/fjadrargljufur/fjadrargljufur.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+// @ts-ignore
+import fjadrargljufurK2 from './repo/examples/fjadrargljufur/fjadrargljufur-2.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+// @ts-ignore
+import fjadrargljufurK3 from './repo/examples/fjadrargljufur/fjadrargljufur-3.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+// @ts-ignore
+import fjadrargljufurK12 from './repo/examples/fjadrargljufur/fjadrargljufur-12.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 
-import papercourtBefore from './repo/examples/papercourt/IMG_4700.jpg';
-import papercourtK2 from './repo/examples/papercourt/IMG_4700-2.jpg';
-import papercourtK5 from './repo/examples/papercourt/IMG_4700-5.jpg';
-import papercourtK8 from './repo/examples/papercourt/IMG_4700-8.jpg';
+// @ts-ignore
+import papercourtBefore from './repo/examples/papercourt/IMG_4700.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+// @ts-ignore
+import papercourtK2 from './repo/examples/papercourt/IMG_4700-2.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+// @ts-ignore
+import papercourtK5 from './repo/examples/papercourt/IMG_4700-5.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+// @ts-ignore
+import papercourtK8 from './repo/examples/papercourt/IMG_4700-8.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 
 import PageHeading from "~/components/PageHeading";
 import PageSubHeading from "~/components/PageSubHeading";

@@ -6,25 +6,25 @@ import FancyLinks from '~/components/FancyLinks';
 
 import dissertationPdfUrl from './dissertation/Dissertation.pdf'
 // @ts-ignore
-import breakoutImg from './dissertation/breakout.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+import breakoutImg from './dissertation/breakout.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
-import websiteImg from './website/screenshot.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+import websiteImg from './website/screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
-import websiteRemixImg from './website-remix/screenshot.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+import websiteRemixImg from './website-remix/screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
-import lincImg from './linc/img/logo.min.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+import lincImg from './linc/img/logo.min.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
-import flappyImg from './flappy/img/logo.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+import flappyImg from './flappy/img/logo.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
-import zucchiniImg from './zucchini/logo.png?w=300;500;700;1000;&format=webp;avif;png&as=picture';
+import zucchiniImg from './zucchini/logo.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
-import robotImg from './robot/casterbot.jpg?w=300;500;700;1000;&format=webp;avif;jpg&as=picture';
+import robotImg from './robot/casterbot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 // @ts-ignore
-import portalImg from './portal/screenshot.jpg?w=300;500;700;1000;&format=webp;avif;jpg&as=picture';
+import portalImg from './portal/screenshot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 // @ts-ignore
-import kmeansImg from './k-means/repo/examples/alabama-hills-ca/alabama-hills-ca-2.png?w=300;500;700;1000;&format=webp;avif;jpg&as=picture';
+import kmeansImg from './k-means/repo/examples/alabama-hills-ca/alabama-hills-ca-2.png?as=picture&format=webp;avif;jpg&w=300;500;700;1000;2000;3000;';
 // @ts-ignore
-import equatorImg from './equator/screenshot.jpg?w=300;500;700;1000;&format=webp;avif;jpg&as=picture';
+import equatorImg from './equator/screenshot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 
 export const CONTENT_WIDTH_CLASSES: string = "max-w-5xl mx-auto px-4"
 
