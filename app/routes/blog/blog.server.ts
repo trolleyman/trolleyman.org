@@ -2,8 +2,7 @@ import { readdir, readFile, access } from 'fs/promises';
 import { join, resolve, relative } from 'path';
 import matter from 'gray-matter';
 import { DateTime } from 'luxon';
-import { parseDateOrThrow } from '../../date';
-import { serializePost } from '../../serialization';
+import { parseDate } from '../../date';
 import type { Post } from './types';
 
 // Constants
@@ -128,11 +127,7 @@ export async function getPostByFilename(filename: string): Promise<Post> {
   // Parse date and ensure it's a valid DateTime object
   let date: DateTime;
   if (data.date) {
-    try {
-      date = parseDateOrThrow(data.date, `post "${normalizedFilename}"`);
-    } catch (error) {
-      throw error; // Re-throw the error from parseDateOrThrow
-    }
+    date = parseDate(data.date);
   } else {
     date = DateTime.now(); // Use local timezone
   }

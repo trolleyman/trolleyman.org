@@ -3,8 +3,7 @@ import { join } from 'path';
 import { createInterface } from 'readline';
 import slugify from 'slugify';
 import matter from 'gray-matter';
-import { DateTime } from 'luxon';
-import { generateCurrentDate, generateDatePrefix } from '../app/date';
+import { generateCurrentDate, generateDatePrefix } from '../app/date.ts';
 
 const rl = createInterface({
   input: process.stdin,

@@ -109,15 +109,7 @@ export function parseDate(dateString: string): DateTime<true> {
   const zone: Zone = ianaZone || fixedOffsetZone || FixedOffsetZone.utcInstance; // Default to UTC
 
   // Create DateTime from object
-  console.log('dateString', dateString);
-  console.log('dateTimeObj', dateTimeObj);
-  console.log('zone', zone);
   const parsed = DateTime.fromObject(dateTimeObj, { zone });
-  console.log('parsed', parsed);
-  console.log('parsed.isValid', parsed.isValid);
-  console.log('parsed.zoneName', parsed.zoneName);
-  console.log('parsed.zone.name', parsed.zone.name);
-  console.log('parsed.offset', parsed.offset);
 
   if (parsed.isValid) {
     // If we have both IANA zone and fixed offset, verify they match
@@ -126,12 +118,10 @@ export function parseDate(dateString: string): DateTime<true> {
       fixedOffset !== null &&
       parsed.offset !== fixedOffset
     ) {
-      console.log('throwing time zone mismatch error');
       throw new Error(
         `Timezone offset mismatch: "${ianaZone.name}" ${parsed.offset}m !== ${fixedOffset}m (at ${formatDate(parsed)})`,
       );
     }
-    console.log('returning!', parsed);
     return parsed;
   }
   throw new Error(`Invalid date: "${dateString}"`);

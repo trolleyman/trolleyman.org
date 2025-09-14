@@ -1,10 +1,11 @@
 ---
 title: 'Hello World!'
 slug: 'hello-world'
+description: 'This is a description test! Looking at a very very very long paragraph here. Nothing too too fancy, but I think this will probably over-egg it.'
 author: 'Callum Tolley'
-date: '2025-09-14 16:03:07.332'
+date: '2025-09-14T19:51:33.264+01:00[Europe/London]'
 draft: true
-tags: ['hello-world']
+tags: ['hello-world', 'demo', 'testing']
 ---
 
 # Hi there!
