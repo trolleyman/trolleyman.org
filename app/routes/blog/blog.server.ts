@@ -1,6 +1,8 @@
 import { readdir, readFile, access } from 'fs/promises';
 import { join, resolve, relative } from 'path';
 import matter from 'gray-matter';
+import { DateTime } from 'luxon';
+import { parseDateOrThrow } from '~/date';
 
 // Constants
 export const POSTS_DIRECTORY = join(process.cwd(), 'posts');
@@ -58,7 +60,7 @@ export interface Post {
   title: string;
   description: string;
   author: string;
-  date: Date;
+  date: DateTime;
   draft: boolean;
   tags: string[];
   content: string;
@@ -89,7 +91,7 @@ export async function getPosts(): Promise<Post[]> {
     : validPosts.filter((post) => !post.draft);
 
   // Sort by date (newest first)
-  return filteredPosts.sort((a, b) => b.date.getTime() - a.date.getTime());
+  return filteredPosts.sort((a, b) => b.date.toMillis() - a.date.toMillis());
 }
 
 export async function getPostByFilename(filename: string): Promise<Post> {
@@ -133,18 +135,16 @@ export async function getPostByFilename(filename: string): Promise<Post> {
   const author = data.author ? String(data.author) : 'Unknown';
   const draft = Boolean(data.draft);
 
-  // Parse date and ensure it's a valid Date object
-  let date: Date;
+  // Parse date and ensure it's a valid DateTime object
+  let date: DateTime;
   if (data.date) {
-    const parsedDate = new Date(data.date);
-    if (isNaN(parsedDate.getTime())) {
-      throw new Error(
-        `Invalid date "${data.date}" in post "${normalizedFilename}". Please use a valid date format (e.g., "2024-01-15" or "2024-01-15T10:30:00Z").`,
-      );
+    try {
+      date = parseDateOrThrow(data.date, `post "${normalizedFilename}"`);
+    } catch (error) {
+      throw error; // Re-throw the error from parseDateOrThrow
     }
-    date = parsedDate;
   } else {
-    date = new Date();
+    date = DateTime.now(); // Use local timezone
   }
 
   // Ensure tags is an array of strings

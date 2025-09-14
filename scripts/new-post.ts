@@ -3,6 +3,8 @@ import { join } from 'path';
 import { createInterface } from 'readline';
 import slugify from 'slugify';
 import matter from 'gray-matter';
+import { DateTime } from 'luxon';
+import { generateCurrentDate, generateDatePrefix } from '../app/date';
 
 const rl = createInterface({
   input: process.stdin,
@@ -72,14 +74,8 @@ async function main() {
     const author =
       (await question('👤 Author (Callum Tolley): ')) || 'Callum Tolley';
 
-    // Get date with time including seconds and milliseconds
-    const now = new Date();
-    const todayDate = now.toISOString().split('T')[0];
-    const timeWithMs =
-      now.toISOString().split('T')[1].split('.')[0] +
-      '.' +
-      now.toISOString().split('T')[1].split('.')[1].substring(0, 3); // HH:MM:SS.mmm
-    const defaultDateTime = `${todayDate} ${timeWithMs}`;
+    // Get date with time including seconds, milliseconds, and timezone in RFC 9557 format
+    const defaultDateTime = generateCurrentDate();
     const date =
       (await question(`📅 Date & Time (${defaultDateTime}): `)) ||
       defaultDateTime;
@@ -100,7 +96,7 @@ async function main() {
       isDraftInput.toLowerCase() === 'yes';
 
     // Generate filename with date prefix
-    const datePrefix = todayDate; // YYYY-MM-DD
+    const datePrefix = generateDatePrefix(); // YYYY-MM-DD
     const filename = `${datePrefix}-${slug}.md`;
     const filePath = join(POSTS_DIR, filename);
 

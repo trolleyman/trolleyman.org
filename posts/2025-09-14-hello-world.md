@@ -28,6 +28,10 @@ And an ordered list:
 2. Second numbered item
 3. Third numbered item
 
+### Inline Code
+
+Here's some `inline` code.
+
 ### Code Blocks
 
 Here's a code block:
