@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { DateTime } from 'luxon';
 import { parseDate } from '../../date';
 import type { Post } from './types';
+import { loadAuthor } from '../../author.server';
 
 // Constants
 export const POSTS_DIRECTORY = join(process.cwd(), 'posts');
@@ -121,7 +122,8 @@ export async function getPostByFilename(filename: string): Promise<Post> {
   const slug = String(data.slug);
   const title = data.title ? String(data.title) : 'Untitled';
   const description = data.description ? String(data.description) : '';
-  const author = data.author ? String(data.author) : 'Unknown';
+  const authorName = data.author ? String(data.author) : 'Unknown';
+  const author = (await loadAuthor(authorName)) ?? authorName;
   const draft = Boolean(data.draft);
 
   // Parse date and ensure it's a valid DateTime object
