@@ -4,6 +4,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import slugify from 'slugify';
 import { twMerge } from 'tailwind-merge';
+import type { Author } from './components/Article';
 
 export const cn = (...classes: ClassValue[]) => twMerge(clsx(...classes));
 

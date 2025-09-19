@@ -5,17 +5,7 @@ import type { Post } from '~/routes/blog/types';
 /**
  * Serialized version of Post for JSON transport
  */
-export interface SerializedPost {
-  filename: string;
-  slug: string;
-  title: string;
-  description: string;
-  author: string;
-  date: string; // RFC 9557 format with timezone
-  draft: boolean;
-  tags: string[];
-  content: string;
-}
+export type SerializedPost = Omit<Post, 'date'> & { date: string };
 
 /**
  * Serialize a Post object for JSON transport
@@ -23,16 +13,10 @@ export interface SerializedPost {
  * @returns A serialized version of the post
  */
 export function serializePost(post: Post): SerializedPost {
+  const { date, ...rest } = post;
   return {
-    filename: post.filename,
-    slug: post.slug,
-    title: post.title,
-    description: post.description,
-    author: post.author,
-    date: formatDate(post.date),
-    draft: post.draft,
-    tags: post.tags,
-    content: post.content,
+    date: formatDate(date),
+    ...rest,
   };
 }
 
@@ -42,24 +26,15 @@ export function serializePost(post: Post): SerializedPost {
  * @returns A Post object with proper DateTime
  */
 export function deserializePost(serializedPost: SerializedPost): Post {
-  console.log('deserializePost date', serializedPost.date);
   const parsedDate = parseDate(serializedPost.date);
-  console.log('deserializePost parsedDate', parsedDate);
   if (!parsedDate) {
-    console.log('deserializePost error', parsedDate);
     throw new Error(`Invalid date string: ${serializedPost.date}`);
   }
 
+  const { date, ...rest } = serializedPost;
   return {
-    filename: serializedPost.filename,
-    slug: serializedPost.slug,
-    title: serializedPost.title,
-    description: serializedPost.description,
-    author: serializedPost.author,
     date: parsedDate,
-    draft: serializedPost.draft,
-    tags: serializedPost.tags,
-    content: serializedPost.content,
+    ...rest,
   };
 }
 

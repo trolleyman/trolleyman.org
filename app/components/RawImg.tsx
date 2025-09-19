@@ -1,4 +1,3 @@
-import type * as CSS from 'csstype';
 import type { Picture } from 'imagetools-core';
 
 import { cn } from '~/utils';
@@ -22,14 +21,14 @@ export default function RawImg({
   src,
   width,
   height,
+  style,
   className,
   ...props
 }: RawImgProps) {
   width ??= typeof src === 'object' ? src.img.w : undefined;
   height ??= typeof src === 'object' ? src.img.h : undefined;
-
-  const style: CSS.Properties = {};
-  if (width && height) {
+  style ??= {};
+  if (width && height && !style.aspectRatio) {
     style.aspectRatio = `${width} / ${height}`;
   }
 
@@ -40,6 +39,7 @@ export default function RawImg({
       height={height}
       style={style}
       className={cn('w-auto h-auto', className)}
+      {...props}
     />
   );
 

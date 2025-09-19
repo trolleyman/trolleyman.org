@@ -3,8 +3,8 @@ import { Link } from 'react-router';
 import BodyLink from '~/components/BodyLink';
 
 import './css/base.css';
-import './css/mainpage/main-mod.css';
 import './css/mainpage/main.css';
+import './css/mainpage/main-mod.css';
 
 import lincLogo from './img/demo/linc_logo.png';
 import connectBlackImg from './img/demo/mainpage/CONNECT_BLACK.jpg';
