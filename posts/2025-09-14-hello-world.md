@@ -56,11 +56,15 @@ console.log(greet('World'));
     <style>
       .content-red {
         text-color: 'red';
+        flex: 1 1;
+        display: flex;
+        background-color: #FF00FF;
       }
     </style>
     <script>
       const x = 2 * 3;
       console.log(x);
+      console.log(`Template string with substitution: ${x * 12}; ${(x => `${x * 123} =>> ${x + 12 + 99 || 'testing'}`)(3)}`)
     </script>
   </head>
   <body>
@@ -85,6 +89,40 @@ pub fn main() {
   let y = 41 * x;
   println!("Result: x={x}, y={y}");
 }
+```
+
+... And one with diff
+
+```html remove=1 add=2 /size-12/
+<div class="h-12 w-12 bg-red-500">
+<div class="size-12 bg-red-500">
+  <!-- ... -->
+</div>
+```
+
+... And one with line numbers
+
+```js filename="prettier.config.js" {10,12-13,15} showLineNumbers
+/** @type {import("prettier").Config} */
+const functions = ["cn", "clsx", "cva"];
+export default {
+  // Used to sort classes in strings provided to function calls (clsx, twMerge or cva)
+  tailwindFunctions: functions,
+  // Used to wrap classes in strings provided to function calls (clsx, twMerge or cva)
+  customFunctions: functions,
+  tailwindStylesheet: "./app/app.css",
+  // https://github.com/ony3000/prettier-plugin-classnames?tab=readme-ov-file#ending-position
+  endingPosition: "absolute-with-indent",
+  plugins: [
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-classnames",
+    // Needed to make both plugins work together
+    "prettier-plugin-merge",
+  ],
+  semi: true,
+  tabWidth: 2,
+  singleQuote: false,
+};
 ```
 
 ### Links

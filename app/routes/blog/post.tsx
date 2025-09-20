@@ -8,6 +8,7 @@ import { serializePost, deserializePost } from '~/serialization';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import hljs from 'highlight.js'; // TODO: Only import some languages?
+import 'highlight.js/styles/atom-one-dark.css';
 import { cn } from '~/utils';
 
 export async function loader({ params: { postId } }: Route.LoaderArgs) {
@@ -42,6 +43,9 @@ export default function Post() {
         </Link>
       );
     },
+    pre: ({ node, children, ...props }: any) => {
+      return <pre {...props}>{children}</pre>;
+    },
     code({ node, inline, className, children, ...props }: any) {
       const match = /language-(\w+)/.exec(className || '');
       if (inline) {
@@ -60,7 +64,10 @@ export default function Post() {
         : hljs.highlightAuto(content);
       return (
         <code
-          className={cn(className, 'language-' + highlightResult.language)}
+          className={cn(
+            className,
+            match ? undefined : 'language-' + highlightResult.language,
+          )}
           {...props}
           dangerouslySetInnerHTML={{ __html: highlightResult.value }}
         />

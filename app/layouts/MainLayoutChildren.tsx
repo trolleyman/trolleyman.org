@@ -28,6 +28,7 @@ export default function MainLayoutChildren({
                 </div>
               </div>
             )}
+            {import.meta.env.DEV ? <ThemeToggle /> : undefined}
             <Link
               to="/blog"
               prefetch="viewport"
