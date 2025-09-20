@@ -6,6 +6,9 @@ import { Article } from '~/components/Article';
 import { getPost } from './blog.server';
 import { serializePost, deserializePost } from '~/serialization';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import hljs from 'highlight.js'; // TODO: Only import some languages?
+import { cn } from '~/utils';
 
 export async function loader({ params: { postId } }: Route.LoaderArgs) {
   const post = await getPost(postId);
@@ -22,10 +25,10 @@ export default function Post() {
   const post = deserializePost(serializedPost);
 
   const markdownComponents = {
-    h1: ({ children, ...props }: any) => <h2 {...props}>{children}</h2>,
-    h2: ({ children, ...props }: any) => <h3 {...props}>{children}</h3>,
-    h3: ({ children, ...props }: any) => <h4 {...props}>{children}</h4>,
-    a: ({ href, children, ...props }: any) => {
+    h1: ({ node, children, ...props }: any) => <h2 {...props}>{children}</h2>,
+    h2: ({ node, children, ...props }: any) => <h3 {...props}>{children}</h3>,
+    h3: ({ node, children, ...props }: any) => <h4 {...props}>{children}</h4>,
+    a: ({ href, node, children, ...props }: any) => {
       const isExternal =
         href.startsWith('http://') || href.startsWith('https://');
       return (
@@ -39,8 +42,30 @@ export default function Post() {
         </Link>
       );
     },
-    pre: ({ children, ...props }: any) => <pre {...props}>{children}</pre>,
-    code: ({ children, ...props }: any) => <code {...props}>{children}</code>,
+    code({ node, inline, className, children, ...props }: any) {
+      const match = /language-(\w+)/.exec(className || '');
+      if (inline) {
+        return (
+          <code className={className} {...props}>
+            {children}
+          </code>
+        );
+      }
+
+      const content = String(children).replace(/\n$/, '');
+      const highlightResult = match
+        ? hljs.highlight(content, {
+            language: match[1],
+          })
+        : hljs.highlightAuto(content);
+      return (
+        <code
+          className={cn(className, 'language-' + highlightResult.language)}
+          {...props}
+          dangerouslySetInnerHTML={{ __html: highlightResult.value }}
+        />
+      );
+    },
   };
 
   return (
@@ -54,6 +79,7 @@ export default function Post() {
       <ReactMarkdown
         components={markdownComponents}
         remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
       >
         {post.content}
       </ReactMarkdown>

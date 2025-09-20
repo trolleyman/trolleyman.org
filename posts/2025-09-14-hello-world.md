@@ -77,6 +77,16 @@ console.log(greet('World'));
 print("Hey it's me!")
 ```
 
+... And one with auto highlighting!
+
+```
+pub fn main() {
+  let x = 1 * 31 + 1231;
+  let y = 41 * x;
+  println!("Result: x={x}, y={y}");
+}
+```
+
 ### Links
 
 - [External link](https://example.com)
