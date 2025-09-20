@@ -23,7 +23,8 @@ export default function BodyLink({
       target={target}
       rel={external ? 'noopener noreferrer' : undefined}
       className={cn(
-        'underline decoration-blue-500/60 hover:decoration-blue-500 transition-colors duration-200',
+        `underline decoration-blue-500/60 transition-colors duration-200
+        hover:decoration-blue-500`,
         className,
       )}
     >

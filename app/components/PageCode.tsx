@@ -16,7 +16,7 @@ export default function PageCode({
   return (
     <code
       className={cn(
-        'text-sm font-code',
+        'font-code text-sm',
         language ? `language-${language}` : '',
         className,
       )}

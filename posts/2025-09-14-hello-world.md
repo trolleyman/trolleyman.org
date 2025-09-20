@@ -104,20 +104,20 @@ pub fn main() {
 
 ```js filename="prettier.config.js" {10,12-13,15} showLineNumbers
 /** @type {import("prettier").Config} */
-const functions = ["cn", "clsx", "cva"];
+const functions = ['cn', 'clsx', 'cva'];
 export default {
   // Used to sort classes in strings provided to function calls (clsx, twMerge or cva)
   tailwindFunctions: functions,
   // Used to wrap classes in strings provided to function calls (clsx, twMerge or cva)
   customFunctions: functions,
-  tailwindStylesheet: "./app/app.css",
+  tailwindStylesheet: './app/app.css',
   // https://github.com/ony3000/prettier-plugin-classnames?tab=readme-ov-file#ending-position
-  endingPosition: "absolute-with-indent",
+  endingPosition: 'absolute-with-indent',
   plugins: [
-    "prettier-plugin-tailwindcss",
-    "prettier-plugin-classnames",
+    'prettier-plugin-tailwindcss',
+    'prettier-plugin-classnames',
     // Needed to make both plugins work together
-    "prettier-plugin-merge",
+    'prettier-plugin-merge',
   ],
   semi: true,
   tabWidth: 2,

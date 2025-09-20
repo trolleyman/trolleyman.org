@@ -55,17 +55,21 @@ export default function FlappyDemo() {
 
       <div className="h-svh w-svw">
         <div
-          className="absolute z-[1] m-[7px] right-0"
+          className="absolute right-0 z-[1] m-[7px]"
           style={{ visibility: 'hidden' }}
           ref={statsContainerRef}
         >
           <div
             ref={statsRef}
-            className="font-[arial] leading-[1.2] bg-black/70 text-white p-[7px] min-w-[120px]"
+            className="min-w-[120px] bg-black/70 p-[7px] font-[arial]
+              leading-[1.2] text-white"
           ></div>
         </div>
         <input
-          className="absolute z-[2] m-0 p-[2px] text-right size-7 font-flappy border-[1.5px] border-black bg-transparent text-gold caret-black focus:border-gold text-shadow-[2px_2px_0px_black,-2px_2px_0px_black,2px_-2px_0px_black,-2px_-2px_0px_black]"
+          className="font-flappy text-gold focus:border-gold absolute z-[2] m-0
+            size-7 border-[1.5px] border-black bg-transparent p-[2px] text-right
+            caret-black
+            text-shadow-[2px_2px_0px_black,-2px_2px_0px_black,2px_-2px_0px_black,-2px_-2px_0px_black]"
           style={{
             visibility: 'hidden',
           }}

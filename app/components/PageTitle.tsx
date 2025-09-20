@@ -20,11 +20,15 @@ export default function PageTitle({
   tags,
 }: PageTitleProps) {
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+    <div className="mx-auto max-w-4xl">
+      <div
+        className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start
+          sm:justify-between"
+      >
         <h1
           className={cn(
-            'text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-serif flex-1',
+            `flex-1 font-serif text-3xl font-bold text-gray-900 md:text-4xl
+            dark:text-white`,
             className,
           )}
         >
@@ -36,10 +40,13 @@ export default function PageTitle({
         )}
       </div>
 
-      <hr className="text-gray-500 w-full mb-4" />
+      <hr className="mb-4 w-full text-gray-500" />
 
       {(date || author) && (
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-4 text-sm">
+        <div
+          className="flex flex-col gap-4 text-sm sm:flex-row sm:items-center
+            sm:justify-end"
+        >
           {date && <PageDate date={date} />}
           {author && <PageAuthor author={author} />}
         </div>

@@ -10,7 +10,7 @@ export default function PageUnorderedList({
   className,
 }: PageUnorderedListProps) {
   return (
-    <ul className={cn('list-disc list-inside space-y-1 my-4', className)}>
+    <ul className={cn('my-4 list-inside list-disc space-y-1', className)}>
       {children}
     </ul>
   );

@@ -55,20 +55,26 @@ function Project({
   libraries ??= [];
   tools ??= [];
   const content = (
-    <div className="w-full lg:w-3/4 space-y-4">
+    <div className="w-full space-y-4 lg:w-3/4">
       <div className="space-y-1">
-        <div className="flex justify-between items-end">
-          <h2 className="order-1 group-odd/row:order-2 text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="flex items-end justify-between">
+          <h2
+            className="order-1 text-2xl font-bold text-gray-900
+              group-odd/row:order-2 dark:text-white"
+          >
             {title}
           </h2>
-          <div className="order-2 group-odd/row:order-1 text-sm text-gray-500 dark:text-gray-400">
+          <div
+            className="order-2 text-sm text-gray-500 group-odd/row:order-1
+              dark:text-gray-400"
+          >
             {date}
           </div>
         </div>
         <hr className="text-gray-500" />
       </div>
 
-      <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
+      <div className="leading-relaxed text-gray-700 dark:text-gray-300">
         {children}
       </div>
 
@@ -115,7 +121,8 @@ function Project({
   const imageElement = imageProps && (
     <Img
       className={cn(
-        'max-w-32 max-h-32 sm:max-w-48 sm:max-h-48 md:max-w-54 md:max-h-54 self-start max-sm:group-odd/row:self-end sm:self-center',
+        `max-h-32 max-w-32 self-start max-sm:group-odd/row:self-end sm:max-h-48
+        sm:max-w-48 sm:self-center md:max-h-54 md:max-w-54`,
       )}
       {...imageProps}
     />
@@ -124,7 +131,8 @@ function Project({
   return (
     <section
       id={id}
-      className="group/row flex flex-col gap-4 sm:gap-12 items-center sm:flex-row odd:sm:flex-row-reverse odd:text-right"
+      className="group/row flex flex-col items-center gap-4 odd:text-right
+        sm:flex-row sm:gap-12 odd:sm:flex-row-reverse"
     >
       {imageElement}
       {content}
@@ -138,7 +146,7 @@ export default function Projects() {
       <PageTitle>Projects</PageTitle>
 
       {/* Projects List */}
-      <div className={cn('flex flex-col gap-12 mt-6', CONTENT_WIDTH_CLASSES)}>
+      <div className={cn('mt-6 flex flex-col gap-12', CONTENT_WIDTH_CLASSES)}>
         <Project
           id="proj_website_remix"
           title="trolleyman.org (Remix)"

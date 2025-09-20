@@ -17,7 +17,7 @@ export default function LincProject() {
 
       <div
         className={cn(
-          'space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed',
+          'space-y-4 leading-relaxed text-gray-700 dark:text-gray-300',
           CONTENT_WIDTH_CLASSES,
         )}
       >
@@ -25,7 +25,7 @@ export default function LincProject() {
           src={connectLaunchImg}
           alt="CONNECT launch event"
           caption="CONNECT launch event"
-          className="float-right w-full xs:max-w-xs sm:max-w-sm ml-4 mb-2"
+          className="xs:max-w-xs float-right mb-2 ml-4 w-full sm:max-w-sm"
         />
 
         <p>
@@ -57,7 +57,7 @@ export default function LincProject() {
           src={graphImg}
           alt="LINC graph visualization"
           caption="Social network graph visualization"
-          className="float-left w-full xs:max-w-xs sm:max-w-sm mr-4 mb-2"
+          className="xs:max-w-xs float-left mr-4 mb-2 w-full sm:max-w-sm"
         />
 
         <p>

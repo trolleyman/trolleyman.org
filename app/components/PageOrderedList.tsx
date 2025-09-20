@@ -10,7 +10,7 @@ export default function PageOrderedList({
   className,
 }: PageOrderedListProps) {
   return (
-    <ol className={cn('list-decimal list-inside space-y-1 my-4', className)}>
+    <ol className={cn('my-4 list-inside list-decimal space-y-1', className)}>
       {children}
     </ol>
   );

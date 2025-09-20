@@ -9,15 +9,20 @@ export default function ThemeToggle() {
 
   const optionClasses = (active: boolean) =>
     cn(
-      'flex-1 inline-flex items-center justify-center h-8 select-none text-xs font-medium cursor-pointer px-1 first:pl-2 last:pr-2 border-gray-400 dark:border-gray-600',
+      `inline-flex h-8 flex-1 cursor-pointer items-center justify-center
+      border-gray-400 px-1 text-xs font-medium select-none first:pl-2 last:pr-2
+      dark:border-gray-600`,
       active
-        ? 'text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/30'
-        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800',
+        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+        : `text-gray-600 hover:bg-gray-100 dark:text-gray-300
+          dark:hover:bg-gray-800`,
     );
 
   return (
     <div
-      className="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden divide-x-1 border-1 border-gray-500 dark:border-gray-400"
+      className="inline-flex items-center divide-x-1 overflow-hidden
+        rounded-full border-1 border-gray-500 bg-gray-100 dark:border-gray-400
+        dark:bg-gray-800"
       role="group"
       aria-label="Theme toggle"
     >

@@ -11,7 +11,10 @@ export default function FancyLink({ children, to, external }: FancyLinkProps) {
       to={to}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
-      className="m-1 inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200"
+      className="m-1 inline-flex items-center rounded-lg bg-blue-50 px-4 py-2
+        text-sm font-medium text-blue-600 transition-colors duration-200
+        hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400
+        dark:hover:bg-blue-900/30"
     >
       {children}
     </Link>

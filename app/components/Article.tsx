@@ -70,21 +70,24 @@ export function Article({
       {/* TODO: Make author a bit smaller, move date to the right, (/left???), or maybe just make the title larger and with less padding, basically just need to make the author and date less prominent */}
       {/* Main Title */}
       <h1 className="mb-4">{title}</h1>
-      <hr className="text-gray-500 w-full mt-0 mb-4" />
+      <hr className="mt-0 mb-4 w-full text-gray-500" />
 
       {/* Author and Metadata Section */}
       {(author || date) && (
-        <div className="flex items-center gap-4 mb-6">
+        <div className="mb-6 flex items-center gap-4">
           {/* Author Profile Picture */}
-          <div className="w-12 h-12 rounded-full bg-gray-600 flex items-center justify-center overflow-hidden">
+          <div
+            className="flex h-12 w-12 items-center justify-center
+              overflow-hidden rounded-full bg-gray-600"
+          >
             {authorInfo.profilePicture ? (
               <RawImg
                 src={authorInfo.profilePicture}
                 alt={authorInfo.name}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             ) : (
-              <span className="text-white text-lg font-semibold">
+              <span className="text-lg font-semibold text-white">
                 {authorInfo.name ? getInitials(authorInfo.name) : 'A'}
               </span>
             )}
@@ -105,11 +108,13 @@ export function Article({
 
       {/* Tags */}
       {tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="mb-8 flex flex-wrap gap-2">
           {tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors"
+              className="inline-flex items-center rounded-full bg-gray-700 px-3
+                py-1 text-sm font-medium text-gray-300 transition-colors
+                hover:bg-gray-600"
             >
               {tag}
             </span>

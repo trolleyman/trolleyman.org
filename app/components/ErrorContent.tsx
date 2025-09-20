@@ -32,20 +32,29 @@ export default function ErrorContent({ error }: { error: unknown }) {
 
   return (
     <>
-      <div className="w-full max-w-5xl mx-auto px-4">
+      <div className="mx-auto w-full max-w-5xl px-4">
         <div className="space-y-3">
-          <h1 className="text-center text-5xl font-bold text-gray-900 dark:text-white font-serif">
+          <h1
+            className="text-center font-serif text-5xl font-bold text-gray-900
+              dark:text-white"
+          >
             {title}
           </h1>
           <hr className="text-gray-500" />
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-center">
+          <p
+            className="text-center leading-relaxed text-gray-700
+              dark:text-gray-300"
+          >
             {details}
           </p>
         </div>
 
         {stack && (
           <div className="mt-6">
-            <pre className="p-4 rounded-lg overflow-x-auto bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200 shadow-inner text-sm">
+            <pre
+              className="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm
+                text-gray-800 shadow-inner dark:bg-gray-800 dark:text-gray-200"
+            >
               <code>{stack}</code>
             </pre>
           </div>

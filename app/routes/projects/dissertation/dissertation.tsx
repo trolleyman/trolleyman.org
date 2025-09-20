@@ -20,11 +20,11 @@ export default function Dissertation() {
         Artificial Intelligence in Atari 2600 Games using Deep Q-Learning
       </PageTitle>
 
-      <Img src={games} rendering="pixelated" className="mb-6 mt-4 w-full" />
+      <Img src={games} rendering="pixelated" className="mt-4 mb-6 w-full" />
 
       <div
         className={cn(
-          'space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed',
+          'space-y-4 leading-relaxed text-gray-700 dark:text-gray-300',
           CONTENT_WIDTH_CLASSES,
         )}
       >
@@ -45,7 +45,7 @@ export default function Dissertation() {
           src={breakoutGraph}
           alt="Breakout Q-values over time"
           caption="Annotated graph of Q-values over time for an episode of Breakout."
-          className="float-right w-full xs:max-w-xs sm:max-w-sm ml-4 mb-2"
+          className="xs:max-w-xs float-right mb-2 ml-4 w-full sm:max-w-sm"
         />
         <p>
           The method is explained more fully in my{' '}

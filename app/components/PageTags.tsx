@@ -13,7 +13,9 @@ export default function PageTags({ tags, className }: PageTagsProps) {
       {tags.map((tag, index) => (
         <span
           key={index}
-          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+          className="inline-flex items-center rounded-full bg-blue-100 px-2.5
+            py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900
+            dark:text-blue-200"
         >
           #{tag}
         </span>

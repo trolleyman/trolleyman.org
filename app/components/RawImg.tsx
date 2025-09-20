@@ -38,7 +38,7 @@ export default function RawImg({
       width={width}
       height={height}
       style={style}
-      className={cn('w-auto h-auto', className)}
+      className={cn('h-auto w-auto', className)}
       {...props}
     />
   );

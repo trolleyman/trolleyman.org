@@ -18,7 +18,7 @@ export default function RobotProject() {
 
       <div
         className={cn(
-          'space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed',
+          'space-y-4 leading-relaxed text-gray-700 dark:text-gray-300',
           CONTENT_WIDTH_CLASSES,
         )}
       >
@@ -26,7 +26,7 @@ export default function RobotProject() {
           src={guiImg}
           alt="Robot warehouse GUI"
           caption="Warehouse management interface"
-          className="float-right w-full sm:max-w-sm ml-4 mb-2"
+          className="float-right mb-2 ml-4 w-full sm:max-w-sm"
         />
 
         <p className="sm:text-right">
@@ -55,7 +55,7 @@ export default function RobotProject() {
           src={selfieImg}
           alt="Robot project selfie"
           caption="Late night debugging session"
-          className="float-left w-full sm:max-w-sm mr-4 mb-2"
+          className="float-left mr-4 mb-2 w-full sm:max-w-sm"
         />
 
         <p>

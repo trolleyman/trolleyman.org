@@ -93,11 +93,11 @@ export default function KMeansProject() {
 
       <div
         className={cn(
-          'space-y-6 text-gray-700 dark:text-gray-300 leading-relaxed',
+          'space-y-6 leading-relaxed text-gray-700 dark:text-gray-300',
           CONTENT_WIDTH_CLASSES,
         )}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <Figure
             src={alabamaOriginal}
             alt="Alabama Hills, CA original"
@@ -131,7 +131,7 @@ export default function KMeansProject() {
             (here, pixel colours), and then iterates over two simple steps until
             convergence:
           </p>
-          <ul className="list-disc pt-2 pl-6 space-y-1">
+          <ul className="list-disc space-y-1 pt-2 pl-6">
             <li>
               <b>Assignment</b>: assign each point to the nearest centroid.
             </li>
@@ -142,7 +142,7 @@ export default function KMeansProject() {
           </ul>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <Figure
             src={exampleData}
             alt="Example 2D data for k-means"
@@ -161,7 +161,7 @@ export default function KMeansProject() {
 
         <PageHeading>Results</PageHeading>
         <PageSubHeading>Yellowstone</PageSubHeading>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <Figure
             src={yellowstoneBefore}
             alt="Yellowstone original"
@@ -197,7 +197,7 @@ export default function KMeansProject() {
         </div>
 
         <PageSubHeading>Blue Mountains #1</PageSubHeading>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <Figure
             src={blueMountainsBefore}
             alt="Blue Mountains original"
@@ -233,7 +233,7 @@ export default function KMeansProject() {
         </div>
 
         <PageSubHeading>Blue Mountains #2</PageSubHeading>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <Figure
             src={blueMountains2Before}
             alt="Blue Mountains 2 original"
@@ -269,7 +269,7 @@ export default function KMeansProject() {
         </div>
 
         <PageSubHeading>Blue Mountains #3</PageSubHeading>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <Figure
             src={blueMountains3Before}
             alt="Blue Mountains 3 original"
@@ -305,7 +305,7 @@ export default function KMeansProject() {
         </div>
 
         <PageSubHeading>Fjadrargljufur</PageSubHeading>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
           <Figure
             src={fjadrargljufurBefore}
             alt="Fjadrargljufur original"
@@ -341,7 +341,7 @@ export default function KMeansProject() {
         </div>
 
         <PageSubHeading>Papercourt</PageSubHeading>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
           <Figure
             src={papercourtBefore}
             alt="Papercourt original"

@@ -27,7 +27,7 @@ export default function PageDate({ date, className }: PageDateProps) {
     <time
       dateTime={luxonDate.toISO() || undefined}
       className={cn(
-        'text-sm text-gray-600 dark:text-gray-400 cursor-help transition-colors',
+        'cursor-help text-sm text-gray-600 transition-colors dark:text-gray-400',
         'hover:text-gray-800 dark:hover:text-gray-200',
         className,
       )}

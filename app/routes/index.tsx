@@ -10,13 +10,19 @@ export default function Index() {
   return (
     <>
       {/* Profile Section */}
-      <div className="text-center space-y-6">
+      <div className="space-y-6 text-center">
         {/* Profile Picture */}
         <div className="relative">
-          <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 p-1 mx-auto">
-            <div className="w-full h-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+          <div
+            className="mx-auto h-32 w-32 rounded-full bg-gradient-to-br
+              from-blue-400 to-purple-600 p-1"
+          >
+            <div
+              className="flex h-full w-full items-center justify-center
+                overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700"
+            >
               {/* Headshot */}
-              <Img className="w-full h-full" src={headshotImg} />
+              <Img className="h-full w-full" src={headshotImg} />
             </div>
           </div>
         </div>
@@ -38,7 +44,10 @@ export default function Index() {
             target="_blank"
             rel="noopener noreferrer"
             title="@trolleyman"
-            className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-600 dark:hover:text-blue-400"
+            className="flex h-12 w-12 items-center justify-center rounded-full
+              bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-600
+              dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-blue-900
+              dark:hover:text-blue-400"
           >
             <FaGithub className="text-xl" />
           </Link>
@@ -47,7 +56,10 @@ export default function Index() {
             target="_blank"
             rel="noopener noreferrer"
             title="@trolleyman0"
-            className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-600 dark:hover:text-blue-400"
+            className="flex h-12 w-12 items-center justify-center rounded-full
+              bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-600
+              dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-blue-900
+              dark:hover:text-blue-400"
           >
             <FaXTwitter className="text-xl" />
           </Link>
@@ -56,14 +68,20 @@ export default function Index() {
             target="_blank"
             rel="noopener noreferrer"
             title="@callum.tolley"
-            className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-600 dark:hover:text-blue-400"
+            className="flex h-12 w-12 items-center justify-center rounded-full
+              bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-600
+              dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-blue-900
+              dark:hover:text-blue-400"
           >
             <FaLinkedin className="text-xl" />
           </Link>
           <Link
             to="mailto:callumgtolley@gmail.com"
             title="callumgtolley@gmail.com"
-            className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-600 dark:hover:text-blue-400"
+            className="flex h-12 w-12 items-center justify-center rounded-full
+              bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-600
+              dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-blue-900
+              dark:hover:text-blue-400"
           >
             <FaEnvelope className="text-xl" />
           </Link>

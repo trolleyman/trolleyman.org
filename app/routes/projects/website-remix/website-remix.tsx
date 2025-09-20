@@ -13,7 +13,7 @@ export default function WebsiteProject() {
 
       <div
         className={cn(
-          'space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed',
+          'space-y-4 leading-relaxed text-gray-700 dark:text-gray-300',
           CONTENT_WIDTH_CLASSES,
         )}
       >

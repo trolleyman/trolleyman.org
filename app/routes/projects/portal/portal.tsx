@@ -17,7 +17,7 @@ export default function PortalProject() {
 
       <div
         className={cn(
-          'space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed',
+          'space-y-4 leading-relaxed text-gray-700 dark:text-gray-300',
           CONTENT_WIDTH_CLASSES,
         )}
       >
@@ -25,7 +25,7 @@ export default function PortalProject() {
           src={portalImg}
           alt="Portal 2"
           caption="Portal 2"
-          className="float-right w-full sm:max-w-sm ml-4 mb-2"
+          className="float-right mb-2 ml-4 w-full sm:max-w-sm"
         />
 
         <p className="sm:text-right">

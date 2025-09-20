@@ -16,14 +16,15 @@ export default function WebsiteProject() {
 
       <div
         className={cn(
-          'space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed pt-4',
+          'space-y-4 pt-4 leading-relaxed text-gray-700 dark:text-gray-300',
           CONTENT_WIDTH_CLASSES,
         )}
       >
         <Img
           src={screenshot}
           alt="Website screenshot"
-          className="mb-4 mx-auto max-h-48 sm:mr-0 sm:float-right sm:ml-4 md:max-h-64"
+          className="mx-auto mb-4 max-h-48 sm:float-right sm:mr-0 sm:ml-4
+            md:max-h-64"
         />
 
         <p className="sm:text-right">

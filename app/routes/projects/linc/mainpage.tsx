@@ -34,7 +34,7 @@ export default function LincMainPage() {
 
         {/* Main */}
         <div id="main">
-          <header className="major container 75%">
+          <header className="major 75% container">
             <p>
               LINC is a digital networking visualisation, connecting people
               based on their interests, hobbies and skills.
@@ -76,7 +76,7 @@ export default function LincMainPage() {
             </section>
           </div>
 
-          <footer id="features" className="major container 75%">
+          <footer id="features" className="major 75% container">
             <h3>Features</h3>
             <ul>
               <li>Fully configurable - use your branding</li>
@@ -99,7 +99,7 @@ export default function LincMainPage() {
 
         {/* Footer */}
         <div id="footer">
-          <div className="container 75%">
+          <div className="75% container">
             <ul className="copyright">
               <li>
                 &copy;

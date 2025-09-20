@@ -13,7 +13,7 @@ export default function PageCodeBlock({
   return (
     <pre
       className={cn(
-        'bg-gray-100 dark:bg-gray-800 rounded-lg p-4 overflow-x-auto my-4',
+        'my-4 overflow-x-auto rounded-lg bg-gray-100 p-4 dark:bg-gray-800',
         className,
       )}
       {...props}
