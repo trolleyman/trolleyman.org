@@ -89,10 +89,10 @@ async function main() {
       : [];
 
     // Ask if it's a draft
-    const isDraftInput = await question('📋 Draft? (y/N): ');
+    const isDraftInput = await question('📋 Draft? (Y/n): ');
     const isDraft =
-      isDraftInput.toLowerCase() === 'y' ||
-      isDraftInput.toLowerCase() === 'yes';
+      isDraftInput.toLowerCase() !== 'n' &&
+      isDraftInput.toLowerCase() !== 'no';
 
     // Generate filename with date prefix
     const datePrefix = generateDatePrefix(); // YYYY-MM-DD
