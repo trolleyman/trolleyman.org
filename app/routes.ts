@@ -80,8 +80,8 @@ export function getRouteConfig(options?: GetRouteConfigOptions): RouteConfig {
         route(ssr ? '404' : undefined, './routes/error_404_template.tsx'),
         index('./routes/index.tsx'),
         route(dev ? 'img-test' : undefined, './routes/img-test/index.tsx'),
-        route('blog', './routes/blog/blog.tsx'),
-        route('blog/:postId', './routes/blog/post.tsx'),
+        route(dev ? 'blog' : undefined, './routes/blog/blog.tsx'),
+        route(dev ? 'blog/:postId' : undefined, './routes/blog/post.tsx'),
         route('projects', './routes/projects/index.tsx'),
         route(
           'projects/website-remix',

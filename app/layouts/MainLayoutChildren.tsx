@@ -42,14 +42,16 @@ export default function MainLayoutChildren({
               </div>
             )}
             {import.meta.env.DEV ? <ThemeToggle /> : undefined}
-            <Link
-              to="/blog"
-              prefetch="viewport"
-              className="text-gray-700 hover:text-blue-600 dark:text-gray-300
-                dark:hover:text-blue-400"
-            >
-              Blog
-            </Link>
+            {import.meta.env.DEV ? (
+              <Link
+                to="/blog"
+                prefetch="viewport"
+                className="text-gray-700 hover:text-blue-600 dark:text-gray-300
+                  dark:hover:text-blue-400"
+              >
+                Blog
+              </Link>
+            ) : undefined}
             <Link
               to="/projects"
               prefetch="viewport"

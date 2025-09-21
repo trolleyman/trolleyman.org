@@ -1,7 +1,6 @@
 import type { DateTime } from 'luxon';
 import RawImg from './RawImg';
 import type { Picture } from 'imagetools-core';
-import Title from './Title';
 import { cn } from '~/utils';
 
 export type Author = {
