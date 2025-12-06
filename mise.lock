@@ -1,3 +1,4 @@
 [[tools.bun]]
 version = "1.2.21"
 backend = "core:bun"
+"platforms.macos-x64" = { checksum = "blake3:579aabcc64319d1307cca2dd18905def43fa53ede6dc9a104577a92e7a536ed4"}
