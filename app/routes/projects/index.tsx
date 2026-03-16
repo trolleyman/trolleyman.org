@@ -159,7 +159,7 @@ export default function Projects() {
           id="proj_hydra"
           title="Hydra"
           date="2026"
-          image={{ src: hydraImg, alt: 'Hydra icon', rounded: false }}
+          image={{ src: hydraImg, alt: 'Hydra icon', rounded: false, translucent: true }}
           languages={['Go', 'TypeScript']}
           libraries={['React']}
           tools={['Docker']}
