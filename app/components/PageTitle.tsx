@@ -40,7 +40,7 @@ export default function PageTitle({
         )}
       </div>
 
-      <hr className="mb-4 w-full text-gray-500" />
+      <hr className="mb-6 w-full text-gray-500" />
 
       {(date || author) && (
         <div

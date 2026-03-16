@@ -10,12 +10,17 @@ import laserImg from './laser.png?as=picture&format=webp;avif;png&w=300;500;700;
 import shootingImg from './shooting.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
 import victoryImg from './victory.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+import logoUrl from './logo.png?url';
+
 
 export default function ZucchiniProject() {
   return (
     <>
       <PageTitle className="text-3xl md:text-3xl lg:text-4xl">
-        Zucchini
+        <span className="flex items-center gap-3">
+          <img src={logoUrl} alt="" className="h-10" />
+          Zucchini
+        </span>
       </PageTitle>
 
       <div

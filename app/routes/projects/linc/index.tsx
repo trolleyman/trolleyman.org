@@ -6,14 +6,20 @@ import PageTitle from '~/components/PageTitle';
 import { cn } from '~/utils';
 
 // @ts-ignore
-import connectLaunchImg from './img/connect_launch.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
-// @ts-ignore
 import graphImg from './img/graph_white.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+// @ts-ignore
+import darkGraphImg from './img/graph_black.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+import logoUrl from './img/logo.min.png?url';
 
 export default function LincProject() {
   return (
     <>
-      <PageTitle className="text-3xl md:text-3xl lg:text-4xl">LINC</PageTitle>
+      <PageTitle className="text-3xl md:text-3xl lg:text-4xl">
+        <span className="flex items-center gap-3">
+          <img src={logoUrl} alt="" className="h-10 w-10" />
+          LINC
+        </span>
+      </PageTitle>
 
       <div
         className={cn(
@@ -22,10 +28,10 @@ export default function LincProject() {
         )}
       >
         <Figure
-          src={connectLaunchImg}
-          alt="CONNECT launch event"
-          caption="CONNECT launch event"
-          className="xs:max-w-xs float-right mb-2 ml-4 w-full sm:max-w-sm"
+          src={graphImg}
+          alt="LINC graph visualization"
+          caption="Social network graph visualization"
+          className="xs:max-w-xs float-right ml-4 mb-2 w-80 sm:max-w-sm"
         />
 
         <p>
@@ -54,10 +60,10 @@ export default function LincProject() {
         </p>
 
         <Figure
-          src={graphImg}
-          alt="LINC graph visualization"
-          caption="Social network graph visualization"
-          className="xs:max-w-xs float-left mr-4 mb-2 w-full sm:max-w-sm"
+          src={darkGraphImg}
+          alt="Dark mode LINC"
+          caption="Dark mode"
+          className="xs:max-w-xs float-left mr-4 w-80 sm:max-w-sm"
         />
 
         <p>
@@ -95,8 +101,6 @@ export default function LincProject() {
             { text: 'Demo', to: '/projects/linc/demo' },
           ]}
         />
-
-        <div className="clear-both" />
       </div>
     </>
   );

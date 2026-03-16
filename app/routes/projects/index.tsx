@@ -7,6 +7,13 @@ import { cn } from '~/utils';
 import dissertationPdfUrl from './dissertation/Dissertation.pdf';
 
 // @ts-ignore
+import hydraImg from './hydra/icon.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import ottomanImg from './ottoman/logo.webp?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+// @ts-ignore
+import tutorImg from './tutor/screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+
+// @ts-ignore
 import breakoutImg from './dissertation/breakout.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
 import equatorImg from './equator/screenshot.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
@@ -26,6 +33,7 @@ import websiteRemixImg from './website-remix/screenshot.png?as=picture&format=we
 import websiteImg from './website/screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 // @ts-ignore
 import zucchiniImg from './zucchini/logo.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
+import BodyLink from '~/components/BodyLink';
 
 export const CONTENT_WIDTH_CLASSES: string = 'max-w-5xl mx-auto px-4';
 
@@ -147,6 +155,80 @@ export default function Projects() {
 
       {/* Projects List */}
       <div className={cn('mt-6 flex flex-col gap-12', CONTENT_WIDTH_CLASSES)}>
+        <Project
+          id="proj_hydra"
+          title="Hydra"
+          date="2026"
+          image={{ src: hydraImg, alt: 'Hydra icon', rounded: false }}
+          languages={['Go', 'TypeScript']}
+          libraries={['React']}
+          tools={['Docker']}
+          links={[
+            {
+              text: 'GitHub',
+              to: 'https://github.com/trolleyman/hydra',
+              external: true,
+            },
+            { text: 'Details', to: '/projects/hydra' },
+          ]}
+        >
+          <p>
+            AI agent orchestrator that spawns and manages autonomous AI agents,
+            each running in an isolated Docker container with its own Git worktree.
+          </p>
+          <p>
+            Features a CLI, TUI dashboard, and web interface.
+          </p>
+        </Project>
+
+        <Project
+          id="proj_ottoman"
+          title="Ottoman"
+          date="2026"
+          image={{ src: ottomanImg, alt: 'Ottoman logo', translucent: true }}
+          languages={['Go', 'TypeScript']}
+          links={[
+            {
+              text: 'GitHub',
+              to: 'https://github.com/trolleyman/ottoman',
+              external: true,
+            },
+            { text: 'Details', to: '/projects/ottoman' },
+          ]}
+        >
+          Home orchestrator for managing a desktop PC from a Raspberry Pi. Supports
+          Wake-on-LAN, display layout management, and HTTP proxying between the Pi
+          and desktop.
+        </Project>
+
+        <Project
+          id="proj_tutor"
+          title="Tutoring Website"
+          date="2025"
+          image={{ src: tutorImg, alt: 'Elizabeth Campbell tutoring website' }}
+          languages={['TypeScript', 'HTML', 'CSS']}
+          tools={['Bun']}
+          links={[
+            {
+              text: 'GitHub',
+              to: 'https://github.com/trolleyman/tutor',
+              external: true,
+            },
+            {
+              text: 'Website',
+              to: 'https://elizabethmcampbell.co.uk',
+              external: true,
+            },
+            { text: 'Details', to: '/projects/tutor' },
+          ]}
+        >
+          Tutoring website built for{' '}
+          <BodyLink to="https://elizabethmcampbell.co.uk" external>
+            elizabethmcampbell.co.uk
+          </BodyLink>
+          .
+        </Project>
+
         <Project
           id="proj_website_remix"
           title="trolleyman.org (Remix)"
@@ -309,7 +391,7 @@ export default function Projects() {
         >
           A redo of my first Portal project, a shameless attempt to copy my
           favourite video game at the time, Portal. Guess that makes this a redo
-          of a r edo.
+          of a redo.
         </Project>
 
         <Project

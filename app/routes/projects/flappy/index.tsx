@@ -11,13 +11,18 @@ import demo1Img from './img/demo1.jpg?as=picture&format=webp;avif;jpg&w=300;500;
 import demo2Img from './img/demo2.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
 // @ts-ignore
 import demo3Img from './img/demo3.jpg?as=picture&format=webp;avif;jpg&w=300;500;700;1000;';
+import logoUrl from './img/logo.png?url';
 
 export default function FlappyProject() {
   return (
     <>
       <PageTitle className="text-3xl md:text-3xl lg:text-4xl">
-        Flappy Clone
+        <span className="flex items-center gap-3">
+          <img src={logoUrl} alt="" className="h-10" />
+          Flappy Clone
+        </span>
       </PageTitle>
+
 
       <div
         className={cn(

@@ -83,6 +83,9 @@ export function getRouteConfig(options?: GetRouteConfigOptions): RouteConfig {
         route(dev ? 'blog' : undefined, './routes/blog/blog.tsx'),
         route(dev ? 'blog/:postId' : undefined, './routes/blog/post.tsx'),
         route('projects', './routes/projects/index.tsx'),
+        route('projects/hydra', './routes/projects/hydra/hydra.tsx'),
+        route('projects/ottoman', './routes/projects/ottoman/ottoman.tsx'),
+        route('projects/tutor', './routes/projects/tutor/tutor.tsx'),
         route(
           'projects/website-remix',
           './routes/projects/website-remix/website-remix.tsx',

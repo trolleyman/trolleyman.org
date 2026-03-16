@@ -74,11 +74,9 @@ export default function Dissertation() {
         </p>
 
         <FancyLinks
-          className="text-right"
+          className="text-left"
           links={[{ text: 'Paper', to: dissertationPdfUrl, external: true }]}
         />
-
-        <div className="clear-both" />
       </div>
     </>
   );

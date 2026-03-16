@@ -1,8 +1,12 @@
 import { CONTENT_WIDTH_CLASSES } from '..';
 import BodyLink from '~/components/BodyLink';
 import FancyLinks from '~/components/FancyLinks';
+import Img from '~/components/Img';
 import PageTitle from '~/components/PageTitle';
 import { cn } from '~/utils';
+
+// @ts-ignore
+import screenshot from './screenshot.png?as=picture&format=webp;avif;png&w=300;500;700;1000;';
 
 export default function WebsiteProject() {
   return (
@@ -17,7 +21,13 @@ export default function WebsiteProject() {
           CONTENT_WIDTH_CLASSES,
         )}
       >
-        {/* TODO: Screenshot */}
+        <Img
+          src={screenshot}
+          alt="Website screenshot"
+          className="mx-auto mb-4 max-h-48 sm:float-right sm:mr-0 sm:ml-4
+            md:max-h-64"
+        />
+
         <p>
           Created a website to keep track of the projects I've been working on.
           This is a rewrite of the{' '}

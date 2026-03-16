@@ -6,10 +6,6 @@ React Router v7 (formerly Remix) implementation of my website!
 
 Also hosting on Netlify at [trolleyman.netlify.app](https://trolleyman.netlify.app).
 
-## TODO
-
-- Fix links (prod links don't work)
-
 ## Getting Started
 
 ### Installation
