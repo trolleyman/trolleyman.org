@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 const buildDir = path.resolve('build/client');
+const serverBuildDir = path.resolve('build/server');
 const projectRoot = process.cwd();
 
 // Check if output is going to a terminal
@@ -113,6 +114,24 @@ async function moveIndexFiles(
   return { moved, removed };
 }
 
+async function copyServerEntry(): Promise<void> {
+  const target = path.join(serverBuildDir, 'index.js');
+  if (await pathExists(target)) return;
+
+  const entries = await fs.readdir(serverBuildDir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const candidate = path.join(serverBuildDir, entry.name, 'index.js');
+    if (await pathExists(candidate)) {
+      await fs.copyFile(candidate, target);
+      console.log(
+        `  ${formatAction('Copied')} ${formatPath(getRelativePath(candidate))} → ${formatPath(getRelativePath(target))}`,
+      );
+      return;
+    }
+  }
+}
+
 // Main execution
 console.log();
 console.log(colorize('┌─ Post-build Script', 'bright'));
@@ -123,6 +142,7 @@ console.log(
 console.log(colorize('└─', 'bright'));
 
 const startTime = Date.now();
+await copyServerEntry();
 const stats = await moveIndexFiles(buildDir);
 const duration = Date.now() - startTime;
 
