@@ -13,14 +13,7 @@ import {
 
 import MainLayoutErrorPage from './components/MainLayoutErrorPage';
 import ThemeProvider from './components/ThemeProvider';
-import {
-  isTheme,
-  themeCookie,
-  resolvedThemeCookie,
-  type Theme,
-  type ResolvedTheme,
-  isResolvedTheme,
-} from './theme';
+import { isTheme, themeCookie, type Theme } from './theme';
 
 import './app.css';
 
@@ -41,18 +34,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
   } catch {}
 
-  let cookieResolvedTheme: ResolvedTheme | undefined = undefined;
-  try {
-    const cookieFromHeader = await resolvedThemeCookie.parse(cookieHeader);
-    if (isResolvedTheme(cookieFromHeader)) {
-      cookieResolvedTheme = cookieFromHeader;
-    }
-  } catch {}
-
-  return {
-    cookieTheme,
-    cookieResolvedTheme,
-  };
+  return { cookieTheme };
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -62,22 +44,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
     typeof loaderData === 'object' && loaderData !== null
       ? loaderData.cookieTheme
       : undefined;
-  const cookieResolvedTheme =
-    typeof loaderData === 'object' && loaderData !== null
-      ? loaderData.cookieResolvedTheme
-      : undefined;
 
   return (
-    <html
-      lang="en"
-      ref={htmlRef}
-      {...(cookieResolvedTheme === 'dark' || cookieTheme === 'dark'
-        ? { 'data-theme': 'dark' }
-        : {})}
-    >
+    <html lang="en" ref={htmlRef} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var c=document.cookie.split(';'),t,r;for(var i=0;i<c.length;i++){var p=c[i].trim().split('='),k=p[0],v=decodeURIComponent(p.slice(1).join('='));try{v=JSON.parse(v);}catch(e){}if(k==='theme')t=v;if(k==='resolvedTheme')r=v;}if(!t){try{t=localStorage.getItem('theme');}catch(e){}}var dark=r==='dark'||t==='dark'||((!t||t==='system')&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(dark)document.documentElement.setAttribute('data-theme','dark');}catch(e){}})()`,
+          }}
+        />
         <Meta />
         <Links />
       </head>
