@@ -1,15 +1,12 @@
 import type { Route } from './+types/post';
 
-import { Link, useLoaderData } from 'react-router';
-import ReactMarkdown from 'react-markdown';
+import { useLoaderData } from 'react-router';
+
 import { Article } from '~/components/Article';
+import Markdown from '~/components/Markdown';
+import { deserializePost, serializePost } from '~/serialization';
+
 import { getPost } from './blog.server';
-import { serializePost, deserializePost } from '~/serialization';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
-import hljs from 'highlight.js'; // TODO: Only import some languages?
-import 'highlight.js/styles/atom-one-dark.css';
-import { cn } from '~/utils';
 
 export async function loader({ params: { postId } }: Route.LoaderArgs) {
   const post = await getPost(postId);
@@ -25,56 +22,6 @@ export default function Post() {
   const { post: serializedPost } = useLoaderData<typeof loader>();
   const post = deserializePost(serializedPost);
 
-  const markdownComponents = {
-    h1: ({ node, children, ...props }: any) => <h2 {...props}>{children}</h2>,
-    h2: ({ node, children, ...props }: any) => <h3 {...props}>{children}</h3>,
-    h3: ({ node, children, ...props }: any) => <h4 {...props}>{children}</h4>,
-    a: ({ href, node, children, ...props }: any) => {
-      const isExternal =
-        href.startsWith('http://') || href.startsWith('https://');
-      return (
-        <Link
-          to={href}
-          target={isExternal ? '_blank' : undefined}
-          rel={isExternal ? 'noopener noreferrer' : undefined}
-          className={props.className}
-        >
-          {children}
-        </Link>
-      );
-    },
-    pre: ({ node, children, ...props }: any) => {
-      return <pre {...props}>{children}</pre>;
-    },
-    code({ node, inline, className, children, ...props }: any) {
-      const match = /language-(\w+)/.exec(className || '');
-      if (inline) {
-        return (
-          <code className={className} {...props}>
-            {children}
-          </code>
-        );
-      }
-
-      const content = String(children).replace(/\n$/, '');
-      const highlightResult = match
-        ? hljs.highlight(content, {
-            language: match[1],
-          })
-        : hljs.highlightAuto(content);
-      return (
-        <code
-          className={cn(
-            className,
-            match ? undefined : 'language-' + highlightResult.language,
-          )}
-          {...props}
-          dangerouslySetInnerHTML={{ __html: highlightResult.value }}
-        />
-      );
-    },
-  };
-
   return (
     <Article
       title={post.title}
@@ -83,13 +30,9 @@ export default function Post() {
       date={post.date}
       tags={post.tags.concat(post.draft ? ['draft'] : [])}
     >
-      <ReactMarkdown
-        components={markdownComponents}
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
-      >
+      <Markdown bare allowHtml>
         {post.content}
-      </ReactMarkdown>
+      </Markdown>
     </Article>
   );
 }
