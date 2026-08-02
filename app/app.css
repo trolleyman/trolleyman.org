@@ -77,6 +77,22 @@
   );
 }
 
+/*
+  The settle of a card arriving on the pile in the flashcard editor, picking up
+  where the flight animation leaves off. Kept here rather than inline because
+  Tailwind resolves `animate-[land_...]` against the theme's keyframes.
+*/
+@keyframes land {
+  from {
+    transform: translateY(-6px) scale(1.04);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
 :where([data-theme='dark']) .editor-code-block {
   background-color: color-mix(
     in oklab,

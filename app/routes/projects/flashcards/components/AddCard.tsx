@@ -1,9 +1,11 @@
-import { useRef, useState, type RefObject } from 'react';
+import { useCallback, useRef, useState, type RefObject } from 'react';
 
 import { cn } from '~/utils';
 
-import { normaliseTags, type TagCount } from '../store';
+import { newId, normaliseTags, type TagCount } from '../store';
 import { buttonPrimary, hintClasses, inputClasses } from '../styles';
+import AddedStack, { type StackedCard } from './AddedStack';
+import CardFlight, { type Flight } from './CardFlight';
 import MarkdownInput from './MarkdownInput';
 
 export interface AddCardProps {
@@ -26,21 +28,67 @@ export default function AddCard({
 }: AddCardProps) {
   const [front, setFront] = useState('');
   const [back, setBack] = useState('');
-  const [added, setAdded] = useState(0);
+  const [stack, setStack] = useState<StackedCard[]>([]);
+  const [flights, setFlights] = useState<Flight[]>([]);
   const frontRef = useRef<HTMLTextAreaElement>(null);
   const backRef = useRef<HTMLTextAreaElement>(null);
+  const fieldsRef = useRef<HTMLDivElement>(null);
+  const deckRef = useRef<HTMLDivElement>(null);
 
   const tags = normaliseTags(tagText.split(/[\s,]+/));
   const ready = front.trim().length > 0 && back.trim().length > 0;
 
   function submit() {
     if (!ready) return;
-    onAdd(front.trim(), back.trim(), tags);
+    const card: StackedCard = {
+      id: newId(),
+      front: front.trim(),
+      back: back.trim(),
+    };
+    onAdd(card.front, card.back, tags);
+
+    // Measure before clearing the fields, while they are still the size the
+    // card should fly from.
+    const origin = fieldsRef.current?.getBoundingClientRect();
+    if (origin) {
+      setFlights((current) => [
+        ...current,
+        {
+          ...card,
+          from: {
+            top: origin.top,
+            left: origin.left,
+            width: origin.width,
+            height: origin.height,
+          },
+        },
+      ]);
+    } else {
+      setStack((current) => [card, ...current]);
+    }
+
     setFront('');
     setBack('');
-    setAdded((count) => count + 1);
     frontRef.current?.focus();
   }
+
+  /**
+   * The card reaches the pile, so the pile is what shows it from now on.
+   * Stable, so a flight in progress never sees a stale version of it.
+   */
+  const land = useCallback((flight: Flight) => {
+    setStack((cards) =>
+      // Idempotent on purpose. React runs effects twice in development, and the
+      // reduced motion path reports back from inside the effect rather than
+      // from an animation, so this would otherwise stack the card twice.
+      cards.some((card) => card.id === flight.id)
+        ? cards
+        : [{ id: flight.id, front: flight.front, back: flight.back }, ...cards],
+    );
+    setFlights((current) =>
+      current.filter((pending) => pending.id !== flight.id),
+    );
+  }, []);
 
   /**
    * Enter advances and then commits, shift + enter inserts a newline. Enter
@@ -98,37 +146,40 @@ export default function AddCard({
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <Label onNewline={() => insertNewline(frontRef, front, setFront)}>
-          Front
-        </Label>
-        <MarkdownInput
-          value={front}
-          onChange={setFront}
-          onKeyDown={onFrontKeyDown}
-          placeholder="capital of France"
-          ariaLabel="Front of the card"
-          inputRef={frontRef}
-          enterKeyHint="next"
-          rows={2}
-          autoFocus
-        />
-      </div>
+      {/* The flight is measured from this box, so it wraps both fields. */}
+      <div ref={fieldsRef} className="space-y-4">
+        <div className="space-y-2">
+          <Label onNewline={() => insertNewline(frontRef, front, setFront)}>
+            Front
+          </Label>
+          <MarkdownInput
+            value={front}
+            onChange={setFront}
+            onKeyDown={onFrontKeyDown}
+            placeholder="capital of France"
+            ariaLabel="Front of the card"
+            inputRef={frontRef}
+            enterKeyHint="next"
+            rows={2}
+            autoFocus
+          />
+        </div>
 
-      <div className="space-y-2">
-        <Label onNewline={() => insertNewline(backRef, back, setBack)}>
-          Back
-        </Label>
-        <MarkdownInput
-          value={back}
-          onChange={setBack}
-          onKeyDown={onBackKeyDown}
-          placeholder="Paris"
-          ariaLabel="Back of the card"
-          inputRef={backRef}
-          enterKeyHint="done"
-          rows={2}
-        />
+        <div className="space-y-2">
+          <Label onNewline={() => insertNewline(backRef, back, setBack)}>
+            Back
+          </Label>
+          <MarkdownInput
+            value={back}
+            onChange={setBack}
+            onKeyDown={onBackKeyDown}
+            placeholder="Paris"
+            ariaLabel="Back of the card"
+            inputRef={backRef}
+            enterKeyHint="done"
+            rows={2}
+          />
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -185,12 +236,28 @@ export default function AddCard({
           Enter moves to the answer and then adds the card. For a line break use
           new line above, or shift and enter.
         </p>
-        {added > 0 && (
-          <span className="text-xs text-green-600 dark:text-green-400">
-            {added} added
-          </span>
-        )}
       </div>
+
+      <AddedStack cards={stack} deckRef={deckRef} />
+
+      {/*
+        Announced politely rather than through the animation, which is
+        decorative and invisible to a screen reader.
+      */}
+      <p aria-live="polite" className="sr-only">
+        {stack.length > 0
+          ? `Card added, ${stack.length} ${stack.length === 1 ? 'card' : 'cards'} this session.`
+          : ''}
+      </p>
+
+      {flights.map((flight) => (
+        <CardFlight
+          key={flight.id}
+          flight={flight}
+          deckRef={deckRef}
+          onDone={land}
+        />
+      ))}
     </div>
   );
 }
