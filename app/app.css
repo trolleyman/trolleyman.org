@@ -60,3 +60,27 @@
 }
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/*
+  The backing rectangle drawn behind a fenced code block in the flashcard
+  editor. It is a separate absolutely positioned layer rather than a background
+  on the text itself, because the text has to stay in the inline flow for the
+  editor's alignment to hold, and an inline background stops at the end of each
+  line instead of filling the width. MarkdownInput measures where each block
+  starts and ends and sizes these to match.
+*/
+.editor-code-block {
+  background-color: color-mix(
+    in oklab,
+    var(--color-amber-500) 10%,
+    transparent
+  );
+}
+
+:where([data-theme='dark']) .editor-code-block {
+  background-color: color-mix(
+    in oklab,
+    var(--color-amber-400) 15%,
+    transparent
+  );
+}

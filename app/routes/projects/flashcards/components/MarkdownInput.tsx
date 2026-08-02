@@ -1,4 +1,10 @@
-import { useMemo, type RefObject } from 'react';
+import {
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type RefObject,
+} from 'react';
 
 import { cn } from '~/utils';
 
@@ -28,6 +34,82 @@ import { TOKEN_CLASSES, tokenize } from '../highlight';
 const SHARED = `m-0 w-full px-3 py-2 font-writer text-base leading-6
   break-words whitespace-pre-wrap [font-synthesis-weight:none]`;
 
+interface BlockRect {
+  top: number;
+  height: number;
+}
+
+function sameRects(a: BlockRect[], b: BlockRect[]): boolean {
+  return (
+    a.length === b.length &&
+    a.every(
+      (rect, index) =>
+        Math.abs(rect.top - b[index].top) < 0.5 &&
+        Math.abs(rect.height - b[index].height) < 0.5,
+    )
+  );
+}
+
+/**
+ * Finds where each fenced code block sits within the field, so a full width
+ * rectangle can be painted behind it.
+ *
+ * Measuring is the only way to get a solid block here. A background on the text
+ * itself stops at the end of each line, which leaves the block ragged down its
+ * right hand side and puts a hole through any blank line, since a blank line's
+ * inline fragment is zero characters wide. Taking the union of the token's line
+ * rectangles instead gives one clean rectangle covering the whole fence.
+ */
+function useCodeBlockRects(
+  containerRef: RefObject<HTMLDivElement | null>,
+  preRef: RefObject<HTMLPreElement | null>,
+  value: string,
+): BlockRect[] {
+  const [rects, setRects] = useState<BlockRect[]>([]);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    const pre = preRef.current;
+    if (!container || !pre) return;
+
+    function measure() {
+      // `top` on an absolutely positioned child is measured from the padding
+      // box of its containing block, not the border box that
+      // getBoundingClientRect reports, so the border has to come off or every
+      // rectangle sits a pixel low.
+      const base =
+        container!.getBoundingClientRect().top + container!.clientTop;
+      const next: BlockRect[] = [];
+      for (const element of pre!.querySelectorAll('[data-code-block]')) {
+        const lines = [...element.getClientRects()];
+        if (lines.length === 0) continue;
+        const top = Math.min(...lines.map((line) => line.top)) - base;
+        const bottom = Math.max(...lines.map((line) => line.bottom)) - base;
+        next.push({ top, height: bottom - top });
+      }
+      // Bail out when nothing moved, or this would loop forever.
+      setRects((current) => (sameRects(current, next) ? current : next));
+    }
+
+    measure();
+
+    // The field rewraps when it is resized, and again when the webfont finally
+    // arrives and the metrics change under it.
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    let cancelled = false;
+    void document.fonts?.ready.then(() => {
+      if (!cancelled) measure();
+    });
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
+  }, [containerRef, preRef, value]);
+
+  return rects;
+}
+
 export interface MarkdownInputProps {
   value: string;
   onChange: (value: string) => void;
@@ -38,6 +120,13 @@ export interface MarkdownInputProps {
   rows?: number;
   autoFocus?: boolean;
   inputRef?: RefObject<HTMLTextAreaElement | null>;
+  /**
+   * Relabels the return key on an on screen keyboard, so it reads "next" or
+   * "done" rather than the newline it is not going to insert. It only changes
+   * the label, never the behaviour, so the key still arrives as an ordinary
+   * Enter for onKeyDown to deal with.
+   */
+  enterKeyHint?: React.HTMLAttributes<HTMLTextAreaElement>['enterKeyHint'];
 }
 
 /**
@@ -63,18 +152,36 @@ export default function MarkdownInput({
   rows = 3,
   autoFocus,
   inputRef,
+  enterKeyHint,
 }: MarkdownInputProps) {
   const tokens = useMemo(() => tokenize(value), [value]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const preRef = useRef<HTMLPreElement>(null);
+  const blocks = useCodeBlockRects(containerRef, preRef, value);
 
   return (
+    // overflow-hidden keeps the code block rectangles inside the rounded
+    // corners. It does not clip the focus ring, which is this element's own
+    // shadow rather than a child's.
     <div
-      className="relative rounded-md border border-gray-300 bg-white
-        focus-within:border-blue-500 focus-within:ring-1
+      ref={containerRef}
+      className="relative overflow-hidden rounded-md border border-gray-300
+        bg-white focus-within:border-blue-500 focus-within:ring-1
         focus-within:ring-blue-500 dark:border-gray-600 dark:bg-gray-800"
     >
+      {blocks.map((block, index) => (
+        <div
+          key={index}
+          aria-hidden
+          className="editor-code-block pointer-events-none absolute inset-x-0"
+          style={{ top: block.top, height: block.height }}
+        />
+      ))}
+
       <pre
+        ref={preRef}
         aria-hidden
-        className={cn(SHARED, 'text-gray-900 dark:text-gray-100')}
+        className={cn(SHARED, 'relative text-gray-900 dark:text-gray-100')}
         style={{ minHeight: `calc(${rows} * 1.5rem + 1rem)` }}
       >
         {value.length === 0 && placeholder ? (
@@ -83,7 +190,11 @@ export default function MarkdownInput({
           </span>
         ) : (
           tokens.map((token, index) => (
-            <span key={index} className={TOKEN_CLASSES[token.kind]}>
+            <span
+              key={index}
+              className={TOKEN_CLASSES[token.kind]}
+              data-code-block={token.kind === 'codeBlock' ? '' : undefined}
+            >
               {token.text}
             </span>
           ))
@@ -103,6 +214,7 @@ export default function MarkdownInput({
         onKeyDown={onKeyDown}
         aria-label={ariaLabel}
         autoFocus={autoFocus}
+        enterKeyHint={enterKeyHint}
         spellCheck
         className={cn(
           SHARED,

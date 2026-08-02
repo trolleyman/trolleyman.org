@@ -65,14 +65,30 @@ describe('code', () => {
     expect(kinds('use `xs[::-1]` here', 'code')).toEqual(['`xs[::-1]`']);
   });
 
+  // Fenced blocks are their own kind because they are drawn differently from
+  // inline code: their background runs the full width of the field.
   it('picks up a fenced block including the fences', () => {
-    expect(kinds('```js\nlet a = 1\n```', 'code')).toEqual([
+    expect(kinds('```js\nlet a = 1\n```', 'codeBlock')).toEqual([
       '```js\nlet a = 1\n```',
     ]);
+    expect(kinds('```js\nlet a = 1\n```', 'code')).toEqual([]);
   });
 
   it('runs an unterminated fence to the end rather than giving up', () => {
-    expect(kinds('```js\nlet a = 1', 'code')).toEqual(['```js\nlet a = 1']);
+    expect(kinds('```js\nlet a = 1', 'codeBlock')).toEqual([
+      '```js\nlet a = 1',
+    ]);
+  });
+
+  it('keeps a fence with a blank line in it as one token', () => {
+    expect(kinds('```\na\n\nb\n```', 'codeBlock')).toEqual([
+      '```\na\n\nb\n```',
+    ]);
+  });
+
+  it('does not confuse inline code for a block', () => {
+    expect(kinds('a `b` c', 'code')).toEqual(['`b`']);
+    expect(kinds('a `b` c', 'codeBlock')).toEqual([]);
   });
 
   it('does not treat emphasis inside code as emphasis', () => {

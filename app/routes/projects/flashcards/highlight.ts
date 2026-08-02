@@ -12,6 +12,7 @@
 export type TokenKind =
   | 'text'
   | 'code'
+  | 'codeBlock'
   | 'math'
   | 'heading'
   | 'quote'
@@ -38,7 +39,7 @@ export interface Token {
 const END = '(?![\\s\\S])';
 
 const PATTERNS: [TokenKind, string][] = [
-  ['code', `\`\`\`[\\s\\S]*?(?:\`\`\`|${END})`],
+  ['codeBlock', `\`\`\`[\\s\\S]*?(?:\`\`\`|${END})`],
   ['code', '``[^`]*``'],
   ['code', '`[^`\\n]*`'],
   ['math', `\\$\\$[\\s\\S]*?(?:\\$\\$|${END})`],
@@ -120,6 +121,10 @@ export const TOKEN_CLASSES: Record<TokenKind, string> = {
   // card does, since a different font would not line up.
   code: `box-decoration-clone rounded bg-amber-500/10 py-0.5 text-amber-700
     dark:bg-amber-400/15 dark:text-amber-300`,
+  // No background here: a fenced block gets a full width rectangle painted
+  // behind it by MarkdownInput instead, because an inline background stops at
+  // the end of each line and leaves the block ragged.
+  codeBlock: 'text-amber-700 dark:text-amber-300',
   math: 'text-violet-700 dark:text-violet-300',
   heading: 'font-bold text-blue-700 dark:text-blue-300',
   quote: 'text-gray-500 dark:text-gray-400',

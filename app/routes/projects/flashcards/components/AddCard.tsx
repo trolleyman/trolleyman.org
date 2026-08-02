@@ -109,6 +109,7 @@ export default function AddCard({
           placeholder="capital of France"
           ariaLabel="Front of the card"
           inputRef={frontRef}
+          enterKeyHint="next"
           rows={2}
           autoFocus
         />
@@ -125,6 +126,7 @@ export default function AddCard({
           placeholder="Paris"
           ariaLabel="Back of the card"
           inputRef={backRef}
+          enterKeyHint="done"
           rows={2}
         />
       </div>
