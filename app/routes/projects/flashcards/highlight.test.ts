@@ -117,16 +117,32 @@ describe('structure', () => {
 });
 
 describe('emphasis', () => {
-  it('prefers the longest marker', () => {
-    expect(kinds('***a***', 'emphasis')).toEqual(['***a***']);
-    expect(kinds('**a**', 'emphasis')).toEqual(['**a**']);
+  // Bold and italic are separate kinds because they are drawn differently, so
+  // the marker count has to decide which one a run gets.
+  it('separates bold from italic', () => {
+    expect(kinds('**a**', 'strong')).toEqual(['**a**']);
+    expect(kinds('**a**', 'emphasis')).toEqual([]);
+    expect(kinds('*a*', 'emphasis')).toEqual(['*a*']);
+    expect(kinds('*a*', 'strong')).toEqual([]);
+  });
+
+  it('treats three markers as both', () => {
+    expect(kinds('***a***', 'strongEmphasis')).toEqual(['***a***']);
+    expect(kinds('___a___', 'strongEmphasis')).toEqual(['___a___']);
+    expect(kinds('***a***', 'strong')).toEqual([]);
   });
 
   it('handles both underscore and asterisk forms', () => {
     expect(kinds('_a_ and *b*', 'emphasis')).toEqual(['_a_', '*b*']);
+    expect(kinds('__a__ and **b**', 'strong')).toEqual(['__a__', '**b**']);
   });
 
   it('does not run across lines', () => {
     expect(kinds('*a\nb*', 'emphasis')).toEqual([]);
+    expect(kinds('**a\nb**', 'strong')).toEqual([]);
+  });
+
+  it('does not treat bold inside code as bold', () => {
+    expect(kinds('`a **b** c`', 'strong')).toEqual([]);
   });
 });

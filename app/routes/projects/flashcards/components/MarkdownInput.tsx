@@ -12,9 +12,17 @@ import { TOKEN_CLASSES, tokenize } from '../highlight';
  * `text-base` rather than `text-sm` is deliberate: iOS zooms the page when a
  * focused field is under 16px, which on a phone is worse than slightly large
  * text.
+ *
+ * `font-synthesis-weight: none` is what makes bold highlighting safe. Fira Code
+ * is duplexed, so its real bold face is the same width as its regular and
+ * bolding shifts nothing. If it has not loaded and the stack falls back to a
+ * system monospace that has no bold face, this stops the browser faking one,
+ * since a synthesised bold is smeared wider than the original and would drag
+ * the highlighted layer out of step with the textarea. Losing the bold in that
+ * case is a much better failure than losing the alignment.
  */
 const SHARED = `m-0 w-full px-3 py-2 font-code text-base leading-6
-  break-words whitespace-pre-wrap`;
+  break-words whitespace-pre-wrap [font-synthesis-weight:none]`;
 
 export interface MarkdownInputProps {
   value: string;
@@ -39,8 +47,8 @@ export interface MarkdownInputProps {
  * height of the box and the textarea stretches to match, which means neither
  * layer ever needs to scroll independently.
  *
- * Only colour is applied, never weight or size, so no character ever changes
- * width and the two layers cannot drift apart.
+ * Bold and italic are applied as well as colour, which is only possible because
+ * the editor is set in a duplexed font. See TOKEN_CLASSES in highlight.ts.
  */
 export default function MarkdownInput({
   value,

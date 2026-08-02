@@ -17,7 +17,9 @@ export type TokenKind =
   | 'quote'
   | 'marker'
   | 'link'
-  | 'emphasis';
+  | 'strong'
+  | 'emphasis'
+  | 'strongEmphasis';
 
 export interface Token {
   text: string;
@@ -45,11 +47,11 @@ const PATTERNS: [TokenKind, string][] = [
   ['quote', '^[ \\t]*>[ \\t]?.*$'],
   ['marker', '^[ \\t]*(?:[-*+]|\\d+[.)])[ \\t]+'],
   ['link', '!?\\[[^\\]\\n]*\\]\\([^)\\n]*\\)'],
-  ['emphasis', '\\*\\*\\*[^*\\n]+\\*\\*\\*'],
-  ['emphasis', '\\*\\*[^*\\n]+\\*\\*'],
+  ['strongEmphasis', '\\*\\*\\*[^*\\n]+\\*\\*\\*'],
+  ['strong', '\\*\\*[^*\\n]+\\*\\*'],
   ['emphasis', '\\*[^*\\n]+\\*'],
-  ['emphasis', '___[^_\\n]+___'],
-  ['emphasis', '__[^_\\n]+__'],
+  ['strongEmphasis', '___[^_\\n]+___'],
+  ['strong', '__[^_\\n]+__'],
   ['emphasis', '_[^_\\n]+_'],
 ];
 
@@ -93,17 +95,27 @@ export function tokenize(input: string): Token[] {
 }
 
 /**
- * Colour only, never weight, size or spacing. Anything that changes the metrics
- * of the text would move it out from under the caret of the textarea sitting on
- * top of it.
+ * Colour, weight and slant, but never size or letter spacing.
+ *
+ * Bold is safe here only because Fira Code is duplexed: its 700 weight has the
+ * same advance width as its 400 weight for every glyph, so bolding a run of
+ * text does not move any character sideways. That matters because only the
+ * highlighted layer is styled, while the textarea over it stays at weight 400,
+ * so the two must agree on where every character sits.
+ *
+ * Do not add font-size, letter-spacing or a non duplexed family here. See the
+ * `font-synthesis-weight` note in MarkdownInput for what protects the fallback
+ * case where Fira Code has not loaded.
  */
 export const TOKEN_CLASSES: Record<TokenKind, string> = {
   text: '',
   code: 'text-amber-700 dark:text-amber-300',
   math: 'text-violet-700 dark:text-violet-300',
-  heading: 'text-blue-700 dark:text-blue-300',
+  heading: 'font-bold text-blue-700 dark:text-blue-300',
   quote: 'text-gray-500 dark:text-gray-400',
-  marker: 'text-blue-700 dark:text-blue-300',
+  marker: 'font-bold text-blue-700 dark:text-blue-300',
   link: 'text-sky-700 dark:text-sky-300',
-  emphasis: 'text-emerald-700 dark:text-emerald-300',
+  strong: 'font-bold text-emerald-700 dark:text-emerald-300',
+  emphasis: 'italic text-emerald-700 dark:text-emerald-300',
+  strongEmphasis: 'font-bold italic text-emerald-700 dark:text-emerald-300',
 };
