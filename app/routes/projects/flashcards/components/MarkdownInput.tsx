@@ -13,15 +13,19 @@ import { TOKEN_CLASSES, tokenize } from '../highlight';
  * focused field is under 16px, which on a phone is worse than slightly large
  * text.
  *
- * `font-synthesis-weight: none` is what makes bold highlighting safe. Fira Code
- * is duplexed, so its real bold face is the same width as its regular and
- * bolding shifts nothing. If it has not loaded and the stack falls back to a
- * system monospace that has no bold face, this stops the browser faking one,
+ * `font-writer` is iA Writer Quattro: proportional, so a card does not read
+ * like source code, but duplexed, so its bold is exactly as wide as its
+ * regular. See the note in app.css for why only its upright faces are loaded.
+ *
+ * `font-synthesis-weight: none` covers the case where Quattro has not loaded.
+ * If the fallback family has no bold face, this stops the browser faking one,
  * since a synthesised bold is smeared wider than the original and would drag
- * the highlighted layer out of step with the textarea. Losing the bold in that
- * case is a much better failure than losing the alignment.
+ * the highlighted layer out of step with the textarea. Losing the bold is a
+ * much better failure than losing the alignment. Style synthesis stays on,
+ * because a synthesised oblique is a shear and leaves widths untouched, which
+ * is exactly how italic is drawn here.
  */
-const SHARED = `m-0 w-full px-3 py-2 font-code text-base leading-6
+const SHARED = `m-0 w-full px-3 py-2 font-writer text-base leading-6
   break-words whitespace-pre-wrap [font-synthesis-weight:none]`;
 
 export interface MarkdownInputProps {

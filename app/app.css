@@ -7,6 +7,37 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+/*
+  iA Writer Quattro, used by the flashcard editor. Self hosted rather than
+  pulled from a CDN because the editor depends on its exact metrics.
+
+  Only the upright faces are loaded, and that is deliberate. Quattro is
+  duplexed across weight, so its bold is exactly as wide as its regular and
+  bolding a run of text shifts nothing. Its real italic faces are not width
+  matched, so loading them would reflow the line the moment you typed a `*`.
+  Leaving them out means the browser shears the upright face instead, which
+  keeps every advance width identical. Measured across every letter, digit and
+  punctuation mark, regular, bold, italic and bold italic all come out the same
+  width to the pixel.
+
+  SIL Open Font License 1.1, see iA-Writer-LICENSE.txt in this folder.
+*/
+@font-face {
+  font-family: 'iA Writer Quattro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/ia-writer-quattro-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'iA Writer Quattro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/ia-writer-quattro-700.woff2') format('woff2');
+}
+
 @theme {
   /*
   Default Tailwind font themes:
@@ -18,6 +49,13 @@
   /* --font-abril-fatface: "Abril Fatface", var(--font-serif); */
   --font-flappy: 'FlappyFont', var(--font-mono);
   --font-code: 'Fira Code', var(--font-mono);
+  /*
+    Proportional, so writing a card does not look like writing code, but still
+    safe to embolden inline. The monospace fallback is on purpose: if Quattro
+    fails to load, a monospace family is far more likely to be duplexed than a
+    proportional one, so the editor degrades to something that still lines up.
+  */
+  --font-writer: 'iA Writer Quattro', var(--font-mono);
   --color-gold: #ffd700;
 }
 

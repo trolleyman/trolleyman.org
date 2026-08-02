@@ -70,7 +70,7 @@ export default function CardEditor({
               value={tagText}
               onChange={(event) => setTagText(event.target.value)}
               placeholder="geography capitals"
-              className={cn(inputClasses, 'font-code text-base')}
+              className={cn(inputClasses, 'font-writer text-base')}
             />
           </Field>
         </div>

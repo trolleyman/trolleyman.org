@@ -95,21 +95,31 @@ export function tokenize(input: string): Token[] {
 }
 
 /**
- * Colour, weight and slant, but never size or letter spacing.
+ * What is safe to put here, and what is not.
  *
- * Bold is safe here only because Fira Code is duplexed: its 700 weight has the
- * same advance width as its 400 weight for every glyph, so bolding a run of
- * text does not move any character sideways. That matters because only the
- * highlighted layer is styled, while the textarea over it stays at weight 400,
- * so the two must agree on where every character sits.
+ * Only the highlighted layer is styled; the textarea over it stays at weight
+ * 400 in the same font. So anything that changes where a character sits will
+ * pull the two out of step.
  *
- * Do not add font-size, letter-spacing or a non duplexed family here. See the
- * `font-synthesis-weight` note in MarkdownInput for what protects the fallback
- * case where Fira Code has not loaded.
+ * Safe: colour, background, border-radius, and vertical padding. Backgrounds
+ * are painted rather than laid out, and vertical padding on an inline element
+ * does not change the height of its line box, it just overflows it.
+ *
+ * Safe here specifically: bold, because iA Writer Quattro is duplexed, and
+ * italic, because with no italic face loaded the browser shears the upright
+ * one and a shear preserves advance widths.
+ *
+ * Not safe: font-size, letter-spacing, horizontal padding, borders, or a
+ * different font-family. Each of those moves the characters after it along the
+ * line.
  */
 export const TOKEN_CLASSES: Record<TokenKind, string> = {
   text: '',
-  code: 'text-amber-700 dark:text-amber-300',
+  // A chip like the rendered version gets, done with background and radius
+  // only. It cannot also switch to a monospace family the way the rendered
+  // card does, since a different font would not line up.
+  code: `box-decoration-clone rounded bg-amber-500/10 py-0.5 text-amber-700
+    dark:bg-amber-400/15 dark:text-amber-300`,
   math: 'text-violet-700 dark:text-violet-300',
   heading: 'font-bold text-blue-700 dark:text-blue-300',
   quote: 'text-gray-500 dark:text-gray-400',

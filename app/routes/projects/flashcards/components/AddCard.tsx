@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type RefObject } from 'react';
 
 import { cn } from '~/utils';
 
@@ -68,6 +68,27 @@ export default function AddCard({
     }
   }
 
+  /**
+   * Inserts a line break at the caret. Enter is spoken for by the add flow and
+   * a phone's on screen keyboard has no shift, so without this there would be
+   * no way to write a multi-line card on mobile at all.
+   */
+  function insertNewline(
+    ref: RefObject<HTMLTextAreaElement | null>,
+    value: string,
+    setValue: (next: string) => void,
+  ) {
+    const field = ref.current;
+    if (!field) return;
+    const start = field.selectionStart ?? value.length;
+    const end = field.selectionEnd ?? start;
+    // Focus synchronously, while still inside the click, or a mobile browser
+    // will refuse to bring the keyboard back up.
+    field.focus();
+    setValue(`${value.slice(0, start)}\n${value.slice(end)}`);
+    requestAnimationFrame(() => field.setSelectionRange(start + 1, start + 1));
+  }
+
   function toggleTag(tag: string) {
     const next = tags.includes(tag)
       ? tags.filter((existing) => existing !== tag)
@@ -78,7 +99,9 @@ export default function AddCard({
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label>Front</Label>
+        <Label onNewline={() => insertNewline(frontRef, front, setFront)}>
+          Front
+        </Label>
         <MarkdownInput
           value={front}
           onChange={setFront}
@@ -92,7 +115,9 @@ export default function AddCard({
       </div>
 
       <div className="space-y-2">
-        <Label>Back</Label>
+        <Label onNewline={() => insertNewline(backRef, back, setBack)}>
+          Back
+        </Label>
         <MarkdownInput
           value={back}
           onChange={setBack}
@@ -117,7 +142,7 @@ export default function AddCard({
           value={tagText}
           onChange={(event) => onTagTextChange(event.target.value)}
           placeholder="geography capitals"
-          className={cn(inputClasses, 'font-code text-base')}
+          className={cn(inputClasses, 'font-writer text-base')}
         />
         {knownTags.length > 0 && (
           <div className="flex flex-wrap gap-2">
@@ -155,8 +180,8 @@ export default function AddCard({
           Add card
         </button>
         <p className={hintClasses}>
-          Enter moves to the answer and then adds the card. Shift and enter for
-          a new line.
+          Enter moves to the answer and then adds the card. For a line break use
+          new line above, or shift and enter.
         </p>
         {added > 0 && (
           <span className="text-xs text-green-600 dark:text-green-400">
@@ -171,15 +196,31 @@ export default function AddCard({
 /**
  * The fields themselves carry an aria-label, since a `label` cannot point at
  * the textarea inside MarkdownInput without threading an id through it. This is
- * the visible caption only.
+ * the visible caption, plus the line break control that sits alongside it.
  */
-function Label({ children }: React.PropsWithChildren) {
+function Label({
+  children,
+  onNewline,
+}: React.PropsWithChildren<{ onNewline: () => void }>) {
   return (
-    <span
-      aria-hidden
-      className="block text-xs font-medium text-gray-600 dark:text-gray-400"
-    >
-      {children}
-    </span>
+    <div className="flex items-baseline justify-between">
+      <span
+        aria-hidden
+        className="block text-xs font-medium text-gray-600 dark:text-gray-400"
+      >
+        {children}
+      </span>
+      <button
+        type="button"
+        // Keep the caret where it is: without this the field blurs on press and
+        // the insertion point is lost before the click even lands.
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={onNewline}
+        className="text-xs text-gray-500 underline decoration-gray-400
+          hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+      >
+        new line
+      </button>
+    </div>
   );
 }
