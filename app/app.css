@@ -4,39 +4,26 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
 
-@import 'tailwindcss';
-@plugin '@tailwindcss/typography';
-
 /*
-  iA Writer Quattro, used by the flashcard editor. Self hosted rather than
-  pulled from a CDN because the editor depends on its exact metrics.
+  iA Writer Quattro, used by the flashcard editor. Comes from npm and is bundled
+  at build time, so the font files are pinned by the lockfile without living in
+  this repository. SIL Open Font License 1.1, the text of which ships in
+  node_modules/@fontsource/ia-writer-quattro/LICENSE.
 
-  Only the upright faces are loaded, and that is deliberate. Quattro is
+  Only the upright faces are imported, and that is deliberate. Quattro is
   duplexed across weight, so its bold is exactly as wide as its regular and
   bolding a run of text shifts nothing. Its real italic faces are not width
-  matched, so loading them would reflow the line the moment you typed a `*`.
+  matched, so importing them would reflow the line the moment you typed a `*`.
   Leaving them out means the browser shears the upright face instead, which
   keeps every advance width identical. Measured across every letter, digit and
   punctuation mark, regular, bold, italic and bold italic all come out the same
   width to the pixel.
-
-  SIL Open Font License 1.1, see iA-Writer-LICENSE.txt in this folder.
 */
-@font-face {
-  font-family: 'iA Writer Quattro';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('./fonts/ia-writer-quattro-400.woff2') format('woff2');
-}
+@import '@fontsource/ia-writer-quattro/latin-400.css';
+@import '@fontsource/ia-writer-quattro/latin-700.css';
 
-@font-face {
-  font-family: 'iA Writer Quattro';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('./fonts/ia-writer-quattro-700.woff2') format('woff2');
-}
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @theme {
   /*
@@ -75,6 +62,64 @@
     var(--color-amber-500) 10%,
     transparent
   );
+}
+
+/*
+  highlight.js tokens inside the flashcard editor.
+
+  The stock atom-one-dark theme is imported globally for rendered code blocks,
+  but it cannot be used here: it sets padding and a background on `.hljs`, which
+  would move the text out from under the textarea, and its colours are built for
+  a dark background. These rules apply to the `hljs-*` token classes only, set
+  nothing but colour, and cover both themes. Anything added here must leave the
+  metrics alone, so no font-size and no letter-spacing.
+*/
+.editor-hljs :where(.hljs-keyword, .hljs-built_in, .hljs-literal, .hljs-type) {
+  color: var(--color-violet-700);
+}
+.editor-hljs :where(.hljs-string, .hljs-regexp, .hljs-char) {
+  color: var(--color-emerald-700);
+}
+.editor-hljs :where(.hljs-number, .hljs-symbol) {
+  color: var(--color-orange-700);
+}
+.editor-hljs :where(.hljs-comment, .hljs-quote) {
+  color: var(--color-gray-500);
+  font-style: italic;
+}
+.editor-hljs
+  :where(.hljs-title, .hljs-name, .hljs-section, .hljs-selector-tag) {
+  color: var(--color-blue-700);
+}
+.editor-hljs :where(.hljs-attr, .hljs-attribute, .hljs-meta, .hljs-doctag) {
+  color: var(--color-sky-700);
+}
+
+:where([data-theme='dark'])
+  .editor-hljs
+  :where(.hljs-keyword, .hljs-built_in, .hljs-literal, .hljs-type) {
+  color: var(--color-violet-300);
+}
+:where([data-theme='dark'])
+  .editor-hljs
+  :where(.hljs-string, .hljs-regexp, .hljs-char) {
+  color: var(--color-emerald-300);
+}
+:where([data-theme='dark']) .editor-hljs :where(.hljs-number, .hljs-symbol) {
+  color: var(--color-orange-300);
+}
+:where([data-theme='dark']) .editor-hljs :where(.hljs-comment, .hljs-quote) {
+  color: var(--color-gray-400);
+}
+:where([data-theme='dark'])
+  .editor-hljs
+  :where(.hljs-title, .hljs-name, .hljs-section, .hljs-selector-tag) {
+  color: var(--color-blue-300);
+}
+:where([data-theme='dark'])
+  .editor-hljs
+  :where(.hljs-attr, .hljs-attribute, .hljs-meta, .hljs-doctag) {
+  color: var(--color-sky-300);
 }
 
 /*

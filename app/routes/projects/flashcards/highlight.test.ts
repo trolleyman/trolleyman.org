@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { type TokenKind, tokenize } from './highlight';
+import { splitCodeBlock, type TokenKind, tokenize } from './highlight';
 
 function kinds(input: string, kind: TokenKind): string[] {
   return tokenize(input)
@@ -40,6 +40,10 @@ describe('tokenize round trip', () => {
     '****',
     '$$',
     '```',
+    '<!-- a comment -->',
+    'before <!-- spanning\ntwo lines --> after',
+    'unterminated <!-- comment',
+    '<!---->',
   ];
 
   it.each(samples)('rebuilds %j exactly', (sample) => {
@@ -93,6 +97,79 @@ describe('code', () => {
 
   it('does not treat emphasis inside code as emphasis', () => {
     expect(kinds('`a *b* c`', 'emphasis')).toEqual([]);
+  });
+});
+
+describe('html comments', () => {
+  it('picks up a comment including its delimiters', () => {
+    expect(kinds('a <!-- note --> b', 'comment')).toEqual(['<!-- note -->']);
+  });
+
+  it('spans lines', () => {
+    expect(kinds('<!-- one\ntwo -->', 'comment')).toEqual([
+      '<!-- one\ntwo -->',
+    ]);
+  });
+
+  it('runs an unterminated comment to the end', () => {
+    expect(kinds('a <!-- open', 'comment')).toEqual(['<!-- open']);
+  });
+
+  it('leaves a comment inside code alone', () => {
+    expect(kinds('`<!-- x -->`', 'comment')).toEqual([]);
+    expect(kinds('```\n<!-- x -->\n```', 'comment')).toEqual([]);
+  });
+
+  it('does not treat markdown inside a comment as markdown', () => {
+    expect(kinds('<!-- **not bold** -->', 'strong')).toEqual([]);
+  });
+});
+
+describe('splitCodeBlock', () => {
+  // The parts are rendered as three separate spans, so losing or gaining a
+  // character here would shift the text just as a tokeniser bug would.
+  const samples = [
+    '```',
+    '```py',
+    '```py\n',
+    '```py\nx = 1\n```',
+    '```\nno language\n```',
+    '```py\nunterminated',
+    '```py\n\n\n```',
+    '```py\nx\n```   ',
+    '```js title=foo\nx\n```',
+  ];
+
+  it.each(samples)('rebuilds %j exactly', (sample) => {
+    const { open, body, close } = splitCodeBlock(sample);
+    expect(open + body + close).toBe(sample);
+  });
+
+  it('reads the language off the fence', () => {
+    expect(splitCodeBlock('```python\nx\n```').language).toBe('python');
+  });
+
+  it('lowercases the language', () => {
+    expect(splitCodeBlock('```Python\nx\n```').language).toBe('python');
+  });
+
+  it('takes only the first word of the info string', () => {
+    expect(splitCodeBlock('```js title=foo\nx\n```').language).toBe('js');
+  });
+
+  it('reports no language when the fence declares none', () => {
+    expect(splitCodeBlock('```\nx\n```').language).toBeUndefined();
+  });
+
+  it('separates the body from the fences', () => {
+    const parts = splitCodeBlock('```py\nx = 1\n```');
+    expect(parts.open).toBe('```py\n');
+    expect(parts.body).toBe('x = 1');
+    expect(parts.close).toBe('\n```');
+  });
+
+  it('has an empty close while the block is still being typed', () => {
+    expect(splitCodeBlock('```py\nx = 1').close).toBe('');
   });
 });
 

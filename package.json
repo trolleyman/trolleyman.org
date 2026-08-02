@@ -19,6 +19,7 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "@fontsource/ia-writer-quattro": "^5.3.0",
     "@react-router/fs-routes": "^7.13.1",
     "@react-router/node": "^7.13.1",
     "@react-router/serve": "^7.13.1",

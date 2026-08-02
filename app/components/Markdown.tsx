@@ -51,14 +51,21 @@ const components = {
     const content = String(codeElement.props.children ?? '').replace(/\n$/, '');
     const highlighted = highlight(content, language);
 
+    // Left as plain text when the fence named no language, or named one
+    // highlight.js does not know. Guessing is worse than not colouring.
+    if (highlighted === null) {
+      return (
+        <pre {...props}>
+          <code className={className}>{content}</code>
+        </pre>
+      );
+    }
+
     return (
       <pre {...props}>
         <code
-          className={cn(
-            className,
-            language ? undefined : `language-${highlighted.language}`,
-          )}
-          dangerouslySetInnerHTML={{ __html: highlighted.value }}
+          className={className}
+          dangerouslySetInnerHTML={{ __html: highlighted }}
         />
       </pre>
     );
@@ -72,17 +79,21 @@ const components = {
 };
 
 /**
- * Highlights a block, falling back to auto detection when the fence names a
- * language highlight.js does not know. Without this, a card containing
- * ```` ```notalanguage ```` would throw and take the whole page down.
+ * Highlights a block against the language its fence declared, or returns null
+ * to say it should be left alone.
+ *
+ * There is deliberately no auto detection. Guessing gets it wrong often enough
+ * to be worse than plain text, and it used to colour short snippets as whatever
+ * language they happened to resemble. Checking the language is registered also
+ * means an unknown one on a fence is ignored rather than throwing and taking
+ * the page down with it.
  */
-function highlight(content: string, language: string | undefined) {
-  if (language && hljs.getLanguage(language)) {
-    const result = hljs.highlight(content, { language });
-    return { value: result.value, language };
-  }
-  const result = hljs.highlightAuto(content);
-  return { value: result.value, language: result.language ?? 'plaintext' };
+export function highlight(
+  content: string,
+  language: string | undefined,
+): string | null {
+  if (!language || !hljs.getLanguage(language)) return null;
+  return hljs.highlight(content, { language }).value;
 }
 
 const remarkPlugins = [remarkGfm, remarkMath];

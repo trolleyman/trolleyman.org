@@ -8,7 +8,9 @@ import {
 
 import { cn } from '~/utils';
 
-import { TOKEN_CLASSES, tokenize } from '../highlight';
+import { highlight } from '~/components/Markdown';
+
+import { TOKEN_CLASSES, splitCodeBlock, tokenize } from '../highlight';
 
 /**
  * Styling that the highlighted layer and the textarea must share exactly. Any
@@ -110,6 +112,41 @@ function useCodeBlockRects(
   return rects;
 }
 
+/**
+ * A fenced block, with its body coloured for whatever language the fence
+ * declared. There is no auto detection: an unknown language, or none at all,
+ * leaves the body as plain code text rather than guessing at it.
+ *
+ * highlight.js output is injected as HTML because it is the only way to get its
+ * tokens, but that is safe for alignment: it escapes rather than rewrites, so
+ * the rendered text is character for character what was typed. The classes it
+ * emits are restyled under `.editor-hljs` in app.css to colour only, since the
+ * stock theme also sets padding and a background.
+ */
+function CodeBlockToken({ text }: { text: string }) {
+  const { open, body, close, language } = splitCodeBlock(text);
+  const highlighted = useMemo(
+    () => highlight(body, language),
+    [body, language],
+  );
+  const fence = TOKEN_CLASSES.codeBlock;
+
+  return (
+    <span data-code-block="">
+      <span className={fence}>{open}</span>
+      {highlighted === null ? (
+        <span className={fence}>{body}</span>
+      ) : (
+        <span
+          className={cn(fence, 'editor-hljs')}
+          dangerouslySetInnerHTML={{ __html: highlighted }}
+        />
+      )}
+      <span className={fence}>{close}</span>
+    </span>
+  );
+}
+
 export interface MarkdownInputProps {
   value: string;
   onChange: (value: string) => void;
@@ -120,13 +157,6 @@ export interface MarkdownInputProps {
   rows?: number;
   autoFocus?: boolean;
   inputRef?: RefObject<HTMLTextAreaElement | null>;
-  /**
-   * Relabels the return key on an on screen keyboard, so it reads "next" or
-   * "done" rather than the newline it is not going to insert. It only changes
-   * the label, never the behaviour, so the key still arrives as an ordinary
-   * Enter for onKeyDown to deal with.
-   */
-  enterKeyHint?: React.HTMLAttributes<HTMLTextAreaElement>['enterKeyHint'];
 }
 
 /**
@@ -152,7 +182,6 @@ export default function MarkdownInput({
   rows = 3,
   autoFocus,
   inputRef,
-  enterKeyHint,
 }: MarkdownInputProps) {
   const tokens = useMemo(() => tokenize(value), [value]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -189,15 +218,15 @@ export default function MarkdownInput({
             {placeholder}
           </span>
         ) : (
-          tokens.map((token, index) => (
-            <span
-              key={index}
-              className={TOKEN_CLASSES[token.kind]}
-              data-code-block={token.kind === 'codeBlock' ? '' : undefined}
-            >
-              {token.text}
-            </span>
-          ))
+          tokens.map((token, index) =>
+            token.kind === 'codeBlock' ? (
+              <CodeBlockToken key={index} text={token.text} />
+            ) : (
+              <span key={index} className={TOKEN_CLASSES[token.kind]}>
+                {token.text}
+              </span>
+            ),
+          )
         )}
         {/*
           A `pre` swallows one trailing newline, so put it back. Without this,
@@ -214,7 +243,6 @@ export default function MarkdownInput({
         onKeyDown={onKeyDown}
         aria-label={ariaLabel}
         autoFocus={autoFocus}
-        enterKeyHint={enterKeyHint}
         spellCheck
         className={cn(
           SHARED,

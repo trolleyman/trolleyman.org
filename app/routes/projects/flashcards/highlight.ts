@@ -13,6 +13,7 @@ export type TokenKind =
   | 'text'
   | 'code'
   | 'codeBlock'
+  | 'comment'
   | 'math'
   | 'heading'
   | 'quote'
@@ -44,6 +45,7 @@ const PATTERNS: [TokenKind, string][] = [
   ['code', '`[^`\\n]*`'],
   ['math', `\\$\\$[\\s\\S]*?(?:\\$\\$|${END})`],
   ['math', '\\$[^$\\n]+\\$'],
+  ['comment', `<!--[\\s\\S]*?(?:-->|${END})`],
   ['heading', '^[ \\t]*#{1,6}[ \\t].*$'],
   ['quote', '^[ \\t]*>[ \\t]?.*$'],
   ['marker', '^[ \\t]*(?:[-*+]|\\d+[.)])[ \\t]+'],
@@ -95,6 +97,49 @@ export function tokenize(input: string): Token[] {
   return tokens;
 }
 
+export interface CodeBlockParts {
+  /** The opening fence and its info string, including the newline after it. */
+  open: string;
+  /** The code itself, which is what gets highlighted. */
+  body: string;
+  /** The closing fence, empty when the block is still being typed. */
+  close: string;
+  /** The language the fence declared, if it declared one. */
+  language?: string;
+}
+
+/**
+ * Splits a fenced block into its fences and its body, so the body can be
+ * highlighted for the language the fence declares while the fences themselves
+ * stay coloured as markdown syntax.
+ *
+ * `open + body + close` is always exactly the input. Nothing here may drop or
+ * add a character, for the same reason the tokeniser may not.
+ */
+export function splitCodeBlock(text: string): CodeBlockParts {
+  const firstBreak = text.indexOf('\n');
+  // A fence with nothing after it yet, still being typed.
+  if (firstBreak === -1) return { open: text, body: '', close: '' };
+
+  const open = text.slice(0, firstBreak + 1);
+  const info = text.slice(3, firstBreak).trim().split(/\s+/)[0];
+  const language = /^[A-Za-z0-9_+#-]+$/.test(info)
+    ? info.toLowerCase()
+    : undefined;
+
+  const rest = text.slice(firstBreak + 1);
+  const closing = rest.match(/\n?```[ \t]*$/);
+  if (closing && closing.index !== undefined) {
+    return {
+      open,
+      body: rest.slice(0, closing.index),
+      close: rest.slice(closing.index),
+      language,
+    };
+  }
+  return { open, body: rest, close: '', language };
+}
+
 /**
  * What is safe to put here, and what is not.
  *
@@ -128,6 +173,7 @@ export const TOKEN_CLASSES: Record<TokenKind, string> = {
   math: 'text-violet-700 dark:text-violet-300',
   heading: 'font-bold text-blue-700 dark:text-blue-300',
   quote: 'text-gray-500 dark:text-gray-400',
+  comment: 'text-gray-500 italic dark:text-gray-400',
   marker: 'font-bold text-blue-700 dark:text-blue-300',
   link: 'text-sky-700 dark:text-sky-300',
   strong: 'font-bold text-emerald-700 dark:text-emerald-300',

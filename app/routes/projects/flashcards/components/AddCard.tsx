@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type RefObject } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { cn } from '~/utils';
 
@@ -91,50 +91,19 @@ export default function AddCard({
   }, []);
 
   /**
-   * Enter advances and then commits, shift + enter inserts a newline. Enter
-   * rather than tab because a phone's on screen keyboard reliably has a return
-   * key and mostly does not have a tab key. Tab still works as usual for anyone
-   * who prefers it, since these are ordinary focusable fields.
+   * Enter inserts a line break, the way an ordinary textarea does, so writing a
+   * multi-line card needs nothing special and works the same on a phone. Moving
+   * between the fields is left to tapping them, tab, or the up and down arrows
+   * that iOS puts above its keyboard, and adding is the button's job.
+   *
+   * The one shortcut is the conventional one: ctrl or cmd with enter submits,
+   * which no on screen keyboard can produce and so takes nothing away.
    */
-  function onFrontKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();
-      if (front.trim()) backRef.current?.focus();
-    }
-  }
-
-  function onBackKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (event.key === 'Enter' && !event.shiftKey) {
+  function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       submit();
     }
-    // An empty answer with the cursor at the start means the last keystroke was
-    // probably a mistake, so step back rather than swallowing it.
-    if (event.key === 'Backspace' && back.length === 0) {
-      event.preventDefault();
-      frontRef.current?.focus();
-    }
-  }
-
-  /**
-   * Inserts a line break at the caret. Enter is spoken for by the add flow and
-   * a phone's on screen keyboard has no shift, so without this there would be
-   * no way to write a multi-line card on mobile at all.
-   */
-  function insertNewline(
-    ref: RefObject<HTMLTextAreaElement | null>,
-    value: string,
-    setValue: (next: string) => void,
-  ) {
-    const field = ref.current;
-    if (!field) return;
-    const start = field.selectionStart ?? value.length;
-    const end = field.selectionEnd ?? start;
-    // Focus synchronously, while still inside the click, or a mobile browser
-    // will refuse to bring the keyboard back up.
-    field.focus();
-    setValue(`${value.slice(0, start)}\n${value.slice(end)}`);
-    requestAnimationFrame(() => field.setSelectionRange(start + 1, start + 1));
   }
 
   function toggleTag(tag: string) {
@@ -149,34 +118,28 @@ export default function AddCard({
       {/* The flight is measured from this box, so it wraps both fields. */}
       <div ref={fieldsRef} className="space-y-4">
         <div className="space-y-2">
-          <Label onNewline={() => insertNewline(frontRef, front, setFront)}>
-            Front
-          </Label>
+          <Label>Front</Label>
           <MarkdownInput
             value={front}
             onChange={setFront}
-            onKeyDown={onFrontKeyDown}
+            onKeyDown={onKeyDown}
             placeholder="capital of France"
             ariaLabel="Front of the card"
             inputRef={frontRef}
-            enterKeyHint="next"
             rows={2}
             autoFocus
           />
         </div>
 
         <div className="space-y-2">
-          <Label onNewline={() => insertNewline(backRef, back, setBack)}>
-            Back
-          </Label>
+          <Label>Back</Label>
           <MarkdownInput
             value={back}
             onChange={setBack}
-            onKeyDown={onBackKeyDown}
+            onKeyDown={onKeyDown}
             placeholder="Paris"
             ariaLabel="Back of the card"
             inputRef={backRef}
-            enterKeyHint="done"
             rows={2}
           />
         </div>
@@ -232,10 +195,7 @@ export default function AddCard({
         >
           Add card
         </button>
-        <p className={hintClasses}>
-          Enter moves to the answer and then adds the card. For a line break use
-          new line above, or shift and enter.
-        </p>
+        <p className={hintClasses}>Ctrl or cmd with enter adds the card too.</p>
       </div>
 
       <AddedStack cards={stack} deckRef={deckRef} />
@@ -265,31 +225,15 @@ export default function AddCard({
 /**
  * The fields themselves carry an aria-label, since a `label` cannot point at
  * the textarea inside MarkdownInput without threading an id through it. This is
- * the visible caption, plus the line break control that sits alongside it.
+ * the visible caption only.
  */
-function Label({
-  children,
-  onNewline,
-}: React.PropsWithChildren<{ onNewline: () => void }>) {
+function Label({ children }: React.PropsWithChildren) {
   return (
-    <div className="flex items-baseline justify-between">
-      <span
-        aria-hidden
-        className="block text-xs font-medium text-gray-600 dark:text-gray-400"
-      >
-        {children}
-      </span>
-      <button
-        type="button"
-        // Keep the caret where it is: without this the field blurs on press and
-        // the insertion point is lost before the click even lands.
-        onMouseDown={(event) => event.preventDefault()}
-        onClick={onNewline}
-        className="text-xs text-gray-500 underline decoration-gray-400
-          hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-      >
-        new line
-      </button>
-    </div>
+    <span
+      aria-hidden
+      className="block text-xs font-medium text-gray-600 dark:text-gray-400"
+    >
+      {children}
+    </span>
   );
 }
