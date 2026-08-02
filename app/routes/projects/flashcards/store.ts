@@ -106,45 +106,6 @@ export function searchCards(cards: Flashcard[], query: string): Flashcard[] {
   );
 }
 
-export interface QuickAddResult {
-  front: string;
-  back: string;
-  tags: string[];
-}
-
-/**
- * Parses the one line quick add syntax:
- *
- *     question :: answer #tag1 #tag2
- *
- * Only `#tag` tokens in an unbroken run at the very end are treated as tags, so
- * a `#` inside the answer text (a C preprocessor directive, a markdown heading)
- * is left alone. Returns null if there is no `::` separator or either side is
- * empty, which is what the caller uses to keep the add button disabled.
- */
-export function parseQuickAdd(raw: string): QuickAddResult | null {
-  let rest = raw.trim();
-  if (!rest) return null;
-
-  const tags: string[] = [];
-  const trailingTag = /\s+#([\p{L}\p{N}][\p{L}\p{N}_-]*)$/u;
-  for (;;) {
-    const match = rest.match(trailingTag);
-    if (!match || match.index === undefined) break;
-    tags.unshift(match[1]);
-    rest = rest.slice(0, match.index).trimEnd();
-  }
-
-  const separator = rest.indexOf('::');
-  if (separator === -1) return null;
-
-  const front = rest.slice(0, separator).trim();
-  const back = rest.slice(separator + 2).trim();
-  if (!front || !back) return null;
-
-  return { front, back, tags: normaliseTags(tags) };
-}
-
 /**
  * Validates parsed JSON from an imported file. Throws on anything structurally
  * wrong; repairs individual cards where a missing field has an obvious default,

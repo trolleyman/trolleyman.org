@@ -6,11 +6,13 @@ import { cn } from '~/utils';
 import { normaliseTags } from '../store';
 import {
   buttonPrimary,
+  buttonQuiet,
   buttonSecondary,
   hintClasses,
   inputClasses,
 } from '../styles';
 import type { Flashcard } from '../types';
+import MarkdownInput from './MarkdownInput';
 
 export interface CardEditorProps {
   card: Flashcard;
@@ -18,7 +20,6 @@ export interface CardEditorProps {
   onCancel: () => void;
 }
 
-/** Full editor for longer cards, with a live preview of the rendered markdown. */
 export default function CardEditor({
   card,
   onSave,
@@ -27,6 +28,9 @@ export default function CardEditor({
   const [front, setFront] = useState(card.front);
   const [back, setBack] = useState(card.back);
   const [tagText, setTagText] = useState(card.tags.join(' '));
+  // Off by default: the editor highlights as you type, so the preview is only
+  // needed to check that something like a block of maths actually renders.
+  const [preview, setPreview] = useState(false);
 
   const canSave = front.trim().length > 0 && back.trim().length > 0;
 
@@ -42,22 +46,22 @@ export default function CardEditor({
 
   return (
     <div className="space-y-3">
-      <div className="grid gap-3 lg:grid-cols-2">
+      <div className={cn('grid gap-3', preview && 'lg:grid-cols-2')}>
         <div className="space-y-3">
           <Field label="Front">
-            <textarea
+            <MarkdownInput
               value={front}
-              onChange={(event) => setFront(event.target.value)}
-              rows={4}
-              className={cn(inputClasses, 'font-code resize-y text-sm')}
+              onChange={setFront}
+              ariaLabel="Front of the card"
+              rows={3}
             />
           </Field>
           <Field label="Back">
-            <textarea
+            <MarkdownInput
               value={back}
-              onChange={(event) => setBack(event.target.value)}
-              rows={4}
-              className={cn(inputClasses, 'font-code resize-y text-sm')}
+              onChange={setBack}
+              ariaLabel="Back of the card"
+              rows={3}
             />
           </Field>
           <Field label="Tags">
@@ -66,18 +70,20 @@ export default function CardEditor({
               value={tagText}
               onChange={(event) => setTagText(event.target.value)}
               placeholder="geography capitals"
-              className={cn(inputClasses, 'font-code text-sm')}
+              className={cn(inputClasses, 'font-code text-base')}
             />
           </Field>
         </div>
 
-        <div className="space-y-3">
-          <Preview label="Front preview" content={front} />
-          <Preview label="Back preview" content={back} />
-        </div>
+        {preview && (
+          <div className="space-y-3">
+            <Preview label="Front preview" content={front} />
+            <Preview label="Back preview" content={back} />
+          </div>
+        )}
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
           onClick={save}
@@ -88,6 +94,14 @@ export default function CardEditor({
         </button>
         <button type="button" onClick={onCancel} className={buttonSecondary}>
           Cancel
+        </button>
+        <button
+          type="button"
+          onClick={() => setPreview((current) => !current)}
+          aria-pressed={preview}
+          className={buttonQuiet}
+        >
+          {preview ? 'Hide preview' : 'Preview'}
         </button>
         {!canSave && (
           <span className={hintClasses}>
@@ -104,12 +118,14 @@ function Field({
   children,
 }: React.PropsWithChildren<{ label: string }>) {
   return (
-    <label className="block space-y-1">
-      <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+    <div className="space-y-1">
+      <span
+        className="block text-xs font-medium text-gray-600 dark:text-gray-400"
+      >
         {label}
       </span>
       {children}
-    </label>
+    </div>
   );
 }
 

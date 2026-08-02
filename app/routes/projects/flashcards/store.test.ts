@@ -6,7 +6,6 @@ import {
   normaliseTag,
   normaliseTags,
   parseCollection,
-  parseQuickAdd,
   removeCard,
   searchCards,
   tagCounts,
@@ -40,56 +39,6 @@ describe('normaliseTags', () => {
 
   it('drops empty tags', () => {
     expect(normaliseTags(['', '  ', 'ok'])).toEqual(['ok']);
-  });
-});
-
-describe('parseQuickAdd', () => {
-  it('splits on the first ::', () => {
-    expect(parseQuickAdd('capital of France :: Paris')).toEqual({
-      front: 'capital of France',
-      back: 'Paris',
-      tags: [],
-    });
-  });
-
-  it('pulls trailing tags off the back', () => {
-    expect(parseQuickAdd('a :: b #geo #capitals')).toEqual({
-      front: 'a',
-      back: 'b',
-      tags: ['capitals', 'geo'],
-    });
-  });
-
-  it('leaves a hash inside the answer alone', () => {
-    expect(parseQuickAdd('include guard :: #include <stdio.h>')).toEqual({
-      front: 'include guard',
-      back: '#include <stdio.h>',
-      tags: [],
-    });
-  });
-
-  it('only takes hashes in an unbroken run at the end', () => {
-    const result = parseQuickAdd('a :: see #1 below #tag');
-    expect(result?.back).toBe('see #1 below');
-    expect(result?.tags).toEqual(['tag']);
-  });
-
-  it('keeps later :: in the answer', () => {
-    expect(parseQuickAdd('scope :: std::vector')?.back).toBe('std::vector');
-  });
-
-  it('returns null without a separator', () => {
-    expect(parseQuickAdd('just some text')).toBeNull();
-  });
-
-  it('returns null when either side is empty', () => {
-    expect(parseQuickAdd(':: b')).toBeNull();
-    expect(parseQuickAdd('a ::')).toBeNull();
-    expect(parseQuickAdd('   ')).toBeNull();
-  });
-
-  it('normalises the tags it finds', () => {
-    expect(parseQuickAdd('a :: b #Maths #maths')?.tags).toEqual(['maths']);
   });
 });
 
