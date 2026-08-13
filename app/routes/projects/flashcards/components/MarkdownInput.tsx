@@ -8,7 +8,7 @@ import {
 
 import { cn } from '~/utils';
 
-import { highlight } from '~/components/Markdown';
+import { highlight } from '~/syntax';
 
 import { TOKEN_CLASSES, splitCodeBlock, tokenize } from '../highlight';
 

@@ -1,5 +1,4 @@
 import { isValidElement } from 'react';
-import hljs from 'highlight.js';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router';
 import rehypeKatex from 'rehype-katex';
@@ -7,6 +6,7 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 
+import { highlight } from '~/syntax';
 import { cn } from '~/utils';
 
 import 'highlight.js/styles/atom-one-dark.css';
@@ -77,24 +77,6 @@ const components = {
     </code>
   ),
 };
-
-/**
- * Highlights a block against the language its fence declared, or returns null
- * to say it should be left alone.
- *
- * There is deliberately no auto detection. Guessing gets it wrong often enough
- * to be worse than plain text, and it used to colour short snippets as whatever
- * language they happened to resemble. Checking the language is registered also
- * means an unknown one on a fence is ignored rather than throwing and taking
- * the page down with it.
- */
-export function highlight(
-  content: string,
-  language: string | undefined,
-): string | null {
-  if (!language || !hljs.getLanguage(language)) return null;
-  return hljs.highlight(content, { language }).value;
-}
 
 const remarkPlugins = [remarkGfm, remarkMath];
 const rehypePluginsWithHtml = [rehypeRaw, rehypeKatex];
