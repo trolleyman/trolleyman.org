@@ -156,10 +156,34 @@ export default function Projects() {
       {/* Projects List */}
       <div className={cn('mt-6 flex flex-col gap-12', CONTENT_WIDTH_CLASSES)}>
         <Project
+          id="proj_flashcards"
+          title="Flashcards"
+          date="2026"
+          languages={['TypeScript']}
+          libraries={['React Router', 'Tailwind CSS', 'ts-fsrs', 'KaTeX']}
+          links={[{ text: 'Try it', to: '/projects/flashcards' }]}
+        >
+          <p>
+            A small spaced repetition trainer along the lines of Anki. Cards
+            take markdown and LaTeX maths, are organised with tags, and are
+            scheduled using FSRS.
+          </p>
+          <p>
+            Runs entirely in the browser with no account and no server, so cards
+            stay on your own machine.
+          </p>
+        </Project>
+
+        <Project
           id="proj_hydra"
           title="Hydra"
           date="2026"
-          image={{ src: hydraImg, alt: 'Hydra icon', rounded: false, translucent: true }}
+          image={{
+            src: hydraImg,
+            alt: 'Hydra icon',
+            rounded: false,
+            translucent: true,
+          }}
           languages={['Go', 'TypeScript']}
           libraries={['React']}
           tools={['Docker']}
@@ -174,11 +198,10 @@ export default function Projects() {
         >
           <p>
             AI agent orchestrator that spawns and manages autonomous AI agents,
-            each running in an isolated Docker container with its own Git worktree.
+            each running in an isolated Docker container with its own Git
+            worktree.
           </p>
-          <p>
-            Features a CLI, TUI dashboard, and web interface.
-          </p>
+          <p>Features a CLI, TUI dashboard, and web interface.</p>
         </Project>
 
         <Project
@@ -196,9 +219,9 @@ export default function Projects() {
             { text: 'Details', to: '/projects/ottoman' },
           ]}
         >
-          Home orchestrator for managing a desktop PC from a Raspberry Pi. Supports
-          Wake-on-LAN, display layout management, and HTTP proxying between the Pi
-          and desktop.
+          Home orchestrator for managing a desktop PC from a Raspberry Pi.
+          Supports Wake-on-LAN, display layout management, and HTTP proxying
+          between the Pi and desktop.
         </Project>
 
         <Project
